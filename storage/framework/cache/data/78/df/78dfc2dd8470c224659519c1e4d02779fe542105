@@ -1,0 +1,58 @@
+9999999999s:2717:"<!--<div class="socials">-->
+<!--<a href="https://www.facebook.com/virtuard"><i class="fa fa-facebook"></i></a>-->
+<!--<a href="https://www.instagram.com/virtuardtour"><i class="fa fa-instagram"></i></a>-->
+<!--<a href="https://twitter.com/virtuard"><i class="fa fa-twitter"></i></a>-->
+<!--</div>-->
+<!--<span class="line"></span>-->
+<!--<a href="mailto:info@virtuard.com">info@virtuard.com</a>-->
+<div class="d-flex align-items-center w-full">
+    <a href="/ru">
+        <img class="logo-header-new" src="https://virtuard.com/wp-content/uploads/2022/09/cropped-Logo-Contorno-Bianco-copia-e1673010650937.png">
+    </a>
+    <div class="w-full d-flex justify-content-between ml-4">
+        <a class="menu-additional-header mr-4" href='/ru/explore'>
+            Исследовать
+        </a>
+        <a class="menu-additional-header mr-4" href='/ru/user/follow-boards'>
+            Доска объявлений
+        </a>
+        <a class="menu-additional-header mr-4" href='/ru/user/follow-member'>
+            Участники
+        </a>
+        <!--<a class="menu-additional-header mr-4" href='/ru/page/maintenance'>-->
+        <!--    Utilitas-->
+        <!--</a>-->
+        
+        <div class="dropdown header-widget widget-user widget-language flex-shrink-0">
+            <div data-toggle="dropdown" class="user-dropdown d-flex align-items-center" aria-haspopup="true" aria-expanded="false">
+                <div class="user-info flex-grow-1 d-flex">
+                    Утилита
+                </div>
+                <i class="fa fa-angle-down"></i>
+            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="">
+                <a class="dropdown-item" href="/ru/page/events">
+                    События
+                </a>
+                <a class="dropdown-item" href="/ru/page/adventages">
+                    Преимущества
+                </a>
+                <a class="dropdown-item" href="/ru/page/maintenance">
+                    Обучение 
+                </a>
+                <a class="dropdown-item" href="/ru/page/prices">
+                    Стоимость услуги 
+                </a>
+                <a class="dropdown-item" href="/ru/page/work-with-us">
+                    Работа с нами
+                </a>
+                <a class="dropdown-item" href="/ru/page/shop">
+                    PRO
+                </a>
+                <a class="dropdown-item" href="https://www.virtuard.cloud/">
+                    Наши социальные сети
+                </a>
+            </div>
+        </div>
+    </div>
+</div>";

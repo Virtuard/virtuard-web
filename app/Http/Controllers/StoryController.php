@@ -1,0 +1,78 @@
+<?php
+namespace App\Http\Controllers;
+
+use App\User;
+use Modules\Hotel\Models\Hotel;
+use Modules\Location\Models\LocationCategory;
+use Modules\Page\Models\Page;
+use Modules\News\Models\NewsCategory;
+use Modules\News\Models\Tag;
+use Modules\News\Models\News;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Story;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic as Image;
+
+class StoryController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function addStory(Request $request)
+    {
+        $idUser = Auth::id();
+
+        // Periksa apakah file media telah diunggah
+        if ($request->hasFile('media')) {
+            $mediaPath = $request->file('media')->store('public/images/story');
+        } else {
+            $mediaPath = null;
+        }
+
+        $story = new Story;
+        $story->user_id = $idUser;
+        $story->link_text = $request->input('linkText');
+        $story->link = $request->input('link');
+        $story->media = $mediaPath;
+
+        $story->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil diproses',
+            'data' => $request->all(),
+        ]);
+    }
+
+    public function getStory()
+    {
+        $idUser = Auth::id();
+
+        $story = Story::where('user_id', $idUser)->get();
+        ;
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil diproses',
+            'data' => $story,
+        ]);
+    }
+
+
+
+}

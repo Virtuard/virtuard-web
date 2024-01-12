@@ -1,0 +1,97 @@
+<div id="ipnrm-ui-modal-{{ modalData.id }}" class="ipnrm-ui-modal" tabindex="-1">
+	<div class="ipnrm-ui-modal-dialog">
+		<div class="ipnrm-ui-modal-header">
+			<div class="ipnrm-ui-modal-close" x-ng-click="modalData.deferred.resolve('close');">&times;</div>
+			<div class="ipnrm-ui-modal-title">Save Virtuard 360</div>
+		</div>
+		<div class="ipnrm-ui-modal-data">
+			<div class="ipnrm-ui-modal-info">
+				Are you sure you want to keep your Virtuard 360 data?
+			</div>
+			
+			<pre style="display: none;" class="prettyprint ipnrm-ui-modal-prettyprint">
+&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;!-- you can use your own animation library and css3 classes --&gt;
+&lt;link rel="stylesheet" href="assets/lib/effect.css"&gt; 
+&lt;!-- ipanorama styles --&gt;
+&lt;link rel="stylesheet" href="assets/lib/ipanorama.css"&gt;
+&lt;link rel="stylesheet" href="assets/lib/ipanorama.theme.default.css"&gt;
+&lt;link rel="stylesheet" href="assets/lib/ipanorama.theme.modern.css"&gt;
+&lt;link rel="stylesheet" href="assets/lib/ipanorama.theme.dark.css"&gt;
+&lt;!-- /end ipanorama styles --&gt;
+&lt;!-- main style --&gt;
+&lt;style&gt;
+#mypanorama {
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+}
+&lt;/style&gt;
+&lt;!-- /end main style --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div id="mypanorama"&gt;&lt;/div&gt;
+
+&lt;script src="assets/js/lib/jquery.min.js"&gt;&lt;/script&gt;
+&lt;script src="assets/js/lib/three.min.js"&gt;&lt;/script&gt;
+&lt;script src="assets/lib/jquery.ipanorama.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+$(document).ready(function() {
+	// paste generated code here...
+});
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+			</pre>
+			
+			<div style="display: none;" class="ipnrm-ui-modal-info">
+				The code for paste that contains all settings and initializes the plugin:<br>
+				Also you can make additional customization to this config, if you need it.
+			</div>
+			
+			<div class="ipnrm-ui-modal-group">
+				<textarea style="display: none;" id="code_get" class="ipnrm-ui-modal-textarea" rows="20">{{modalData.fn.getConfigCode(modalData)}}</textarea>
+			</div>
+		</div>
+		<div class="ipnrm-ui-modal-footer">
+			<div class="ipnrm-ui-modal-btn" onclick="submitData()">Submit</div>
+			<div class="ipnrm-ui-modal-btn ipnrm-ui-modal-btn-close" x-ng-click="modalData.deferred.resolve('close');">Close</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function submitData() {
+		const dataCode = document.getElementById('code_get').innerHTML;
+
+        var currentURL = window.location.href;
+        var url = new URL(currentURL);
+        var idItem = url.searchParams.get("idItem");
+
+        var requestOptions = {
+		  method: 'POST',
+		  headers: {
+		    'Content-Type': 'application/json',
+		  },
+		  body: JSON.stringify({ data: dataCode, id: idItem }),
+		};
+
+		fetch('/user/add/virtuard-360/apiSecond', requestOptions)
+		.then(function(response) {
+			if (!response.ok) {
+			  throw new Error('Gagal melakukan fetch');
+			}
+		})
+		.then(function(data) {
+			Swal.fire('Saved!', '', 'success')
+		})
+		.catch(function(error) {
+			console.error('Kesalahan:', error);
+		});
+	}
+</script>
