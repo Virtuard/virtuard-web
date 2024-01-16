@@ -35,6 +35,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
         $class = \Modules\Theme\ThemeManager::currentProvider();
         if(class_exists($class)){
             $modules  = $class::getModules();
+            // dd($modules);
             $coreModules = static::getCoreModules();
             foreach ($modules as $module=>$class){
                 if(class_exists($class)) {

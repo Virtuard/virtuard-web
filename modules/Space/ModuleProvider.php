@@ -57,21 +57,21 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Space'),
                         'permission' => 'space_create',
                     ],
-                    'attribute'=>[
-                        'url'        => route('space.admin.attribute.index'),
-                        'title'      => __('Attributes'),
-                        'permission' => 'space_manage_attributes',
-                    ],
-                    'availability'=>[
-                        'url'        => route('space.admin.availability.index'),
-                        'title'      => __('Availability'),
-                        'permission' => 'space_create',
-                    ],
-                    'recovery'=>[
-                        'url'        => route('space.admin.recovery'),
-                        'title'      => __('Recovery'),
-                        'permission' => 'space_view',
-                    ],
+                    // 'attribute'=>[
+                    //     'url'        => route('space.admin.attribute.index'),
+                    //     'title'      => __('Attributes'),
+                    //     'permission' => 'space_manage_attributes',
+                    // ],
+                    // 'availability'=>[
+                    //     'url'        => route('space.admin.availability.index'),
+                    //     'title'      => __('Availability'),
+                    //     'permission' => 'space_create',
+                    // ],
+                    // 'recovery'=>[
+                    //     'url'        => route('space.admin.recovery'),
+                    //     'title'      => __('Recovery'),
+                    //     'permission' => 'space_view',
+                    // ],
 
                 ]
             ]

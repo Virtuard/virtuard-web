@@ -13,5 +13,7 @@
        $('body').toggleClass('sidebar-toggled');
     });
 
+    alert('base js');
+
 
 })(jQuery);

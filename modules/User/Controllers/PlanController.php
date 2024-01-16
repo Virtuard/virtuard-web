@@ -239,4 +239,9 @@ class PlanController extends FrontendController
     {
         return view('User::frontend.plan.thankyou');
     }
+
+    public function planStatus()
+    {
+        return view('plan-status');
+    }
 }

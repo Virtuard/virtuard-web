@@ -6,31 +6,31 @@ $menus = [
         'title' => __('Dashboard'),
         'icon' => 'fa fa-home',
         'permission' => 'dashboard_vendor_access',
-        'position' => 10,
+        'position' => 1,
     ],
     'booking-history' => [
         'url' => route('user.booking_history'),
         'title' => __('Booking History'),
         'icon' => 'fa fa-clock-o',
-        'position' => 20,
+        'position' => 4,
     ],
     'wishlist' => [
         'url' => route('user.wishList.index'),
         'title' => __('Wishlist'),
         'icon' => 'fa fa-heart-o',
-        'position' => 21,
+        'position' => 3,
     ],
-    'profile' => [
+    'profile-setting' => [
         'url' => route('user.profile.setting'),
         'title' => __('Profile Setting'),
         'icon' => 'fa fa-cogs',
-        'position' => 23,
+        'position' => 100,
     ],
-    'profile-setting' => [
+    'profile' => [
         'url' => route('user.profile.index'),
         'title' => __('My Profile'),
         'icon' => 'fa fa-user',
-        'position' => 22,
+        'position' => 2,
     ],
     'password' => [
         'url' => route('user.change_password'),
@@ -45,6 +45,20 @@ $menus = [
         'permission' => 'dashboard_access',
         'position' => 110,
     ],
+    'virtuard360' => [
+        'url' => route('user-virtuard'),
+        'title' => 'Virtuard 360',
+        'icon' => 'fa fa-camera',
+        'permission' => 'dashboard_vendor_access',
+        'position' => 5,
+    ],
+    // 'listing' => [
+    //     'url' => '#',
+    //     'title' => 'Listing',
+    //     'icon' => 'fa fa-list',
+    //     'position' => 6,
+    //     'children' => [],
+    // ],
 ];
 
 // Modules
@@ -131,6 +145,19 @@ if (!empty($custom_modules)) {
     }
 }
 
+// check list menu
+foreach ($menus as $key => $menu) {
+    $menus[$key]['id'] = $key;
+    if (in_array($key, menu_listing())) {
+        $menus[$key]['category'] = 'listing';
+        // $menus['listing']['children'][] = $menu;
+        // unset($menus[$key]);
+    }
+    if (!in_array($key, menu_user())) {
+        unset($menus[$key]);
+    }
+}
+
 $currentUrl = url(Illuminate\Support\Facades\Route::current()->uri());
 if (!empty($menus)) {
     $menus = array_values(
@@ -139,6 +166,7 @@ if (!empty($menus)) {
         }),
     );
 }
+
 foreach ($menus as $k => $menuItem) {
     if (!empty($menuItem['permission']) and !Auth::user()->hasPermission($menuItem['permission'])) {
         unset($menus[$k]);
@@ -156,6 +184,7 @@ foreach ($menus as $k => $menuItem) {
         }
     }
 }
+
 ?>
 <div class="sidebar-user">
     <div class="bravo-close-menu-user"><i class="icofont-scroll-left"></i></div>
@@ -181,8 +210,22 @@ foreach ($menus as $k => $menuItem) {
     </div>
     <div class="sidebar-menu">
         <ul class="main-menu">
-            @foreach ($menus as $menuItem)
-                <li class="{{ $menuItem['class'] }}" position="{{ $menuItem['position'] ?? '' }}">
+            @foreach ($menus as $key => $menuItem)
+
+            @if ($key === 5)
+                <li id="nav-listing" class="nav-category nav-listing">
+                    <a href="#">
+                        <span class="icon text-center"><i class="fa fa-list"></i></span>
+                        Listing
+                    </a>
+                    <i class="caret"></i>
+                </li>
+            @endif
+
+                <li 
+                    class="{{ $menuItem['class'] }} {{ $menuItem['category'] ?? '' }} {{ isset($menuItem['category']) ? 'd-none' : '' }}" 
+                    position="{{ $menuItem['position'] ?? '' }}"
+                    >
                     <a href="{{ url($menuItem['url']) }}">
 
                         @if (!empty($menuItem['icon']))
@@ -207,16 +250,15 @@ foreach ($menus as $k => $menuItem) {
                             <span class="icon text-center"><i class="{{ $iconMenu }}"></i></span>
                         @endif
 
-
                         <?php
                         $dataTitleName = $menuItem['title'];
                         
                         if ($dataTitleName === 'Manage Hotel') {
-                            $dataTitleName = 'Manage Business';
+                            $dataTitleName = 'Manage Property';
                         } elseif ($dataTitleName === 'Manage Tour') {
                             $dataTitleName = 'Manage Natural and Landscapes';
                         } elseif ($dataTitleName === 'Manage Space') {
-                            $dataTitleName = 'Manage Property';
+                            $dataTitleName = 'Manage Business';
                         } elseif ($dataTitleName === 'Manage Car') {
                             $dataTitleName = 'Manage Accomodation';
                         } elseif ($dataTitleName === 'Manage Event') {
@@ -232,6 +274,11 @@ foreach ($menus as $k => $menuItem) {
 
                         {!! clean($dataTitleName) !!}
 
+                        @if (checkMenuVendor($menuItem))
+                            <span class="icon text-center icon-lock">
+                                <i class="fa fa-star"></i>
+                            </span>
+                        @endif
                     </a>
                     @if (!empty($menuItem['children']))
                         <i class="caret"></i>
@@ -239,25 +286,27 @@ foreach ($menus as $k => $menuItem) {
                     @if (!empty($menuItem['children']))
                         <ul class="children">
                             @foreach ($menuItem['children'] as $menuItem2)
-                                <li class="{{ $menuItem2['class'] }}"><a href="{{ url($menuItem2['url']) }}">
+                                <li class="{{ $menuItem2['class'] }}">
+                                    <a href="{{ url($menuItem2['url']) }}">
                                         @if (!empty($menuItem2['icon']))
                                             <i class="{{ $menuItem2['icon'] }}"></i>
                                         @endif
                                         {!! clean($menuItem2['title']) !!}
-                                    </a></li>
+                                    </a>
+                                </li>
                             @endforeach
                         </ul>
                     @endif
                 </li>
 
-                @if ($menuItem['title'] === 'Dashboard')
+                {{-- @if ($menuItem['title'] === 'Dashboard')
                     <li class="" position="9">
                         <a href="/user/virtuard-360">
                             <span class="icon text-center"><i class="fa fa-camera"></i></span>
                             Virtuard 360
                         </a>
                     </li>
-                @endif
+                @endif --}}
             @endforeach
         </ul>
     </div>

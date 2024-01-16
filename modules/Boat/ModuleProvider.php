@@ -114,16 +114,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __("Add Boat"),
                         'permission' => 'boat_create',
                     ],
-                    [
-                        'url'        => route('boat.vendor.availability.index'),
-                        'title'      => __("Availability"),
-                        'permission' => 'boat_create',
-                    ],
-                    [
-                        'url'   => route('boat.vendor.recovery'),
-                        'title'      => __("Recovery"),
-                        'permission' => 'boat_create',
-                    ],
+                    // [
+                    //     'url'        => route('boat.vendor.availability.index'),
+                    //     'title'      => __("Availability"),
+                    //     'permission' => 'boat_create',
+                    // ],
+                    // [
+                    //     'url'   => route('boat.vendor.recovery'),
+                    //     'title'      => __("Recovery"),
+                    //     'permission' => 'boat_create',
+                    // ],
                 ]
             ];
         }

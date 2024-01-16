@@ -1,6 +1,7 @@
 <?php
 use Modules\Core\Models\Settings;
 use App\Currency;
+use App\Models\SubscribeVirtuard;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
@@ -1216,3 +1217,85 @@ function generate_timezone_list()
     function get_main_lang(){
         return setting_item('site_locale');
     }
+
+if (!function_exists('menu_listing')) {
+    function menu_listing() {
+        $data = [
+            'space', //business
+            'tour', //natural
+            'hotel', //property
+            'car', //accomodation
+            'event', //cultural
+            'flight', //rendering
+            'boat', //vehicles
+        ];
+
+        return $data;
+    }
+}
+
+if (!function_exists('menu_user')) {
+    function menu_user() {
+        $data = [
+            'dashboard',
+            'booking-history',
+            'wishlist',
+            'profile',
+            'profile-setting',
+            // 'password',
+            'admin',
+            'hotel',
+            'space',
+            'car',
+            'event',
+            'tour',
+            'flight',
+            'boat',
+            // 'news',
+            // 'verification',
+            'my_plan',
+            'booking_report',
+            // "enquiry",
+            // "payout",
+            'virtuard360',
+            'listing',
+        ];
+
+        return $data;
+    }
+}
+
+if (!function_exists('getMenuVendor')) {
+    function getMenuVendor()
+    {
+        $data = [
+            'dashboard',
+            'virtuard360',
+        ];
+
+        return $data;
+    }
+}
+
+if (!function_exists('checkMenuVendor')) {
+    function checkMenuVendor($menu)
+    {
+        $status = false;
+        if (isset($menu['id']) && in_array($menu['id'], getMenuVendor())) $status = true;
+        return $status;
+    }
+}
+
+if (!function_exists('checkUserSubscriber')) {
+    function checkUserSubscriber()
+    {
+        $status = false;
+
+        $userId = auth()->user()->id;
+        $subscribe = SubscribeVirtuard::where('id_user', $userId)->first();
+
+        if(!empty($subscribe)) $status = true;
+
+        return $status;
+    }
+}
