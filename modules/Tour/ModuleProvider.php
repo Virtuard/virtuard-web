@@ -105,18 +105,18 @@ class ModuleProvider extends ModuleServiceProvider
         if(Tour::isEnable()){
             $res['tour'] = [
                 'url'   => route('tour.vendor.index'),
-                'title'      => __("Manage Tour"),
+                'title'      => __('natural.manage'),
                 'icon'       => Tour::getServiceIconFeatured(),
                 'permission' => 'tour_view',
                 'position'   => 40,
                 'children'   => [
                     [
                         'url'   => route('tour.vendor.index'),
-                        'title' => __("All Tours"),
+                        'title' => __('natural.all'),
                     ],
                     [
                         'url'        => route('tour.vendor.create'),
-                        'title'      => __("Add Tour"),
+                        'title'      => __('natural.add'),
                         'permission' => 'tour_create',
                     ],
                     // [
@@ -148,7 +148,7 @@ class ModuleProvider extends ModuleServiceProvider
             ],
             [
                 'class' => \Modules\Tour\Models\TourCategory::class,
-                'name'  => __("Tour Category"),
+                'name'  => __('natural.category'),
                 'items' => \Modules\Tour\Models\TourCategory::searchForMenu(),
                 'position'=>30
             ],

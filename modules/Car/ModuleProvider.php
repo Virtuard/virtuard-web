@@ -49,7 +49,7 @@ class ModuleProvider extends ModuleServiceProvider
                     ],
                     'create'=>[
                         'url'        => route('car.admin.create'),
-                        'title'      => __('Add new Car'),
+                        'title'      => __('accomodation.add_new'),
                         'permission' => 'car_create',
                     ],
                     // 'attribute'=>[
@@ -99,30 +99,30 @@ class ModuleProvider extends ModuleServiceProvider
         if(Car::isEnable()){
             $res['car'] = [
                 'url'   => route('car.vendor.index'),
-                'title'      => __("Manage Car"),
+                'title'      => __('accomodation.manage'),
                 'icon'       => Car::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'car_view',
                 'children' => [
                     [
                         'url'   => route('car.vendor.index'),
-                        'title'  => __("All Cars"),
+                        'title'  => __('accomodation.all'),
                     ],
                     [
                         'url'   => route('car.vendor.create'),
-                        'title'      => __("Add Car"),
+                        'title'      => __('accomodation.add'),
                         'permission' => 'car_create',
                     ],
-                    [
-                        'url'        => route('car.vendor.availability.index'),
-                        'title'      => __("Availability"),
-                        'permission' => 'car_create',
-                    ],
-                    [
-                        'url'   => route('car.vendor.recovery'),
-                        'title'      => __("Recovery"),
-                        'permission' => 'car_create',
-                    ],
+                    // [
+                    //     'url'        => route('car.vendor.availability.index'),
+                    //     'title'      => __("Availability"),
+                    //     'permission' => 'car_create',
+                    // ],
+                    // [
+                    //     'url'   => route('car.vendor.recovery'),
+                    //     'title'      => __("Recovery"),
+                    //     'permission' => 'car_create',
+                    // ],
                 ]
             ];
         }

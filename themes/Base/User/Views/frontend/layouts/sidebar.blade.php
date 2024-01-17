@@ -148,6 +148,7 @@ if (!empty($custom_modules)) {
 // check list menu
 foreach ($menus as $key => $menu) {
     $menus[$key]['id'] = $key;
+    $menus[$key]['position'] = setMenuPosition($menus[$key]);
     if (in_array($key, menu_listing())) {
         $menus[$key]['category'] = 'listing';
         // $menus['listing']['children'][] = $menu;
@@ -222,8 +223,8 @@ foreach ($menus as $k => $menuItem) {
                 </li>
             @endif
 
-                <li 
-                    class="{{ $menuItem['class'] }} {{ $menuItem['category'] ?? '' }} {{ isset($menuItem['category']) ? 'd-none' : '' }}" 
+                <li
+                    class="{{ $menuItem['class'] }} {{ $menuItem['category'] ?? '' }} {{ isset($menuItem['category']) ? 'd-none' : '' }}"
                     position="{{ $menuItem['position'] ?? '' }}"
                     >
                     <a href="{{ url($menuItem['url']) }}">
@@ -231,7 +232,7 @@ foreach ($menus as $k => $menuItem) {
                         @if (!empty($menuItem['icon']))
                             <?php
                             $iconMenu = $menuItem['icon'];
-                            
+
                             if ($menuItem['icon'] === 'fa fa-building-o') {
                                 $iconMenu = 'fa fa-shopping-bag';
                             } elseif ($menuItem['icon'] === 'icofont-island-alt') {
@@ -252,23 +253,6 @@ foreach ($menus as $k => $menuItem) {
 
                         <?php
                         $dataTitleName = $menuItem['title'];
-                        
-                        if ($dataTitleName === 'Manage Hotel') {
-                            $dataTitleName = 'Manage Business';
-                        } elseif ($dataTitleName === 'Manage Tour') {
-                            $dataTitleName = 'Manage Natural and Landscapes';
-                        } elseif ($dataTitleName === 'Manage Space') {
-                            $dataTitleName = 'Manage Property';
-                        } elseif ($dataTitleName === 'Manage Car') {
-                            $dataTitleName = 'Manage Accomodation';
-                        } elseif ($dataTitleName === 'Manage Event') {
-                            $dataTitleName = 'Manage Cultural Haritage and Public Works';
-                        } elseif ($dataTitleName === 'Manage Flight') {
-                            $dataTitleName = 'Manage Rendering and Art';
-                        } elseif ($dataTitleName === 'Manage Boat') {
-                            $dataTitleName = 'Manage Vehicles';
-                        }
-                        
                         ?>
 
 

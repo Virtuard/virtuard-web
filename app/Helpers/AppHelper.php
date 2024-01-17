@@ -1221,12 +1221,12 @@ function generate_timezone_list()
 if (!function_exists('menu_listing')) {
     function menu_listing() {
         $data = [
-            'space', //business
             'tour', //natural
-            'hotel', //property
-            'car', //accomodation
             'event', //cultural
             'flight', //rendering
+            'hotel', //business
+            'space', //property
+            'car', //accomodation
             'boat', //vehicles
         ];
 
@@ -1297,5 +1297,38 @@ if (!function_exists('checkUserSubscriber')) {
         if(!empty($subscribe)) $status = true;
 
         return $status;
+    }
+}
+
+if (!function_exists('setMenuPosition')) {
+    function setMenuPosition($menu)
+    {
+        $position = $menu['position'];
+
+        switch ($menu['id']) {
+            case 'tour':
+                $position = 10;
+                break;
+            case 'event':
+                $position = 11;
+                break;
+            case 'flight':
+                $position = 12;
+                break;
+            case 'hotel':
+                $position = 13;
+                break;
+            case 'space':
+                $position = 14;
+                break;
+            case 'car':
+                $position = 15;
+                break;
+            case 'boat':
+                $position = 16;
+                break;
+        }
+
+        return $position;
     }
 }

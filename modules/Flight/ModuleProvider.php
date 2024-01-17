@@ -92,18 +92,18 @@ class ModuleProvider extends ModuleServiceProvider
         if (Flight::isEnable()) {
             $res['flight'] = [
                 'url'        => route('flight.vendor.index'),
-                'title'      => __("Manage Flight"),
+                'title'      => __("rendering.manage"),
                 'icon'       => Flight::getServiceIconFeatured(),
                 'position'   => 60,
                 'permission' => 'flight_view',
                 'children'   => [
                     [
                         'url'   => route('flight.vendor.index'),
-                        'title' => __("All Flights"),
+                        'title' => __("rendering.all"),
                     ],
                     [
                         'url'        => route('flight.vendor.create'),
-                        'title'      => __("Add Flights"),
+                        'title'      => __("rendering.add"),
                         'permission' => 'flight_create',
                     ],
                 ]

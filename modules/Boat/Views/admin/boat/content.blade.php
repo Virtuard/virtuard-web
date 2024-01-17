@@ -1,5 +1,5 @@
 <div class="panel">
-    <div class="panel-title"><strong>{{ __('Boat Content') }}</strong></div>
+    <div class="panel-title"><strong>{{ __('vehicle.content') }}</strong></div>
     <div class="panel-body">
         <div class="form-group">
             <label>{{ __('Title') }}</label>

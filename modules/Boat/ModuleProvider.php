@@ -50,7 +50,7 @@ class ModuleProvider extends ModuleServiceProvider
                     ],
                     'create'=>[
                         'url'        => route('boat.admin.create'),
-                        'title'      => __('Add new Boat'),
+                        'title'      => __('vehicle.add_new'),
                         'permission' => 'boat_create',
                     ],
                     'attribute'=>[
@@ -100,18 +100,18 @@ class ModuleProvider extends ModuleServiceProvider
         if(Boat::isEnable()){
             $res['boat'] = [
                 'url'   => route('boat.vendor.index'),
-                'title'      => __("Manage Boat"),
+                'title'      => __('vehicle.manage'),
                 'icon'       => Boat::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'boat_view',
                 'children' => [
                     [
                         'url'   => route('boat.vendor.index'),
-                        'title'  => __("All Boats"),
+                        'title'  => __('vehicle.all'),
                     ],
                     [
                         'url'   => route('boat.vendor.create'),
-                        'title'      => __("Add Boat"),
+                        'title'      => __('vehicle.add'),
                         'permission' => 'boat_create',
                     ],
                     // [

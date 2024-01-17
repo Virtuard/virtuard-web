@@ -150,7 +150,7 @@
 
 @endif
 
-@if ($categories)
+@if (isset($categories))
     <div class="panel">
         <div class="panel-title"><strong>{{ __('Cultural Haritage and Public Works Category') }}</strong></div>
         <div class="panel-body">

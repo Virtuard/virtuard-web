@@ -105,30 +105,30 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'event' => [
                 'url'   => route('event.vendor.index'),
-                'title'      => __("Manage Event"),
+                'title'      => __('cultural.manage'),
                 'icon'       => Event::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'event_view',
                 'children' => [
                     [
                         'url'   => route('event.vendor.index'),
-                        'title'  => __("All Events"),
+                        'title'  => __('cultural.all'),
                     ],
                     [
                         'url'   => route('event.vendor.create'),
-                        'title'      => __("Add Event"),
+                        'title'      => __('cultural.add'),
                         'permission' => 'event_create',
                     ],
-                    'availability'=>[
-                        'url'        => route('event.vendor.availability.index'),
-                        'title'      => __('Availability'),
-                        'permission' => 'event_create',
-                    ],
-                    [
-                        'url'   => route('event.vendor.recovery'),
-                        'title'      => __("Recovery"),
-                        'permission' => 'event_create',
-                    ],
+                    // 'availability'=>[
+                    //     'url'        => route('event.vendor.availability.index'),
+                    //     'title'      => __('Availability'),
+                    //     'permission' => 'event_create',
+                    // ],
+                    // [
+                    //     'url'   => route('event.vendor.recovery'),
+                    //     'title'      => __("Recovery"),
+                    //     'permission' => 'event_create',
+                    // ],
                 ]
             ],
         ];
