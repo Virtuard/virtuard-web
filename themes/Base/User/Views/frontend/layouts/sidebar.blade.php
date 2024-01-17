@@ -254,11 +254,11 @@ foreach ($menus as $k => $menuItem) {
                         $dataTitleName = $menuItem['title'];
                         
                         if ($dataTitleName === 'Manage Hotel') {
-                            $dataTitleName = 'Manage Property';
+                            $dataTitleName = 'Manage Business';
                         } elseif ($dataTitleName === 'Manage Tour') {
                             $dataTitleName = 'Manage Natural and Landscapes';
                         } elseif ($dataTitleName === 'Manage Space') {
-                            $dataTitleName = 'Manage Business';
+                            $dataTitleName = 'Manage Property';
                         } elseif ($dataTitleName === 'Manage Car') {
                             $dataTitleName = 'Manage Accomodation';
                         } elseif ($dataTitleName === 'Manage Event') {
