@@ -61,7 +61,7 @@ class VendorEventController extends FrontendController
             'rows' => $list_tour->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => __('cultural.manage'),
+                    'name' => __('Manage Events'),
                     'url'  => route('event.vendor.index')
                 ],
                 [
@@ -69,7 +69,7 @@ class VendorEventController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'         => __('cultural.manage'),
+            'page_title'         => __("Manage Events"),
         ];
         return view('Event::frontend.vendorEvent.index', $data);
     }
@@ -84,7 +84,7 @@ class VendorEventController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => __('cultural.manage'),
+                    'name' => __('Manage Events'),
                     'url'  => route('event.vendor.index')
                 ],
                 [
@@ -125,7 +125,7 @@ class VendorEventController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'event')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => __('cultural.manage'),
+                    'name' => __('Manage Events'),
                     'url'  => route('event.vendor.index')
                 ],
                 [
@@ -270,7 +270,7 @@ class VendorEventController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('cultural.manage'),
+                    'name' => __('Manage Events'),
                     'url'  => route('event.vendor.index')
                 ],
                 [

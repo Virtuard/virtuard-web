@@ -57,21 +57,21 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Space'),
                         'permission' => 'space_create',
                     ],
-                    // 'attribute'=>[
-                    //     'url'        => route('space.admin.attribute.index'),
-                    //     'title'      => __('Attributes'),
-                    //     'permission' => 'space_manage_attributes',
-                    // ],
-                    // 'availability'=>[
-                    //     'url'        => route('space.admin.availability.index'),
-                    //     'title'      => __('Availability'),
-                    //     'permission' => 'space_create',
-                    // ],
-                    // 'recovery'=>[
-                    //     'url'        => route('space.admin.recovery'),
-                    //     'title'      => __('Recovery'),
-                    //     'permission' => 'space_view',
-                    // ],
+                    'attribute'=>[
+                        'url'        => route('space.admin.attribute.index'),
+                        'title'      => __('Attributes'),
+                        'permission' => 'space_manage_attributes',
+                    ],
+                    'availability'=>[
+                        'url'        => route('space.admin.availability.index'),
+                        'title'      => __('Availability'),
+                        'permission' => 'space_create',
+                    ],
+                    'recovery'=>[
+                        'url'        => route('space.admin.recovery'),
+                        'title'      => __('Recovery'),
+                        'permission' => 'space_view',
+                    ],
 
                 ]
             ]
@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         if (Space::isEnable()) {
             $res['space'] = [
                 'url'        => route('space.vendor.index'),
-                'title'      => __('property.manage'),
+                'title'      => __('property.title'),
                 'icon'       => Space::getServiceIconFeatured(),
                 'position'   => 50,
                 'permission' => 'space_view',

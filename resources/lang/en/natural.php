@@ -1,8 +1,7 @@
 <?php
 
 return [
-    'title' => 'Natural',
-    'title_full' => 'Natural and Landscape',
+    'title' => 'Natural and Landscape',
     'manage' => 'Manage Natural and Landscape',
     'all' => 'All Natural',
     'add' => 'Add Natural',

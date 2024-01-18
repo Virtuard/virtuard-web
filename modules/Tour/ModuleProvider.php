@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Tour::isEnable()){
             $res['tour'] = [
                 'url'   => route('tour.vendor.index'),
-                'title'      => __('natural.manage'),
+                'title'      => __('natural.title'),
                 'icon'       => Tour::getServiceIconFeatured(),
                 'permission' => 'tour_view',
                 'position'   => 40,

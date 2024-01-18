@@ -52,21 +52,21 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('accomodation.add_new'),
                         'permission' => 'car_create',
                     ],
-                    // 'attribute'=>[
-                    //     'url'        => route('car.admin.attribute.index'),
-                    //     'title'      => __('Attributes'),
-                    //     'permission' => 'car_manage_attributes',
-                    // ],
-                    // 'availability'=>[
-                    //     'url'        => route('car.admin.availability.index'),
-                    //     'title'      => __('Availability'),
-                    //     'permission' => 'car_create',
-                    // ],
-                    // 'recovery'=>[
-                    //     'url'        => route('car.admin.recovery'),
-                    //     'title'      => __('Recovery'),
-                    //     'permission' => 'car_view',
-                    // ],
+                    'attribute'=>[
+                        'url'        => route('car.admin.attribute.index'),
+                        'title'      => __('Attributes'),
+                        'permission' => 'car_manage_attributes',
+                    ],
+                    'availability'=>[
+                        'url'        => route('car.admin.availability.index'),
+                        'title'      => __('Availability'),
+                        'permission' => 'car_create',
+                    ],
+                    'recovery'=>[
+                        'url'        => route('car.admin.recovery'),
+                        'title'      => __('Recovery'),
+                        'permission' => 'car_view',
+                    ],
                 ]
             ]
         ];
@@ -99,7 +99,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Car::isEnable()){
             $res['car'] = [
                 'url'   => route('car.vendor.index'),
-                'title'      => __('accomodation.manage'),
+                'title'      => __('accomodation.title'),
                 'icon'       => Car::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'car_view',

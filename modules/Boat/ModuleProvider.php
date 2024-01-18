@@ -100,7 +100,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Boat::isEnable()){
             $res['boat'] = [
                 'url'   => route('boat.vendor.index'),
-                'title'      => __('vehicle.manage'),
+                'title'      => __('vehicle.title'),
                 'icon'       => Boat::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'boat_view',

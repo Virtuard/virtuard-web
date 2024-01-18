@@ -158,6 +158,7 @@ foreach ($menus as $key => $menu) {
         unset($menus[$key]);
     }
 }
+// dd($menus);
 
 $currentUrl = url(Illuminate\Support\Facades\Route::current()->uri());
 if (!empty($menus)) {
@@ -217,7 +218,7 @@ foreach ($menus as $k => $menuItem) {
                 <li id="nav-listing" class="nav-category nav-listing">
                     <a href="#">
                         <span class="icon text-center"><i class="fa fa-list"></i></span>
-                        Listing
+                        Manage Listing
                     </a>
                     <i class="caret"></i>
                 </li>

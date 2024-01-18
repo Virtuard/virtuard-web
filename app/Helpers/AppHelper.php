@@ -1222,7 +1222,7 @@ if (!function_exists('menu_listing')) {
     function menu_listing() {
         $data = [
             'tour', //natural
-            'event', //cultural
+            'cultural', //cultural
             'flight', //rendering
             'hotel', //business
             'space', //property
@@ -1247,7 +1247,7 @@ if (!function_exists('menu_user')) {
             'hotel',
             'space',
             'car',
-            'event',
+            // 'event',
             'tour',
             'flight',
             'boat',
@@ -1259,6 +1259,7 @@ if (!function_exists('menu_user')) {
             // "payout",
             'virtuard360',
             'listing',
+            'cultural',
         ];
 
         return $data;
@@ -1271,6 +1272,10 @@ if (!function_exists('getMenuVendor')) {
         $data = [
             'dashboard',
             'virtuard360',
+            'hotel',
+            'space',
+            'boat',
+            'car',
         ];
 
         return $data;
@@ -1309,7 +1314,7 @@ if (!function_exists('setMenuPosition')) {
             case 'tour':
                 $position = 10;
                 break;
-            case 'event':
+            case 'cultural':
                 $position = 11;
                 break;
             case 'flight':

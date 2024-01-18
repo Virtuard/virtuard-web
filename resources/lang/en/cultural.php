@@ -1,8 +1,7 @@
 <?php
 
 return [
-    'title' => 'Cultural',
-    'title_full' => 'Cultural Haritage and Public Work',
+    'title' => 'Cultural Haritage and Public Work',
     'manage' => 'Manage Cultural Haritage and Public Work',
     'all' => 'All Cultural',
     'add' => 'Add Cultural',

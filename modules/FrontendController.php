@@ -24,7 +24,7 @@ class FrontendController extends Controller
     public function checkVirtuard360()
     {
         $idUser = Auth::id();
-        
+
         $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)->get();
 
         $isVirtuard360 = false;
