@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'Rendering',
+    'title' => 'Rendering and Art',
     'title_full' => 'Rendering and Art',
     'manage' => 'Manage Rendering and Landscape',
     'all' => 'All Rendering',
