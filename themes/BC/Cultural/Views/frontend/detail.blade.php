@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @push('css')
-    <link href="{{ asset('dist/frontend/module/event/css/cultural.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
+    <link href="{{ asset('dist/frontend/module/event/css/event.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/ion_rangeslider/css/ion.rangeSlider.min.css") }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/fotorama/fotorama.css") }}"/>
 
@@ -76,7 +76,7 @@
     <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
-    <script type="text/javascript" src="{{ asset('module/event/js/single-cultural.js?_ver='.config('app.asset_version')) }}"></script>
+    <script type="text/javascript" src="{{ asset('module/event/js/single-event.js?_ver='.config('app.asset_version')) }}"></script>
 
     <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>

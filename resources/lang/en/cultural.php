@@ -2,6 +2,7 @@
 
 return [
     'title' => 'Cultural Haritage and Public Work',
+    'sidebar_menu_title' => 'Cultural Haritage',
     'manage' => 'Manage Cultural Haritage and Public Work',
     'all' => 'All Cultural',
     'add' => 'Add Cultural',

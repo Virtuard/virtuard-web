@@ -1,7 +1,7 @@
 <?php
 /**
- * @var $translation \Modules\Event\Models\EventTranslation
- * @var $row \Modules\Event\Models\Event
+ * @var $translation \Modules\Cultural\Models\CulturalTranslation
+ * @var $row \Modules\Cultural\Models\Cultural
  */
 ?>
 <div class="g-header">
@@ -140,7 +140,7 @@
         </div>
     </div>
 @endif
-@include('Event::frontend.layouts.details.attributes')
+@include('Cultural::frontend.layouts.details.attributes')
 @if($translation->faqs)
 <div class="g-faq">
     <h3> {{__("FAQs")}} </h3>

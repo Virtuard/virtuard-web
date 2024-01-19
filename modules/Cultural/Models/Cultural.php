@@ -141,7 +141,7 @@ class Cultural extends Bookable
                 $param['children'] = $children;
             }
         }
-        $urlDetail = app_get_locale(false, false, '/') . env('cultural_ROUTE_PREFIX', 'cultural') . "/" . $this->slug;
+        $urlDetail = app_get_locale(false, false, '/') . env('CULTURAL_ROUTE_PREFIX', 'cultural') . "/" . $this->slug;
         if (!empty($param)) {
             $urlDetail .= "?" . http_build_query($param);
         }
@@ -151,7 +151,7 @@ class Cultural extends Bookable
     public static function getLinkForPageSearch($locale = false, $param = [])
     {
 
-        return url(app_get_locale(false, false, '/') . env('cultural_ROUTE_PREFIX', 'cultural') . "?" . http_build_query($param));
+        return url(app_get_locale(false, false, '/') . env('CULTURAL_ROUTE_PREFIX', 'cultural') . "?" . http_build_query($param));
     }
 
     public function getEditUrl()

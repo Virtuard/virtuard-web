@@ -1,9 +1,9 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar">
-        {{!empty($recovery) ?__('Recovery Events') : __('Manage Event')}}
+        {{!empty($recovery) ?__('Recovery Events') : __("Manage Events")}}
         @if(Auth::user()->hasPermission('event_create') && empty($recovery))
-            <a href="{{ route("event.vendor.create") }}" class="btn-change-password">{{__('cultural.add')}}</a>
+            <a href="{{ route("event.vendor.create") }}" class="btn-change-password">{{__("Add Event")}}</a>
         @endif
     </h2>
     @include('admin.message')
@@ -28,6 +28,6 @@
             </div>
         </div>
     @else
-        {{__('cultural.no')}}
+        {{__("No Event")}}
     @endif
 @endsection

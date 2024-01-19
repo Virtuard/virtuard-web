@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'cultural' => [
                 'url'   => route('cultural.vendor.index'),
-                'title'      => __('cultural.title'),
+                'title'      => __('cultural.sidebar_menu_title'),
                 'icon'       => Cultural::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'cultural_view',

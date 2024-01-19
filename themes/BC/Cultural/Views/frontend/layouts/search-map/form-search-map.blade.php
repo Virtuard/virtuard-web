@@ -1,4 +1,4 @@
-<form action="{{url( app_get_locale(false,false,'/').env('EVENT_ROUTE_PREFIX','event') )}}" class="form bravo_form d-flex justify-content-start" method="get" onsubmit="return false;">
+<form action="{{url( app_get_locale(false,false,'/').env('CULTURAL_ROUTE_PREFIX','event') )}}" class="form bravo_form d-flex justify-content-start" method="get" onsubmit="return false;">
     @php $cultural_map_search_fields = setting_item_array('cultural_map_search_fields');
 
     $cultural_map_search_fields = array_values(\Illuminate\Support\Arr::sort($cultural_map_search_fields, function ($value) {

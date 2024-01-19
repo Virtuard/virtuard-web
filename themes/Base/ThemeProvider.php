@@ -51,6 +51,7 @@ class ThemeProvider extends AbstractThemeProvider
         'review'=>\Modules\Review\ModuleProvider::class,
         'popup'=>\Modules\Popup\ModuleProvider::class,
         'cultural'=>\Modules\Cultural\ModuleProvider::class,
+        'art'=>\Modules\Art\ModuleProvider::class,
 
     ];
 

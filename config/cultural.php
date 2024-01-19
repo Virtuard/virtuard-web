@@ -1,4 +1,4 @@
 <?php
 return [
-    'cultural_route_prefix' => env("CUlTURAL_ROUTER_PREFIX","cultural"),
+    'cultural_route_prefix' => env("CULTURAL_ROUTER_PREFIX","cultural"),
 ];
