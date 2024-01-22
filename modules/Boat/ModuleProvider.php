@@ -37,9 +37,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Boat::isEnable()) return [];
         return [
             'boat'=>[
-                "position"=>45,
+                "position"=>17,
                 'url'        => route('boat.admin.index'),
-                'title'      => __('Boat'),
+                'title'      => __('vehicle.title'),
                 'icon'       => 'ion-md-boat',
                 'permission' => 'boat_view',
                 'children'   => [

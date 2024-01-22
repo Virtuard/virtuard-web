@@ -41,9 +41,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Space::isEnable()) return [];
         return [
             'space'=>[
-                "position"=>41,
+                "position"=>15,
                 'url'        => route('space.admin.index'),
-                'title'      => __('Space'),
+                'title'      => __('property.title'),
                 'icon'       => 'ion ion-md-home',
                 'permission' => 'space_view',
                 'children'   => [

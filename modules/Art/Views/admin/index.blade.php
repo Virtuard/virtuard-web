@@ -5,7 +5,7 @@
             <h1 class="title-bar">{{!empty($recovery) ? __('Recovery') : __("All Arts")}}</h1>
             <div class="title-actions">
                 @if(empty($recovery))
-                <a href="{{route('cultural.admin.create')}}" class="btn btn-primary">{{__("Add new cultural")}}</a>
+                <a href="{{route('art.admin.create')}}" class="btn btn-primary">{{__("Add new art")}}</a>
                 @endif
             </div>
         </div>
@@ -13,7 +13,7 @@
         <div class="filter-div d-flex justify-content-between ">
             <div class="col-left">
                 @if(!empty($rows))
-                    <form method="post" action="{{route('cultural.admin.bulkEdit')}}" class="filter-form filter-form-left d-flex justify-content-start">
+                    <form method="post" action="{{route('art.admin.bulkEdit')}}" class="filter-form filter-form-left d-flex justify-content-start">
                         {{csrf_field()}}
                         <select name="action" class="form-control">
                             <option value="">{{__(" Bulk Actions ")}}</option>
@@ -34,8 +34,8 @@
                 @endif
             </div>
             <div class="col-left dropdown">
-                <form method="get" action="{{ !empty($recovery) ? route('cultural.admin.recovery') : route('cultural.admin.index')}}" class="filter-form filter-form-right d-flex justify-content-end flex-column flex-sm-row" role="search">
-                    @if(!empty($rows) and $cultural_manage_others)
+                <form method="get" action="{{ !empty($recovery) ? route('art.admin.recovery') : route('art.admin.index')}}" class="filter-form filter-form-right d-flex justify-content-end flex-column flex-sm-row" role="search">
+                    @if(!empty($rows) and $art_manage_others)
                         <input type="text" name="s" value="{{ Request()->s }}" placeholder="{{__('Search by name')}}" class="form-control">
                         <div class="ml-3 position-relative">
                             <button class="btn btn-secondary dropdown-toggle bc-dropdown-toggle-filter" type="button" id="dropdown_filters">
@@ -80,7 +80,7 @@
                                         @if($row->is_featured)
                                             <span class="badge badge-primary">{{ __("Featured") }}</span>
                                         @endif
-                                        <a href="{{route('cultural.admin.edit',['id'=>$row->id])}}">{{$row->title}}</a>
+                                        <a href="{{route('art.admin.edit',['id'=>$row->id])}}">{{$row->title}}</a>
                                     </td>
                                     <td>{{$row->location->name ?? ''}}</td>
                                     <td>
@@ -99,14 +99,14 @@
                                     <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         @if(empty($recovery))
-                                            <a href="{{route('cultural.admin.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
+                                            <a href="{{route('art.admin.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="7">{{__("No cultural found")}}</td>
+                                <td colspan="7">{{__("No art found")}}</td>
                             </tr>
                         @endif
                         </tbody>

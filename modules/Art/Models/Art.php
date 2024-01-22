@@ -85,7 +85,7 @@ class Art extends Bookable
 
     public static function getModelName()
     {
-        return __("Art");
+        return "Art";
     }
 
     public static function getTableName()

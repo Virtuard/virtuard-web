@@ -1,14 +1,14 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <form action="{{route('cultural.admin.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post" enctype="multipart/form-data">
+    <form action="{{route('art.admin.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb20">
                 <div class="">
-                    <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Add new cultural')}}</h1>
+                    <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Add new art')}}</h1>
                     @if($row->slug)
-                        <p class="item-url-demo">{{__("Permalink")}}: {{ url('cultural' ) }}/<a href="#" class="open-edit-input" data-name="slug">{{$row->slug}}</a>
+                        <p class="item-url-demo">{{__("Permalink")}}: {{ url('art' ) }}/<a href="#" class="open-edit-input" data-name="slug">{{$row->slug}}</a>
                         </p>
                     @endif
                 </div>
@@ -25,9 +25,9 @@
             <div class="lang-content-box">
                 <div class="row">
                     <div class="col-md-9">
-                        @include('Art::admin.cultural.content')
-                        @include('Art::admin.cultural.pricing')
-                        @include('Art::admin.cultural.location')
+                        @include('Art::admin.art.content')
+                        @include('Art::admin.art.pricing')
+                        @include('Art::admin.art.location')
                         @include('Hotel::admin.hotel.surrounding')
                         @include('Core::admin/seo-meta/seo-meta')
                     </div>
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                             </div>
-                            @include('Art::admin.cultural.attributes')
+                            @include('Art::admin.art.attributes')
                             <div class="panel">
                                 <div class="panel-title"><strong>{{__('Feature Image')}}</strong></div>
                                 <div class="panel-body">

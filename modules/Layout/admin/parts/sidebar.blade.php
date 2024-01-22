@@ -187,104 +187,14 @@ if (!empty($menus)){
             Virtuard 360
         </a>
     </li>
-    @php
-        $businessCategory = [
-            "url" => "admin/add/category/product/business",
-            "title" => "Add Category Business",
-            "class" => ""
-        ];
-
-        $naturalCategory = [
-            "url" => "admin/add/category/product/natural",
-            "title" => "Add Category Natural",
-            "class" => ""
-        ];
-
-        $propertyCategory = [
-            "url" => "admin/add/category/product/property",
-            "title" => "Add Category Property",
-            "class" => ""
-        ];
-
-        $renderingArtCategory = [
-            "url" => "admin/add/category/product/rendering-art",
-            "title" => "Add Category Rendering",
-            "class" => ""
-        ];
-
-        $AccomodationCategory = [
-            "url" => "admin/add/category/product/accomodation",
-            "title" => "Add Category Accomodation",
-            "class" => ""
-        ];
-
-        $VehicleCategory = [
-            "url" => "admin/add/category/product/vehicle",
-            "title" => "Add Category Vehicles",
-            "class" => ""
-        ];
-
-        $culturalCategory = [
-            "url" => "admin/add/category/product/cultural",
-            "title" => "Add Category Cultural",
-            "class" => ""
-        ];
-
-        $menus[4]["children"][] = $businessCategory;
-        $menus[5]["children"][] = $naturalCategory;
-        $menus[6]["children"][] = $propertyCategory;
-        $menus[7]["children"][] = $renderingArtCategory;
-        $menus[8]["children"][] = $AccomodationCategory;
-        $menus[9]["children"][] = $VehicleCategory;
-        $menus[10]["children"][] = $culturalCategory;
-    @endphp
     @foreach($menus as $menuItem)
         @php $menuItem['class'] .= " ".str_ireplace("/","_",$menuItem['url']) @endphp
         <li class="{{$menuItem['class']}}"><a href="{{ url($menuItem['url']) }}">
                 @if(!empty($menuItem['icon']))
-                    <?php
-                        $iconMenu = $menuItem['icon'];
-
-                        if($menuItem['icon'] === 'fa fa-building-o') {
-                            $iconMenu = 'fa fa-shopping-bag';
-                        }elseif($menuItem['icon'] === 'icon ion-md-umbrella') {
-                            $iconMenu = 'fa fa-tree';
-                        }elseif($menuItem['icon'] === 'ion ion-md-home') {
-                            $iconMenu = 'fa fa-home';
-                        }elseif($menuItem['icon'] === 'ion ion-md-airplane') {
-                            $iconMenu = 'fa fa-laptop';
-                        }elseif($menuItem['icon'] === 'ion-logo-model-s') {
-                            $iconMenu = 'fa fa-industry';
-                        }elseif($menuItem['icon'] === 'ion-ios-calendar') {
-                            $iconMenu = 'fa fa-leaf';
-                        }
-                    ?>
-
-                    <span class="icon text-center"><i class="{{$iconMenu}}"></i></span>
+                    <span class="icon text-center"><i class="{{$menuItem['icon']}}"></i></span>
                 @endif
 
-                <?php
-                $dataTitleName = $menuItem['title'];
-
-                if($dataTitleName === 'Hotel') {
-                    $dataTitleName = 'Business';
-                }elseif($dataTitleName === 'Tour') {
-                    $dataTitleName = 'Natural and Landscapes';
-                }elseif($dataTitleName === 'Space') {
-                    $dataTitleName = 'Property';
-                }elseif($dataTitleName === 'Car') {
-                    $dataTitleName = 'Accomodation';
-                }elseif($dataTitleName === 'Event') {
-                    $dataTitleName = 'Cultural Haritage and Public Works';
-                }elseif($dataTitleName === 'Flight') {
-                    $dataTitleName = 'Rendering and Art';
-                }elseif($dataTitleName === 'Boat') {
-                    $dataTitleName = 'Vehicles';
-                }
-
-                ?>
-
-                {!! clean($dataTitleName,[
+                {!! clean($menuItem['title'],[
                     'Attr.AllowedClasses'=>null
                 ]) !!}
             </a>

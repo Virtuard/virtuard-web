@@ -17,7 +17,7 @@ $list_service = [];
                     $list_service[$type] = $services;
                 @endphp
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#type_{{$type}}">{{$moduleClass::getModelName()}}</a>
+                        <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#type_{{$type}}">{{ $moduleClass::getModelName() }}</a>
                     </li>
                 @php $i++; @endphp
             @endforeach

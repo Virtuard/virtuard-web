@@ -1313,25 +1313,25 @@ if (!function_exists('setMenuPosition')) {
 
         switch ($menu['id']) {
             case 'tour':
-                $position = 10;
-                break;
-            case 'cultural':
                 $position = 11;
                 break;
-            case 'art':
+            case 'cultural':
                 $position = 12;
                 break;
-            case 'hotel':
+            case 'art':
                 $position = 13;
                 break;
-            case 'space':
+            case 'hotel':
                 $position = 14;
                 break;
-            case 'car':
+            case 'space':
                 $position = 15;
                 break;
-            case 'boat':
+            case 'car':
                 $position = 16;
+                break;
+            case 'boat':
+                $position = 17;
                 break;
         }
 

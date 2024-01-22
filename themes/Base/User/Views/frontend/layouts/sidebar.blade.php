@@ -158,7 +158,6 @@ foreach ($menus as $key => $menu) {
         unset($menus[$key]);
     }
 }
-// dd($menus);
 
 $currentUrl = url(Illuminate\Support\Facades\Route::current()->uri());
 if (!empty($menus)) {
@@ -229,35 +228,11 @@ foreach ($menus as $k => $menuItem) {
                     position="{{ $menuItem['position'] ?? '' }}"
                     >
                     <a href="{{ url($menuItem['url']) }}">
-
                         @if (!empty($menuItem['icon']))
-                            <?php
-                            $iconMenu = $menuItem['icon'];
-
-                            if ($menuItem['icon'] === 'fa fa-building-o') {
-                                $iconMenu = 'fa fa-shopping-bag';
-                            } elseif ($menuItem['icon'] === 'icofont-island-alt') {
-                                $iconMenu = 'fa fa-tree';
-                            } elseif ($menuItem['icon'] === 'icofont-building-alt') {
-                                $iconMenu = 'fa fa-home';
-                            } elseif ($menuItem['icon'] === 'icofont-ui-flight') {
-                                $iconMenu = 'fa fa-laptop';
-                            } elseif ($menuItem['icon'] === 'icofont-car') {
-                                $iconMenu = 'fa fa-industry';
-                            } elseif ($menuItem['icon'] === 'icofont-ticket') {
-                                $iconMenu = 'fa fa-leaf';
-                            }
-                            ?>
-
-                            <span class="icon text-center"><i class="{{ $iconMenu }}"></i></span>
+                            <span class="icon text-center"><i class="{{ $menuItem['icon'] }}"></i></span>
                         @endif
 
-                        <?php
-                        $dataTitleName = $menuItem['title'];
-                        ?>
-
-
-                        {!! clean($dataTitleName) !!}
+                        {!! clean($menuItem['title']) !!}
 
                         @if (checkMenuVendor($menuItem))
                             <span class="icon text-center icon-lock">

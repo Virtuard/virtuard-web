@@ -42,10 +42,10 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Cultural::isEnable()) return [];
         return [
             'cultural'=>[
-                "position"=>50,
+                "position"=>12,
                 'url'        => route('cultural.admin.index'),
-                'title'      => __('Cultural'),
-                'icon'       => 'ion-ios-calendar',
+                'title'      => __('cultural.title'),
+                'icon'       => 'fa fa-leaf',
                 'permission' => 'cultural_view',
                 'children'   => [
                     'add'=>[

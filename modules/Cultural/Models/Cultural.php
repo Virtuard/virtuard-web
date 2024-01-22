@@ -85,7 +85,7 @@ class Cultural extends Bookable
 
     public static function getModelName()
     {
-        return __("Cultural");
+        return "Cultural";
     }
 
     public static function getTableName()

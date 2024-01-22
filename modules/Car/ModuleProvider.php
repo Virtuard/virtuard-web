@@ -36,9 +36,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Car::isEnable()) return [];
         return [
             'car'=>[
-                "position"=>45,
+                "position"=>16,
                 'url'        => route('car.admin.index'),
-                'title'      => __('Car'),
+                'title'      => __('accomodation.title'),
                 'icon'       => 'ion-logo-model-s',
                 'permission' => 'car_view',
                 'children'   => [

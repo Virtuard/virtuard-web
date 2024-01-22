@@ -51,10 +51,10 @@ class ModuleProvider extends ModuleServiceProvider
         $res = [];
         if(Tour::isEnable()){
             $res['tour'] = [
-                "position"=>40,
+                "position"=>11,
                 'url'        => route('tour.admin.index'),
-                'title'      => __("Tour"),
-                'icon'       => 'icon ion-md-umbrella',
+                'title'      => __('natural.title'),
+                'icon'       => 'fa fa-tree',
                 'permission' => 'tour_view',
                 'children'   => [
                     'tour_view'=>[

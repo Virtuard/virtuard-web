@@ -41,9 +41,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Hotel::isEnable()) return [];
         return [
             'hotel'=>[
-                "position"=>32,
+                "position"=>14,
                 'url'        => route('hotel.admin.index'),
-                'title'      => __('Hotel'),
+                'title'      => __('business.title'),
                 'icon'       => 'fa fa-building-o',
                 'permission' => 'hotel_view',
                 'children'   => [

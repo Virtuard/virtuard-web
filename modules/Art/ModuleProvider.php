@@ -42,10 +42,10 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Art::isEnable()) return [];
         return [
             'art'=>[
-                "position"=>50,
+                "position"=>13,
                 'url'        => route('art.admin.index'),
-                'title'      => __('Art'),
-                'icon'       => 'ion-ios-calendar',
+                'title'      => __('art.title'),
+                'icon'       => 'fa fa-laptop',
                 'permission' => 'art_view',
                 'children'   => [
                     'add'=>[
