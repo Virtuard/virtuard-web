@@ -92,7 +92,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'cultural'=>[
                 'class' => Cultural::class,
-                'name'  => __("Cultural"),
+                'name'  => "Cultural",
                 'items' => Cultural::searchForMenu(),
                 'position'=>51
             ]

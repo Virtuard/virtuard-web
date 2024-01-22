@@ -133,7 +133,7 @@ class CulturalController extends Controller
             'body_class'=>'is_single',
             'breadcrumbs'       => [
                 [
-                    'name'  => __('Cultural'),
+                    'name'  => 'Cultural',
                     'url'  => route('cultural.search'),
                 ],
             ],
