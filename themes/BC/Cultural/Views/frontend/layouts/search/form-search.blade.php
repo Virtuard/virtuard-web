@@ -22,16 +22,16 @@
                     <div class="col-md-{{ $field['size'] ?? "6" }} border-right">
                         @switch($field['field'])
                             @case ('service_name')
-                                @include('Event::frontend.layouts.search.fields.service_name')
+                                @include('Cultural::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Event::frontend.layouts.search.fields.location')
+                                @include('Cultural::frontend.layouts.search.fields.location')
                             @break
                             @case ('date')
-                                @include('Event::frontend.layouts.search.fields.date')
+                                @include('Cultural::frontend.layouts.search.fields.date')
                             @break
                             @case ('Nearby')
-                                @include('Event::frontend.layouts.search.fields.range')
+                                @include('Cultural::frontend.layouts.search.fields.range')
                             @break
                         @endswitch
                     </div>

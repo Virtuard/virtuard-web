@@ -15,7 +15,7 @@
                 <div class="row">
                     @foreach($rows as $row)
                         <div class="col-lg-{{$col ?? 3}} col-md-6">
-                            @include('Cultural::frontend.layouts.search.loop-grid')
+                            @include('Art::frontend.layouts.search.loop-grid')
                         </div>
                     @endforeach
                 </div>
@@ -23,7 +23,7 @@
             @if($style_list === "carousel")
                 <div class="owl-carousel">
                     @foreach($rows as $row)
-                        @include('Cultural::frontend.layouts.search.loop-grid')
+                        @include('Art::frontend.layouts.search.loop-grid')
                     @endforeach
                 </div>
             @endif

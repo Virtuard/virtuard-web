@@ -16,13 +16,13 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-md-12">
-                        @include('Cultural::frontend.layouts.search.form-search')
+                        @include('Art::frontend.layouts.search.form-search')
                     </div>
                 </div>
             </div>
         </div>
         <div class="container">
-            @include('Cultural::frontend.layouts.search.list-item')
+            @include('Art::frontend.layouts.search.list-item')
         </div>
     </div>
 @endsection

@@ -8,13 +8,13 @@
                     {{ __(":count cultural found",['count'=>$rows->total()]) }}
                 @endif
             </h2>
-            <span class="count-string">{{ __("Showing :from - :to of :total Events",["from"=>$rows->firstItem(),"to"=>$rows->lastItem(),"total"=>$rows->total()]) }}</span>
+            <span class="count-string">{{ __("Showing :from - :to of :total Culturals",["from"=>$rows->firstItem(),"to"=>$rows->lastItem(),"total"=>$rows->total()]) }}</span>
         </div>
         <div class="list-item">
             <div class="row">
                 @foreach($rows as $row)
                     <div class="col-lg-4 col-md-6">
-                        @include('Event::frontend.layouts.search.loop-grid')
+                        @include('Cultural::frontend.layouts.search.loop-grid')
                     </div>
                 @endforeach
             </div>

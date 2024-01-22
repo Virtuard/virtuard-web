@@ -1,5 +1,5 @@
 <div class="bravo_filter">
-    <form action="{{url(app_get_locale(false,false,'/').env('EVENT_ROUTE_PREFIX','cultural'))}}" class="bravo_form_filter">
+    <form action="{{url(app_get_locale(false,false,'/').env('CULTURAL_ROUTE_PREFIX','cultural'))}}" class="bravo_form_filter">
         @if( !empty(Request::query('location_id')) )
             <input type="hidden" name="location_id" value="{{Request::query('location_id')}}">
         @endif

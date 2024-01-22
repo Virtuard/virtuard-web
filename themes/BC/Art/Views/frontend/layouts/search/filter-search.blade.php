@@ -1,5 +1,5 @@
 <div class="bravo_filter">
-    <form action="{{url(app_get_locale(false,false,'/').env('EVENT_ROUTE_PREFIX','cultural'))}}" class="bravo_form_filter">
+    <form action="{{url(app_get_locale(false,false,'/').env('ART_ROUTE_PREFIX','art'))}}" class="bravo_form_filter">
         @if( !empty(Request::query('location_id')) )
             <input type="hidden" name="location_id" value="{{Request::query('location_id')}}">
         @endif
@@ -28,8 +28,8 @@
             <div class="item-content">
                 <div class="bravo-filter-price">
                     <?php
-                    $price_min = $pri_from = floor ( App\Currency::convertPrice($cultural_min_max_price[0]) );
-                    $price_max = $pri_to = ceil ( App\Currency::convertPrice($cultural_min_max_price[1]) );
+                    $price_min = $pri_from = floor ( App\Currency::convertPrice($art_min_max_price[0]) );
+                    $price_max = $pri_to = ceil ( App\Currency::convertPrice($art_min_max_price[1]) );
                     if (!empty($price_range = Request::query('price_range'))) {
                         $pri_from = explode(";", $price_range)[0];
                         $pri_to = explode(";", $price_range)[1];

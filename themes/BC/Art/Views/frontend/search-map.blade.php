@@ -14,7 +14,7 @@
             {{setting_item_with_lang("event_page_search_title")}}
         </h1>
         <div class="bravo_form_search_map">
-            @include('Cultural::frontend.layouts.search-map.form-search-map')
+            @include('Art::frontend.layouts.search-map.form-search-map')
         </div>
         <div class="bravo_search_map {{ setting_item_with_lang("event_layout_map_option",false,"map_left") }}"">
             <div class="results_map">
@@ -24,9 +24,9 @@
                 <div id="bravo_results_map" class="results_map_inner"></div>
             </div>
             <div class="results_item">
-                @include('Cultural::frontend.layouts.search-map.advance-filter')
+                @include('Art::frontend.layouts.search-map.advance-filter')
                 <div class="listing_items">
-                    @include('Cultural::frontend.layouts.search-map.list-item')
+                    @include('Art::frontend.layouts.search-map.list-item')
                 </div>
             </div>
         </div>

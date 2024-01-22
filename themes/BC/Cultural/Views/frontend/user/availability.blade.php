@@ -2,7 +2,7 @@
 
 @section ('content')
     <h2 class="title-bar no-border-bottom">
-        {{ __("Availability Events") }}
+        {{ __("Availability Culturals") }}
     </h2>
     <div class="language-navigation">
         <div class="panel-body">
