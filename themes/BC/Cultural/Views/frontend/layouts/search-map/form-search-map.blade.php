@@ -10,16 +10,16 @@
         @foreach($cultural_map_search_fields as $field)
             @switch($field['field'])
                 @case ('location')
-                    @include('Event::frontend.layouts.search-map.fields.location')
+                    @include('Cultural::frontend.layouts.search-map.fields.location')
                 @break
                 @case ('attr')
-                    @include('Event::frontend.layouts.search-map.fields.attr')
+                    @include('Cultural::frontend.layouts.search-map.fields.attr')
                 @break
                 @case ('date')
-                    @include('Event::frontend.layouts.search-map.fields.date')
+                    @include('Cultural::frontend.layouts.search-map.fields.date')
                 @break
                 @case ('price')
-                    @include('Event::frontend.layouts.search-map.fields.price')
+                    @include('Cultural::frontend.layouts.search-map.fields.price')
                 @break
                 @case ('advance')
                     <div class="filter-item filter-simple">

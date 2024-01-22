@@ -15,7 +15,7 @@
 @section('content')
     <div class="bravo_detail_event">
         @include('Layout::parts.bc')
-        @include('Cultural::frontend.layouts.details.banner')
+        @include('Art::frontend.layouts.details.banner')
         <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
         <div class="bravo_content">
             <div class="container">
@@ -25,22 +25,22 @@
                         @if($data['ipanorama'])
                         <div id="panorama"></div>
                         @endif
-                        @include('Cultural::frontend.layouts.details.detail')
-                        @include('Cultural::frontend.layouts.details.review')
+                        @include('Art::frontend.layouts.details.detail')
+                        @include('Art::frontend.layouts.details.review')
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
-                        @include('Cultural::frontend.layouts.details.form-book')
+                        @include('Art::frontend.layouts.details.form-book')
                     </div>
                 </div>
                 <div class="row end_tour_sticky">
                     <div class="col-md-12">
-                        @include('Cultural::frontend.layouts.details.related')
+                        @include('Art::frontend.layouts.details.related')
                     </div>
                 </div>
             </div>
         </div>
-        @include('Cultural::frontend.layouts.details.form-book-mobile')
+        @include('Art::frontend.layouts.details.form-book-mobile')
     </div>
 @endsection
 

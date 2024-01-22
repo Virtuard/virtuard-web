@@ -153,7 +153,7 @@
                 defaultView: 'dayGridMonth',
                 firstDay: daterangepickerLocale.first_day_of_week,
                 events:{
-                    url:"{{route('cultural.vendor.availability.loadDates')}}",
+                    url:"{{route('art.vendor.availability.loadDates')}}",
                     extraParams:{
                         id:lastId,
                     }
@@ -172,15 +172,15 @@
                     });
                 },
                 eventClick:function (info) {
-                    var form = Object.assign({},info.cultural.extendedProps);
-                    form.start_date = moment(info.cultural.start).format('YYYY-MM-DD');
-                    form.end_date = moment(info.cultural.start).format('YYYY-MM-DD');
+                    var form = Object.assign({},info.art.extendedProps);
+                    form.start_date = moment(info.art.start).format('YYYY-MM-DD');
+                    form.end_date = moment(info.art.start).format('YYYY-MM-DD');
                     console.log(form);
                     formModal.show(form);
                 },
                 eventRender: function (info) {
-                    $(info.el).find('.fc-title').html(info.cultural.title);
-                    $(info.el).find('.fc-content').attr("data-html","true").attr("title",info.cultural.title).tooltip({ boundary: 'window' })
+                    $(info.el).find('.fc-title').html(info.art.title);
+                    $(info.el).find('.fc-content').attr("data-html","true").attr("title",info.art.title).tooltip({ boundary: 'window' })
                 }
             });
             calendar.render();
@@ -256,7 +256,7 @@
                     this.onSubmit = true;
                     this.form.ticket_types = this.ticket_types;
                     $.ajax({
-                        url:'{{route('cultural.vendor.availability.store')}}',
+                        url:'{{route('art.vendor.availability.store')}}',
                         data:this.form,
                         dataType:'json',
                         method:'post',
