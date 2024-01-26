@@ -8,7 +8,13 @@ class RefIpanorama extends Model
 {
     public $incrementing = true;
     protected $table = 'ref_add_ipanorama';
-
-    protected $fillable = ['id_user', 'title', 'code'];
     public $timestamps = false;
+
+    protected $fillable = [
+        'id_user', 
+        'title', 
+        'code',
+        'json_data',
+        'thumb',
+    ];
 }

@@ -42,20 +42,17 @@ class FollowBoardsController extends Controller
     {
         $idUser = Auth::id();
         $dataUser = User::all();
-        $dataPostMe = UserPost::join('users', 'users.id', '=', 'user_post_status.user_id')
+        $posts = UserPost::join('users', 'users.id', '=', 'user_post_status.user_id')
             ->select('user_post_status.*', 'users.name as name')
             ->orderBy('user_post_status.created_at', 'desc')
             ->get();
-
-        $posts = PostMedia::all();
+        $postMedia = PostMedia::all();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
         $likes = PostLike::all();
         $comments = PostComment::all();
+        $dataFeedMe = Story::where('user_id', $idUser)->get();
 
-        $dataFeedMe = Story::where('user_id', $idUser)
-            ->get();
-
-        return view('boards.index', compact('dataUser', 'dataPostMe', 'likes', 'comments', 'dataFeedMe', 'posts', 'dataIpanorama'));
+        return view('boards.index', compact('dataUser', 'postMedia', 'likes', 'comments', 'dataFeedMe', 'posts', 'dataIpanorama'));
     }
 
     public function store(Request $request)

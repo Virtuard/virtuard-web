@@ -105,8 +105,8 @@
 
         <div id="ipanorama-frame"></div>
     @endif
-
-    @push('js')
+@endsection
+@push('js')
         <script>
             @if (Auth::check() && Auth::user()->is_tour != 1)
                 const tour = new Shepherd.Tour({
@@ -264,4 +264,3 @@
             });
         </script>
     @endpush
-@endsection

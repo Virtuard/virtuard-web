@@ -2,6 +2,7 @@
 namespace Modules\User\Controllers;
 
 use App\Models\FollowUser;
+use App\Models\UserPost;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 use Matrix\Exception;
@@ -96,7 +97,10 @@ class UserController extends FrontendController
         $user = Auth::user();
         $followUser = FollowUser::where('user_id', Auth::user()->id)->count();
         $followingUser = FollowUser::where('follow_user_id', Auth::user()->id)->count();
+        $userPosts = UserPost::with('medias', 'ipanorama')->where('user_id', $user->id)->get();
+        
         $data = [
+            'userPosts' => $userPosts,
             'dataUser' => $user,
             'followed' => $followUser,
             'following' => $followingUser,

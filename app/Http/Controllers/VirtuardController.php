@@ -206,12 +206,11 @@ class VirtuardController extends Controller
 
     public function vendorVirtuardAddApiSecond(Request $request)
     {
-        $data = json_decode($request->getContent());
-        $id = $data->id;
+        $data = $request->except('id');
+        $id = $request->id;
 
-        $virtuard = RefIpanorama::where('id', $id)->first();
-        $virtuard->code = $data->data;
-        $virtuard->save();
+        $virtuard = RefIpanorama::find($id);
+        $virtuard->update($data);
 
         if ($data === null) {
             return response()->json([

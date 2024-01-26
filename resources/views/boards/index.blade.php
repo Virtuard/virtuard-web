@@ -33,6 +33,10 @@
             height: 20vw;
             object-fit: cover;
         }
+
+        .thumb-panorama {
+            width: 350px;
+        }
     </style>
     <div style="padding-top: 115px;padding-bottom: 40px; background: #f5f5f5;">
         <div class="col-md-12">
@@ -187,41 +191,50 @@
                         </div>
                     </form>
                     <div id="content_status_post" style="display: block;">
-                        @foreach ($dataPostMe as $postMe)
-                            <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $postMe->id }}">
+                        @foreach ($posts as $post)
+                            <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img class="mr-4"
                                         src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                         alt="">
                                     <div>
-                                        <p class="m-0" style="font-weight: 600;">
-                                            {{ $postMe->name }}
-                                        </p>
+                                        <a href="{{ route('user.profile', $post->user_id) }}">
+                                            <p class="m-0" style="font-weight: 600;">
+                                                {{ $post->name }}
+                                            </p>
+                                        </a>
                                         <p class="m-0" style="font-size: 0.7rem; font-weight: 500; color: #9b9b9b;">
-                                            {{ $postMe->created_at->diffForHumans() }}
+                                            {{ $post->created_at->diffForHumans() }}
                                         </p>
                                     </div>
                                 </div>
                                 <hr>
-                                @if ($postMe->ipanorama_id)
-                                    <div id="panorama"></div>
+                                @if ($post->ipanorama_id)
+                                    @foreach ($dataIpanorama as $panorama)
+                                        @if ($panorama->id === $post->ipanorama_id)
+                                            <a data-id="{{ $panorama->id }}"  data-code="{{ $panorama->code }}" class="preview-panorama cursor-pointer">
+                                                <img id="thumb-panorama-{{ $panorama->id }}" src='{{ getThumbPanorama($panorama) }}' alt="" class="thumb-panorama">
+                                            </a>
+                                            @break
+                                        @endif
+                                    @endforeach
                                 @endif
                                 @php $count = 0; @endphp
-                                @foreach ($posts as $post)
-                                    @if ($post->post_id == $postMe->id)
+                                @foreach ($postMedia as $pm)
+                                    @if ($pm->post_id == $post->id)
                                         @php
-                                            $fileType = pathinfo($post->media, PATHINFO_EXTENSION);
+                                            $fileType = pathinfo($pm->media, PATHINFO_EXTENSION);
                                         @endphp
 
                                         @if (in_array(strtolower($fileType), ['jpeg', 'jpg', 'png', 'webp']))
-                                            <a href="{{ asset('uploads/' . $post->media) }}" data-lightbox="image-1">
-                                                <img src="{{ url('uploads/' . $post->media) }}" alt=""
+                                            <a href="{{ asset('uploads/' . $pm->media) }}" data-lightbox="image-1">
+                                                <img src="{{ url('uploads/' . $pm->media) }}" alt="image"
                                                     style="width: 320px; height: 220px; position: relative;"
                                                     class="{{ $count >= 4 ? 'd-none' : '' }}">
                                             </a>
                                         @elseif (in_array(strtolower($fileType), ['pdf', 'doc', 'docx', 'xls', 'xlsx']))
-                                            <a href="{{ url('uploads/' . $post->media) }}" download
+                                            <a href="{{ url('uploads/' . $pm->media) }}" download
                                                 style="text-decoration: none; color: #333;"
                                                 class="{{ $count >= 4 ? ' d-none' : '' }}">
                                                 <div style="display: flex; align-items: center;">
@@ -239,11 +252,11 @@
                                                 </div>
                                             </a>
                                         @elseif (in_array(strtolower($fileType), ['mp4', 'mkv']))
-                                            <a href="{{ url('uploads/' . $post->media) }}" data-lightbox="videos"
+                                            <a href="{{ url('uploads/' . $pm->media) }}" data-lightbox="videos"
                                                 data-title="Video Title">
                                                 <video width="320" height="240" controls
                                                     class="{{ $count >= 4 ? 'd-none' : '' }}">
-                                                    <source src="{{ url('uploads/' . $post->media) }}">
+                                                    <source src="{{ url('uploads/' . $pm->media) }}">
                                                 </video>
                                             </a>
                                         @endif
@@ -257,11 +270,11 @@
                                             font-weight: 500;
                                             color: #9b9b9b;
                                         ">
-                                    {{ $postMe->message }}
+                                    {{ $post->message }}
                                 </p>
                                 <hr>
                                 @php
-                                    $comments = $comments->where('post_id', $postMe->id);
+                                    $comments = $comments->where('post_id', $post->id);
                                 @endphp
                                 {{-- COMMENT --}}
                                 @if ($comments->count() > 0)
@@ -308,22 +321,22 @@
                                     </div>
 
                                     <p class="m-0 ml-2" style="color: #9b9b9b;">and
-                                        {{ $likes->where('post_id', $postMe->id)->count() }} Like This</p>
+                                        {{ $likes->where('post_id', $post->id)->count() }} Like This</p>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-around align-items-center">
                                     @php
-                                        $liked = $likes->where('post_id', $postMe->id)->where('user_id', Auth::id());
+                                        $liked = $likes->where('post_id', $post->id)->where('user_id', Auth::id());
                                     @endphp
 
                                     @auth
                                         @if ($liked->count() > 0)
-                                            <a href="{{ route('user.post.like', ['id' => $postMe->id]) }}"
+                                            <a href="{{ route('user.post.like', ['id' => $post->id]) }}"
                                                 class="cursor-pointer" style="color: pink;">
                                                 <i class="fa fa-heart"></i> Liked
                                             </a>
                                         @else
-                                            <a href="{{ route('user.post.like', ['id' => $postMe->id]) }}"
+                                            <a href="{{ route('user.post.like', ['id' => $post->id]) }}"
                                                 class="cursor-pointer" style="color: #9b9b9b;">
                                                 <i class="fa fa-heart-o"></i> Like
                                             </a>
@@ -340,7 +353,7 @@
                                         @endif
                                     @endauth
                                     <a class="cursor-pointer" style="color: #9b9b9b;"
-                                        onclick="toggleCommentInput({{ $postMe->id }})"><i
+                                        onclick="toggleCommentInput({{ $post->id }})"><i
                                             class="fa fa-commenting-o"></i>
                                         Comment</a>
                                     <div class="btn-group">
@@ -350,7 +363,7 @@
                                         </button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item"
-                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('/user/follow-boards#Post-' . $postMe->id)) }}"
+                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-facebook"></i> Share on Facebook
                                             </a>
@@ -359,8 +372,8 @@
 
                                 </div>
                                 @auth
-                                    <div id="commentInput_{{ $postMe->id }}" style="display:none;" class="mt-2">
-                                        <form action="{{ route('user.post.comment', ['id' => $postMe->id]) }}" method="POST">
+                                    <div id="commentInput_{{ $post->id }}" style="display:none;" class="mt-2">
+                                        <form action="{{ route('user.post.comment', ['id' => $post->id]) }}" method="POST">
                                             @csrf
                                             <div class="form-group" style="display: flex;">
                                                 <textarea class="form-control" id="comment" name="comment" placeholder="Write your comment here" rows="3"
@@ -370,7 +383,7 @@
                                         </form>
                                     </div>
                                 @else
-                                    <div id="commentInput_{{ $postMe->id }}" style="display:none;" class="mt-2">
+                                    <div id="commentInput_{{ $post->id }}" style="display:none;" class="mt-2">
                                         <form id="commentForm">
                                             <div class="form-group" style="display: flex;">
                                                 <textarea class="form-control" id="comment" name="comment" rows="3" style="flex: 1;"
@@ -435,6 +448,10 @@
             </div>
         </div>
     </div>
+
+    <div class="section-modal">
+        @include('vendor.ipanorama.demo.includes.ipanorama-modal')
+    </div>
 @endsection
 
 @push('css')
@@ -447,8 +464,8 @@
 @endpush
 
 @push('js')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
     <script>
@@ -492,11 +509,6 @@
             'wrapAround': false,
             'disableScrolling': true,
         })
-    </script>
-    <script>
-        var panoramaData = {!! json_encode($postMe->panorama->code ?? '') !!};
-
-        var panorama = $("#panorama").ipanorama(panoramaData);
     </script>
     <script>
         function toggleCommentInput(postId) {

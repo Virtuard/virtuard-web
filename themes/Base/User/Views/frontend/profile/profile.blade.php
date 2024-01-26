@@ -21,3 +21,11 @@
     </div>
 </div>
 @endsection
+
+@push('css')
+    @include('vendor.ipanorama.demo.includes.ipanorama-style')
+    <link rel="stylesheet" href="{{ asset('assets/css/profile-setting-custom.css') }}">
+@endpush
+@push('js')
+    @include('vendor.ipanorama.demo.includes.ipanorama-script')
+@endpush

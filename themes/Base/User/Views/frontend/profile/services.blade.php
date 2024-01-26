@@ -7,6 +7,9 @@ $list_service = [];
     <div class="service-nav-tabs">
         <ul class="nav nav-tabs">
             @php $i = 0; @endphp
+            <li class="nav-item">
+                <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">Profile</a>
+            </li>
             @foreach($types as $type=>$moduleClass)
                 @php
                     if($type == "flight")  continue;
@@ -17,7 +20,7 @@ $list_service = [];
                     $list_service[$type] = $services;
                 @endphp
                     <li class="nav-item">
-                        <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#type_{{$type}}">{{ $moduleClass::getModelName() }}</a>
+                        <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$type}}">{{ $moduleClass::getModelName() }}</a>
                     </li>
                 @php $i++; @endphp
             @endforeach
@@ -25,6 +28,9 @@ $list_service = [];
     </div>
     <div class="tab-content">
         @php $i = 0; @endphp
+        <div class="tab-pane fade @if(!$i) show active @endif" id="profile" role="tabpanel" aria-labelledby="pills-home-tab">
+            @include('User::frontend.profile.gallery', ['userPosts' => getUserPosts($user->id)])
+        </div>
         @foreach($types as $type=>$moduleClass)
             @php
                 if($type == "flight")  continue;
@@ -32,7 +38,7 @@ $list_service = [];
                 if(empty($list_service[$type])) continue;
             @endphp
                 @if(view()->exists(ucfirst($type).'::frontend.profile.service') && $user->hasPermission($type.'_create'))
-                    <div class="tab-pane fade @if(!$i) show active @endif" id="type_{{$type}}" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <div class="tab-pane fade" id="type_{{$type}}" role="tabpanel" aria-labelledby="pills-home-tab">
                         @include(ucfirst($type).'::frontend.profile.service',['services'=>$list_service[$type]])
                     </div>
                     @php $i++; @endphp

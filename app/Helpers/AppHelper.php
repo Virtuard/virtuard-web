@@ -2,6 +2,7 @@
 use Modules\Core\Models\Settings;
 use App\Currency;
 use App\Models\SubscribeVirtuard;
+use App\Models\UserPost;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
 
@@ -1336,5 +1337,22 @@ if (!function_exists('setMenuPosition')) {
         }
 
         return $position;
+    }
+}
+
+if (!function_exists('getThumbPanorama')) {
+    function getThumbPanorama($data) {
+        $result = '/uploads/ipanoramaBuilder/upload/default.png';
+        if (isset($data->thumb)) {
+            $result = "/uploads/ipanoramaBuilder/$data->thumb";
+        }
+        return $result;
+    }
+}
+
+if (!function_exists('getUserPosts')) {
+    function getUserPosts($id) {
+        $data = UserPost::with('medias', 'ipanorama')->where('user_id', $id)->get();
+        return $data;
     }
 }

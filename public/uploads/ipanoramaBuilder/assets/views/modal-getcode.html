@@ -68,17 +68,28 @@ $(document).ready(function() {
 <script type="text/javascript">
 	function submitData() {
 		const dataCode = document.getElementById('code_get').innerHTML;
+        let dataConfig = dataCode.replace(`$("#mypanorama").ipanorama(`, '');
+        dataConfig = dataConfig.slice(0, -2);
+
+        let dataConfigObj = JSON.parse(dataConfig);
+        let thumb = dataConfigObj.scenes.scene1.image ?? 'upload/default.png';
 
         var currentURL = window.location.href;
         var url = new URL(currentURL);
         var idItem = url.searchParams.get("idItem");
+
+        const dataPost = { 
+            id: idItem,
+            code: dataConfigObj,
+            thumb,
+        };
 
         var requestOptions = {
 		  method: 'POST',
 		  headers: {
 		    'Content-Type': 'application/json',
 		  },
-		  body: JSON.stringify({ data: dataCode, id: idItem }),
+		  body: JSON.stringify(dataPost),
 		};
 
 		fetch('/user/add/virtuard-360/apiSecond', requestOptions)
