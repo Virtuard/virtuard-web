@@ -212,7 +212,7 @@
                                 <hr>
                                 @if ($post->ipanorama_id)
                                     @foreach ($dataIpanorama as $panorama)
-                                        @if ($panorama->id === $post->ipanorama_id)
+                                        @if ($panorama->id == $post->ipanorama_id)
                                             <a data-id="{{ $panorama->id }}"  data-code="{{ $panorama->code }}" class="preview-panorama cursor-pointer">
                                                 <img id="thumb-panorama-{{ $panorama->id }}" src='{{ getThumbPanorama($panorama) }}' alt="" class="thumb-panorama">
                                             </a>
