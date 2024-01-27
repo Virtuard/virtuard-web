@@ -5,7 +5,7 @@ $list_service = [];
 ?>
 <div class="profile-service-tabs">
     <div class="service-nav-tabs">
-        <ul class="nav nav-tabs">
+        <ul class="nav nav-tabs w-100">
             @php $i = 0; @endphp
             <li class="nav-item">
                 <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">Profile</a>
