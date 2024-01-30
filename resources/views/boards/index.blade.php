@@ -195,7 +195,7 @@
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img class="mr-4"
-                                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                        src="{{ $post->user->getAvatarUrl() }}"
                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                         alt="">
                                     <div>

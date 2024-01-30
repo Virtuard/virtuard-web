@@ -16,6 +16,10 @@ class UserPost extends Model
         return $this->belongsTo(RefIpanorama::class, 'ipanorama_id');
     }
 
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
     public function medias()
     {
         return $this->hasMany(PostMedia::class, 'post_id');

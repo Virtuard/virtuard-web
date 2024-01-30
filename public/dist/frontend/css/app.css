@@ -6931,7 +6931,7 @@ ul {
 .bravo_wrap .bravo_topbar .content .topbar-items li {
   display:inline-block;
   padding-left:18px;
-  padding-right:18px
+  /* padding-right:18px */
 }
 .bravo_wrap .bravo_topbar .content .topbar-items li a {
   color:#fff;

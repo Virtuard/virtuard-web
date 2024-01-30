@@ -1,9 +1,9 @@
 <?php
 
 return [
-    'title' => 'Cultural Haritage and Public Work',
-    'sidebar_menu_title' => 'Cultural Haritage',
-    'manage' => 'Manage Cultural Haritage and Public Work',
+    'title' => 'Cultural Heritage and Public Work',
+    'sidebar_menu_title' => 'Cultural Heritage',
+    'manage' => 'Manage Cultural Heritage and Public Work',
     'all' => 'All Cultural',
     'add' => 'Add Cultural',
     'add_new' => 'Add New Cultural',
