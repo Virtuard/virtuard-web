@@ -2,6 +2,7 @@
 namespace Modules\Hotel\Models;
 
 use App\Currency;
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -1196,5 +1197,10 @@ class Hotel extends Bookable
         }
         return $search_fields;
 
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'create_user');
     }
 }

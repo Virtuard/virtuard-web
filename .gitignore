@@ -21,3 +21,4 @@ yarn-error.log
 storage/bc.php
 storage/installed
 public/themes/*/dist
+/local_note

@@ -1356,3 +1356,10 @@ if (!function_exists('getUserPosts')) {
         return $data;
     }
 }
+
+if (!function_exists('get_map_gmap_key')) {
+    function get_map_gmap_key() {
+        $data = Settings::select('val')->where('name', 'map_gmap_key')->first();
+        return $data->val;
+    }
+}

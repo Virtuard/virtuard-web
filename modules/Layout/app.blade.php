@@ -38,6 +38,7 @@
     <link rel='stylesheet' id='google-font-css-css'
         href='https://fonts.googleapis.com/css?family=Poppins%3A300%2C400%2C500%2C600&display=swap' type='text/css'
         media='all' />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
     {!! \App\Helpers\Assets::css() !!}
     {!! \App\Helpers\Assets::js() !!}
     @include('Layout::parts.global-script')

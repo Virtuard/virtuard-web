@@ -24,11 +24,11 @@
     <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.dark.css') }}" rel="stylesheet">
     <link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
     <link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/custom-user.css') }}" rel="stylesheet">
-
+    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel='stylesheet' id='google-font-css-css'  href='https://fonts.googleapis.com/css?family=Poppins%3A400%2C500%2C600' type='text/css' media='all' />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
     @include('Layout::parts.global-script')
     <script>
         var image_editer = {

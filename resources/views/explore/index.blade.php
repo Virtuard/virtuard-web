@@ -48,56 +48,64 @@
                 </form>
             </div>
         </div>
-        <div class="row mt-4">
-            <div class="container col-12">
-                <ul class="nav nav-tabs d-flex justify-content-between" id="myTab" role="tablist">
+        <div class="row mt-4 nav-tab">
+            <div class="col-12">
+                <ul class="nav nav-tabs d-flex justify-content-start" id="myTab" role="tablist" style="gap: 5px; padding: 5px 0;">
                     <li class="nav-item" role="presentation">
                         <button class="nav-link text-capitalize disabled" id="#" data-toggle="tab" data-target="#"
                             type="button" role="tab" aria-controls="#" aria-selected="true">What are you looking for?
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize active" id="all-tab" data-toggle="tab" data-target="#all"
+                        <button class="nav-link nav-category text-capitalize active" id="all-tab" data-toggle="tab" data-target="#all"
                             type="button" role="tab" aria-controls="all" aria-selected="true">
                             <i class="fa fa-sm mr-2 fa-globe"></i> All
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
+                        <button class="nav-link nav-category text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
                             type="button" role="tab" aria-controls="business" aria-selected="false">
-                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>
-                            Business</button>
+                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>Business</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize" id="properties-tab" data-toggle="tab"
+                        <button class="nav-link nav-category text-capitalize" id="properties-tab" data-toggle="tab"
                             data-target="#properties" type="button" role="tab" aria-controls="properties"
-                            aria-selected="false"><i class="fa fa- mr-2 fa-home"></i> properties</button>
+                            aria-selected="false"><i class="fa fa-sm mr-2 fa-home"></i> Properties</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize" id="accomodation-tab" data-toggle="tab"
-                            data-target="#accomodation" type="button" role="tab" aria-controls="accomodation"
-                            aria-selected="false"> <i class="fa fa- mr-2 fa-industry"></i> accomodation</button>
+                        <button class="nav-link nav-category text-capitalize" id="accomodations-tab" data-toggle="tab"
+                            data-target="#accomodations" type="button" role="tab" aria-controls="accomodations"
+                            aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> Accomodations</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize" id="cultural-tab" data-toggle="tab"
-                            data-target="#cultural" type="button" role="tab" aria-controls="cultural"
-                            aria-selected="false"><i class="fa fa- mr-2 fa-leaf"></i> cultural heritage</button>
+                        <button class="nav-link nav-category text-capitalize" id="vehicles-tab" data-toggle="tab"
+                            data-target="#vehicles" type="button" role="tab" aria-controls="vehicles"
+                            aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> Vehicles</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize" id="rendering-tab" data-toggle="tab"
-                            data-target="#rendering" type="button" role="tab" aria-controls="rendering"
-                            aria-selected="false"><i class="fa fa- mr-2 fa-laptop"></i> Rendering and Art</button>
+                        <button class="nav-link nav-category text-capitalize" id="naturals-tab" data-toggle="tab"
+                            data-target="#naturals" type="button" role="tab" aria-controls="naturals"
+                            aria-selected="false"><i class="material-icons">landscape</i> Natural and Landscape</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize" id="vehicles-tab" data-toggle="tab"
-                            data-target="#vehicle" type="button" role="tab" aria-controls="vehicle"
-                            aria-selected="false"><i class="fa fa- mr-2 fa-car"></i> Vehicles (Boat and Car)</button>
+                        <button class="nav-link nav-category text-capitalize" id="culturals-tab" data-toggle="tab"
+                            data-target="#culturals" type="button" role="tab" aria-controls="culturals"
+                            aria-selected="false"><i class="material-icons">church</i> Cultural Heritage</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-category text-capitalize" id="arts-tab" data-toggle="tab"
+                            data-target="#arts" type="button" role="tab" aria-controls="arts"
+                            aria-selected="false"><i class="material-icons font-size-inherit">design_services</i> Rendering and Art</button>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-8">
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
@@ -222,7 +230,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -230,7 +238,7 @@
                                             <span>Showing {{ count($business) }} Result</span>
                                             <i class="fa fa-lg fa-arrow-right cursor-pointer"></i>
                                         </div>
-                                        @foreach ($business as $businessItem)
+                                        @foreach ($topBusiness as $businessItem)
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card card-custom card-has-bg click-col"
@@ -282,17 +290,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen="" loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="business" role="tabpanel" aria-labelledby="busines-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -409,31 +411,31 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <i class="fa fa-lg fa-arrow-left"></i>
-                                            <span>Showing {{ $hotels->count() }} Result</span>
+                                            <span>Showing {{ $business->count() }} Result</span>
                                             <i class="fa fa-lg fa-arrow-right"></i>
                                         </div>
-                                        @foreach ($hotels as $hotel)
+                                        @foreach ($business as $business)
                                             <div class="col-12 mb-4">
                                                 <div class="card">
-                                                    <a href="{{ url('hotel/' . $hotel->slug) }}">
+                                                    <a href="{{ url('hotel/' . $business->slug) }}">
                                                         <div class="card card-custom card-has-bg click-col"
-                                                            style="background-image:url('{{ url('uploads/' . ($hotel->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
+                                                            style="background-image:url('{{ url('uploads/' . ($business->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
                                                             <div class="card-img-overlay d-flex align-items-end">
                                                                 <img src="https://source.unsplash.com/600x900/?house"
                                                                     alt="rumah"
                                                                     style="width:50px; height:50px;border-radius:50%">
                                                                 <div class="ml-2">
                                                                     <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                            herf="{{ url('hotel/' . $hotel->slug) }}">{{ $hotel->title ?? 'Hotel' }}</a>
+                                                                            herf="{{ url('hotel/' . $business->slug) }}">{{ $business->title ?? 'Hotel' }}</a>
                                                                     </h4>
                                                                     <span class="text-white"> <i
                                                                             class="fa fa-map-marker"></i>
-                                                                        {{ $hotel->address ?? 'No address' }}</span>
+                                                                        {{ $business->address ?? 'No address' }}</span>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -446,7 +448,7 @@
                                                                     style="width:25px; height:25px;border-radius:50%">
                                                                 <div class="ml-2">
                                                                     <p class="card-title mt-0 mb-0 text-dark">
-                                                                        {{ $hotel->user->name ?? 'Virtuard' }}</p>
+                                                                        {{ $business->user->name ?? 'Virtuard' }}</p>
                                                                 </div>
                                                             </div>
                                                             <div class="d-flex align-items-center">
@@ -466,17 +468,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen="" loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="properties" role="tabpanel" aria-labelledby="properties-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -593,7 +589,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -648,17 +644,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen="" loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="accomodation" role="tabpanel" aria-labelledby="accomodation-tab">
+                    <div class="tab-pane fade" id="accomodations" role="tabpanel" aria-labelledby="accomodations-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="form-group">
@@ -719,8 +709,8 @@
                                         <div class="form-group mt-3">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <input type="text" aria-label='location'
-                                                    class='form-control autocomplete' id='place-accomodation'
-                                                    name='place-accomodation' placeholder="Place"
+                                                    class='form-control autocomplete' id='place-accomodations'
+                                                    name='place-accomodations' placeholder="Place"
                                                     style="border-top: none;border-left:none;border-right:none;">
                                                 <button class="btn btn-sm" id="get-location" type="button">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -775,29 +765,29 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <i class="fa fa-lg fa-arrow-left"></i>
-                                            <span>Showing {{ $cars->count() }} Result</span>
+                                            <span>Showing {{ $accomodations->count() }} Result</span>
                                             <i class="fa fa-lg fa-arrow-right"></i>
                                         </div>
-                                        @foreach ($cars as $car)
+                                        @foreach ($accomodations as $accomodation)
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image:url('{{ url('uploads/' . ($car->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
+                                                        style="background-image:url('{{ url('uploads/' . ($accomodation->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
                                                         <div class="card-img-overlay d-flex align-items-end">
                                                             <img src="https://source.unsplash.com/600x900/?house"
                                                                 alt="rumah"
                                                                 style="width:50px; height:50px;border-radius:50%">
                                                             <div class="ml-2">
                                                                 <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                        href="{{ url('car/' . $car->slug) }}">{{ $car->title }}</a>
+                                                                        href="{{ url('car/' . $accomodation->slug) }}">{{ $accomodation->title }}</a>
                                                                 </h4>
                                                                 <span class="text-white"> <i class="fa fa-map-marker"></i>
-                                                                    {{ $car->address }}</span>
+                                                                    {{ $accomodation->address }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -809,7 +799,7 @@
                                                                     style="width:25px; height:25px;border-radius:50%">
                                                                 <div class="ml-2">
                                                                     <p class="card-title mt-0 mb-0 text-dark">
-                                                                        {{ $car->user->business_name }}
+                                                                        {{ $accomodation->user->business_name }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -830,39 +820,259 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen="" loading="lazy"
-                                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="vehicles" role="tabpanel" aria-labelledby="vehicles-tab">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="card" style="height: 600px; overflow-y: auto;">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="exampleFormControlSelect1">Sort by</label>
+                                            <select class="form-control" id="exampleFormControlSelect1">
+                                                <option>Last</option>
+                                                <option>Top Rated</option>
+                                                <option>Random</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <input type="text" class='form-control' placeholder="Categories"
+                                                style="border-top: none;border-left:none;border-right:none;">
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <label for="services">Services</label>
+                                            <div class="form-group">
+                                                <input class="" type="checkbox" value=""
+                                                    id="defaultCheck1">
+                                                <label class="form-check-label" for="defaultCheck1">
+                                                    Air Conditioning
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="" type="checkbox" value=""
+                                                    id="defaultCheck2">
+                                                <label class="form-check-label" for="defaultCheck2">
+                                                    TV
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="" type="checkbox" value=""
+                                                    id="defaultCheck3">
+                                                <label class="form-check-label" for="defaultCheck3">
+                                                    Free Wi-Fi
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="" type="checkbox" value=""
+                                                    id="defaultCheck4">
+                                                <label class="form-check-label" for="defaultCheck4">
+                                                    Internet
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="" type="checkbox" value=""
+                                                    id="defaultCheck5">
+                                                <label class="form-check-label" for="defaultCheck5">
+                                                    Outside Pool
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="" type="checkbox" value=""
+                                                    id="defaultCheck6">
+                                                <label class="form-check-label" for="defaultCheck6">
+                                                    Free Parking
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <input type="text" aria-label='location'
+                                                    class='form-control autocomplete' id='place-art'
+                                                    name='place-art' placeholder="Place"
+                                                    style="border-top: none;border-left:none;border-right:none;">
+                                                <button class="btn btn-sm" id="get-location" type="button">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                        height="24" viewBox="0 0 24 24" fill="none">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"
+                                                            fill="#0F172A" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <label for="open">Open Now</label>
+                                            <div class="form-group">
+                                                <div class="btn-group w-100 btn-group-toggle" data-toggle="buttons">
+                                                    <label class="btn btn-outline-secondary btn-toggle active">
+                                                        <input type="radio" name="options" id="option1"
+                                                            autocomplete="off" checked> All
+                                                    </label>
+                                                    <label class="btn btn-outline-secondary btn-toggle">
+                                                        <input type="radio" name="options" id="option2"
+                                                            autocomplete="off"> Open Now
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <div class="form-content">
+                                                <label class="mb-2 font-weight-bold">Range</label>
+                                                <div class="input-search">
+                                                    <input type="range" class="w-100" value="700000"
+                                                        step="100000" min="0" max="1000000" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <input type="text" class='form-control' placeholder="Text Search"
+                                                style="border-top: none;border-left:none;border-right:none;">
+                                        </div>
+                                        <div class="form-group mt-3">
+                                            <input type="text" class='form-control'
+                                                placeholder="General Search Box"
+                                                style="border-top: none;border-left:none;border-right:none;">
+                                        </div>
+                                        <button class="btn btn-secondary w-100 mt-3">
+                                            <i class="fa fa-search mr-2"></i>
+                                            Search
+                                        </button>
+                                        <button class="btn btn-outline-secondary w-100 mt-3">
+                                            <i class="fa fa-undo mr-2"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card" style="height: 600px; overflow-y: auto;">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <i class="fa fa-lg fa-arrow-left"></i>
+                                            <span>Showing {{ $vehicles->count()}} Result</span>
+                                            <i class="fa fa-lg fa-arrow-right"></i>
+                                        </div>
+                                        @foreach ($vehicles as $vehicle)
+                                            <div class="col-12 mb-4">
+                                                <div class="card">
+                                                    <div class="card card-custom card-has-bg click-col"
+                                                        style="background-image:url('{{ url('uploads/' . ($vehicle->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
+                                                        <div class="card-img-overlay d-flex align-items-end">
+                                                            <img src="https://source.unsplash.com/600x900/?car"
+                                                                alt="Mobil"
+                                                                style="width:50px; height:50px;border-radius:50%">
+                                                            <div class="ml-2">
+                                                                <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                        href="{{ url('car/' . $vehicle->slug) }}">{{ $vehicle->title }}</a>
+                                                                </h4>
+                                                                <span class="text-white"> <i
+                                                                        class="fa fa-map-marker"></i>
+                                                                    {{ $vehicle->address }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="https://source.unsplash.com/600x900/?car"
+                                                                    alt="rumah"
+                                                                    style="width:25px; height:25px;border-radius:50%">
+                                                                <div class="ml-2">
+                                                                    <p class="card-title mt-0 mb-0 text-dark">
+                                                                        {{ $vehicle->user->business_name }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <button class="btn btn-sm" type="button">
+                                                                    <i class="fa fa-search-plus"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm" type="button">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </button>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+
+                                        @foreach ($vehicles as $vehicle)
+                                            <div class="col-12 mb-4">
+                                                <div class="card">
+                                                    <div class="card card-custom card-has-bg click-col"
+                                                        style="background-image:url('{{ url('uploads/' . ($vehicle->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
+                                                        <div class="card-img-overlay d-flex align-items-end">
+                                                            <img src="https://source.unsplash.com/600x900/?boat"
+                                                                alt="Mobil"
+                                                                style="width:50px; height:50px;border-radius:50%">
+                                                            <div class="ml-2">
+                                                                <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                        href="{{ url('boat/' . $vehicle->slug) }}">{{ $vehicle->title }}</a>
+                                                                </h4>
+                                                                <span class="text-white"> <i
+                                                                        class="fa fa-map-marker"></i>
+                                                                    {{ $vehicle->address }}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <div class="d-flex justify-content-between">
+                                                            <div class="d-flex align-items-center">
+                                                                <img src="https://source.unsplash.com/600x900/?boat"
+                                                                    alt="rumah"
+                                                                    style="width:25px; height:25px;border-radius:50%">
+                                                                <div class="ml-2">
+                                                                    <p class="card-title mt-0 mb-0 text-dark">
+                                                                        {{ $vehicle->user->business_name }}
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex align-items-center">
+                                                                <button class="btn btn-sm" type="button">
+                                                                    <i class="fa fa-search-plus"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm" type="button">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </button>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="cultural" role="tabpanel" aria-labelledby="cultural-tab">
+                    <div class="tab-pane fade" id="naturals" role="tabpanel" aria-labelledby="naturals-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="filters-cultural-tab" data-toggle="tab"
-                                                data-target="#filters-cultural" type="button" role="tab"
-                                                aria-controls="filters-cultural" aria-selected="true">Filters</button>
+                                            <button class="nav-link active" id="filters-naturals-tab" data-toggle="tab"
+                                                data-target="#filters-naturals" type="button" role="tab"
+                                                aria-controls="filters-naturals" aria-selected="true">Filters</button>
                                         </li>
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="categories-cultural-tab" data-toggle="tab"
-                                                data-target="#categories-cultural" type="button" role="tab"
-                                                aria-controls="categories-cultural"
+                                            <button class="nav-link" id="categories-naturals-tab" data-toggle="tab"
+                                                data-target="#categories-naturals" type="button" role="tab"
+                                                aria-controls="categories-naturals"
                                                 aria-selected="false">Categories</button>
                                         </li>
                                         <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="region-cultural-tab" data-toggle="tab"
-                                                data-target="#region-cultural" type="button" role="tab"
-                                                aria-controls="region-cultural" aria-selected="false">Region</button>
+                                            <button class="nav-link" id="region-naturals-tab" data-toggle="tab"
+                                                data-target="#region-naturals" type="button" role="tab"
+                                                aria-controls="region-naturals" aria-selected="false">Region</button>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="filter-cultural" role="tabpanel"
-                                            aria-labelledby="filter-cultural-tab">
+                                        <div class="tab-pane fade show active" id="filter-naturals" role="tabpanel"
+                                            aria-labelledby="filter-naturals-tab">
                                             <div class="card-body">
                                                 <div class="form-group">
                                                     <label for="exampleFormControlSelect1">Sort by</label>
@@ -879,8 +1089,8 @@
                                                 <div class="form-group mt-3">
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <input type="text" aria-label='location'
-                                                            class='form-control autocomplete' id='place-cultural'
-                                                            name='place-cultural' placeholder="Place"
+                                                            class='form-control autocomplete' id='place-naturals'
+                                                            name='place-naturals' placeholder="Place"
                                                             style="border-top: none;border-left:none;border-right:none;">
                                                         <button class="btn btn-sm" id="get-location" type="button">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24"
@@ -936,8 +1146,8 @@
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="categories-cultural" role="tabpanel"
-                                            aria-labelledby="categories-cultural-tab">
+                                        <div class="tab-pane fade" id="categories-culturals" role="tabpanel"
+                                            aria-labelledby="categories-culturals-tab">
                                             <div class="col-12 mb-4">
                                                 <div class="card card-custom card-has-bg click-col"
                                                     style="background-image:url('https://source.unsplash.com/600x900/?tech');">
@@ -1023,35 +1233,35 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="tab-pane fade" id="region-cultural" role="tabpanel"
-                                            aria-labelledby="region-cultural-tab">
+                                        <div class="tab-pane fade" id="region-culturals" role="tabpanel"
+                                            aria-labelledby="region-culturals-tab">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <i class="fa fa-lg fa-arrow-left"></i>
-                                            <span>Showing {{ $events->count() }} Result</span>
+                                            <span>Showing {{ $naturals->count() }} Result</span>
                                             <i class="fa fa-lg fa-arrow-right"></i>
                                         </div>
-                                        @foreach ($events as $event)
+                                        @foreach ($naturals as $naturals)
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image:url('{{ url('uploads/' . ($event->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
+                                                        style="background-image:url('{{ url('uploads/' . ($naturals->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
                                                         <div class="card-img-overlay d-flex align-items-end">
                                                             <img src="https://source.unsplash.com/600x900/?event"
                                                                 alt="rumah"
                                                                 style="width:50px; height:50px;border-radius:50%">
                                                             <div class="ml-2">
                                                                 <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                        href="{{ url('event/' . $event->slug) }}">{{ $event->title }}</a>
+                                                                        href="{{ url('event/' . $naturals->slug) }}">{{ $naturals->title }}</a>
                                                                 </h4>
                                                                 <span class="text-white"> <i class="fa fa-map-marker"></i>
-                                                                    {{ $event->address }}</span>
+                                                                    {{ $naturals->address }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1063,7 +1273,7 @@
                                                                     style="width:25px; height:25px;border-radius:50%">
                                                                 <div class="ml-2">
                                                                     <p class="card-title mt-0 mb-0 text-dark">
-                                                                        {{ $event->user->business_name ?? 'Virtuard' }}
+                                                                        {{ $naturals->user->business_name ?? 'Virtuard' }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -1084,171 +1294,234 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen=""
-                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="rendering" role="tabpanel" aria-labelledby="rendering-tab">
+                    <div class="tab-pane fade" id="culturals" role="tabpanel" aria-labelledby="culturals-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Sort by</label>
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>Last</option>
-                                                <option>Top Rated</option>
-                                                <option>Random</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <input type="text" class='form-control' placeholder="Categories"
-                                                style="border-top: none;border-left:none;border-right:none;">
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <label for="services">Services</label>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck1">
-                                                <label class="form-check-label" for="defaultCheck1">
-                                                    Air Conditioning
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck2">
-                                                <label class="form-check-label" for="defaultCheck2">
-                                                    TV
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck3">
-                                                <label class="form-check-label" for="defaultCheck3">
-                                                    Free Wi-Fi
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck4">
-                                                <label class="form-check-label" for="defaultCheck4">
-                                                    Internet
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck5">
-                                                <label class="form-check-label" for="defaultCheck5">
-                                                    Outside Pool
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck6">
-                                                <label class="form-check-label" for="defaultCheck6">
-                                                    Free Parking
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <input type="text" aria-label='location'
-                                                    class='form-control autocomplete' id='place-rendering'
-                                                    name='place-rendering' placeholder="Place"
-                                                    style="border-top: none;border-left:none;border-right:none;">
-                                                <button class="btn btn-sm" id="get-location" type="button">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                        height="24" viewBox="0 0 24 24" fill="none">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"
-                                                            fill="#0F172A" />
-                                                    </svg>
+                                    <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="filters-culturals-tab" data-toggle="tab"
+                                                data-target="#filters-culturals" type="button" role="tab"
+                                                aria-controls="filters-culturals" aria-selected="true">Filters</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="categories-culturals-tab" data-toggle="tab"
+                                                data-target="#categories-culturals" type="button" role="tab"
+                                                aria-controls="categories-culturals"
+                                                aria-selected="false">Categories</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="region-culturals-tab" data-toggle="tab"
+                                                data-target="#region-culturals" type="button" role="tab"
+                                                aria-controls="region-culturals" aria-selected="false">Region</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="filter-culturals" role="tabpanel"
+                                            aria-labelledby="filter-culturals-tab">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlSelect1">Sort by</label>
+                                                    <select class="form-control" id="exampleFormControlSelect1">
+                                                        <option>Last</option>
+                                                        <option>Top Rated</option>
+                                                        <option>Random</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <input type="text" class='form-control' placeholder="Categories"
+                                                        style="border-top: none;border-left:none;border-right:none;">
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <input type="text" aria-label='location'
+                                                            class='form-control autocomplete' id='place-culturals'
+                                                            name='place-culturals' placeholder="Place"
+                                                            style="border-top: none;border-left:none;border-right:none;">
+                                                        <button class="btn btn-sm" id="get-location" type="button">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"
+                                                                    fill="#0F172A" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="open">Open Now</label>
+                                                    <div class="form-group">
+                                                        <div class="btn-group w-100 btn-group-toggle"
+                                                            data-toggle="buttons">
+                                                            <label class="btn btn-outline-secondary btn-toggle active">
+                                                                <input type="radio" name="options" id="option1"
+                                                                    autocomplete="off" checked> All
+                                                            </label>
+                                                            <label class="btn btn-outline-secondary btn-toggle">
+                                                                <input type="radio" name="options" id="option2"
+                                                                    autocomplete="off"> Open Now
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <div class="form-content">
+                                                        <label class="mb-2 font-weight-bold">Range</label>
+                                                        <div class="input-search">
+                                                            <input type="range" class="w-100" value="700000"
+                                                                step="100000" min="0" max="1000000" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <input type="text" class='form-control' placeholder="Text Search"
+                                                        style="border-top: none;border-left:none;border-right:none;">
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <input type="text" class='form-control'
+                                                        placeholder="General Search Box"
+                                                        style="border-top: none;border-left:none;border-right:none;">
+                                                </div>
+                                                <button class="btn btn-secondary w-100 mt-3">
+                                                    <i class="fa fa-search mr-2"></i>
+                                                    Search
+                                                </button>
+                                                <button class="btn btn-outline-secondary w-100 mt-3">
+                                                    <i class="fa fa-undo mr-2"></i>
+                                                    Reset
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <label for="open">Open Now</label>
-                                            <div class="form-group">
-                                                <div class="btn-group w-100 btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-outline-secondary btn-toggle active">
-                                                        <input type="radio" name="options" id="option1"
-                                                            autocomplete="off" checked> All
-                                                    </label>
-                                                    <label class="btn btn-outline-secondary btn-toggle">
-                                                        <input type="radio" name="options" id="option2"
-                                                            autocomplete="off"> Open Now
-                                                    </label>
+                                        <div class="tab-pane fade" id="categories-culturals" role="tabpanel"
+                                            aria-labelledby="categories-culturals-tab">
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <div class="form-content">
-                                                <label class="mb-2 font-weight-bold">Range</label>
-                                                <div class="input-search">
-                                                    <input type="range" class="w-100" value="700000"
-                                                        step="100000" min="0" max="1000000" />
-                                                </div>
-                                            </div>
+                                        <div class="tab-pane fade" id="region-culturals" role="tabpanel"
+                                            aria-labelledby="region-culturals-tab">
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <input type="text" class='form-control' placeholder="Text Search"
-                                                style="border-top: none;border-left:none;border-right:none;">
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <input type="text" class='form-control'
-                                                placeholder="General Search Box"
-                                                style="border-top: none;border-left:none;border-right:none;">
-                                        </div>
-                                        <button class="btn btn-secondary w-100 mt-3">
-                                            <i class="fa fa-search mr-2"></i>
-                                            Search
-                                        </button>
-                                        <button class="btn btn-outline-secondary w-100 mt-3">
-                                            <i class="fa fa-undo mr-2"></i>
-                                            Reset
-                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <i class="fa fa-lg fa-arrow-left"></i>
-                                            <span>Showing {{ $flights->count() }} Result</span>
+                                            <span>Showing {{ $culturals->count() }} Result</span>
                                             <i class="fa fa-lg fa-arrow-right"></i>
                                         </div>
-                                        @foreach ($flights as $flight)
+                                        @foreach ($culturals as $cultural)
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image:url('https://source.unsplash.com/600x900/?flight'); height: 250px;">
+                                                        style="background-image:url('{{ url('uploads/' . ($cultural->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
                                                         <div class="card-img-overlay d-flex align-items-end">
-                                                            <img src="https://source.unsplash.com/600x900/?flight"
+                                                            <img src="https://source.unsplash.com/600x900/?event"
                                                                 alt="rumah"
                                                                 style="width:50px; height:50px;border-radius:50%">
                                                             <div class="ml-2">
                                                                 <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                        href="{{ url('flight') }}">{{ $flight->title }}</a>
+                                                                        href="{{ url('event/' . $cultural->slug) }}">{{ $cultural->title }}</a>
                                                                 </h4>
-                                                                <span class="text-white">
-                                                                    {{ $flight->code }}</span>
+                                                                <span class="text-white"> <i class="fa fa-map-marker"></i>
+                                                                    {{ $cultural->address }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="card-footer">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex align-items-center">
-                                                                <img src="https://source.unsplash.com/600x900/?flight"
+                                                                <img src="https://source.unsplash.com/600x900/?event"
                                                                     alt="rumah"
                                                                     style="width:25px; height:25px;border-radius:50%">
                                                                 <div class="ml-2">
                                                                     <p class="card-title mt-0 mb-0 text-dark">
-                                                                        {{ $flight->user->business_name ?? 'Virtuard' }}
+                                                                        {{ $cultural->user->business_name ?? 'Virtuard' }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -1269,218 +1542,234 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen=""
-                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="vehicle" role="tabpanel" aria-labelledby="vehicle-tab">
+                    <div class="tab-pane fade" id="arts" role="tabpanel" aria-labelledby="arts-tab">
                         <div class="row">
-                            <div class="col-3">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label for="exampleFormControlSelect1">Sort by</label>
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>Last</option>
-                                                <option>Top Rated</option>
-                                                <option>Random</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <input type="text" class='form-control' placeholder="Categories"
-                                                style="border-top: none;border-left:none;border-right:none;">
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <label for="services">Services</label>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck1">
-                                                <label class="form-check-label" for="defaultCheck1">
-                                                    Air Conditioning
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck2">
-                                                <label class="form-check-label" for="defaultCheck2">
-                                                    TV
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck3">
-                                                <label class="form-check-label" for="defaultCheck3">
-                                                    Free Wi-Fi
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck4">
-                                                <label class="form-check-label" for="defaultCheck4">
-                                                    Internet
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck5">
-                                                <label class="form-check-label" for="defaultCheck5">
-                                                    Outside Pool
-                                                </label>
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="" type="checkbox" value=""
-                                                    id="defaultCheck6">
-                                                <label class="form-check-label" for="defaultCheck6">
-                                                    Free Parking
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <input type="text" aria-label='location'
-                                                    class='form-control autocomplete' id='place-rendering'
-                                                    name='place-rendering' placeholder="Place"
-                                                    style="border-top: none;border-left:none;border-right:none;">
-                                                <button class="btn btn-sm" id="get-location" type="button">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                        height="24" viewBox="0 0 24 24" fill="none">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"
-                                                            fill="#0F172A" />
-                                                    </svg>
+                                    <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="filters-arts-tab" data-toggle="tab"
+                                                data-target="#filters-arts" type="button" role="tab"
+                                                aria-controls="filters-arts" aria-selected="true">Filters</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="categories-arts-tab" data-toggle="tab"
+                                                data-target="#categories-arts" type="button" role="tab"
+                                                aria-controls="categories-arts"
+                                                aria-selected="false">Categories</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="region-arts-tab" data-toggle="tab"
+                                                data-target="#region-arts" type="button" role="tab"
+                                                aria-controls="region-arts" aria-selected="false">Region</button>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content" id="myTabContent">
+                                        <div class="tab-pane fade show active" id="filter-arts" role="tabpanel"
+                                            aria-labelledby="filter-arts-tab">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlSelect1">Sort by</label>
+                                                    <select class="form-control" id="exampleFormControlSelect1">
+                                                        <option>Last</option>
+                                                        <option>Top Rated</option>
+                                                        <option>Random</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <input type="text" class='form-control' placeholder="Categories"
+                                                        style="border-top: none;border-left:none;border-right:none;">
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <input type="text" aria-label='location'
+                                                            class='form-control autocomplete' id='place-arts'
+                                                            name='place-arts' placeholder="Place"
+                                                            style="border-top: none;border-left:none;border-right:none;">
+                                                        <button class="btn btn-sm" id="get-location" type="button">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none">
+                                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                    d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"
+                                                                    fill="#0F172A" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <label for="open">Open Now</label>
+                                                    <div class="form-group">
+                                                        <div class="btn-group w-100 btn-group-toggle"
+                                                            data-toggle="buttons">
+                                                            <label class="btn btn-outline-secondary btn-toggle active">
+                                                                <input type="radio" name="options" id="option1"
+                                                                    autocomplete="off" checked> All
+                                                            </label>
+                                                            <label class="btn btn-outline-secondary btn-toggle">
+                                                                <input type="radio" name="options" id="option2"
+                                                                    autocomplete="off"> Open Now
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <div class="form-content">
+                                                        <label class="mb-2 font-weight-bold">Range</label>
+                                                        <div class="input-search">
+                                                            <input type="range" class="w-100" value="700000"
+                                                                step="100000" min="0" max="1000000" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <input type="text" class='form-control' placeholder="Text Search"
+                                                        style="border-top: none;border-left:none;border-right:none;">
+                                                </div>
+                                                <div class="form-group mt-3">
+                                                    <input type="text" class='form-control'
+                                                        placeholder="General Search Box"
+                                                        style="border-top: none;border-left:none;border-right:none;">
+                                                </div>
+                                                <button class="btn btn-secondary w-100 mt-3">
+                                                    <i class="fa fa-search mr-2"></i>
+                                                    Search
+                                                </button>
+                                                <button class="btn btn-outline-secondary w-100 mt-3">
+                                                    <i class="fa fa-undo mr-2"></i>
+                                                    Reset
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <label for="open">Open Now</label>
-                                            <div class="form-group">
-                                                <div class="btn-group w-100 btn-group-toggle" data-toggle="buttons">
-                                                    <label class="btn btn-outline-secondary btn-toggle active">
-                                                        <input type="radio" name="options" id="option1"
-                                                            autocomplete="off" checked> All
-                                                    </label>
-                                                    <label class="btn btn-outline-secondary btn-toggle">
-                                                        <input type="radio" name="options" id="option2"
-                                                            autocomplete="off"> Open Now
-                                                    </label>
+                                        <div class="tab-pane fade" id="categories-arts" role="tabpanel"
+                                            aria-labelledby="categories-culturals-tab">
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-4">
+                                                <div class="card card-custom card-has-bg click-col"
+                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
+                                                    <div
+                                                        class="card-img-overlay d-flex flex-column justify-content-between">
+                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
+                                                        <div>
+                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
+                                                                    herf="https://creativemanner.com">Hotels</a></h4>
+                                                            <small class="text-white">1.344 listings</small>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <div class="form-content">
-                                                <label class="mb-2 font-weight-bold">Range</label>
-                                                <div class="input-search">
-                                                    <input type="range" class="w-100" value="700000"
-                                                        step="100000" min="0" max="1000000" />
-                                                </div>
-                                            </div>
+                                        <div class="tab-pane fade" id="region-arts" role="tabpanel"
+                                            aria-labelledby="region-arts-tab">
                                         </div>
-                                        <div class="form-group mt-3">
-                                            <input type="text" class='form-control' placeholder="Text Search"
-                                                style="border-top: none;border-left:none;border-right:none;">
-                                        </div>
-                                        <div class="form-group mt-3">
-                                            <input type="text" class='form-control'
-                                                placeholder="General Search Box"
-                                                style="border-top: none;border-left:none;border-right:none;">
-                                        </div>
-                                        <button class="btn btn-secondary w-100 mt-3">
-                                            <i class="fa fa-search mr-2"></i>
-                                            Search
-                                        </button>
-                                        <button class="btn btn-outline-secondary w-100 mt-3">
-                                            <i class="fa fa-undo mr-2"></i>
-                                            Reset
-                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="card" style="height: 600px; overflow-y: auto;">
                                     <div class="card-body">
                                         <div class="d-flex justify-content-between align-items-center mb-4">
                                             <i class="fa fa-lg fa-arrow-left"></i>
-                                            <span>Showing {{$cars->count() + $boats->count()}} Result</span>
+                                            <span>Showing {{ $arts->count() }} Result</span>
                                             <i class="fa fa-lg fa-arrow-right"></i>
                                         </div>
-                                        @foreach ($cars as $car)
+                                        @foreach ($arts as $art)
                                             <div class="col-12 mb-4">
                                                 <div class="card">
                                                     <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image:url('{{ url('uploads/' . ($car->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
+                                                        style="background-image:url('{{ url('uploads/' . ($art->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
                                                         <div class="card-img-overlay d-flex align-items-end">
-                                                            <img src="https://source.unsplash.com/600x900/?car"
-                                                                alt="Mobil"
+                                                            <img src="https://source.unsplash.com/600x900/?event"
+                                                                alt="rumah"
                                                                 style="width:50px; height:50px;border-radius:50%">
                                                             <div class="ml-2">
                                                                 <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                        href="{{ url('car/' . $car->slug) }}">{{ $car->title }}</a>
+                                                                        href="{{ url('event/' . $art->slug) }}">{{ $art->title }}</a>
                                                                 </h4>
-                                                                <span class="text-white"> <i
-                                                                        class="fa fa-map-marker"></i>
-                                                                    {{ $car->address }}</span>
+                                                                <span class="text-white"> <i class="fa fa-map-marker"></i>
+                                                                    {{ $art->address }}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="card-footer">
                                                         <div class="d-flex justify-content-between">
                                                             <div class="d-flex align-items-center">
-                                                                <img src="https://source.unsplash.com/600x900/?car"
+                                                                <img src="https://source.unsplash.com/600x900/?event"
                                                                     alt="rumah"
                                                                     style="width:25px; height:25px;border-radius:50%">
                                                                 <div class="ml-2">
                                                                     <p class="card-title mt-0 mb-0 text-dark">
-                                                                        {{ $car->user->business_name }}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center">
-                                                                <button class="btn btn-sm" type="button">
-                                                                    <i class="fa fa-search-plus"></i>
-                                                                </button>
-                                                                <button class="btn btn-sm" type="button">
-                                                                    <i class="fa fa-heart-o"></i>
-                                                                </button>
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-
-                                        @foreach ($boats as $boat)
-                                            <div class="col-12 mb-4">
-                                                <div class="card">
-                                                    <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image:url('{{ url('uploads/' . ($boat->image->file_path ?? 'demo/hotel/gallery/hotel-gallery-1.jpg')) }}'); height: 250px;">
-                                                        <div class="card-img-overlay d-flex align-items-end">
-                                                            <img src="https://source.unsplash.com/600x900/?boat"
-                                                                alt="Mobil"
-                                                                style="width:50px; height:50px;border-radius:50%">
-                                                            <div class="ml-2">
-                                                                <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                        href="{{ url('boat/' . $boat->slug) }}">{{ $boat->title }}</a>
-                                                                </h4>
-                                                                <span class="text-white"> <i
-                                                                        class="fa fa-map-marker"></i>
-                                                                    {{ $boat->address }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="d-flex justify-content-between">
-                                                            <div class="d-flex align-items-center">
-                                                                <img src="https://source.unsplash.com/600x900/?boat"
-                                                                    alt="rumah"
-                                                                    style="width:25px; height:25px;border-radius:50%">
-                                                                <div class="ml-2">
-                                                                    <p class="card-title mt-0 mb-0 text-dark">
-                                                                        {{ $boat->user->business_name }}
+                                                                        {{ $art->user->business_name ?? 'Virtuard' }}
                                                                     </p>
                                                                 </div>
                                                             </div>
@@ -1501,15 +1790,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-5">
-                                <iframe
-                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.5190519312455!2d112.57141607497284!3d-8.150342891880014!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e789f9fb747015b%3A0x41e82b7170971b0!2sKanjuruhan%20Stadium!5e0!3m2!1sen!2sid!4v1695985217982!5m2!1sen!2sid"
-                                    class="w-100" height="600" style="border:0;" allowfullscreen=""
-                                    loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-4">
+                <div id="gmap" style="height: 100%;"></div>
             </div>
         </div>
     </div>
@@ -1676,6 +1962,11 @@
             background: rgba(22, 22, 22, 0.3);
             background: linear-gradient(0deg, rgba(22, 22, 22, 0.3) 0%, #1a1b1b 100%);
         }
+
+        .nav-tab .material-icons {
+            font-size: inherit !important;
+            margin-right: 2px;
+        }
     </style>
 @endpush
 
@@ -1794,10 +2085,10 @@
         autocomplete(document.getElementById("location"), data);
         autocomplete(document.getElementById("place-business"), data);
         autocomplete(document.getElementById("place-properties"), data);
-        autocomplete(document.getElementById("place-accomodation"), data);
-        autocomplete(document.getElementById("place-cultural"), data);
-        autocomplete(document.getElementById("place-natural"), data);
-        autocomplete(document.getElementById("place-rendering"), data);
+        autocomplete(document.getElementById("place-accomodations"), data);
+        autocomplete(document.getElementById("place-culturals"), data);
+        autocomplete(document.getElementById("place-naturals"), data);
+        autocomplete(document.getElementById("place-arts"), data);
     </script>
     <script>
         document.getElementById('get-location').addEventListener('click', function() {
@@ -1831,4 +2122,61 @@
             input.addEventListener('input', handleInputChange)
         })
     </script> --}}
+    <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}" ></script>
+    <script>
+        // Initialize the map
+        const markersData = {{ Js::from($listMap) }}
+        let map;
+        let mapMarkers = [];
+
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('gmap'), {
+                center: { lat: 0, lng: 0 },
+                zoom: 1
+            });
+
+            addMarkersToMap(markersData);
+        }
+
+        function addMarkersToMap(data) {
+            data.forEach(marker => {
+                const { category, title, map_lat, map_lng, icon} = marker;
+                const lat = Number(map_lat)
+                const lng = Number(map_lng)
+                const newMarker = new google.maps.Marker({
+                    position: { lat, lng },
+                    map: map,
+                    title: title,
+                    icon: icon,
+                });
+
+                mapMarkers.push(newMarker);
+            });
+        }
+
+        function filterMarkers(condition) {
+            mapMarkers.forEach(marker => marker.setMap(null));
+
+            const filteredMarkers = markersData.filter(condition);
+
+            addMarkersToMap(filteredMarkers);
+        }
+
+        function defaultMarkers() {
+            mapMarkers.forEach(marker => marker.setMap(null));
+
+            addMarkersToMap(markersData);
+        }
+
+        initMap();
+
+        $('.nav-category').on('click', function(e) {
+            let id = $(this).attr('id');
+            id = id.replace('-tab', '');
+
+            if (id == 'all') return defaultMarkers();
+            
+            filterMarkers(marker => marker.category == id);
+        });
+    </script>
 @endpush
