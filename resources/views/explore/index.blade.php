@@ -28,6 +28,10 @@
                                         <input type="range" class="w-100" value="700000" step="100000" min="0"
                                             max="1000000" />
                                     </div>
+                                    <div class="d-flex justify-content-between" style="font-size: 12px!important">
+                                        <span>0</span>
+                                        <span>≥10km</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1814,80 +1818,6 @@
             outline: none;
             box-shadow: none;
         }
-
-        input[type="range"]:focus {
-            outline: none;
-        }
-
-        input[type="range"] {
-            position: relative;
-            -webkit-appearance: none;
-            margin-right: 15px;
-            width: 100%;
-            height: 8px;
-            background: rgba(241, 241, 241, 1);
-            border-radius: 5px;
-            background-image: linear-gradient(180deg,
-                    rgb(0, 0, 0) 0%,
-                    #000000 100%);
-            background-size: 70% 100%;
-            background-repeat: no-repeat;
-        }
-
-        input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: ew-resize;
-            border: 3.5px solid #000000;
-            transition: background 0.3s ease-in-out;
-        }
-
-        input[type="range"]::-moz-range-thumb {
-            -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: ew-resize;
-            border: 3.5px solid #000000;
-            transition: background 0.3s ease-in-out;
-        }
-
-        input[type="range"]::-ms-thumb {
-            -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
-            border-radius: 50%;
-            background: #fff;
-            cursor: ew-resize;
-            border: 3.5px solid #000000;
-            transition: background 0.3s ease-in-out;
-        }
-
-        input[type="range"]::-webkit-slider-runnable-track {
-            -webkit-appearance: none;
-            box-shadow: none;
-            border: none;
-            background: transparent;
-        }
-
-        input[type="range"]::-moz-range-track {
-            -webkit-appearance: none;
-            box-shadow: none;
-            border: none;
-            background: transparent;
-        }
-
-        input[type="range"]::-ms-track {
-            -webkit-appearance: none;
-            box-shadow: none;
-            border: none;
-            background: transparent;
-        }
-
         .card-custom {
             border: none;
             overflow: hidden;
@@ -1966,6 +1896,85 @@
         .nav-tab .material-icons {
             font-size: inherit !important;
             margin-right: 2px;
+        }
+    </style>
+    <style>
+        input[type="range"]:focus {
+        outline: none;
+        }
+
+        input[type="range"] {
+            position: relative;
+            -webkit-appearance: none;
+            margin-right: 15px;
+            width: 100%;
+            height: 8px;
+            background: rgba(241, 241, 241, 1);
+            border-radius: 5px;
+            background-image: linear-gradient(
+                180deg,
+                rgba(101, 143, 227, 0.8) 0%,
+                #6e9cf7 100%
+            );
+            background-size: 70% 100%;
+            background-repeat: no-repeat;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: ew-resize;
+            border: 3.5px solid #6e9cf7;
+            box-shadow: 0 0 1px 0 #6e9cf7;
+            transition: background 0.3s ease-in-out;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            -webkit-appearance: none;
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: ew-resize;
+            border: 3.5px solid #6e9cf7;
+            box-shadow: 0 0 1px 0 #6e9cf7;
+            transition: background 0.3s ease-in-out;
+        }
+
+        input[type="range"]::-ms-thumb {
+            -webkit-appearance: none;
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: ew-resize;
+            border: 3.5px solid #6e9cf7;
+            box-shadow: 0 0 1px 0 #6e9cf7;
+            transition: background 0.3s ease-in-out;
+        }
+
+        input[type="range"]::-webkit-slider-runnable-track {
+            -webkit-appearance: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+        }
+
+        input[type="range"]::-moz-range-track {
+            -webkit-appearance: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
+        }
+
+        input[type="range"]::-ms-track {
+            -webkit-appearance: none;
+            box-shadow: none;
+            border: none;
+            background: transparent;
         }
     </style>
 @endpush
@@ -2102,7 +2111,7 @@
             }
         });
     </script>
-    {{-- <script>
+    <script>
         const rangeInputs = document.querySelectorAll('input[type="range"]')
 
         function handleInputChange(e) {
@@ -2121,7 +2130,7 @@
         rangeInputs.forEach(input => {
             input.addEventListener('input', handleInputChange)
         })
-    </script> --}}
+    </script>
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}" ></script>
     <script>
         // Initialize the map

@@ -28,38 +28,47 @@ class ExploreController extends Controller
 
         $accomodations = Hotel::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
 
         $properties = Space::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
 
         $business = Car::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
 
         $vehicles = Boat::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
 
         $naturals = Tour::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
 
         $culturals = Cultural::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
 
         $arts = Art::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
+            ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
             ->get();
+
+        $listMap = [];
 
         foreach ($business as $val) {
             if ($val->map_lat == null || $val->map_lng == null) continue;
