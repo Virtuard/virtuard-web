@@ -148,6 +148,11 @@
 {!! \App\Helpers\Assets::js(true) !!}
 
 @php \App\Helpers\ReCaptchaEngine::scripts() @endphp
+<script>
+    function showModalLogin() {
+        $('#login').modal('show');
+    }
+</script>
 
 @stack('js')
 

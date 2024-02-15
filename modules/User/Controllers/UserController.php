@@ -94,6 +94,8 @@ class UserController extends FrontendController
 
     public function profileSetting(Request $request)
     {
+        return $this->myProfile();
+
         $user = Auth::user();
         $followUser = FollowUser::where('user_id', Auth::user()->id)->count();
         $followingUser = FollowUser::where('follow_user_id', Auth::user()->id)->count();
@@ -263,5 +265,17 @@ class UserController extends FrontendController
 
     }
 
+    public function myProfile(){
+        $user = auth()->user();
 
+        if(empty($user)){
+            abort(404);
+        }
+
+        $data['user'] = $user;
+        $data['page_title'] = $user->getDisplayName();
+        $this->registerCss('dist/frontend/module/user/css/profile.css');
+        
+        return view('User::frontend.profile.profile',$data);
+    }
 }

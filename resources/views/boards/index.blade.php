@@ -54,32 +54,29 @@
                                     margin-right: 16px;">
                                     <i class="fa fa-comments"></i> Status
                                 </li>
-                                @auth
                                     <li style="background: #f5f5f5; padding: 3px 18px; border-radius: 8px; margin-right: 16px; cursor: pointer;"
-                                        onclick="document.getElementById('fileInput').click();">
+                                        @auth
+                                            onclick="document.getElementById('fileInput').click();
+                                        @else
+                                            onclick="showModalLogin()"
+                                        @endauth
+                                        ">
                                         <input type="file" id="fileInput" style="display: none;" name="media_user[]"
                                             accept=".jpeg, .jpg, .png, .webp, .pdf, .doc, .docx, .xls, .xlsx, .mp4, .mkv"
                                             multiple>
                                         <i class="fa fa-picture-o"></i> Media
                                     </li>
                                     <li style="background: #f5f5f5; padding: 3px 18px; border-radius: 8px; margin-right: 16px; cursor: pointer;"
-                                        onclick="document.getElementById('ipanoramaModal').click();">
+                                        @auth
+                                            onclick="document.getElementById('ipanoramaModal').click();"
+                                        @else
+                                            onclick="showModalLogin()"
+                                        @endauth
+                                        >
                                         <i class="fa fa-picture-o"></i> 360 Media
                                         <button id="ipanoramaModal" type="button" class="d-none" data-toggle="modal"
                                             data-target="#modalPanorama"></button>
                                     </li>
-                                @else
-                                    <li
-                                        style="background: #f5f5f5; padding: 3px 18px; border-radius: 8px; margin-right: 16px; cursor: pointer;">
-                                        <input type="file" id="fileInput" style="display: none;" name="media"
-                                            accept=".jpeg, .jpg, .png, .webp, .pdf, .doc, .docx, .xls, .xlsx, .mp4, .mkv">
-                                        <i class="fa fa-picture-o"></i> Media
-                                    </li>
-                                    <li
-                                        style="background: #f5f5f5; padding: 3px 18px; border-radius: 8px; margin-right: 16px; cursor: pointer;">
-                                        <i class="fa fa-picture-o"></i> 360 Media
-                                    </li>
-                                @endauth
                             </ul>
 
                             <hr>
@@ -93,8 +90,7 @@
                                     <textarea style="width: 100%; border: 0; outline: none;" name="message" placeholder="What's new?"
                                         oninput="auto_grow(this)"></textarea>
                                 @else
-                                    <textarea style="width: 100%; border: 0; outline: none;" name="message"
-                                        placeholder="Please register or login to write status" oninput="auto_grow(this)" disabled></textarea>
+                                    <input style="width: 100%; border: 0; outline: none;" placeholder="Please register or login to write status" onclick="showModalLogin()">
                                 @endauth
                             </div>
 
@@ -129,7 +125,7 @@
                                         <option value="My Friend">My Friend</option>
                                         <option value="Members">Members</option>
                                     </select>
-                                    <a class="cursor-pointer">
+                                    <a class="cursor-pointer d-none">
                                         <i class="fa fa-lg fa-smile-o ml-3"></i>
                                     </a>
                                     <div class="cursor-pointer" id="toogle-tag" onclick="showSelect()">
@@ -149,17 +145,12 @@
                                     ">
                                         <option value="My Profile">My Profile</option>
                                     </select>
-                                    @auth
-                                        <button type="submit" class="btn btn-primary ml-3"
-                                            style="border-radius: 100px; outline: none;">
-                                            POST
-                                        </button>
-                                    @else
-                                        <button type="submit" class="btn btn-primary ml-3"
-                                            style="border-radius: 100px; outline: none;" disabled>
-                                            POST
-                                        </button>
-                                    @endauth
+                                    <button type="submit" class="btn btn-primary ml-3"
+                                        style="border-radius: 100px; outline: none;"
+                                    @guest
+                                        disabled
+                                    @endguest
+                                    >POST</button>
                                 </div>
                             </div>
                         </div>
@@ -210,18 +201,21 @@
                                     </div>
                                 </div>
                                 <hr>
-                                @if ($post->ipanorama_id)
-                                    @foreach ($dataIpanorama as $panorama)
-                                        @if ($panorama->id == $post->ipanorama_id)
-                                            <a data-id="{{ $panorama->id }}"  data-code="{{ $panorama->code }}" class="preview-panorama cursor-pointer">
-                                                <img id="thumb-panorama-{{ $panorama->id }}" src='{{ getThumbPanorama($panorama) }}' alt="" class="thumb-panorama">
-                                            </a>
-                                            @break
-                                        @endif
-                                    @endforeach
+
+                                {{-- Ipanorama --}}
+                                @if ($post->ipanorama)
+                                    <a data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}" class="preview-panorama cursor-pointer">
+                                        <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" class="thumb-panorama">
+                                    </a>
                                 @endif
-                                @php $count = 0; @endphp
-                                @foreach ($postMedia as $pm)
+                                @php 
+                                    $count = 0; 
+                                    $medias = $post->medias;
+                                @endphp
+
+                                {{-- Media --}}
+                                @if ($medias->count() > 0)
+                                @foreach ($medias as $pm)
                                     @if ($pm->post_id == $post->id)
                                         @php
                                             $fileType = pathinfo($pm->media, PATHINFO_EXTENSION);
@@ -263,6 +257,7 @@
                                         @php $count++; @endphp
                                     @endif
                                 @endforeach
+                                @endif
 
                                 <p class="mt-3"
                                     style="
@@ -274,7 +269,7 @@
                                 </p>
                                 <hr>
                                 @php
-                                    $comments = $comments->where('post_id', $post->id);
+                                    $comments = $post->comments;
                                 @endphp
                                 {{-- COMMENT --}}
                                 @if ($comments->count() > 0)
@@ -311,6 +306,7 @@
                                     </div>
                                 @endif
                                 {{-- END COMMENT --}}
+                                
                                 <div class="d-flex mt-4">
                                     <div class="d-flex">
                                         <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
@@ -321,12 +317,12 @@
                                     </div>
 
                                     <p class="m-0 ml-2" style="color: #9b9b9b;">and
-                                        {{ $likes->where('post_id', $post->id)->count() }} Like This</p>
+                                        {{ $post->likes->count() }} Like This</p>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-around align-items-center">
                                     @php
-                                        $liked = $likes->where('post_id', $post->id)->where('user_id', Auth::id());
+                                        $liked = \App\Models\PostLike::where('post_id', $post->id)->where('user_id', Auth::id());
                                     @endphp
 
                                     @auth
@@ -412,7 +408,7 @@
                             <p class="m-0">
                                 <i class="fa fa-globe mr-2"></i>
                                 All Members
-                                <span class="badge badge-primary">{{ count($dataUser) }}</span>
+                                <span class="badge badge-primary">{{ $userCount }}</span>
                             </p>
                         </div>
                     </div>

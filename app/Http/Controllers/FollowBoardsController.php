@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Storage;
 
 class FollowBoardsController extends Controller
 {
+    protected $userPost;
+
     /**
      * Create a new controller instance.
      *
@@ -31,6 +33,7 @@ class FollowBoardsController extends Controller
      */
     public function __construct()
     {
+        $this->userPost = new UserPost();
     }
 
     /**
@@ -40,19 +43,16 @@ class FollowBoardsController extends Controller
      */
     public function index()
     {
+        $posts = $this->userPost
+        ->with(['ipanorama', 'medias', 'likes', 'comments'])
+        ->orderBy('id', 'desc')
+        ->get();
+        $userCount = User::count();
         $idUser = Auth::id();
-        $dataUser = User::all();
-        $posts = UserPost::join('users', 'users.id', '=', 'user_post_status.user_id')
-            ->select('user_post_status.*', 'users.name as name')
-            ->orderBy('user_post_status.created_at', 'desc')
-            ->get();
-        $postMedia = PostMedia::all();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $likes = PostLike::all();
-        $comments = PostComment::all();
         $dataFeedMe = Story::where('user_id', $idUser)->get();
 
-        return view('boards.index', compact('dataUser', 'postMedia', 'likes', 'comments', 'dataFeedMe', 'posts', 'dataIpanorama'));
+        return view('boards.index', compact('userCount', 'dataFeedMe', 'posts', 'dataIpanorama'));
     }
 
     public function store(Request $request)
