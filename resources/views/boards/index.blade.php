@@ -192,7 +192,7 @@
                                     <div>
                                         <a href="{{ route('user.profile', $post->user_id) }}">
                                             <p class="m-0" style="font-weight: 600;">
-                                                {{ $post->name }}
+                                                {{ $post->user->name }}
                                             </p>
                                         </a>
                                         <p class="m-0" style="font-size: 0.7rem; font-weight: 500; color: #9b9b9b;">
