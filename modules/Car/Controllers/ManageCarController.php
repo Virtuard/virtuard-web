@@ -60,7 +60,7 @@ class ManageCarController extends FrontendController
             'rows' => $list_tour->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => __('accomodation.manage'),
+                    'name' => __('Manage Cars'),
                     'url'  => route('car.vendor.index')
                 ],
                 [
@@ -68,7 +68,7 @@ class ManageCarController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'         => __("accomodation.manage"),
+            'page_title'         => __("Manage Cars"),
         ];
         return view('Car::frontend.manageCar.index', $data);
     }
@@ -83,7 +83,7 @@ class ManageCarController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => __('accomodation.manage'),
+                    'name' => __('Manage Cars'),
                     'url'  => route('car.vendor.index')
                 ],
                 [
@@ -126,7 +126,7 @@ class ManageCarController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'car')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => __('accomodation.manage'),
+                    'name' => __('Manage Cars'),
                     'url'  => route('car.vendor.index')
                 ],
                 [
@@ -274,7 +274,7 @@ class ManageCarController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('accomodation.manage'),
+                    'name' => __('Manage Cars'),
                     'url'  => route('car.vendor.index')
                 ],
                 [

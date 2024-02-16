@@ -38,7 +38,7 @@ class ModuleProvider extends ModuleServiceProvider
             'car'=>[
                 "position"=>16,
                 'url'        => route('car.admin.index'),
-                'title'      => __('accomodation.title'),
+                'title'      => __('Cars'),
                 'icon'       => 'ion-logo-model-s',
                 'permission' => 'car_view',
                 'children'   => [
@@ -49,7 +49,7 @@ class ModuleProvider extends ModuleServiceProvider
                     ],
                     'create'=>[
                         'url'        => route('car.admin.create'),
-                        'title'      => __('accomodation.add_new'),
+                        'title'      => __('Add new Car'),
                         'permission' => 'car_create',
                     ],
                     'attribute'=>[
@@ -99,18 +99,18 @@ class ModuleProvider extends ModuleServiceProvider
         if(Car::isEnable()){
             $res['car'] = [
                 'url'   => route('car.vendor.index'),
-                'title'      => __('accomodation.title'),
+                'title'      => __('Cars'),
                 'icon'       => Car::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'car_view',
                 'children' => [
                     [
                         'url'   => route('car.vendor.index'),
-                        'title'  => __('accomodation.all'),
+                        'title'  => __('All Car'),
                     ],
                     [
                         'url'   => route('car.vendor.create'),
-                        'title'      => __('accomodation.add'),
+                        'title'      => __('Add new Car'),
                         'permission' => 'car_create',
                     ],
                     // [
