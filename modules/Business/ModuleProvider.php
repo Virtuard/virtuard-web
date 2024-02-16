@@ -44,7 +44,7 @@ class ModuleProvider extends ModuleServiceProvider
                 "position"=>15,
                 'url'        => route('business.admin.index'),
                 'title'      => __('business.title'),
-                'icon'       => 'ion ion-md-home',
+                'icon'       => 'fa fa-shopping-bag',
                 'permission' => 'business_view',
                 'children'   => [
                     'add'=>[

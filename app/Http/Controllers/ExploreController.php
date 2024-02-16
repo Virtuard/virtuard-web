@@ -3,14 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Business;
 use App\Models\ProductCategory;
 use Modules\Art\Models\Art;
 use Modules\Space\Models\Space;
 use Modules\Car\Models\Car;
-use Modules\Event\Models\Event;
-use Modules\Flight\Models\Flight;
 use Modules\Boat\Models\Boat;
+use Modules\Business\Models\Business;
 use Modules\Cultural\Models\Cultural;
 use Modules\Hotel\Models\Hotel;
 use Modules\Tour\Models\Tour;
@@ -38,7 +36,7 @@ class ExploreController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        $business = Car::where('status', 'publish')
+        $business = Business::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
             ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')
