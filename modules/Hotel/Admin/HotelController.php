@@ -131,7 +131,7 @@ class HotelController extends AdminController
     {
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'business')->get();
+        $categories = ProductCategory::where('type', 'accomodation')->get();
         $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)
             ->where('status', 'SUCCESS')
             ->first();

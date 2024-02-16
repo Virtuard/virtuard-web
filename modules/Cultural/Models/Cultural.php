@@ -815,7 +815,7 @@ class Cultural extends Bookable
 
     public static function getServiceIconFeatured()
     {
-        return "icofont-ticket";
+        return "icofont-university";
     }
 
     public static function isEnable()

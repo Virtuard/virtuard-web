@@ -1225,9 +1225,9 @@ if (!function_exists('menu_listing')) {
             'tour', //natural
             'cultural', //cultural
             'art', //rendering and art
-            'hotel', //business
+            'hotel', //accomodation
             'space', //property
-            'car', //accomodation
+            'business',
             'boat', //vehicles
         ];
 
@@ -1247,7 +1247,7 @@ if (!function_exists('menu_user')) {
             'admin',
             'hotel',
             'space',
-            'car',
+            // 'car',
             // 'event',
             'tour',
             // 'flight',
@@ -1262,6 +1262,7 @@ if (!function_exists('menu_user')) {
             'listing',
             'cultural',
             'art',
+            'business',
         ];
 
         return $data;
@@ -1274,10 +1275,13 @@ if (!function_exists('getMenuVendor')) {
         $data = [
             'dashboard',
             'virtuard360',
-            'hotel',
-            'space',
-            'boat',
-            'car',
+            // 'hotel',
+            // 'space',
+            // 'business',
+            // 'boat',
+            // 'tour',
+            // 'cultural',
+            // 'art',
         ];
 
         return $data;
@@ -1326,10 +1330,10 @@ if (!function_exists('setMenuPosition')) {
                 $position = 14;
                 break;
             case 'space':
-                $position = 15;
-                break;
-            case 'car':
                 $position = 16;
+                break;
+            case 'business':
+                $position = 15;
                 break;
             case 'boat':
                 $position = 17;

@@ -798,7 +798,7 @@ class Space extends Bookable
         return '';
     }
     public static function getServiceIconFeatured(){
-        return "icofont-building-alt";
+        return "icofont-home";
     }
 
 

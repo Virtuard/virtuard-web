@@ -1,7 +1,7 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar no-border-bottom">
-        {{$row->id ? __('Edit: ').$row->title : __('business.add_new')}}
+        {{$row->id ? __('Edit: ').$row->title : __('accomodation.add_new')}}
         @if($row->id)
             <div class="title-action">
                 <a class="btn btn-info" href="{{route('hotel.vendor.room.index',['hotel_id'=>$row->id])}}">

@@ -815,7 +815,7 @@ class Art extends Bookable
 
     public static function getServiceIconFeatured()
     {
-        return "icofont-ticket";
+        return "icofont-ruler-pencil";
     }
 
     public static function isEnable()

@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb20">
                 <div class="">
-                    <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Add new business')}}</h1>
+                    <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('Add new accomodation')}}</h1>
                     @if($row->slug)
                         <p class="item-url-demo">{{__("Permalink")}}: {{ url( config('hotel.hotel_route_prefix') ) }}/<a href="#" class="open-edit-input" data-name="slug">{{$row->slug}}</a>
                         </p>
@@ -17,7 +17,7 @@
                         <a class="btn btn-warning btn-xs" href="{{route('hotel.admin.room.index',['hotel_id'=>$row->id])}}" target="_blank"><i class="fa fa-hand-o-right"></i> {{__("Manage Rooms")}}</a>
                     @endif
                     @if($row->slug)
-                        <a class="btn btn-primary btn-xs" href="{{$row->getDetailUrl(request()->query('lang'))}}" target="_blank">{{__("View Business")}}</a>
+                        <a class="btn btn-primary btn-xs" href="{{$row->getDetailUrl(request()->query('lang'))}}" target="_blank">{{__("View Accomodation")}}</a>
                     @endif
                 </div>
             </div>
@@ -80,7 +80,7 @@
                                 <div class="panel-title"><strong>{{__("Availability")}}</strong></div>
                                 <div class="panel-body">
                                     <div class="form-group">
-                                        <label>{{__('Business Featured')}}</label>
+                                        <label>{{__('Accomodation Featured')}}</label>
                                         <br>
                                         <label>
                                             <input type="checkbox" name="is_featured" @if($row->is_featured) checked @endif value="1"> {{__("Enable featured")}}

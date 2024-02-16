@@ -1,9 +1,9 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar">
-        {{!empty($recovery) ?__('Recovery Hotels') : __("business.manage")}}
+        {{!empty($recovery) ?__('Recovery Hotels') : __("accomodation.manage")}}
         @if(Auth::user()->hasPermission('hotel_create') && empty($recovery))
-            <a href="{{ route("hotel.vendor.create") }}" class="btn-change-password">{{__("business.add")}}</a>
+            <a href="{{ route("hotel.vendor.create") }}" class="btn-change-password">{{__("accomodation.add")}}</a>
         @endif
     </h2>
     @include('admin.message')
@@ -28,6 +28,6 @@
             </div>
         </div>
     @else
-        {{__("business.no")}}
+        {{__("accomodation.no")}}
     @endif
 @endsection

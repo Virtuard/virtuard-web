@@ -69,7 +69,7 @@ class VendorController extends FrontendController
             'rows' => $list_hotel->paginate(5),
             'breadcrumbs' => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => __('accomodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [
@@ -77,7 +77,7 @@ class VendorController extends FrontendController
                     'class' => 'active',
                 ],
             ],
-            'page_title' => __('business.manage'),
+            'page_title' => __('accomodation.manage'),
         ];
         return view('Hotel::frontend.vendorHotel.index', $data);
     }
@@ -95,7 +95,7 @@ class VendorController extends FrontendController
             'recovery' => 1,
             'breadcrumbs' => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => __('accomodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [
@@ -112,7 +112,7 @@ class VendorController extends FrontendController
     {
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'business')->get();
+        $categories = ProductCategory::where('type', 'accomodation')->get();
 
         $isVirtuard360 = $this->checkVirtuard360();
         $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)
@@ -132,7 +132,7 @@ class VendorController extends FrontendController
             'attributes' => $this->attributesClass::where('service', 'hotel')->get(),
             'breadcrumbs' => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => __('accomodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [
@@ -258,7 +258,7 @@ class VendorController extends FrontendController
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
         $isVirtuard360 = $this->checkVirtuard360();
-        $categories = ProductCategory::where('type', 'business')->get();
+        $categories = ProductCategory::where('type', 'accomodation')->get();
         $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)
             ->where('status', 'SUCCESS')
             ->first();
@@ -283,7 +283,7 @@ class VendorController extends FrontendController
             'selected_terms' => $row->terms->pluck('term_id'),
             'breadcrumbs' => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => __('accomodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [

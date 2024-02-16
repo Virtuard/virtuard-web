@@ -52,6 +52,7 @@ class ThemeProvider extends AbstractThemeProvider
         'popup'=>\Modules\Popup\ModuleProvider::class,
         'cultural'=>\Modules\Cultural\ModuleProvider::class,
         'art'=>\Modules\Art\ModuleProvider::class,
+        'business'=>\Modules\Business\ModuleProvider::class,
 
     ];
 
