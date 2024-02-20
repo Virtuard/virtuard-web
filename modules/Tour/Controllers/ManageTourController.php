@@ -63,7 +63,7 @@ class ManageTourController extends FrontendController
             'rows'        => $list_tour->paginate(5),
             'breadcrumbs' => [
                 [
-                    'name' => _('listing.natural.manage'),
+                    'name' => __('listing.natural.manage'),
                     'url'  => route('tour.vendor.index'),
                 ],
                 [
@@ -71,7 +71,7 @@ class ManageTourController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'  => _('listing.natural.manage'),
+            'page_title'  => __('listing.natural.manage'),
         ];
         return view('Tour::frontend.manageTour.index', $data);
     }
@@ -86,7 +86,7 @@ class ManageTourController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs' => [
                 [
-                    'name' => _('listing.natural.manage'),
+                    'name' => __('listing.natural.manage'),
                     'url'  => route('tour.vendor.index'),
                 ],
                 [
@@ -129,7 +129,7 @@ class ManageTourController extends FrontendController
 
             'breadcrumbs'   => [
                 [
-                    'name' => _('listing.natural.manage'),
+                    'name' => __('listing.natural.manage'),
                     'url'  => route('tour.vendor.index'),
                 ],
                 [
@@ -163,7 +163,7 @@ class ManageTourController extends FrontendController
             "selected_terms" => $row->tour_term->pluck('term_id'),
             'breadcrumbs'    => [
                 [
-                    'name' => _('listing.natural.manage'),
+                    'name' => __('listing.natural.manage'),
                     'url'  => route('tour.vendor.index'),
                 ],
                 [

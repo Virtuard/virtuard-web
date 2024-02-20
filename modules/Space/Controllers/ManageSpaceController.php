@@ -62,7 +62,7 @@ class ManageSpaceController extends FrontendController
             'rows' => $rows->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.property.manage'),
+                    'name' => __('listing.property.manage'),
                     'url'  => route('space.vendor.index')
                 ],
                 [
@@ -70,7 +70,7 @@ class ManageSpaceController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'         => __("property.manage"),
+            'page_title'         => __("listing.property.manage"),
         ];
         return view('Space::frontend.manageSpace.index', $data);
     }
@@ -85,7 +85,7 @@ class ManageSpaceController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.property.manage'),
+                    'name' => __('listing.property.manage'),
                     'url'  => route('space.vendor.index')
                 ],
                 [
@@ -128,7 +128,7 @@ class ManageSpaceController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'space')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.property.manage'),
+                    'name' => __('listing.property.manage'),
                     'url'  => route('space.vendor.index')
                 ],
                 [
@@ -276,7 +276,7 @@ class ManageSpaceController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.property.manage'),
+                    'name' => __('listing.property.manage'),
                     'url'  => route('space.vendor.index')
                 ],
                 [

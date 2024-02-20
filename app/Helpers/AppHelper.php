@@ -1222,13 +1222,13 @@ function generate_timezone_list()
 if (!function_exists('menu_listing')) {
     function menu_listing() {
         $data = [
-            'tour', //natural
-            'cultural', //cultural
-            'art', //rendering and art
             'hotel', //accomodation
             'space', //property
-            'business',
             'boat', //vehicles
+            'business',
+            'natural',
+            'cultural',
+            'art',
         ];
 
         return $data;
@@ -1249,7 +1249,7 @@ if (!function_exists('menu_user')) {
             'space',
             // 'car',
             // 'event',
-            'tour',
+            // 'tour',
             // 'flight',
             'boat',
             // 'news',
@@ -1263,6 +1263,7 @@ if (!function_exists('menu_user')) {
             'cultural',
             'art',
             'business',
+            'natural',
         ];
 
         return $data;
@@ -1317,7 +1318,7 @@ if (!function_exists('setMenuPosition')) {
         $position = $menu['position'];
 
         switch ($menu['id']) {
-            case 'tour':
+            case 'natural':
                 $position = 11;
                 break;
             case 'cultural':
@@ -1394,12 +1395,12 @@ if (!function_exists('get_attr_listing')) {
             case 'vehicle':
             case 'vehicles':
             case 'boat' :
-                $data['route_as'] = 'space';
+                $data['route_as'] = 'boat';
                 $data['svg'] = 'icon/directions-boat.svg';
                 break;
             case 'natural':
             case 'naturals':
-                $data['route_as'] = 'cultural';
+                $data['route_as'] = 'natural';
                 $data['svg'] = 'icon/mountain.svg';
                 break;
             case 'cultural':

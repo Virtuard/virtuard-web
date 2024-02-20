@@ -179,7 +179,7 @@
 
 @if ($categories)
     <div class="panel">
-        <div class="panel-title"><strong>{{ _('listing.natural.category') }}</strong></div>
+        <div class="panel-title"><strong>{{ __('listing.natural.category') }}</strong></div>
         <div class="panel-body">
             <fieldset class="form-group">
                 @foreach ($categories as $category)

@@ -53,7 +53,7 @@ class ModuleProvider extends ModuleServiceProvider
             $res['tour'] = [
                 "position"=>11,
                 'url'        => route('tour.admin.index'),
-                'title'      => _('listing.natural.title'),
+                'title'      => __('Tour'),
                 'icon'       => 'fa fa-tree',
                 'permission' => 'tour_view',
                 'children'   => [
@@ -105,18 +105,18 @@ class ModuleProvider extends ModuleServiceProvider
         if(Tour::isEnable()){
             $res['tour'] = [
                 'url'   => route('tour.vendor.index'),
-                'title'      => _('listing.natural.title'),
+                'title'      => __('Tour'),
                 'icon'       => Tour::getServiceIconFeatured(),
                 'permission' => 'tour_view',
                 'position'   => 40,
                 'children'   => [
                     [
                         'url'   => route('tour.vendor.index'),
-                        'title' => _('listing.natural.all'),
+                        'title' => __('All Tours'),
                     ],
                     [
                         'url'        => route('tour.vendor.create'),
-                        'title'      => _('listing.natural.add'),
+                        'title'      => __('Add new Tour'),
                         'permission' => 'tour_create',
                     ],
                     // [
@@ -148,7 +148,7 @@ class ModuleProvider extends ModuleServiceProvider
             ],
             [
                 'class' => \Modules\Tour\Models\TourCategory::class,
-                'name'  => _('listing.natural.category'),
+                'name'  => __('Tour category'),
                 'items' => \Modules\Tour\Models\TourCategory::searchForMenu(),
                 'position'=>30
             ],

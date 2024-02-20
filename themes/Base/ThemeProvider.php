@@ -50,9 +50,10 @@ class ThemeProvider extends AbstractThemeProvider
         'location'=>\Modules\Location\ModuleProvider::class,
         'review'=>\Modules\Review\ModuleProvider::class,
         'popup'=>\Modules\Popup\ModuleProvider::class,
+        'business'=>\Modules\Business\ModuleProvider::class,
+        'natural'=>\Modules\Natural\ModuleProvider::class,
         'cultural'=>\Modules\Cultural\ModuleProvider::class,
         'art'=>\Modules\Art\ModuleProvider::class,
-        'business'=>\Modules\Business\ModuleProvider::class,
 
     ];
 

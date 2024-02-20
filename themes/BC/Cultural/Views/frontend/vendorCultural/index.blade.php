@@ -1,9 +1,9 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar">
-        {{!empty($recovery) ?__('Recovery Culturals') : _('listing.cultural.manage')}}
+        {{!empty($recovery) ?__('Recovery Culturals') : __('listing.cultural.manage')}}
         @if(Auth::user()->hasPermission('cultural_create') && empty($recovery))
-            <a href="{{ route("cultural.vendor.create") }}" class="btn-change-password">{{_('listing.cultural.add')}}</a>
+            <a href="{{ route("cultural.vendor.create") }}" class="btn-change-password">{{__('listing.cultural.add')}}</a>
         @endif
     </h2>
     @include('admin.message')
@@ -28,6 +28,6 @@
             </div>
         </div>
     @else
-        {{_('listing.cultural.no')}}
+        {{__('listing.cultural.no')}}
     @endif
 @endsection

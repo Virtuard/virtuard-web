@@ -39,7 +39,7 @@ class ModuleProvider extends ModuleServiceProvider
             'boat'=>[
                 "position"=>17,
                 'url'        => route('boat.admin.index'),
-                'title'      => _('listing.vehicle.title'),
+                'title'      => __('listing.vehicle.title'),
                 'icon'       => 'ion-md-boat',
                 'permission' => 'boat_view',
                 'children'   => [
@@ -50,7 +50,7 @@ class ModuleProvider extends ModuleServiceProvider
                     ],
                     'create'=>[
                         'url'        => route('boat.admin.create'),
-                        'title'      => _('listing.vehicle.add_new'),
+                        'title'      => __('listing.vehicle.add_new'),
                         'permission' => 'boat_create',
                     ],
                     'attribute'=>[
@@ -100,18 +100,18 @@ class ModuleProvider extends ModuleServiceProvider
         if(Boat::isEnable()){
             $res['boat'] = [
                 'url'   => route('boat.vendor.index'),
-                'title'      => _('listing.vehicle.title'),
+                'title'      => __('listing.vehicle.title'),
                 'icon'       => Boat::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'boat_view',
                 'children' => [
                     [
                         'url'   => route('boat.vendor.index'),
-                        'title'  => _('listing.vehicle.all'),
+                        'title'  => __('listing.vehicle.all'),
                     ],
                     [
                         'url'   => route('boat.vendor.create'),
-                        'title'      => _('listing.vehicle.add'),
+                        'title'      => __('listing.vehicle.add'),
                         'permission' => 'boat_create',
                     ],
                     // [

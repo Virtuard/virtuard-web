@@ -44,7 +44,7 @@ class ModuleProvider extends ModuleServiceProvider
             'cultural'=>[
                 "position"=>12,
                 'url'        => route('cultural.admin.index'),
-                'title'      => _('listing.cultural.title'),
+                'title'      => __('listing.cultural.title'),
                 'icon'       => 'fa fa-leaf',
                 'permission' => 'cultural_view',
                 'children'   => [
@@ -105,18 +105,18 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'cultural' => [
                 'url'   => route('cultural.vendor.index'),
-                'title'      => _('listing.cultural.sidebar_menu_title'),
+                'title'      => __('listing.cultural.sidebar_menu_title'),
                 'icon'       => Cultural::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'cultural_view',
                 'children' => [
                     [
                         'url'   => route('cultural.vendor.index'),
-                        'title'  => _('listing.cultural.all'),
+                        'title'  => __('listing.cultural.all'),
                     ],
                     [
                         'url'   => route('cultural.vendor.create'),
-                        'title'      => _('listing.cultural.add'),
+                        'title'      => __('listing.cultural.add'),
                         'permission' => 'cultural_create',
                     ],
                     // 'availability'=>[

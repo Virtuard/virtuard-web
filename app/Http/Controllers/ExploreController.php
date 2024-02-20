@@ -6,12 +6,11 @@ use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use Modules\Art\Models\Art;
 use Modules\Space\Models\Space;
-use Modules\Car\Models\Car;
 use Modules\Boat\Models\Boat;
 use Modules\Business\Models\Business;
 use Modules\Cultural\Models\Cultural;
 use Modules\Hotel\Models\Hotel;
-use Modules\Tour\Models\Tour;
+use Modules\Natural\Models\Natural;
 
 class ExploreController extends Controller
 {
@@ -48,7 +47,7 @@ class ExploreController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
-        $naturals = Tour::where('status', 'publish')
+        $naturals = Natural::where('status', 'publish')
             ->where('address', 'like', '%' . $searchTerm . '%')
             ->where('title', 'like', '%' . $keyword . '%')
             ->orderBy('id', 'DESC')

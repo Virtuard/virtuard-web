@@ -1,9 +1,9 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar">
-        {{!empty($recovery) ?__('Recovery Spaces') : __("property.manage")}}
+        {{!empty($recovery) ?__('Recovery Spaces') : __("listing.property.manage")}}
         @if(Auth::user()->hasPermission('space_create')&& empty($recovery))
-            <a href="{{ route("space.vendor.create") }}" class="btn-change-password">{{__("property.add")}}</a>
+            <a href="{{ route("space.vendor.create") }}" class="btn-change-password">{{__("listing.property.add")}}</a>
         @endif
     </h2>
     @include('admin.message')
@@ -28,6 +28,6 @@
             </div>
         </div>
     @else
-        {{__("property.no")}}
+        {{__("listing.property.no")}}
     @endif
 @endsection

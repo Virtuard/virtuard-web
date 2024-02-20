@@ -44,7 +44,7 @@ class ModuleProvider extends ModuleServiceProvider
             'art'=>[
                 "position"=>13,
                 'url'        => route('art.admin.index'),
-                'title'      => _('listing.art.title'),
+                'title'      => __('listing.art.title'),
                 'icon'       => 'fa fa-laptop',
                 'permission' => 'art_view',
                 'children'   => [
@@ -105,18 +105,18 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'art' => [
                 'url'   => route('art.vendor.index'),
-                'title'      => _('listing.art.title'),
+                'title'      => __('listing.art.title'),
                 'icon'       => Art::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'art_view',
                 'children' => [
                     [
                         'url'   => route('art.vendor.index'),
-                        'title'  => _('listing.art.all'),
+                        'title'  => __('listing.art.all'),
                     ],
                     [
                         'url'   => route('art.vendor.create'),
-                        'title'      => _('listing.art.add'),
+                        'title'      => __('listing.art.add'),
                         'permission' => 'art_create',
                     ],
                     // 'availability'=>[

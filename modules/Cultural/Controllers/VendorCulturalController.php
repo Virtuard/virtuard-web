@@ -61,7 +61,7 @@ class VendorCulturalController extends FrontendController
             'rows' => $list_tour->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.cultural.manage'),
+                    'name' => __('listing.cultural.manage'),
                     'url'  => route('cultural.vendor.index')
                 ],
                 [
@@ -69,7 +69,7 @@ class VendorCulturalController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'         => _('listing.cultural.manage'),
+            'page_title'         => __('listing.cultural.manage'),
         ];
         return view('Cultural::frontend.vendorCultural.index', $data);
     }
@@ -84,7 +84,7 @@ class VendorCulturalController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.cultural.manage'),
+                    'name' => __('listing.cultural.manage'),
                     'url'  => route('cultural.vendor.index')
                 ],
                 [
@@ -125,7 +125,7 @@ class VendorCulturalController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'event')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.cultural.manage'),
+                    'name' => __('listing.cultural.manage'),
                     'url'  => route('cultural.vendor.index')
                 ],
                 [
@@ -270,7 +270,7 @@ class VendorCulturalController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => _('listing.cultural.manage'),
+                    'name' => __('listing.cultural.manage'),
                     'url'  => route('cultural.vendor.index')
                 ],
                 [
