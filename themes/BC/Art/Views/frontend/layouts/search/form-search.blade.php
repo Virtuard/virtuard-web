@@ -5,21 +5,13 @@
             $art_search_fields = array_values(\Illuminate\Support\Arr::sort($art_search_fields, function ($value) {
                 return $value['position'] ?? 0;
             }));
-
-            $art_search_fields[] = [
-                "title" => "Nearby",
-                "field" => "Nearby",
-                "size" => "4",
-                "position" => "3",
-            ];
             @endphp
             @if(!empty($art_search_fields))
                 @foreach($art_search_fields as $field)
                     @php
                         $field['title'] = $field['title_'.app()->getLocale()] ?? $field['title'] ?? "";
-                        $field['size'] = "4";
                     @endphp
-                    <div class="col-md-{{ $field['size'] ?? "6" }} border-right">
+                    <div class="col-md-{{ $field['size'] ?? "4" }} border-right">
                         @switch($field['field'])
                             @case ('service_name')
                                 @include('Art::frontend.layouts.search.fields.service_name')
@@ -30,7 +22,7 @@
                             @case ('date')
                                 @include('Art::frontend.layouts.search.fields.date')
                             @break
-                            @case ('Nearby')
+                            @case ('guests')
                                 @include('Art::frontend.layouts.search.fields.range')
                             @break
                         @endswitch

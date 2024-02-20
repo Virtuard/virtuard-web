@@ -59,7 +59,7 @@ class ManageBoatController extends FrontendController
             'rows' => $list_tour->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => __('vehicle.manage'),
+                    'name' => _('listing.vehicle.manage'),
                     'url'  => route('boat.vendor.index')
                 ],
                 [
@@ -67,7 +67,7 @@ class ManageBoatController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'         => __('vehicle.manage'),
+            'page_title'         => _('listing.vehicle.manage'),
         ];
         return view('Boat::frontend.manageBoat.index', $data);
     }
@@ -82,7 +82,7 @@ class ManageBoatController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => __('vehicle.manage'),
+                    'name' => _('listing.vehicle.manage'),
                     'url'  => route('boat.vendor.index')
                 ],
                 [
@@ -126,7 +126,7 @@ class ManageBoatController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'boat')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => __('vehicle.manage'),
+                    'name' => _('listing.vehicle.manage'),
                     'url'  => route('boat.vendor.index')
                 ],
                 [
@@ -275,7 +275,7 @@ class ManageBoatController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('vehicle.manage'),
+                    'name' => _('listing.vehicle.manage'),
                     'url'  => route('boat.vendor.index')
                 ],
                 [

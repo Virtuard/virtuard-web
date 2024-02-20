@@ -1367,3 +1367,79 @@ if (!function_exists('get_map_gmap_key')) {
         return $data->val;
     }
 }
+
+
+if (!function_exists('get_attr_listing')) {
+    function get_attr_listing($key) {
+        $data  = [];
+
+        switch ($key) {
+            case 'business':
+            case 'businesses' :
+                $data['route_as'] = 'business';
+                $data['svg'] = 'icon/shopping-bag.svg';
+                break;
+            case 'accomodation':
+            case 'accomodations':
+            case 'hotel':
+                $data['route_as'] = 'hotel';
+                $data['svg'] = 'icon/building.svg';
+                break;
+            case 'property':
+            case 'properties':
+            case 'space' :
+                $data['route_as'] = 'space';
+                $data['svg'] = 'icon/house-user.svg';
+                break;
+            case 'vehicle':
+            case 'vehicles':
+            case 'boat' :
+                $data['route_as'] = 'space';
+                $data['svg'] = 'icon/directions-boat.svg';
+                break;
+            case 'natural':
+            case 'naturals':
+                $data['route_as'] = 'cultural';
+                $data['svg'] = 'icon/mountain.svg';
+                break;
+            case 'cultural':
+            case 'culturals' :
+                $data['route_as'] = 'cultural';
+                $data['svg'] = 'icon/church.svg';
+                break;
+            case 'art':
+            case 'arts' :
+                $data['route_as'] = 'art';
+                $data['svg'] = 'icon/pencil-ruler.svg';
+                break;
+        }
+        
+        return $data;
+    }
+}
+
+if (!function_exists('get_map_listing')) {
+    function get_map_listing($key, $data) {
+        $attr = get_attr_listing($key);
+
+        $result = [
+            'category' => $key,
+            'title' => $data->title,
+            'map_lat' => $data->map_lat,
+            'map_lng' => $data->map_lng,
+            'address' => $data->address ?? '',
+            'icon' => asset($attr['svg']),
+            'image' => get_file_url($data->image_id),
+            'url' => route($attr['route_as'] . ".detail", $data->slug),
+        ];
+
+        return $result;
+    }
+}
+
+if (!function_exists('get_listing_book')) {
+    function get_listing_book() {
+        $data = ['hotel', 'space', 'business', 'vehicle'];
+        return $data;
+    }
+}

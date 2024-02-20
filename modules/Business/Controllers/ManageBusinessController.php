@@ -62,7 +62,7 @@ class ManageBusinessController extends FrontendController
             'rows' => $rows->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => _('listing.business.manage'),
                     'url'  => route('business.vendor.index')
                 ],
                 [
@@ -85,7 +85,7 @@ class ManageBusinessController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => _('listing.business.manage'),
                     'url'  => route('business.vendor.index')
                 ],
                 [
@@ -128,7 +128,7 @@ class ManageBusinessController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'business')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => _('listing.business.manage'),
                     'url'  => route('business.vendor.index')
                 ],
                 [
@@ -276,7 +276,7 @@ class ManageBusinessController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('business.manage'),
+                    'name' => _('listing.business.manage'),
                     'url'  => route('business.vendor.index')
                 ],
                 [

@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="d-flex justify-content-between mb20">
                 <div class="">
-                    <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : __('natural.add_new')}}</h1>
+                    <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->title : _('listing.natural.add_new')}}</h1>
                     @if($row->slug)
                         <p class="item-url-demo">{{__("Permalink")}}: {{ url(config('tour.tour_route_prefix') ) }}/<a href="#" class="open-edit-input" data-name="slug">{{$row->slug}}</a>
                         </p>

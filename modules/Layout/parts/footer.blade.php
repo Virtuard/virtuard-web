@@ -204,6 +204,6 @@
             }
         }
 
-        getLocation();
+        // getLocation();
     });
 </script>

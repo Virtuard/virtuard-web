@@ -43,7 +43,7 @@ class ModuleProvider extends ModuleServiceProvider
             'space'=>[
                 "position"=>15,
                 'url'        => route('space.admin.index'),
-                'title'      => __('property.title'),
+                'title'      => _('listing.property.title'),
                 'icon'       => 'ion ion-md-home',
                 'permission' => 'space_view',
                 'children'   => [
@@ -105,18 +105,18 @@ class ModuleProvider extends ModuleServiceProvider
         if (Space::isEnable()) {
             $res['space'] = [
                 'url'        => route('space.vendor.index'),
-                'title'      => __('property.title'),
+                'title'      => _('listing.property.title'),
                 'icon'       => Space::getServiceIconFeatured(),
                 'position'   => 50,
                 'permission' => 'space_view',
                 'children'   => [
                     [
                         'url'   => route('space.vendor.index'),
-                        'title' => __('property.all'),
+                        'title' => _('listing.property.all'),
                     ],
                     [
                         'url'        => route('space.vendor.create'),
-                        'title'      => __('property.add'),
+                        'title'      => _('listing.property.add'),
                         'permission' => 'space_create',
                     ],
                     // [

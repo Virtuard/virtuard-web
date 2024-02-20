@@ -66,109 +66,29 @@ class ExploreController extends Controller
             ->orderBy('id', 'DESC')
             ->get();
 
+        $listings = [
+            'business' => $business,
+            'properties' => $properties,
+            'accomodations' => $accomodations,
+            'vehicles' => $vehicles,
+            'naturals' => $naturals,
+            'culturals' => $culturals,
+            'arts' => $arts,
+        ];
+
         $listMap = [];
 
-        foreach ($business as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'business',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/shopping-bag.svg'),
-            ];
-
-            $listMap[] = $val;
-        }
-
-        foreach ($properties as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'properties',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/house-user.svg'),
-            ];
-
-            $listMap[] = $val;
-        }
-
-        foreach ($accomodations as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'accomodations',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/building.svg'),
-            ];
-
-            $listMap[] = $val;
-        }
-
-        foreach ($vehicles as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'vehicles',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/directions-boat.svg'),
-            ];
-
-            $listMap[] = $val;
-        }
-        
-        foreach ($naturals as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'naturals',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/mountain.svg'),
-            ];
-
-            $listMap[] = $val;
-        }
-
-        foreach ($culturals as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'culturals',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/church.svg'),
-            ];
-
-            $listMap[] = $val;
-        }
-        
-        foreach ($arts as $val) {
-            if ($val->map_lat == null || $val->map_lng == null) continue;
-            $val = [
-                'category' => 'arts',
-                'title' => $val->title,
-                'map_lat' => $val->map_lat,
-                'map_lng' => $val->map_lng,
-                'icon' => asset('icon/pencil-ruler.svg'),
-            ];
-
-            $listMap[] = $val;
+        foreach($listings as $i => $listing) {
+            foreach($listing as $j => $list) {
+                if ($list->map_lat == null || $list->map_lng == null) continue;
+                $listMap[] = get_map_listing($i, $list);
+            }
         }
 
         return view('explore.index', compact(
             'topBusiness',
             'businessCategories',
-            'business',
-            'properties',
-            'accomodations',
-            'vehicles',
-            'naturals',
-            'culturals',
-            'arts',
+            'listings',
             'listMap',
         ));
     }

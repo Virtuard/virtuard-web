@@ -1,4 +1,4 @@
-@php($location_search_style = setting_item('hotel_location_search_style'))
+@php($location_search_style = setting_item('business_location_search_style'))
 
 <div class="form-group">
     <div class="form-content">

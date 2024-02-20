@@ -5,20 +5,11 @@
             $tour_search_fields = array_values(\Illuminate\Support\Arr::sort($tour_search_fields, function ($value) {
                 return $value['position'] ?? 0;
             }));
-
-            $tour_search_fields[] = [
-                "title" => "Nearby",
-                "field" => "Nearby",
-                "size" => "4",
-                "position" => "3",
-            ];
-
             @endphp
             @if(!empty($tour_search_fields))
                 @foreach($tour_search_fields as $field)
                     @php
                         $field['title'] = $field['title_'.app()->getLocale()] ?? $field['title'] ?? "";
-                        $field['size'] = "4";
                     @endphp
                     <div class="col-md-{{ $field['size'] ?? "4" }} border-right">
                         @switch($field['field'])
@@ -31,7 +22,7 @@
                             @case ('date')
                                 @include('Tour::frontend.layouts.search.fields.date')
                             @break
-                            @case ('Nearby')
+                            @case ('guests')
                                 @include('Tour::frontend.layouts.search.fields.range')
                             @break
                         @endswitch

@@ -61,7 +61,7 @@ class VendorArtController extends FrontendController
             'rows' => $list_tour->paginate(5),
             'breadcrumbs'        => [
                 [
-                    'name' => __('art.manage'),
+                    'name' => _('listing.art.manage'),
                     'url'  => route('art.vendor.index')
                 ],
                 [
@@ -69,7 +69,7 @@ class VendorArtController extends FrontendController
                     'class' => 'active'
                 ],
             ],
-            'page_title'         => __('art.manage'),
+            'page_title'         => _('listing.art.manage'),
         ];
         return view('Art::frontend.vendorArt.index', $data);
     }
@@ -84,7 +84,7 @@ class VendorArtController extends FrontendController
             'recovery'           => 1,
             'breadcrumbs'        => [
                 [
-                    'name' => __('art.manage'),
+                    'name' => _('listing.art.manage'),
                     'url'  => route('art.vendor.index')
                 ],
                 [
@@ -125,7 +125,7 @@ class VendorArtController extends FrontendController
             'attributes'    => $this->attributesClass::where('service', 'event')->get(),
             'breadcrumbs'        => [
                 [
-                    'name' => __('art.manage'),
+                    'name' => _('listing.art.manage'),
                     'url'  => route('art.vendor.index')
                 ],
                 [
@@ -270,7 +270,7 @@ class VendorArtController extends FrontendController
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
-                    'name' => __('art.manage'),
+                    'name' => _('listing.art.manage'),
                     'url'  => route('art.vendor.index')
                 ],
                 [
