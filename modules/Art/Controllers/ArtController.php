@@ -44,7 +44,7 @@ class ArtController extends Controller
         if(!empty($request->query('limit'))){
             $limit = $request->query('limit');
         }else{
-            $limit = !empty(setting_item("cultural_page_limit_item"))? setting_item("cultural_page_limit_item") : 9;
+            $limit = !empty(setting_item("art_page_limit_item"))? setting_item("art_page_limit_item") : 9;
         }
 
         $query = $this->artClass->search($request->input());
@@ -60,23 +60,23 @@ class ArtController extends Controller
                     "lng"     => (float)$row->map_lng,
                     "gallery" => $row->getGallery(true),
                     "infobox" => view('Art::frontend.layouts.search.loop-grid', ['row' => $row,'disable_lazyload'=>1,'wrap_class'=>'infobox-item'])->render(),
-                    'marker' => get_file_url(setting_item("cultural_icon_marker_map"),'full') ?? url('images/icons/png/pin.png'),
+                    'marker' => get_file_url(setting_item("art_icon_marker_map"),'full') ?? url('images/icons/png/pin.png'),
                 ];
             }
         }
         $limit_location = 15;
-        if( empty(setting_item("cultural_location_search_style")) or setting_item("cultural_location_search_style") == "normal" ){
+        if( empty(setting_item("art_location_search_style")) or setting_item("art_location_search_style") == "normal" ){
             $limit_location = 1000;
         }
         $data = [
             'rows'               => $list,
             'list_location'      => $this->locationClass::where('status', 'publish')->limit($limit_location)->with(['translation'])->get()->toTree(),
-            'cultural_min_max_price' => $this->artClass::getMinMaxPrice(),
+            'art_min_max_price' => $this->artClass::getMinMaxPrice(),
             'markers'            => $markers,
             "blank" => setting_item('search_open_tab') == "current_tab" ? 0 : 1 ,
             "seo_meta"           => $this->artClass::getSeoMetaForPageList()
         ];
-        $layout = setting_item("cultural_layout_search", 'normal');
+        $layout = setting_item("art_layout_search", 'normal');
         if ($request->query('_layout')) {
             $layout = $request->query('_layout');
         }
@@ -87,7 +87,7 @@ class ArtController extends Controller
                 "markers" => $data['markers']
             ]);
         }
-        $data['attributes'] = Attributes::where('service', 'cultural')->orderBy("position","desc")->with(['terms','translation'])->get();
+        $data['attributes'] = Attributes::where('service', 'art')->orderBy("position","desc")->with(['terms','translation'])->get();
 
         if ($layout == "map") {
             $data['body_class'] = 'has-search-map';
@@ -125,7 +125,7 @@ class ArtController extends Controller
             'row'          => $row,
             'translation'       => $translation,
             'ipanorama' => $dataIpanorama,
-            'cultural_related' => $art_related,
+            'art_related' => $art_related,
             'location_category'=>$this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
             'booking_data' => $row->getBookingData(),
             'review_list'  => $review_list,
@@ -134,7 +134,7 @@ class ArtController extends Controller
             'breadcrumbs'       => [
                 [
                     'name'  => __('Art'),
-                    'url'  => route('cultural.search'),
+                    'url'  => route('art.search'),
                 ],
             ],
         ];
@@ -144,7 +144,6 @@ class ArtController extends Controller
             'class' => 'active'
         ];
         $this->setActiveMenu($row);
-        // return view('Art::frontend.detail', $data);
-        return view('Art::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'cultural_related' => $data['cultural_related'], 'ipanorama' => $data['ipanorama'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Art::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'art_related' => $data['art_related'], 'ipanorama' => $data['ipanorama'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
     }
 }

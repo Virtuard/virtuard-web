@@ -4,7 +4,7 @@
         <div class="row">
             @foreach($art_related as $k=>$item)
                 <div class="col-md-3">
-                    @include('Event::frontend.layouts.search.loop-grid',['row'=>$item,'include_param'=>0])
+                    @include('Art::frontend.layouts.search.loop-grid',['row'=>$item,'include_param'=>0])
                 </div>
             @endforeach
         </div>
