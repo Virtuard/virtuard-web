@@ -45,7 +45,7 @@ class ModuleProvider extends ModuleServiceProvider
                 "position"=>12,
                 'url'        => route('cultural.admin.index'),
                 'title'      => __('listing.cultural.title'),
-                'icon'       => 'fa fa-leaf',
+                'icon'       => 'fa fa-bank',
                 'permission' => 'cultural_view',
                 'children'   => [
                     'add'=>[

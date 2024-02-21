@@ -45,7 +45,7 @@ class ModuleProvider extends ModuleServiceProvider
                 "position"=>12,
                 'url'        => route('natural.admin.index'),
                 'title'      => __('listing.natural.title'),
-                'icon'       => 'fa fa-leaf',
+                'icon'       => 'fa fa-image',
                 'permission' => 'natural_view',
                 'children'   => [
                     'add'=>[
@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'natural' => [
                 'url'   => route('natural.vendor.index'),
-                'title'      => __('listing.natural.sidebar_menu_title'),
+                'title'      => __('listing.natural.title'),
                 'icon'       => Natural::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'natural_view',

@@ -815,7 +815,7 @@ class Natural extends Bookable
 
     public static function getServiceIconFeatured()
     {
-        return "icofont-university";
+        return "icofont-hill";
     }
 
     public static function isEnable()
