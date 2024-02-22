@@ -17,8 +17,11 @@
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" aria-label='location' class='form-control autocomplete' id='location'
-                                            name='location' placeholder="Location"
+                                        <input type="text" aria-label='location' class='form-control' 
+                                            id='search_location'
+                                            name='search_location' 
+                                            placeholder="Location"
+                                            value="{{ isset($_GET['search_location']) ? $_GET['search_location'] : '' }}"
                                             style="border-top: none;border-left:none;border-right:none;">
                                         <button class="btn btn-sm" id="get-location" type="button" onclick="getLocation()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -34,8 +37,15 @@
                                 <div class="form-content">
                                     <label class="mb-2 font-weight-bold">Proximity 10km</label>
                                     <div class="input-search">
-                                        <input type="range" class="w-100" value="700000" step="100000" min="0"
-                                            max="1000000" />
+                                        <input type="range" 
+                                            id="search_range" 
+                                            name="search_range" 
+                                            step="100000" 
+                                            min="0"
+                                            max="1000000" 
+                                            class="w-100" 
+                                            value="700000"
+                                            />
                                     </div>
                                     <div class="d-flex justify-content-between" style="font-size: 12px!important">
                                         <span>0</span>
@@ -46,8 +56,11 @@
                         </div>
                         <div class="col-3">
                             <div class="form-group mt-3">
-                                <input type="text" class="form-control" name="keyword" id="keyword research"
+                                <input type="text" class="form-control" 
+                                    id="search_keyword"
+                                    name="search_keyword" 
                                     placeholder="keyword research"
+                                    value="{{ isset($_GET['search_keyword']) ? $_GET['search_keyword'] : '' }}"
                                     style="border-top: none;border-left:none;border-right:none;">
                             </div>
                         </div>
@@ -114,204 +127,18 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-8">
+            <div class="col-7">
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="card" style="height: 600px; overflow-y: auto;">
-                                    <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link active" id="categories-tab" data-toggle="tab"
-                                                data-target="#categories" type="button" role="tab"
-                                                aria-controls="categories" aria-selected="true">Categories</button>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <button class="nav-link" id="typology-tab" data-toggle="tab"
-                                                data-target="#typology" type="button" role="tab"
-                                                aria-controls="typology" aria-selected="false">Typology</button>
-                                        </li>
-                                    </ul>
-                                    <div class="tab-content" id="myTabContent">
-                                        <div class="tab-pane fade show active" id="categories" role="tabpanel"
-                                            aria-labelledby="categories-tab">
-                                            @foreach ($businessCategories as $businessCategory)
-                                                <div class="col-12 mb-4">
-                                                    <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image:url('https://source.unsplash.com/600x900/?{{ $businessCategory->title }}');">
-                                                        <div
-                                                            class="card-img-overlay d-flex flex-column justify-content-between">
-                                                            <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                            <div>
-                                                                <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                        herf="https://creativemanner.com">{{ $businessCategory->title }}</a>
-                                                                </h4>
-                                                                {{-- <small class="text-white">1.344 listings</small> --}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                        <div class="tab-pane fade" id="typology" role="tabpanel"
-                                            aria-labelledby="typology-tab">
-                                            <div class="col-12 mb-4">
-                                                <div class="card card-custom card-has-bg click-col"
-                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                                                    <div
-                                                        class="card-img-overlay d-flex flex-column justify-content-between">
-                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                        <div>
-                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                    herf="https://creativemanner.com">Hotels</a></h4>
-                                                            <small class="text-white">1.344 listings</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-4">
-                                                <div class="card card-custom card-has-bg click-col"
-                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                                                    <div
-                                                        class="card-img-overlay d-flex flex-column justify-content-between">
-                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                        <div>
-                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                    herf="https://creativemanner.com">Hotels</a></h4>
-                                                            <small class="text-white">1.344 listings</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-4">
-                                                <div class="card card-custom card-has-bg click-col"
-                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                                                    <div
-                                                        class="card-img-overlay d-flex flex-column justify-content-between">
-                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                        <div>
-                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                    herf="https://creativemanner.com">Hotels</a></h4>
-                                                            <small class="text-white">1.344 listings</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-4">
-                                                <div class="card card-custom card-has-bg click-col"
-                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                                                    <div
-                                                        class="card-img-overlay d-flex flex-column justify-content-between">
-                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                        <div>
-                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                    herf="https://creativemanner.com">Hotels</a></h4>
-                                                            <small class="text-white">1.344 listings</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-4">
-                                                <div class="card card-custom card-has-bg click-col"
-                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                                                    <div
-                                                        class="card-img-overlay d-flex flex-column justify-content-between">
-                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                        <div>
-                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                    herf="https://creativemanner.com">Hotels</a></h4>
-                                                            <small class="text-white">1.344 listings</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-12 mb-4">
-                                                <div class="card card-custom card-has-bg click-col"
-                                                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                                                    <div
-                                                        class="card-img-overlay d-flex flex-column justify-content-between">
-                                                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                                                        <div>
-                                                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                                                    herf="https://creativemanner.com">Hotels</a></h4>
-                                                            <small class="text-white">1.344 listings</small>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="card" style="height: 600px; overflow-y: auto;">
-                                    <div class="card-body">
-                                        <div class="d-flex justify-content-between align-items-center mb-4">
-                                            <i class="fa fa-lg fa-arrow-left cursor-pointer"></i>
-                                            <span>Showing {{ count($topBusiness) }} Result</span>
-                                            <i class="fa fa-lg fa-arrow-right cursor-pointer"></i>
-                                        </div>
-                                        @foreach ($topBusiness as $businessItem)
-                                            <div class="col-12 mb-4">
-                                                <div class="card">
-                                                    <div class="card card-custom card-has-bg click-col"
-                                                        style="background-image: url('/uploads/{{ $businessItem->image->file_path }}'); height: 250px;">
-                                                        <div class="card-img-overlay d-flex align-items-end">
-                                                            @if ($businessItem->image && $businessItem->image->file_path)
-                                                                <img src="/uploads/{{ $businessItem->image->file_path }}"
-                                                                    alt="rumah"
-                                                                    style="width:50px; height:50px;border-radius:50%">
-                                                            @else
-                                                                <img src="https://source.unsplash.com/600x900/?avatar {{ $businessItem->title }}"
-                                                                    alt="rumah"
-                                                                    style="width:50px; height:50px;border-radius:50%">
-                                                            @endif
-                                                            <div class="ml-2">
-                                                                <h4 class="card-title mt-0 mb-0"
-                                                                    style="text-overflow: ellipsis; overflow:hidden; white-space: nowrap;">
-                                                                    <a class="text-white">{{ $businessItem->title }}</a>
-                                                                </h4>
-                                                                <span class="text-white"> <i class="fa fa-map-marker"></i>
-                                                                    {{ $businessItem->address }}</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="card-footer">
-                                                        <div class="d-flex justify-content-between">
-                                                            <div class="d-flex align-items-center">
-                                                                <img src="https://source.unsplash.com/600x900/?house"
-                                                                    alt="rumah"
-                                                                    style="width:25px; height:25px;border-radius:50%">
-                                                                <div class="ml-2">
-                                                                    <p class="card-title mt-0 mb-0 text-dark">sangrogria
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                            <div class="d-flex align-items-center">
-                                                                <button class="btn btn-sm" type="button">
-                                                                    <i class="fa fa-search-plus"></i>
-                                                                </button>
-                                                                <button class="btn btn-sm" type="button">
-                                                                    <i class="fa fa-heart-o"></i>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- Tab content listing --}}
+                    {{-- Tab content all --}}
+                    @include('explore.listing.all.content')
+                    
+                    {{-- Tab content listing category --}}
                     @foreach ($listings as $key => $listing)
-                        @include('explore.partial.content-listing')
+                        @include('explore.listing.category.content')
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-5">
                 <div id="gmap" style="height: 100%;"></div>
             </div>
         </div>
@@ -493,126 +320,7 @@
 @endpush
 
 @push('js')
-    <script>
-        let autocomplete = (inp, arr) => {
-            let currentFocus;
-            inp.addEventListener("input", function(e) {
-                let a,
-                    b,
-                    i,
-                    val = this.value;
-
-                closeAllLists();
-
-                if (!val) {
-                    return false;
-                }
-
-                currentFocus = -1;
-
-                a = document.createElement("DIV");
-
-                a.setAttribute("id", this.id + " autocomplete-list");
-                a.setAttribute("class", " autocomplete-items list-group text-left");
-
-                this.parentNode.appendChild(a);
-
-                for (i = 0; i < arr.length; i++) {
-                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                        b = document.createElement("DIV");
-                        b.setAttribute("class", "list-group-item list-group-item-action");
-                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                        b.innerHTML += arr[i].substr(val.length);
-                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-                        b.addEventListener("click", function(e) {
-                            inp.value = this.getElementsByTagName("input")[0].value;
-                            closeAllLists();
-                        });
-                        a.appendChild(b);
-                    }
-                }
-            });
-
-            inp.addEventListener("keydown", function(e) {
-                var x = document.getElementById(this.id + "autocomplete-list");
-                if (x) x = x.getElementsByTagName("div");
-                if (e.keyCode == 40) {
-                    currentFocus++;
-                    addActive(x);
-                } else if (e.keyCode == 38) {
-                    currentFocus--;
-                    addActive(x);
-                } else if (e.keyCode == 13) {
-                    e.preventDefault();
-                    if (currentFocus > -1) {
-                        if (x) x[currentFocus].click();
-                    }
-                }
-            });
-
-            let addActive = (x) => {
-                if (!x) return false;
-                removeActive(x);
-                if (currentFocus >= x.length) currentFocus = 0;
-                if (currentFocus < 0) currentFocus = x.length - 1;
-                x[currentFocus].classList.add("active");
-            };
-
-            let removeActive = (x) => {
-                for (let i = 0; i < x.length; i++) {
-                    x[i].classList.remove("active");
-                }
-            };
-
-            let closeAllLists = (elmnt) => {
-                var x = document.getElementsByClassName("autocomplete-items");
-                for (var i = 0; i < x.length; i++) {
-                    if (elmnt != x[i] && elmnt != inp) {
-                        x[i].parentNode.removeChild(x[i]);
-                    }
-                }
-            };
-
-            document.addEventListener("click", function(e) {
-                closeAllLists(e.target);
-            });
-        };
-
-        let data = [
-            "Afghanistan",
-            "Albania",
-            "Algeria",
-            "Andorra",
-            "Angola",
-            "Anguilla",
-            "Antigua & Barbuda",
-            "Argentina",
-            "Armenia",
-            "Aruba",
-            "Australia",
-            "Austria",
-            "Azerbaijan",
-            "Bahamas",
-            "Bahrain",
-            "Bangladesh",
-            "Barbados",
-            "Belarus",
-            "Belgium",
-            "Belize",
-            "Benin",
-            "Bermuda",
-            "Bhutan",
-        ];
-
-        autocomplete(document.getElementById("location"), data);
-        autocomplete(document.getElementById("place-business"), data);
-        autocomplete(document.getElementById("place-properties"), data);
-        autocomplete(document.getElementById("place-accomodations"), data);
-        autocomplete(document.getElementById("place-culturals"), data);
-        autocomplete(document.getElementById("place-naturals"), data);
-        autocomplete(document.getElementById("place-arts"), data);
-    </script>
-    </script>
+    <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script>
         const rangeInputs = document.querySelectorAll('input[type="range"]')
 
@@ -632,15 +340,21 @@
         rangeInputs.forEach(input => {
             input.addEventListener('input', handleInputChange)
         })
-    </script>
-    <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}" ></script>
-    <script>
+
         // Initialize the map
-        const markersData = {{ Js::from($listMap) }}
+        const markersData = {{ Js::from($listMaps) }}
         let map;
         let mapMarkers = [];
 
+        function initAutocomplete() {
+            let input = document.getElementById('search_location');
+            let autoComplete = new google.maps.places.Autocomplete(input);
+        }
+
         function initMap() {
+            // Initialize the autocomplete
+            initAutocomplete();
+
             map = new google.maps.Map(document.getElementById('gmap'), {
                 center: { lat: 0, lng: 0 },
                 zoom: 1
@@ -708,8 +422,6 @@
             addMarkersToMap(markersData);
         }
 
-        initMap();
-
         $('.nav-category').on('click', function(e) {
             let id = $(this).attr('id');
             id = id.replace('-tab', '');
@@ -717,6 +429,11 @@
             if (id == 'all') return defaultMarkers();
             
             filterMarkers(marker => marker.category == id);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            initMap();
         });
     </script>
 @endpush

@@ -1424,6 +1424,7 @@ if (!function_exists('get_map_listing')) {
         $attr = get_attr_listing($key);
 
         $result = [
+            'id' => $data->id,
             'category' => $key,
             'title' => $data->title,
             'map_lat' => $data->map_lat,
@@ -1432,6 +1433,11 @@ if (!function_exists('get_map_listing')) {
             'icon' => asset($attr['svg']),
             'image' => get_file_url($data->image_id),
             'url' => route($attr['route_as'] . ".detail", $data->slug),
+            'created_at' => $data->created_at,
+            'user' => [
+                'name' => $data->user->name,
+                'image' => $data->user->getAvatarUrl(),
+            ]
         ];
 
         return $result;
