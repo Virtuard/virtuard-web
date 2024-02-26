@@ -1,9 +1,9 @@
 <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
     <div class="row">
-        <div class="col-6">
+        <div class="col-6 px-0">
             @include('explore.listing.all.filter')
         </div>
-        <div class="col-6">
+        <div class="col-6 px-0">
             <div class="card" style="height: 600px; overflow-y: auto;">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">

@@ -1,9 +1,9 @@
 @extends ('layouts.app')
 @section('content')
     <div class="boards" style="background: #f5f5f5; padding: 120px 60px;">
-        <div class="row mt-5">
+        <div class="row my-5">
             <div class="col-12">
-                <h1 class="text-center mb-3">Apa yang ingin anda masukkan?</h1>
+                <h1 class="text-center">What do you want to listing?</h1>
             </div>
         </div>
         <div class="row">

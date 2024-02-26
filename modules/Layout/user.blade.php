@@ -140,7 +140,7 @@
     <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
-    <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script>
+    {{-- <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script> --}}
     <script src="{{ asset('assets/js/custom-user.js') }}"></script>
     @if(!is_demo_mode())
     {!! setting_item('footer_scripts') !!}

@@ -175,6 +175,10 @@
                     const locationName = data.display_name;
                     $('#location_id').val(locationName);
                     $('#location').val(locationName);
+                    $('#search_location').val(locationName);
+
+                    $('#search_lat').val(latitude);
+                    $('#search_lng').val(longitude);
                 } catch (error) {
                     console.error("Error retrieving location data: " + error);
                 }

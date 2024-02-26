@@ -40,7 +40,9 @@ class ExploreController extends Controller
         $search = [
             'location' => $request->search_location,
             'keyword' => $request->search_keyword,
-            'range' => $request->search_range,
+            'radius' => $request->search_radius,
+            'map_lat' => $request->search_lat,
+            'map_lng' => $request->search_lng,
         ];
 
         $topBusiness = $this->business->take(5)->get();
@@ -55,7 +57,7 @@ class ExploreController extends Controller
             'culturals' => $this->getListing($this->cultural, $search),
             'arts' => $this->getListing($this->art, $search),
         ];
-        
+
         $listMaps = [];
         foreach($listings as $i => $listing) {
             foreach($listing as $j => $list) {
@@ -78,13 +80,13 @@ class ExploreController extends Controller
     }
 
     private function getListing($model, $search)
-    {
+    {   
         $data = $model
                 ->when(isset($search['location']), function ($query) use ($search) {
                     $query->where('address', 'like', "%{$search['location']}%");
                 })
-                ->when(isset($search['title']), function ($query) use ($search) {
-                    $query->where('keyword', 'like', "%{$search['keyword']}%");
+                ->when(isset($search['keyword']), function ($query) use ($search) {
+                    $query->where('title', 'like', "%{$search['keyword']}%");
                 })
                 ->where([
                     ['status', '=', 'publish'],
