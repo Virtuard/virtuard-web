@@ -9,19 +9,19 @@
                                 <p class="m-0">
                                     <i class="fa fa-globe mr-2"></i>
                                     All Members 
-                                    <span class="badge badge-primary">{{ count($dataUser) }}</span>
+                                    <span class="badge badge-primary">{{ count($users) }}</span>
                                 </p>
                             </div>
                             <div class="ml-3">
                                 <p class="m-0">
                                     <i class="fa fa-signal mr-2"></i>
                                     Following 
-                                    <span class="badge badge-primary">0</span>
+                                    <span class="badge badge-primary">{{ $myFollowerCount }}</span>
                                 </p>
                             </div>
                         </div>  
                     </div>  
-                    @foreach($dataUser as $user)
+                    @foreach($users as $user)
                     <div class="col-md-4" style="background: #f5f5f5; padding: 0 20px;">
                         <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                             <div class="d-flex align-items-center">

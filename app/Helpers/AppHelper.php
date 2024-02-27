@@ -749,7 +749,12 @@ function get_bookable_services(){
     }
     foreach ($all as $id=>$class){
         $all[$id] = get_class(app()->make($class));
+
+        if (!in_array($id, menu_listing())) {
+            unset($all[$id]);
+        }
     }
+
     return $all;
 }
 function get_payable_services(){
@@ -1230,6 +1235,29 @@ if (!function_exists('menu_listing')) {
             'cultural',
             'art',
         ];
+
+        return $data;
+    }
+}
+
+if (!function_exists('get_attribute_listing')) {
+    function get_attribute_listing($key) {
+        $data = [
+            'old_key' => $key,
+            'new_key' => $key,
+        ];
+
+        switch ($key) {
+            case 'hotel':
+                $data['new_key'] = 'accomodation';
+                break;
+            case 'space':
+                $data['new_key'] = 'property';
+                break;
+            case 'boat':
+                $data['new_key'] = 'vehicle';
+                break;
+        }
 
         return $data;
     }

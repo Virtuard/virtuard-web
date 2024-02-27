@@ -18,9 +18,12 @@ $list_service = [];
                     $services = $moduleClass::getVendorServicesQuery($user->id)->orderBy('id','desc')->paginate(6);
                     if(empty($services->total())) continue;
                     $list_service[$type] = $services;
+
+                    $attrType = get_attribute_listing($type);
+                    $typeText = $attrType['new_key'];
                 @endphp
                     <li class="nav-item">
-                        <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$type}}">{{ $moduleClass::getModelName() }}</a>
+                        <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$typeText}}">{{ $typeText }}</a>
                     </li>
                 @php $i++; @endphp
             @endforeach

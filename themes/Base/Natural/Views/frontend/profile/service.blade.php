@@ -3,7 +3,7 @@ if(!$user->hasPermission('natural_create')) return;
 ?>
 @if(!empty($services) and $services->total())
     <div class="bravo-profile-list-services">
-        @include('Cultural::frontend.blocks.list-natural.index', ['rows'=>$services,'style_list'=>'normal','desc'=>' ','title'=>!empty($view_all) ? __('Event by :name',['name'=>$user->first_name]) :'','col'=>4])
+        @include('Natural::frontend.blocks.list-natural.index', ['rows'=>$services,'style_list'=>'normal','desc'=>' ','title'=>!empty($view_all) ? __('Event by :name',['name'=>$user->first_name]) :'','col'=>4])
 
         <div class="container">
             @if(!empty($view_all))

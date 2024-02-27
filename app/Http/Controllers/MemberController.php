@@ -18,6 +18,8 @@ use Illuminate\Support\Str;
 
 class MemberController extends Controller
 {
+    protected $user;
+    protected $followUser;
     /**
      * Create a new controller instance.
      *
@@ -25,7 +27,8 @@ class MemberController extends Controller
      */
     public function __construct()
     {
-
+        $this->user = new User();
+        $this->followUser = new FollowUser();
     }
 
     /**
@@ -35,18 +38,20 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $idUser = Auth::id();
-        $dataUser = User::leftJoin('follow_member', 'users.id', '=', 'follow_member.user_id')
-            ->select('users.*', DB::raw('IFNULL(follow_member.follow_user_id, false) as isFollow'))
+        $users = $this->user
+            ->where([
+                ['role_id', '!=', 1]
+            ])
+            ->orderBy('id', 'DESC')
             ->get();
 
-        $dataPostMe = UserPost::join('users', 'users.id', '=', 'user_post_status.user_id')
-        ->select('user_post_status.*', 'users.name as name')
-        ->where('users.id', $idUser)
-        ->orderBy('user_post_status.created_at', 'desc') 
-        ->get();
+        $myFollowerCount = 0;
 
-        return view('members.index', compact('dataUser', 'dataPostMe'));
+        if (auth()->check()) {
+            $myFollowerCount = $this->followUser->where('follow_user_id', auth()->user()->id)->count();;
+        } 
+
+        return view('members.index', compact('users', 'myFollowerCount'));
     }
 
     public function store(Request $request) {
