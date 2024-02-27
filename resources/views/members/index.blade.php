@@ -21,18 +21,20 @@
                             </div>
                         </div>  
                     </div>  
-                    @foreach($dataUser as $dataUser)
+                    @foreach($dataUser as $user)
                     <div class="col-md-4" style="background: #f5f5f5; padding: 0 20px;">
                         <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                             <div class="d-flex align-items-center">
-                                <img class="mr-4" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;" alt="">
+                                <div class="image_box">
+                                    <img class="mr-4" src="{{ $user->getAvatarUrl() }}" alt="img" style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;">
+                                </div>
                             
                                 <div>
                                     <p class="m-0">
-                                        <b>{{ $dataUser->name }}</b>
+                                        <b>{{ $user->name }}</b>
                                     </p>
                                     <p class="m-0">
-                                        {{ $dataUser->business_name }}
+                                        {{ $user->business_name }}
                                     </p>
                                 </div>
                             </div>
@@ -40,17 +42,17 @@
                             <hr>
 
                             <p style="color: #a3a3a3;">
-                                {{ $dataUser->bio }}
+                                {!! $user->bio !!}
                             </p>
 
                             <hr>
                             
                             <?php
-                            if($dataUser->isFollow == 0) { ?>
+                            if($user->isFollow == 0) { ?>
                                 <form action="{{ route('user.add.follow.member') }}" class="mb-4" method="POST">
                                 @csrf
                                     <input type="hidden" name="param" value="Follow">
-                                    <input type="hidden" name="id_follow" value="<?=$dataUser->id?>">
+                                    <input type="hidden" name="id_follow" value="<?=$user->id?>">
                                     <button class="btn btn-primary w-100 mb-2">
                                         Follow
                                     </button>
@@ -59,14 +61,14 @@
                                 <form action="{{ route('user.add.follow.member') }}" class="mb-4" method="POST">
                                 @csrf
                                     <input type="hidden" name="param" value="Unfollow">
-                                    <input type="hidden" name="id_follow" value="<?=$dataUser->id?>">
+                                    <input type="hidden" name="id_follow" value="<?=$user->id?>">
                                     <button class="btn btn-secondary w-100 mb-2">
                                         Unfollow
                                     </button>
                                 </form>
                             <?php } ?>
 
-                            <a href="/profile/<?=$dataUser->id?>">
+                            <a href="/profile/<?=$user->id?>">
                                 <button class="btn btn-primary w-100">
                                     View Site
                                 </button>

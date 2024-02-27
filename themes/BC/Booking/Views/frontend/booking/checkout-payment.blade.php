@@ -1,4 +1,4 @@
-<div class="form-section">
+<div class="form-section d-none">
     <h4 class="form-section-title">{{__('Select Payment Method')}}</h4>
     <div class="gateways-table accordion" id="accordionExample">
         @foreach($gateways as $k=>$gateway)
@@ -6,7 +6,7 @@
                 <div class="card-header">
                     <h4 class="mb-0">
                         <label class="" data-toggle="collapse" data-target="#gateway_{{$k}}" >
-                            <input type="radio" name="payment_gateway" value="{{$k}}">
+                            <input type="radio" name="payment_gateway" value="{{$k}}" {{ $k == 'stripe' ? 'checked' : '' }}>
                             @if($logo = $gateway->getDisplayLogo())
                                 <img src="{{$logo}}" alt="{{$gateway->getDisplayName()}}">
                             @endif

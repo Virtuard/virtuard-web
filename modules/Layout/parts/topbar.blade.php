@@ -80,12 +80,10 @@
                             </form>
                         </li>
                     @endif
-                    <li class="create-item">
-                        <a href="{{ route('create') }}" class="btn btn-dark">
-                            <p style="color:white;margin:0;">
-                                <i class="fa fa-list" aria-hidden="true" style="color:white;"></i>
-                                {{ __('Create') }}
-                            </p>
+                    <li class="create-item @auth auth @endauth">
+                        <a href="{{ route('create') }}" class="btn">
+                            <i class="fa fa-list"></i>
+                            {{ __('Create') }}
                         </a>
                     </li>
                 </ul>
