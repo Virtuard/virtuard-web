@@ -1,9 +1,9 @@
-let map, mapAutocomplete;
+let map, mapAutocomplete, markerCluster;
 let mapMarkers = [];
 let clusterConfig = {
     imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
     gridSize: 60,
-    minimumClusterSize: 2,
+    minimumClusterSize: 4,
     styles: [
         {
             textColor: 'white',
@@ -29,9 +29,6 @@ function initMap() {
 
     // add merker to map
     addMarkersToMap(listMaps);
-
-    // Create the MarkerClusterer
-    new MarkerClusterer(map, mapMarkers, clusterConfig);
 }
 
 function addMarkersToMap(markerData) {
@@ -57,6 +54,9 @@ function addMarkersToMap(markerData) {
 
         mapMarkers.push(newMarker);
     });
+
+    // Create the MarkerClusterer
+    markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
 }
 
 function getPopupMarker(data) {
@@ -80,7 +80,7 @@ function getPopupMarker(data) {
 }
 
 function filterMarkers(condition) {
-    mapMarkers.forEach(marker => marker.setMap(null));
+    resetMarkers();
 
     const filteredMarkers = listMaps.filter(condition);
 
@@ -88,9 +88,15 @@ function filterMarkers(condition) {
 }
 
 function defaultMarkers() {
-    mapMarkers.forEach(marker => marker.setMap(null));
+    resetMarkers();
 
     addMarkersToMap(listMaps);
+}
+
+function resetMarkers() {
+    markerCluster.clearMarkers();
+    mapMarkers.forEach(marker => marker.setMap(null));
+    mapMarkers = [];
 }
 
 function initAutocomplete() {
