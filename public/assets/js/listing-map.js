@@ -1,4 +1,4 @@
-let map, mapAutocomplete, markerCluster;
+let map, mapAutocomplete, markerCluster, currentInfoWindow;
 let mapMarkers = [];
 let clusterConfig = {
     imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
@@ -49,7 +49,13 @@ function addMarkersToMap(markerData) {
         });
 
         newMarker.addListener("click", () => {
+            if (currentInfoWindow != null) {
+                currentInfoWindow.close();
+            } 
+
             infowindow.open(map, newMarker);
+
+            currentInfoWindow = infowindow; 
         });
 
         mapMarkers.push(newMarker);
