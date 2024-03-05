@@ -181,12 +181,12 @@ if (!empty($menus)){
 }
 ?>
 <ul class="main-menu pb-5" style="background: #2b2b2b;">
-    <li class="" position="9">
+    {{-- <li class="" position="9">
         <a href="/admin/virtuard-360">
             <span class="icon text-center"><i class="fa fa-camera"></i></span>
             Virtuard 360
         </a>
-    </li>
+    </li> --}}
     @foreach($menus as $menuItem)
         @php $menuItem['class'] .= " ".str_ireplace("/","_",$menuItem['url']) @endphp
         <li class="{{$menuItem['class']}}"><a href="{{ url($menuItem['url']) }}">

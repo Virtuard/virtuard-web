@@ -97,7 +97,11 @@
 
                     Log::warning("SendMailUserRegistered: " . $exception->getMessage());
                 }
-                $user->assignRole(setting_item('user_role'));
+
+                $role = setting_item('user_role');
+                if(setting_item('enable_vendor_role_registered')) $role = setting_item('vendor_role');
+                $user->assignRole($role);
+                
                 return response()->json([
                     'error'    => false,
                     'messages' => false,
