@@ -2,7 +2,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb20">
-            <h1 class="title-bar">{{__("Event Attributes")}}</h1>
+            <h1 class="title-bar">{{__("Natural Attributes")}}</h1>
         </div>
         @include('admin.message')
         <div class="row">
@@ -10,9 +10,9 @@
                 <div class="panel">
                     <div class="panel-title">{{__("Add Attributes")}}</div>
                     <div class="panel-body">
-                        <form action="{{route('event.admin.attribute.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post">
+                        <form action="{{route('natural.admin.attribute.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post">
                             @csrf
-                            @include('Event::admin/attribute/form',['parents'=>$rows])
+                            @include('Natural::admin/attribute/form',['parents'=>$rows])
                             <div class="">
                                 <button class="btn btn-primary" type="submit">{{__("Add new")}}</button>
                             </div>
@@ -24,7 +24,7 @@
                 <div class="filter-div d-flex justify-content-between ">
                     <div class="col-left">
                         @if(!empty($rows))
-                            <form method="post" action="{{route('event.admin.attribute.editAttrBulk')}}" class="filter-form filter-form-left d-flex justify-content-start">
+                            <form method="post" action="{{route('natural.admin.attribute.editAttrBulk')}}" class="filter-form filter-form-left d-flex justify-content-start">
                                 {{csrf_field()}}
                                 <select name="action" class="form-control">
                                     <option value="">{{__(" Bulk Action ")}}</option>
@@ -35,7 +35,7 @@
                         @endif
                     </div>
                     <div class="col-left">
-                        <form method="get" action="{{route('event.admin.attribute.index')}} " class="filter-form filter-form-right d-flex justify-content-end" role="search">
+                        <form method="get" action="{{route('natural.admin.attribute.index')}} " class="filter-form filter-form-right d-flex justify-content-end" role="search">
                             <input type="text" name="s" value="{{ Request()->s }}" class="form-control" placeholder="{{__("Search by name")}}">
                             <button class="btn-info btn btn-icon btn_search" id="search-submit" type="submit">{{__('Search')}}</button>
                         </form>
@@ -61,15 +61,15 @@
                                             <td><input type="checkbox" class="check-item" name="ids[]" value="{{$row->id}}">
                                             </td>
                                             <td class="title">
-                                                <a href="{{route('event.admin.attribute.edit',['id'=>$row->id])}}">{{$row->name}}</a>
+                                                <a href="{{route('natural.admin.attribute.edit',['id'=>$row->id])}}">{{$row->name}}</a>
                                             </td>
                                             <td>
                                                 {{$row->position ?? 0}}
                                             </td>
                                             <td>
-                                                <a href="{{route('event.admin.attribute.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}
+                                                <a href="{{route('natural.admin.attribute.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}
                                                 </a>
-                                                <a href="{{route('event.admin.attribute.term.index',['id'=>$row->id])}}" class="btn btn-sm btn-success"><i class="fa fa"></i> {{__("Manage Terms")}}
+                                                <a href="{{route('natural.admin.attribute.term.index',['id'=>$row->id])}}" class="btn btn-sm btn-success"><i class="fa fa"></i> {{__("Manage Terms")}}
                                                 </a>
 
                                             </td>

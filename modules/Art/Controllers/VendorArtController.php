@@ -122,7 +122,7 @@ class VendorArtController extends FrontendController
             'translation' => new $this->artTranslationClass(),
             'art_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
-            'attributes'    => $this->attributesClass::where('service', 'event')->get(),
+            'attributes'    => $this->attributesClass::where('service', 'art')->get(),
             'breadcrumbs'        => [
                 [
                     'name' => __('listing.art.manage'),

@@ -122,7 +122,7 @@ class VendorCulturalController extends FrontendController
             'translation' => new $this->culturalTranslationClass(),
             'cultural_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
-            'attributes'    => $this->attributesClass::where('service', 'event')->get(),
+            'attributes'    => $this->attributesClass::where('service', 'cultural')->get(),
             'breadcrumbs'        => [
                 [
                     'name' => __('listing.cultural.manage'),

@@ -15,7 +15,6 @@
 @section('content')
     <div class="bravo_detail_space">
         @include('Flight::frontend.layouts.details.space-banner')
-        <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">

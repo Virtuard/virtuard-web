@@ -1,25 +1,5 @@
 <div id="hotel-rooms" class="hotel_rooms_form" v-cloak="" :class="{'d-none':enquiry_type!='book'}">
-    @if($data['ipanorama'])
-        <div id="panorama"></div>
-    @endif
-    
-    @if($data['category_product'] === 'Restaurant and Cafes')
-        <h3 class="heading-section">{{__('Available Table')}}</h3>
-    @elseif($data['category_product'] === 'Shops')
-        <h3 class="heading-section">{{__('Available Shop')}}</h3>
-    @elseif($data['category_product'] === 'Clinic/Doctor/Dentist' || $data['category_product'] === 'Other service')
-        <h3 class="heading-section">{{__('Available Time')}}</h3>
-    @else
-        <h3 class="heading-section">{{__('Available Rooms')}}</h3>
-    @endif
-
-    @if($data['category_product'] === 'Restaurant and Cafes')
-    <div class="nav-enquiry">
-        <div class="active" >
-            <span>{{ __("Booking Restaurant and Cafes") }}</span>
-        </div>
-    </div>
-    @else
+    <h3 class="heading-section">{{__('Available Rooms')}}</h3>
     <div class="nav-enquiry" v-if="is_form_enquiry_and_book">
         <div class="enquiry-item active" >
             <span>{{ __("Book") }}</span>
@@ -27,112 +7,61 @@
         <div class="enquiry-item" data-toggle="modal" data-target="#enquiry_form_modal">
             <span>{{ __("Enquiry") }}</span>
         </div>
-    </div> 
-    @endif
+    </div>
     <div class="form-book">
         <div class="form-search-rooms">
             <div class="d-flex form-search-row">
-                @if($data['category_product'] === 'Restaurant and Cafes')
-                    <div class="col-md-4">
-                        <div class="form-group form-date-field form-date-search " @click="openStartDate" data-format="{{get_moment_date_format()}}">
-                            <i class="fa fa-angle-down arrow"></i>
-                            <input type="text" class="start_date" ref="start_date" style="height: 1px; visibility: hidden">
-                            <div class="date-wrapper form-content" >
-                                <label class="form-label">{{__("Date")}}</label>
-                                <div class="render check-in-render" v-html="start_date_html"></div>
-                            </div>
+                <div class="col-md-4">
+                    <div class="form-group form-date-field form-date-search " @click="openStartDate" data-format="{{get_moment_date_format()}}">
+                        <i class="fa fa-angle-down arrow"></i>
+                        <input type="text" class="start_date" ref="start_date" style="height: 1px; visibility: hidden">
+                        <div class="date-wrapper form-content" >
+                            <label class="form-label">{{__("Check In - Out")}}</label>
+                            <div class="render check-in-render" v-html="start_date_html"></div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <i class="fa fa-angle-down arrow"></i>
-                            <div class="form-content dropdown-toggle" data-toggle="dropdown">
-                                <label class="form-label">{{__('Number of Table')}}</label>
-                                <div class="render">
-                                    <span class="adults" >
-                                        <span class="one" >@{{adults}}
-                                            <span v-if="adults < 2">{{__('Table')}}</span>
-                                            <span v-else>{{__('Table')}}</span>
-                                        </span>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <i class="fa fa-angle-down arrow"></i>
+                        <div class="form-content dropdown-toggle" data-toggle="dropdown">
+                            <label class="form-label">{{__('Guests')}}</label>
+                            <div class="render">
+                                <span class="adults" >
+                                    <span class="one" >@{{adults}}
+                                        <span v-if="adults < 2">{{__('Adult')}}</span>
+                                        <span v-else>{{__('Adults')}}</span>
                                     </span>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu select-guests-dropdown" >
-                                <div class="dropdown-item-row">
-                                    <div class="label">{{__('Table')}}</div>
-                                    <div class="val">
-                                        <span class="btn-minus2" data-input="adults" @click="minusPersonType('adults')"><i class="icon ion-md-remove"></i></span>
-                                        <span class="count-display"><input type="number" v-model="adults" min="1"/></span>
-                                        <span class="btn-add2" data-input="adults" @click="addPersonType('adults')"><i class="icon ion-ios-add"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @elseif($data['category_product'] === 'Shops' || $data['category_product'] === 'Clinic/Doctor/Dentist' || $data['category_product'] === 'Other service')
-                    <div class="col-md-8">
-                        <div class="form-group form-date-field form-date-search " @click="openStartDate" data-format="{{get_moment_date_format()}}">
-                            <i class="fa fa-angle-down arrow"></i>
-                            <input type="text" class="start_date" ref="start_date" style="height: 1px; visibility: hidden">
-                            <div class="date-wrapper form-content" >
-                                <label class="form-label">{{__("Date")}}</label>
-                                <div class="render check-in-render" v-html="start_date_html"></div>
-                            </div>
-                        </div>
-                    </div>
-                @else
-                    <div class="col-md-4">
-                        <div class="form-group form-date-field form-date-search " @click="openStartDate" data-format="{{get_moment_date_format()}}">
-                            <i class="fa fa-angle-down arrow"></i>
-                            <input type="text" class="start_date" ref="start_date" style="height: 1px; visibility: hidden">
-                            <div class="date-wrapper form-content" >
-                                <label class="form-label">{{__("Check In - Out")}}</label>
-                                <div class="render check-in-render" v-html="start_date_html"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <i class="fa fa-angle-down arrow"></i>
-                            <div class="form-content dropdown-toggle" data-toggle="dropdown">
-                                <label class="form-label">{{__('Guests')}}</label>
-                                <div class="render">
-                                    <span class="adults" >
-                                        <span class="one" >@{{adults}}
-                                            <span v-if="adults < 2">{{__('Adult')}}</span>
-                                            <span v-else>{{__('Adults')}}</span>
-                                        </span>
+                                </span>
+                                -
+                                <span class="children" >
+                                    <span class="one" >@{{children}}
+                                        <span v-if="children < 2">{{__('Child')}}</span>
+                                        <span v-else>{{__('Children')}}</span>
                                     </span>
-                                    -
-                                    <span class="children" >
-                                        <span class="one" >@{{children}}
-                                            <span v-if="children < 2">{{__('Child')}}</span>
-                                            <span v-else>{{__('Children')}}</span>
-                                        </span>
-                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown-menu select-guests-dropdown" >
+                            <div class="dropdown-item-row">
+                                <div class="label">{{__('Adults')}}</div>
+                                <div class="val">
+                                    <span class="btn-minus2" data-input="adults" @click="minusPersonType('adults')"><i class="icon ion-md-remove"></i></span>
+                                    <span class="count-display"><input type="number" v-model="adults" min="1"/></span>
+                                    <span class="btn-add2" data-input="adults" @click="addPersonType('adults')"><i class="icon ion-ios-add"></i></span>
                                 </div>
                             </div>
-                            <div class="dropdown-menu select-guests-dropdown" >
-                                <div class="dropdown-item-row">
-                                    <div class="label">{{__('Adults')}}</div>
-                                    <div class="val">
-                                        <span class="btn-minus2" data-input="adults" @click="minusPersonType('adults')"><i class="icon ion-md-remove"></i></span>
-                                        <span class="count-display"><input type="number" v-model="adults" min="1"/></span>
-                                        <span class="btn-add2" data-input="adults" @click="addPersonType('adults')"><i class="icon ion-ios-add"></i></span>
-                                    </div>
-                                </div>
-                                <div class="dropdown-item-row">
-                                    <div class="label">{{__('Children')}}</div>
-                                    <div class="val">
-                                        <span class="btn-minus2" data-input="children" @click="minusPersonType('children')"><i class="icon ion-md-remove"></i></span>
-                                        <span class="count-display"><input type="number" v-model="children" min="0"/></span>
-                                        <span class="btn-add2" data-input="children" @click="addPersonType('children')"><i class="icon ion-ios-add"></i></span>
-                                    </div>
+                            <div class="dropdown-item-row">
+                                <div class="label">{{__('Children')}}</div>
+                                <div class="val">
+                                    <span class="btn-minus2" data-input="children" @click="minusPersonType('children')"><i class="icon ion-md-remove"></i></span>
+                                    <span class="count-display"><input type="number" v-model="children" min="0"/></span>
+                                    <span class="btn-add2" data-input="children" @click="addPersonType('children')"><i class="icon ion-ios-add"></i></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                @endif
+                </div>
                 <div class="col-md-4 col-btn">
                     <div class="g-button-submit">
                         <button class="btn btn-primary btn-search" @click="checkAvailability" :class="{'loading':onLoadAvailability}" type="submit">
@@ -321,19 +250,9 @@
             </div>
         </div>
         <div class="end_room_sticky"></div>
-        @if($data['category_product'] === 'Restaurant and Cafes')
-        <div class="alert alert-warning" v-if="!firstLoad && !rooms.length">
-            {{__("No table available with your selected date. Please change your search critical")}}
-        </div>
-        @elseif($data['category_product'] === 'Shops' || $data['category_product'] === 'Clinic/Doctor/Dentist' || $data['category_product'] === 'Other service')
-        <div class="alert alert-warning" v-if="!firstLoad && !rooms.length">
-            {{__("No time available with your selected date. Please change your search critical")}}
-        </div>
-        @else
         <div class="alert alert-warning" v-if="!firstLoad && !rooms.length">
             {{__("No room available with your selected date. Please change your search critical")}}
         </div>
-        @endif
     </div>
 </div>
 @include("Booking::frontend.global.enquiry-form",['service_type'=>'hotel'])

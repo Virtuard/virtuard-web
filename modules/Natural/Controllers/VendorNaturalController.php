@@ -122,7 +122,7 @@ class VendorNaturalController extends FrontendController
             'translation' => new $this->naturalTranslationClass(),
             'natural_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
-            'attributes'    => $this->attributesClass::where('service', 'event')->get(),
+            'attributes'    => $this->attributesClass::where('service', 'natural')->get(),
             'breadcrumbs'        => [
                 [
                     'name' => __('listing.natural.manage'),

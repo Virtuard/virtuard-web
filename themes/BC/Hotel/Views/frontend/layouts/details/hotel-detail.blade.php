@@ -74,17 +74,18 @@
         </div>
     </div>
 @endif
+@if($row->author->checkUserPlan())
 @include('Hotel::frontend.layouts.details.hotel-rooms')
+@endif
 <div class="g-all-attribute is_mobile">
     @include('Hotel::frontend.layouts.details.hotel-attributes')
 </div>
 <div class="g-rules">
     <h3>{{__("Rules")}}</h3>
     <div class="description">
-        @if($data['category_product'] === 'Restaurant and Cafes' || $data['category_product'] === 'Shops' || $data['category_product'] === 'Clinic/Doctor/Dentist' || $data['category_product'] === 'Other service')
         <div class="row">
             <div class="col-lg-4">
-                <div class="key">{{__("Open")}}</div>
+                <div class="key">{{__("Check In")}}</div>
             </div>
             <div class="col-lg-8">
                 <div class="value">	{{$row->check_in_time}} </div>
@@ -92,30 +93,12 @@
         </div>
         <div class="row">
             <div class="col-lg-4">
-                <div class="key">{{__("Closed")}}</div>
+                <div class="key">{{__("Check Out")}}</div>
             </div>
             <div class="col-lg-8">
                 <div class="value">	{{$row->check_out_time}} </div>
             </div>
         </div>
-        @else
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="key">{{__("Check In")}}</div>
-            </div>
-            <div class="col-lg-8">
-                <div class="value"> {{$row->check_in_time}} </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="key">{{__("Check Out")}}</div>
-            </div>
-            <div class="col-lg-8">
-                <div class="value"> {{$row->check_out_time}} </div>
-            </div>
-        </div>
-        @endif
         @if($translation->policy)
             <div class="row">
                 <div class="col-lg-4">

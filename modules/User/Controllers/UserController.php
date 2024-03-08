@@ -41,8 +41,8 @@ class UserController extends FrontendController
 
     public function dashboard(Request $request)
     {
-        $isVirtuard360 = $this->checkVirtuard360();
-        if (!$isVirtuard360) return redirect()->route('user.plan.status');
+        // $isVirtuard360 = $this->checkVirtuard360();
+        // if (!$isVirtuard360) return redirect()->route('user.plan.status');
 
         $this->checkPermission('dashboard_vendor_access');
         $user_id = Auth::id();

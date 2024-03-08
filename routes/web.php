@@ -19,6 +19,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 
 // Virtuard 360
+Route::group([
+    'middleware' => ['user_plan']
+], function (){
 Route::get('/user/virtuard-360', 'VirtuardController@vendorVirtuardIndex')->name('user-virtuard');
 Route::get('/user/add/virtuard-360', 'VirtuardController@vendorVirtuardAdd')->name('user-add-virtuard');
 Route::post('/user/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');
@@ -29,7 +32,8 @@ Route::post('/user/add/virtuard-360/api', 'VirtuardController@vendorVirtuardAddA
 Route::post('/user/add/virtuard-360/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('user-add-virtuard-api-second');
 Route::get('/user/edit/virtuard-360', 'VirtuardController@vendorVirtuardEdit')->name('user-edit-virtuard');
 Route::post('/user/edit/virtuard-360/updateTour', 'VirtuardController@updateIsTourField')->name('user-update-tour');
-Route::get('/user/delete/virtuard-360', 'VirtuardController@vendorVirtuardDelete')->name('user-delete-virtuard');
+Route::get('/user/delete/virtuard-360', 'VirtuardController@vendorVirtuardDelete')->name('user-delete-virtuard');   
+});
 
 // Story
 Route::get('/user/get/story/api', 'StoryController@getStory')->name('get-story');

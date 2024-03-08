@@ -1263,8 +1263,8 @@ if (!function_exists('get_attribute_listing')) {
     }
 }
 
-if (!function_exists('menu_user')) {
-    function menu_user() {
+if (!function_exists('menu_vendor')) {
+    function menu_vendor() {
         $data = [
             'dashboard',
             'booking-history',
@@ -1281,7 +1281,7 @@ if (!function_exists('menu_user')) {
             // 'flight',
             'boat',
             // 'news',
-            // 'verification',
+            'verification',
             'my_plan',
             'booking_report',
             // "enquiry",
@@ -1298,11 +1298,47 @@ if (!function_exists('menu_user')) {
     }
 }
 
-if (!function_exists('getMenuVendor')) {
-    function getMenuVendor()
+if (!function_exists('menu_admin')) {
+    function menu_admin() {
+        $data = [
+            'admin',
+            'menu',
+            'general',
+            'tools',
+            'hotel',
+            'space',
+            // 'car',
+            // 'event',
+            // 'tour',
+            // 'flight',
+            'boat',
+            'media',
+            'news',
+            'page',
+            'users',
+            'plan',
+            'report',
+            'payout',
+            'coupon',
+            'location',
+            'review',
+            'popup',
+            'business',
+            'natural',
+            'cultural',
+            'art',
+            'theme',
+        ];
+
+        return $data;
+    }
+}
+
+if (!function_exists('getMenuVendorPlan')) {
+    function getMenuVendorPlan()
     {
         $data = [
-            'dashboard',
+            // 'dashboard',
             'virtuard360',
             // 'hotel',
             // 'space',
@@ -1321,7 +1357,7 @@ if (!function_exists('checkMenuVendor')) {
     function checkMenuVendor($menu)
     {
         $status = false;
-        if (isset($menu['id']) && in_array($menu['id'], getMenuVendor())) $status = true;
+        if (isset($menu['id']) && in_array($menu['id'], getMenuVendorPlan())) $status = true;
         return $status;
     }
 }

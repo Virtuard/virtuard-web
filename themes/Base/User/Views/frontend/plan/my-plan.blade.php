@@ -8,8 +8,8 @@
         <div class="col-lg-12">
             <div class="ls-widget">
                 <div class="tabs-box">
-                    <div class="widget-title">
-                        <h4>{{__("My Current Plan")}}</h4>
+                    <div class="widget-title text-right">
+                        <a href="{{ route('plan') }}" class="btn btn-dark mb-3">List Plan</a>
                     </div>
                     <div class="widget-content">
                         @php

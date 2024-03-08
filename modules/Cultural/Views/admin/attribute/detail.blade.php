@@ -22,7 +22,7 @@
                                 <strong>{{__("Attribute Content")}}</strong>
                             </div>
                             <div class="panel-body">
-                                @include('Event::admin/attribute/form')
+                                @include('Cultural::admin/attribute/form')
                             </div>
                         </div>
                     </div>

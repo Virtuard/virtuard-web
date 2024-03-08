@@ -16,7 +16,6 @@
     <div class="bravo_detail_event">
         @include('Layout::parts.bc')
         @include('Natural::frontend.layouts.details.banner')
-        <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">
@@ -30,7 +29,9 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
+                        @if($row->author->checkUserPlan())
                         @include('Natural::frontend.layouts.details.form-book')
+                        @endif
                     </div>
                 </div>
                 <div class="row end_tour_sticky">
@@ -40,7 +41,9 @@
                 </div>
             </div>
         </div>
+        @if($row->author->checkUserPlan())
         @include('Natural::frontend.layouts.details.form-book-mobile')
+        @endif
     </div>
 @endsection
 

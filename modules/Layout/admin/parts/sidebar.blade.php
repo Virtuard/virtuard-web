@@ -150,6 +150,13 @@ $menuConfig = $typeManager->adminMenus();
 
 $menus = array_merge($menus,$menuConfig);
 
+// check list menu
+foreach ($menus as $key => $menu) {
+    if (!in_array($key, menu_admin())) {
+        unset($menus[$key]);
+    }
+}
+
 
 $currentUrl = url(\Modules\Core\Walkers\MenuWalker::getActiveMenu());
 $user = \Illuminate\Support\Facades\Auth::user();

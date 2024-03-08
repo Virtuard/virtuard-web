@@ -34,7 +34,7 @@
     </div>
 </div>
 
-@if ($isVirtuard360 && $virtuard360)
+@if ($row->author->checkUserPlan())
 
     <div class="panel">
         <div class="panel-title"><strong>{{ __('Virtuard 360 Content') }}</strong></div>

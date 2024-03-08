@@ -154,7 +154,7 @@ foreach ($menus as $key => $menu) {
         // $menus['listing']['children'][] = $menu;
         // unset($menus[$key]);
     }
-    if (!in_array($key, menu_user())) {
+    if (!in_array($key, menu_vendor())) {
         unset($menus[$key]);
     }
 }

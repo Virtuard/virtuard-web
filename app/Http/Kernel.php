@@ -80,5 +80,6 @@ class Kernel extends HttpKernel
         "translation_manager" => \App\Http\Middleware\TranslationManager::class,
         "system_log_view" => \App\Http\Middleware\CheckForLogPermission::class,
         "set_language_for_api" => \App\Http\Middleware\SetLanguageForApi::class,
+        "user_plan" => \App\Http\Middleware\CheckUserPlan::class,
     ];
 }

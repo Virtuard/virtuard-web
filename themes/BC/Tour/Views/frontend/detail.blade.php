@@ -16,7 +16,6 @@
     <div class="bravo_detail_tour">
         @include('Layout::parts.bc')
         @include('Tour::frontend.layouts.details.tour-banner')
-        <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">
