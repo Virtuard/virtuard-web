@@ -135,8 +135,10 @@ class ManageBoatController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Boats"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Boat::frontend.manageBoat.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'boat_location' => $data['boat_location'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'categories' => $categories, 'page_title' => $data['page_title'] ]);
+        return view('Boat::frontend.manageBoat.detail', $data);
     }
 
 
@@ -284,8 +286,10 @@ class ManageBoatController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Boats"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Boat::frontend.manageBoat.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'], 'boat_location' => $data['boat_location'] ]);
+        return view('Boat::frontend.manageBoat.detail', $data);
     }
 
     public function deleteBoat($id)

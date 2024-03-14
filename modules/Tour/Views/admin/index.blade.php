@@ -5,7 +5,7 @@
             <h1 class="title-bar">{{!empty($recovery) ? __('Recovery') : __("All Tour")}}</h1>
             <div class="title-actions">
                 @if(empty($recovery))
-                <a href="{{route('tour.admin.create')}}" class="btn btn-primary">{{__('listing.natural.add_new')}}</a>
+                <a href="{{route('tour.admin.create')}}" class="btn btn-primary">{{__('Add New Tour')}}</a>
                 @endif
             </div>
         </div>

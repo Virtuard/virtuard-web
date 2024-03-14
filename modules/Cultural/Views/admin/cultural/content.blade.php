@@ -125,43 +125,5 @@
     </div>
 </div>
 
-@if ($isVirtuard360)
-
-    <div class="panel">
-        <div class="panel-title"><strong>{{ __('Virtuard 360 Content') }}</strong></div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card p-4">
-                        <label>
-                            Image 1
-                        </label>
-                        <select class="form-control" name="div-ipanorama">
-                            <option>Select</option>
-                            @foreach ($dataIpanorama as $dataIpanorama)
-                                <option value="<?= $dataIpanorama->id ?>">{{ $dataIpanorama->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-@endif
-
-@if (isset($categories))
-    <div class="panel">
-        <div class="panel-title"><strong>{{ __('Cultural Haritage and Public Works Category') }}</strong></div>
-        <div class="panel-body">
-            <fieldset class="form-group">
-                @foreach ($categories as $category)
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="categoryProd" id="{{ $category->id }}" value="{{ $category->id }}" required>
-                        <label class="form-check-label" for="{{ $category->id }}">{{ $category->title }}</label>
-                    </div>
-                @endforeach
-            </fieldset>
-        </div>
-    </div>
-@endif
+@include('partials.listing.form-ipanorama')
+@include('partials.listing.form-category')

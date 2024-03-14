@@ -141,9 +141,13 @@ class VendorController extends FrontendController
                 ],
             ],
             'page_title' => __('Create Hotels'),
+            'virtuard360' => $virtuard360,
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
+            'categories' => $categories,
         ];
 
-        return view('Hotel::frontend.vendorHotel.detail', ['data' => $data, 'virtuard360' => $virtuard360, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'hotel_location' => $data['hotel_location'], 'attributes' => $data['attributes'], 'location_category' => $data['location_category'], 'breadcrumbs' => $data['breadcrumbs'], 'categories' => $categories]);
+        return view('Hotel::frontend.vendorHotel.detail', $data);
     }
 
     public function store(Request $request, $id)
@@ -292,9 +296,13 @@ class VendorController extends FrontendController
                 ],
             ],
             'page_title' => __('Edit Hotels'),
+            'virtuard360' => $virtuard360,
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
+            'categories' => $categories,
         ];
 
-        return view('Hotel::frontend.vendorHotel.detail', ['data' => $data, 'categories' => $categories, 'virtuard360' => $virtuard360, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'hotel_location' => $data['hotel_location'], 'attributes' => $data['attributes'], 'location_category' => $data['location_category'], 'breadcrumbs' => $data['breadcrumbs'], 'selected_terms' => $data['selected_terms']]);
+        return view('Hotel::frontend.vendorHotel.detail', $data);
     }
 
     public function delete($id)

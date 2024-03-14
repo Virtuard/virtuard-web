@@ -137,8 +137,10 @@ class ManageSpaceController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Spaces"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Space::frontend.manageSpace.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'row' => $row, 'dataIpanorama' => $dataIpanorama, 'translation' => $data['translation'], 'space_location' => $data['space_location'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'location_category' => $data['location_category'], 'page_title' => $data['page_title'],'categories'     => $categories, ]);
+        return view('Space::frontend.manageSpace.detail', $data);
     }
 
 
@@ -285,8 +287,10 @@ class ManageSpaceController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Spaces"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Space::frontend.manageSpace.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'row' => $row, 'dataIpanorama' => $dataIpanorama, 'translation' => $data['translation'], 'space_location' => $data['space_location'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'location_category' => $data['location_category'], 'page_title' => $data['page_title'], 'selected_terms' => $data['selected_terms'] ]);
+        return view('Space::frontend.manageSpace.detail', $data);
     }
 
     public function deleteSpace($id)

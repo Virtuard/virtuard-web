@@ -1,9 +1,9 @@
 <div class="panel">
-    <div class="panel-title"><strong>{{ __('Natural and Landscapes Content') }}</strong></div>
+    <div class="panel-title"><strong>{{ __('Tour') }}</strong></div>
     <div class="panel-body">
         <div class="form-group">
             <label>{{ __('Title') }}</label>
-            <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Natural and Landscapes title') }}" name="title" class="form-control">
+            <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Tour title') }}" name="title" class="form-control">
         </div>
         <div class="form-group">
             <label class="control-label">{{ __('Content') }}</label>
@@ -153,42 +153,3 @@
         @endif
     </div>
 </div>
-
-@if ($isVirtuard360)
-    <div class="panel">
-        <div class="panel-title"><strong>{{ __('Virtuard 360 Content') }}</strong></div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card p-4">
-                        <label>
-                            Image 1
-                        </label>
-                        <select class="form-control" name="div-ipanorama">
-                            <option>Select</option>
-                            @foreach ($dataIpanorama as $dataIpanorama)
-                                <option value="<?= $dataIpanorama->id ?>">{{ $dataIpanorama->title }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-@endif
-
-@if ($categories)
-    <div class="panel">
-        <div class="panel-title"><strong>{{ __('listing.natural.category') }}</strong></div>
-        <div class="panel-body">
-            <fieldset class="form-group">
-                @foreach ($categories as $category)
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="categoryProd" id="{{ $category->id }}" value="{{ $category->id }}" required>
-                        <label class="form-check-label" for="{{ $category->id }}">{{ $category->title }}</label>
-                    </div>
-                @endforeach
-            </fieldset>
-        </div>
-    </div>
-@endif

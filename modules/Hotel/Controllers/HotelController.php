@@ -165,7 +165,7 @@ class HotelController extends Controller
         $this->setActiveMenu($row);
         // return view('Hotel::frontend.detail', compact('data'));
 
-        return view('Hotel::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'location_category' => $data['location_category'], 'breadcrumbs' => $data['breadcrumbs'], 'review_list' => $data['review_list'], 'hotel_related' => $data['hotel_related'], 'booking_data' => $data['booking_data'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'ipanorama' => $data['ipanorama'], 'category_product' => $data['category_product']]);
+        return view('Hotel::frontend.detail', $data);
     }
 
     public function checkAvailability()

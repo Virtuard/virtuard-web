@@ -137,8 +137,11 @@ class ManageBusinessController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Business"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
+            'categories'     => $categories,
         ];
-        return view('Business::frontend.manageBusiness.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'row' => $row, 'dataIpanorama' => $dataIpanorama, 'translation' => $data['translation'], 'business_location' => $data['business_location'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'location_category' => $data['location_category'], 'page_title' => $data['page_title'],'categories'     => $categories, ]);
+        return view('Business::frontend.manageBusiness.detail', $data);
     }
 
 
@@ -285,8 +288,10 @@ class ManageBusinessController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Business"),
+            'isVirtuard360' => $isVirtuard360, 
+            'dataIpanorama' => $dataIpanorama, 
         ];
-        return view('Business::frontend.manageBusiness.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'row' => $row, 'dataIpanorama' => $dataIpanorama, 'translation' => $data['translation'], 'business_location' => $data['business_location'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'location_category' => $data['location_category'], 'page_title' => $data['page_title'], 'selected_terms' => $data['selected_terms'] ]);
+        return view('Business::frontend.manageBusiness.detail', $data);
     }
 
     public function deleteBusiness($id)

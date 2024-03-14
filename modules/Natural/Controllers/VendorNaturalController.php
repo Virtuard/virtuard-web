@@ -134,8 +134,10 @@ class VendorNaturalController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Naturals"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Natural::frontend.vendorNatural.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'natural_location' => $data['natural_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'] ]);
+        return view('Natural::frontend.vendorNatural.detail', $data);
     }
 
 
@@ -279,8 +281,10 @@ class VendorNaturalController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Naturals"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Natural::frontend.vendorNatural.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'], 'natural_location' => $data['natural_location'], 'location_category' => $data['location_category'] ]);
+        return view('Natural::frontend.vendorNatural.detail', $data);
     }
 
     public function deleteNatural($id)

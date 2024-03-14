@@ -533,5 +533,9 @@
             return $this->hasMany(Service::class,'author_id');
         }
 
+        public function isAdmin(){
+            return $this->hasRole('administrator');
+        }
+
     }
 

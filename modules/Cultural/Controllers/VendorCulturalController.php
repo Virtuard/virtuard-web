@@ -134,8 +134,10 @@ class VendorCulturalController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Culturals"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Cultural::frontend.vendorCultural.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'cultural_location' => $data['cultural_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'] ]);
+        return view('Cultural::frontend.vendorCultural.detail', $data);
     }
 
 
@@ -279,8 +281,10 @@ class VendorCulturalController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Culturals"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Cultural::frontend.vendorCultural.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'], 'cultural_location' => $data['cultural_location'], 'location_category' => $data['location_category'] ]);
+        return view('Cultural::frontend.vendorCultural.detail', $data);
     }
 
     public function deleteCultural($id)

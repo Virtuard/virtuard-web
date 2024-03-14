@@ -134,8 +134,10 @@ class VendorArtController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Arts"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Art::frontend.vendorArt.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'art_location' => $data['art_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'] ]);
+        return view('Art::frontend.vendorArt.detail', $data);
     }
 
 
@@ -279,8 +281,10 @@ class VendorArtController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Arts"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        return view('Art::frontend.vendorArt.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'], 'art_location' => $data['art_location'], 'location_category' => $data['location_category'] ]);
+        return view('Art::frontend.vendorArt.detail', $data);
     }
 
     public function deleteArt($id)
