@@ -1,22 +1,33 @@
-@if (auth()->user()->checkUserPlan() || auth()->user()->isAdmin())
-    <div class="panel">
-        <div class="panel-title"><strong>{{ __('Virtuard 360 Content') }}</strong></div>
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card p-4">
-                        <label> Image </label>
+<div class="panel">
+    <div class="panel-title"><strong>{{ __('Virtuard 360 Content') }}</strong></div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card p-4">
+                    <div class="text-right">
+                        <a href=""></a>
+                        <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user-virtuard') }}"><i class="icon ion-ios-add-circle-outline"></i> Add item</a>
+                    </div>
+                    <label> Image </label>
+                    @if (auth()->user()->checkUserPlan() || auth()->user()->isAdmin())
                         <select class="form-control" name="div-ipanorama">
-                            <option>Select</option>
+                            <option>-- Select Item --</option>
                             @foreach ($dataIpanorama as $panorama)
-                                <option value="{{ $panorama->id }}" {{ $row->ipanorama_id == $panorama->id ? 'selected' : '' }}>
+                                <option value="{{ $panorama->id }}"
+                                    {{ $row->ipanorama_id == $panorama->id ? 'selected' : '' }}>
                                     {{ $panorama->title }}
                                 </option>
                             @endforeach
                         </select>
-                    </div>
+                    @else
+                        <div class="alert alert-danger" role="alert">
+                            Feature locked. please <a href="{{ route('user.plan') }}">Click here</a> to subscribe our
+                            plan.
+
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
-@endif
+</div>

@@ -4,33 +4,33 @@
         Virtuard 360
     </h2>
     @include('admin.message')
-        <div class="d-flex justify-content-end mt-4">
-            <a href="/user/add/virtuard-360" class="virtuard-add btn btn-success">
-                    Add 360
-            </a>
-        </div>
+    @include('partials.plan-status')
+    @if(auth()->user()->checkUserPlan())
         <div class="container">
+            <div class="text-right mt-4">
+                <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user-add-virtuard') }}"><i class="icon ion-ios-add-circle-outline"></i> Add item</a>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <!-- Content for the left column (6 columns wide on medium-sized screens) -->
                     <table class="table mt-4">
                         <thead class="thead-dark">
                             <tr>
-                                <th>#</th>
+                                <th width="10%">#</th>
                                 <th>Title</th>
-                                <th>Action</th>
+                                <th width=20%>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($dataIpanorama as $key => $ipanoramaData)
+                            @forelse ($dataIpanorama as $key => $pan)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
-                                    <td>{{ $ipanoramaData->title }}</td>
+                                    <td>{{ $pan->title }}</td>
                                     <td>
-                                        <a href="/user/edit/virtuard-360?id=<?= $ipanoramaData->id ?>"
-                                            class="virtuard-edit btn btn-primary">Edit</a>
-                                        <a href="/user/delete/virtuard-360?id=<?= $ipanoramaData->id ?>"
-                                                class="virtuard-delete btn btn-danger">Delete</a>
+                                        <a href="{{ route('user-edit-virtuard', $pan->id) }}"
+                                            class="virtuard-edit btn btn-warning btn-sm">Edit</a>
+                                        <a href="{{ route('user-delete-virtuard', $pan->id) }}"
+                                                class="virtuard-delete btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                             @empty
@@ -43,4 +43,5 @@
                 </div>
             </div>
         </div>
+    @endif
 @endsection

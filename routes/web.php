@@ -19,10 +19,10 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 
 // Virtuard 360
+Route::get('/user/virtuard-360', 'VirtuardController@vendorVirtuardIndex')->name('user-virtuard');
 Route::group([
     'middleware' => ['user_plan']
 ], function (){
-Route::get('/user/virtuard-360', 'VirtuardController@vendorVirtuardIndex')->name('user-virtuard');
 Route::get('/user/add/virtuard-360', 'VirtuardController@vendorVirtuardAdd')->name('user-add-virtuard');
 Route::post('/user/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');
 Route::post('/user/add/new/virtuard-360', 'VirtuardController@addNewVirtuard360')->name('add-new-service');

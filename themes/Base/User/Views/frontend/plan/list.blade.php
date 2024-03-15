@@ -1,4 +1,4 @@
-<div class="sec-title text-center">
+<div class="sec-title text-center mt-5">
     <h2>{{ setting_item_with_lang('user_plans_page_title', app()->getLocale()) ?? __("Pricing Packages")}}</h2>
     <div class="text">{{ setting_item_with_lang('user_plans_page_sub_title', app()->getLocale()) ?? __("Choose your pricing plan") }}</div>
 </div>

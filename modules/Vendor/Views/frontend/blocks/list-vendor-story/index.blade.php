@@ -115,11 +115,7 @@
         </div>
     </div>
 
-
-
-
-
-    <div class="container" style="margin-top:10px;">
+    <div class="container" style="margin-top:20px;">
         @if ($title)
             <div class="title">
                 {{ $title }}

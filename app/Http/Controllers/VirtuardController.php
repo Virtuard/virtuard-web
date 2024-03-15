@@ -39,8 +39,12 @@ class VirtuardController extends Controller
         $idUser = Auth::id();
         $data = SubscribeVirtuard::where('id_user', $idUser)->get();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $user_plan = auth()->user()->userPlans()->where('status',1)->where('end_date','>',now())->first();
+        if (!$user_plan) {
+            $user_plan = auth()->user()->userPlans()->latest('end_date')->first();
+        }
 
-        return view('vendor.virtuard360.index', compact('data', 'dataIpanorama'));
+        return view('vendor.virtuard360.index', compact('data', 'dataIpanorama', 'user_plan'));
     }
 
     public function vendorVirtuardAdd()
