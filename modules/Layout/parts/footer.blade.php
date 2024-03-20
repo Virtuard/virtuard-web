@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        <div class="main-footer">
+        <div class="main-footer d-none">
             <div class="container">
                 <div class="row">
                     @if ($list_widget_footers = setting_item_with_lang('list_widget_footer'))

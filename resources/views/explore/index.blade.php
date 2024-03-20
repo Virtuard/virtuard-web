@@ -1,6 +1,6 @@
 @extends ('layouts.app')
 @section('content')
-    <div class="" style="background: #f5f5f5; padding: 120px 60px;">
+    <div class="" style="background: #f5f5f5; padding: 20px 60px;">
         <div class="row">
             <div class="card">
                 <div class="p-4">

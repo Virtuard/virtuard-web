@@ -1,3 +1,35 @@
+        
+/*Top Bar*/
+.bravo_wrap .bravo_topbar {
+    background: #172641;
+}
+
+.bravo_wrap .bravo_topbar .content .dropdown-menu {
+    background: #172641;
+}
+
+/*Header Logo*/
+.bravo-logo img {
+    width: 75px;
+}
+
+.img-adventages-header {
+    height: 400px;
+    background-image: linear-gradient(0deg,rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)),url('http://localhost:8081/uploads/0000/9/2023/07/27/pexels-pixabay-219692.jpg') !important;
+    background-position: 50% !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    padding: 120px 0;
+}
+
+
+.bravo-list-vendor.story-vendor .list-item.story-vendor .item {
+    padding: 0 !important;
+    border: 0 !important;
+    margin-right: 1% !important;
+}
+
+ /*=========  */
 .bravo_wrap .bravo_user_profile .sidebar-menu ul li .icon-lock i {
     font-size: 8px;
     opacity: 0.8;
@@ -8,7 +40,7 @@
 
 .topbar-items li.create-item a {
     color: #ffffff !important;
-    background-color: #000000 !important;
+    background-color: #1e9bff !important;
 }
 
 li.create-item.auth a {
@@ -32,7 +64,6 @@ li.create-item.auth a:before{
     width: 100%;
     height: 100%;
     border-radius: 20px;
-    z-index: -1;
     background-color: #1e9bff !important;
     transform: translateX(-50%) translateY(-50%);
     animation: pulse 1.5s ease-out infinite;
@@ -43,3 +74,7 @@ li.create-item.auth a:before{
     0% { transform: translateX(-50%) translateY(-50%) scale(1); opacity: 1; }
     100% { transform: translateX(-50%) translateY(-50%) scale(1.4); opacity: 0; }
 }
+
+.bravo_wrap .bravo_topbar .content .topbar-left a {
+    color: white;
+  }

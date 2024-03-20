@@ -1,6 +1,6 @@
 @extends ('layouts.app')
 @section ('content')
-        <div class="container" style="padding-top: 115px;padding-bottom: 40px; background: #f5f5f5;">
+        <div style="padding 40px 0; background: #f5f5f5;">
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-12" style="background: #f5f5f5; padding: 0 20px;">

@@ -29,6 +29,8 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel='stylesheet' id='google-font-css-css'  href='https://fonts.googleapis.com/css?family=Poppins%3A400%2C500%2C600' type='text/css' media='all' />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-user.css') }}">
+
     @include('Layout::parts.global-script')
     <script>
         var image_editer = {
@@ -141,7 +143,7 @@
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
     {{-- <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script> --}}
-    <script src="{{ asset('assets/js/custom-user.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-app.js') }}"></script>
     @if(!is_demo_mode())
     {!! setting_item('footer_scripts') !!}
     @endif
