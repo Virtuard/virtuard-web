@@ -1,4 +1,4 @@
-<div class="card" style="height: 600px; overflow-y: auto;">
+<div class="card card-explore">
     <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="categories-tab" data-toggle="tab" data-target="#categories" type="button"

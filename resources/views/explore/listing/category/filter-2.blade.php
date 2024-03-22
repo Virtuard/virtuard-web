@@ -1,5 +1,5 @@
-<div class="card" style="height: 600px; overflow-y: auto;">
-    <ul class="nav nav-tabs justify-content-start p-3" id="myTab" role="tablist">
+<div class="card card-explore">
+    <ul class="nav nav-tabs justify-content-start" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="filters-arts-tab" data-toggle="tab" data-target="#filters-arts"
                 type="button" role="tab" aria-controls="filters-arts" aria-selected="true">Filters</button>
@@ -58,10 +58,10 @@
                 </div>
                 <div class="form-group mt-3">
                     <div class="form-content">
-                        <label class="mb-2 font-weight-bold">Range</label>
+                        <label class="mb-2 font-weight-bold">Range <span id="proximity_text">0</span> km</label>
                         <div class="input-search">
-                            <input type="range" class="w-100" value="700000" step="100000" min="0"
-                                max="1000000" />
+                            <input type="range" id="search_radius" name="search_radius" min="0" max="500"
+                                class="w-100 cursor-pointer" value="0" />
                         </div>
                     </div>
                 </div>

@@ -1,14 +1,14 @@
 <div class="tab-pane fade" id="{{ $key }}" role="tabpanel" aria-labelledby="{{ $key }}-tab">
     <div class="row">
-        <div class="col-6">
+        <div class="col-md-6 p-1">
             @if(in_array($key, get_listing_book()))
                 @include('explore.listing.category.filter-1')
             @else
                 @include('explore.listing.category.filter-2')
             @endif
         </div>
-        <div class="col-6">
-            <div class="card" style="height: 600px; overflow-y: auto;">
+        <div class="col-md-6 p-1">
+            <div class="card card-explore">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <i class="fa fa-lg fa-arrow-left"></i>

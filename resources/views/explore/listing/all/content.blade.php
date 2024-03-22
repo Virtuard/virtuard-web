@@ -1,10 +1,10 @@
 <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
     <div class="row">
-        <div class="col-6 px-0">
+        <div class="col-md-6 p-1">
             @include('explore.listing.all.filter')
         </div>
-        <div class="col-6 px-0">
-            <div class="card" style="height: 600px; overflow-y: auto;">
+        <div class="col-md-6 p-1">
+            <div class="card card-explore">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <i class="fa fa-lg fa-arrow-left cursor-pointer"></i>

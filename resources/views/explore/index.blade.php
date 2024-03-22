@@ -3,17 +3,17 @@
     <div class="" style="background: #f5f5f5; padding: 20px 60px;">
         <div class="row">
             <div class="card">
-                <div class="p-4">
+                <div class="p-2">
                     <i class="fa fa-globe" aria-hidden="true"></i>
                     <span>All</span>
                 </div>
             </div>
         </div>
-        <div class="row" style="margin-top: -5px;">
+        <div class="row">
             <div class="col-12 card">
                 <form action="">
                     <div class="row py-3">
-                        <div class="col-3">
+                        <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
@@ -35,7 +35,7 @@
                                 <input type="hidden" id="search_lng" name="search_lng">
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <label class="mb-2 font-weight-bold">Proximity <span id="proximity_text">0</span> km</label>
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <input type="text" class="form-control" 
                                     id="search_keyword"
@@ -65,7 +65,7 @@
                                     style="border-top: none;border-left:none;border-right:none;">
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-md-3">
                             <button type="submit" class="btn btn-md btn-dark mt-3 w-100">
                                 <i class="fa fa-search"></i>
                                 Search
@@ -75,14 +75,9 @@
                 </form>
             </div>
         </div>
-        <div class="row mt-4 nav-tab">
-            <div class="col-12">
+        <div class="row my-2 nav-tab">
+            <div class="col-12 px-0">
                 <ul class="nav nav-tabs d-flex justify-content-start" id="myTab" role="tablist" style="gap: 5px; padding: 5px 0;">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link text-capitalize disabled" id="#" data-toggle="tab" data-target="#"
-                            type="button" role="tab" aria-controls="#" aria-selected="true">What are you looking for?
-                        </button>
-                    </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize active" id="all-tab" data-toggle="tab" data-target="#all"
                             type="button" role="tab" aria-controls="all" aria-selected="true">
@@ -90,9 +85,9 @@
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
-                            type="button" role="tab" aria-controls="business" aria-selected="false">
-                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>Business</button>
+                        <button class="nav-link nav-category text-capitalize" id="accomodations-tab" data-toggle="tab"
+                            data-target="#accomodations" type="button" role="tab" aria-controls="accomodations"
+                            aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> Accomodations</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="properties-tab" data-toggle="tab"
@@ -100,14 +95,14 @@
                             aria-selected="false"><i class="fa fa-sm mr-2 fa-home"></i> Properties</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="accomodations-tab" data-toggle="tab"
-                            data-target="#accomodations" type="button" role="tab" aria-controls="accomodations"
-                            aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> Accomodations</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="vehicles-tab" data-toggle="tab"
                             data-target="#vehicles" type="button" role="tab" aria-controls="vehicles"
                             aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> Vehicles</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-category text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
+                            type="button" role="tab" aria-controls="business" aria-selected="false">
+                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>Business</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="naturals-tab" data-toggle="tab"
@@ -128,7 +123,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-7">
+            <div class="col-md-7">
                 <div class="tab-content" id="myTabContent">
                     {{-- Tab content all --}}
                     @include('explore.listing.all.content')
@@ -139,8 +134,12 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-5 px-0">
-                <div id="gmap" style="height: 100%;"></div>
+            <div class="col-md-5 p-1">
+                <div class="card card-explore">
+                    <div class="card-body">
+                        <div id="gmap"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -166,18 +165,6 @@
             border-radius: 5px;
             min-height: 150px;
             box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
-        }
-
-        @media (max-width: 768px) {
-            .card-custom {
-                min-height: 350px;
-            }
-        }
-
-        @media (max-width: 420px) {
-            .card-custom {
-                min-height: 300px;
-            }
         }
 
         .card-custom.card-has-bg {
@@ -238,6 +225,33 @@
             font-size: inherit !important;
             margin-right: 2px;
         }
+
+        #gmap {
+            height: 100%;
+        }
+
+        .card-explore {
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+            .card-custom {
+                min-height: 250px;
+            }
+
+            .card-explore {
+                height: 550px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .card-custom {
+                min-height: 250px;
+            }
+        }
+
     </style>
     <style>
         .cluster-marker {

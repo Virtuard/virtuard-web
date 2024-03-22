@@ -1,4 +1,4 @@
-<div class="card" style="height: 600px; overflow-y: auto;">
+<div class="card card-explore">
     <div class="card-body">
         <div class="form-group">
             <label for="exampleFormControlSelect1">Sort by</label>
@@ -85,10 +85,10 @@
         </div>
         <div class="form-group mt-3">
             <div class="form-content">
-                <label class="mb-2 font-weight-bold">Range</label>
+                <label class="mb-2 font-weight-bold">Range <span id="proximity_text">0</span> km</label>
                 <div class="input-search">
-                    <input type="range" class="w-100" value="700000" step="100000" min="0"
-                        max="1000000" />
+                    <input type="range" id="search_radius" name="search_radius" min="0" max="500"
+                        class="w-100 cursor-pointer" value="0" />
                 </div>
             </div>
         </div>
