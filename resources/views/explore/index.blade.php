@@ -234,6 +234,7 @@
             height: 600px;
             position: relative;
             overflow: hidden;
+            overflow-y: scroll;
         }
 
         @media (max-width: 768px) {
