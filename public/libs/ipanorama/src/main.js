@@ -3,30 +3,8 @@
 //=================================
 $(document).ready(function() {
 	"use strict";
-	var fullURL = document.getElementById('panId').value;
-	var arr =  fullURL.split(',');
-	var data = document.getElementById('panId').value;
 
-	data = data.replace('$("#mypanorama").ipanorama(', '').replace(');', '');
-
-	// function replaceUploadPaths(data) {
-    // // Fungsi rekursif untuk mengganti semua jalur 'upload/' menjadi '/uploads/public/images/ipanorama/'
-    // function replacePaths(obj) {
-    //     for (let key in obj) {
-    //         if (typeof obj[key] === 'string') {
-    //             obj[key] = obj[key].replace('upload/', '/uploads/ipanoramaBuilder/assets/images/');
-    //         } else if (typeof obj[key] === 'object') {
-    //             replacePaths(obj[key]);
-    //         }
-    //     }
-    // }
-
-    // replacePaths(data);
-	// }
-
-	// replaceUploadPaths(data);
-
-	function replacePaths(obj) {
+    function replacePaths(obj) {
 	    for (let key in obj) {
 	        if (typeof obj[key] === 'string') {
 	            obj[key] = obj[key].replace('upload/', '/uploads/ipanoramaBuilder/upload/');
@@ -36,15 +14,19 @@ $(document).ready(function() {
 	    }
 	}
 
-	var dataObj = JSON.parse(data);
+	const data = document.getElementById('panId').value;
+
+    if (!data) return false;
+
+	const dataObj = JSON.parse(data);
 
 	replacePaths(dataObj);
 
-	var panorama = $("#panorama").ipanorama(
+	const panorama = $("#panorama").ipanorama(
 		dataObj
 	);
 	
-	// var panorama = $("#panorama").ipanorama({
+	// const panorama = $("#panorama").ipanorama({
 	// 	theme: "ipnrm-theme-default",
 	// 	hotSpotSetup: false,
 	// 	onShare: function(e) {

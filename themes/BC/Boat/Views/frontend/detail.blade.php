@@ -16,6 +16,7 @@
     <div class="bravo_detail_boat">
         @include('Layout::parts.bc')
         @include('Boat::frontend.layouts.details.banner')
+        <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">
