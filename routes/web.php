@@ -19,20 +19,25 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 
 // Virtuard 360
-Route::get('/user/virtuard-360', 'VirtuardController@vendorVirtuardIndex')->name('user-virtuard');
+Route::group([
+    'prefix' => '/user/virtuard-360',
+    'as' => 'user.virtuard-360.'
+], function (){
+Route::get('/', 'VirtuardController@vendorVirtuardIndex')->name('index');
 Route::group([
     'middleware' => ['user_plan']
 ], function (){
-Route::get('/user/add/virtuard-360', 'VirtuardController@vendorVirtuardAdd')->name('user-add-virtuard');
-Route::post('/user/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');
-Route::post('/user/add/new/virtuard-360', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
-Route::post('/user/add/newImage/virtuard-360', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
-Route::get('/user/add/virtuard-360/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('user-add-virtuard-api');
-Route::post('/user/add/virtuard-360/api', 'VirtuardController@vendorVirtuardAddApi')->name('user-add-virtuard-api');
-Route::post('/user/add/virtuard-360/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('user-add-virtuard-api-second');
-Route::get('/user/edit/virtuard-360', 'VirtuardController@vendorVirtuardEdit')->name('user-edit-virtuard');
-Route::post('/user/edit/virtuard-360/updateTour', 'VirtuardController@updateIsTourField')->name('user-update-tour');
-Route::get('/user/delete/virtuard-360', 'VirtuardController@vendorVirtuardDelete')->name('user-delete-virtuard');   
+Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
+Route::post('/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');
+Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
+Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
+Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api');
+Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');
+Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
+Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
+Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
+Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
+});
 });
 
 // Story

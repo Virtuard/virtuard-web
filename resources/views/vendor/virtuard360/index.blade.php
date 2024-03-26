@@ -8,7 +8,7 @@
     @if(auth()->user()->checkUserPlan())
         <div class="container">
             <div class="text-right mt-4">
-                <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user-add-virtuard') }}"><i class="icon ion-ios-add-circle-outline"></i> Add item</a>
+                <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.add') }}"><i class="icon ion-ios-add-circle-outline"></i> Add item</a>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -27,9 +27,9 @@
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $pan->title }}</td>
                                     <td>
-                                        <a href="{{ route('user-edit-virtuard', $pan->id) }}"
+                                        <a href="{{ route('user.virtuard-360.edit', ['id' => $pan->id]) }}"
                                             class="virtuard-edit btn btn-warning btn-sm">Edit</a>
-                                        <a href="{{ route('user-delete-virtuard', $pan->id) }}"
+                                        <a href="{{ route('user.virtuard-360.destroy', $pan->id) }}"
                                                 class="virtuard-delete btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>

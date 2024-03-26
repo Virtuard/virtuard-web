@@ -63,7 +63,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('submission-service') }}" method="POST" enctype="multipart/form-user_plan">
+                <form action="{{ route('user.virtuard-360.submission-service') }}" method="POST" enctype="multipart/form-user_plan">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

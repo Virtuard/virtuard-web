@@ -46,7 +46,7 @@ $menus = [
         'position' => 110,
     ],
     'virtuard360' => [
-        'url' => route('user-virtuard'),
+        'url' => route('user.virtuard-360.index'),
         'title' => 'Virtuard 360',
         'icon' => 'fa fa-camera',
         'permission' => 'dashboard_vendor_access',

@@ -37,41 +37,28 @@ class VirtuardController extends Controller
     public function vendorVirtuardIndex()
     {
         $idUser = Auth::id();
-        $data = SubscribeVirtuard::where('id_user', $idUser)->get();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
         $user_plan = auth()->user()->userPlans()->where('status',1)->where('end_date','>',now())->first();
         if (!$user_plan) {
             $user_plan = auth()->user()->userPlans()->latest('end_date')->first();
         }
 
-        return view('vendor.virtuard360.index', compact('data', 'dataIpanorama', 'user_plan'));
+        return view('vendor.virtuard360.index', compact('dataIpanorama', 'user_plan'));
     }
 
-    public function vendorVirtuardAdd()
+    public function vendorVirtuardAdd(Request $request)
     {
-        $idUser = Auth::id();
-        $data = SubscribeVirtuard::where('id_user', $idUser)->get();
-        // dd($data);
-
-        return view('vendor.virtuard360.add', compact('data'));
+        return view('vendor.virtuard360.add');
     }
 
-    public function vendorVirtuardEdit()
+    public function vendorVirtuardEdit(Request $request)
     {
-        $idUser = Auth::id();
-        $data = SubscribeVirtuard::where('id_user', $idUser)->get();
-
-        return view('vendor.virtuard360.edit', compact('data'));
+        return view('vendor.virtuard360.edit');
     }
 
-    public function vendorVirtuardDelete(Request $request)
+    public function vendorVirtuardDelete($id)
     {
-        $idUser = Auth::id();
-        $id = $request->input('id');
-
-        $ipanorama = RefIpanorama::where('id', $id)
-            ->where('id_user', $idUser)
-            ->first();
+        $ipanorama = RefIpanorama::find($id);
 
         if ($ipanorama) {
             $ipanorama->delete();
@@ -133,7 +120,7 @@ class VirtuardController extends Controller
         $ipanorama->title = $request->input('title');
         $ipanorama->save();
 
-        $urlWithId = url('/user/add/virtuard-360?id=' . $ipanorama->id);
+        $urlWithId = route('user.virtuard-360.add', ['id' => $ipanorama->id]);
         return redirect($urlWithId)->with('success', 'Insert successfully');
     }
 
@@ -143,11 +130,13 @@ class VirtuardController extends Controller
         $proofImage = $request->file('image');
         $title = $request->input('title');
 
-        $extension = $proofImage->getClientOriginalExtension();
-
-        $newFileName = Str::slug($title) . '.' . $extension;
-
-        $path = $proofImage->storeAs('/ipanoramaBuilder/upload', $newFileName);
+        if ($proofImage) {
+            $extension = $proofImage->getClientOriginalExtension();
+    
+            $newFileName = Str::slug($title) . '.' . $extension;
+    
+            $path = $proofImage->storeAs('/ipanoramaBuilder/upload', $newFileName);
+        }
 
         return back()->with('success', 'Insert successfully');
     }

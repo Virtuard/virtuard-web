@@ -34,7 +34,7 @@
         }
     </style>
     <h2 class="title-bar no-border-bottom">
-        Add Virtuard 360
+        Edit Virtuard 360
     </h2>
 
     @if (!request()->has('id'))
@@ -42,7 +42,7 @@
             <b>You must first create a title for your Virtuard 360!</b>
         </div>
 
-        <form action="{{ route('add-new-service') }}" method="POST">
+        <form action="{{ route('user.virtuard-360.add-new-service') }}" method="POST">
             @csrf
 
             <div class="card p-4">
@@ -64,11 +64,11 @@
     @endif
 
     @if (request()->has('id'))
-        <div class="col-md-12 p-0 mb-4">
+        {{-- <div class="col-md-12 p-0 mb-4">
             <button class="btn btn-primary w-100 add-image" data-toggle="modal" data-target="#modalAddImage" id="btn-image">
                 + Add New Image
             </button>
-        </div>
+        </div> --}}
 
         <!-- Modal -->
         <div class="modal fade" id="modalAddImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -80,7 +80,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ route('add-new-image-service') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('user.virtuard-360.add-new-image-service') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
                             <div class="form-group title-image">
@@ -229,7 +229,7 @@
                 const csrfToken = $('meta[name="csrf-token"]').attr('content');
 
                 $.ajax({
-                    url: '{{ route('user-update-tour') }}',
+                    url: '{{ route('user.virtuard-360.update-tour') }}',
                     method: 'POST',
                     data: {
                         _token: csrfToken,
