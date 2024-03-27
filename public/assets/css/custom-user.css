@@ -43,7 +43,7 @@
     background-color: #1e9bff !important;
 }
 
-li.create-item.auth a {
+li.create-item a {
     color: #ffffff !important;
     background-color: #1e9bff !important;
     box-shadow: 0 0 20px #1e9bff !important;
@@ -51,12 +51,12 @@ li.create-item.auth a {
     border-radius: 20px;
 }
 
-li.create-item.auth a:focus {
+li.create-item a:focus {
     border: none;
     outline: none;
 }
 
-li.create-item.auth a:before{
+li.create-item a:before{
     content: "";
     position: absolute;
     top: 50%;
@@ -77,4 +77,12 @@ li.create-item.auth a:before{
 
 .bravo_wrap .bravo_topbar .content .topbar-left a {
     color: white;
-  }
+}
+
+.nav {
+    justify-content: space-between;
+}
+
+.bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a {
+    padding: 7px 18px;
+}

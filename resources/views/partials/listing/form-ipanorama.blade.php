@@ -6,9 +6,9 @@
                 <div class="card p-4">
                     <div class="text-right">
                         <a href=""></a>
-                        <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.index') }}"><i class="icon ion-ios-add-circle-outline"></i> Add item</a>
+                        <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.index') }}"><i class="icon ion-ios-add-circle-outline"></i> Add 360 Image</a>
                     </div>
-                    <label> Image </label>
+                    <label>360 Image </label>
                     @if (auth()->user()->checkUserPlan() || auth()->user()->isAdmin())
                         <select class="form-control" name="div-ipanorama">
                             <option>-- Select Item --</option>

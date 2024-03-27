@@ -8,13 +8,13 @@
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label">{{__("Price")}}</label>
-                        <input type="number" step="any" min="0" name="price" class="form-control" value="{{$row->price}}" placeholder="{{__("Event Price")}}">
+                        <input type="number" step="any" min="0" name="price" class="form-control" value="{{$row->price}}" placeholder="{{__("Cultural Price")}}">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
                         <label class="control-label">{{__("Sale Price")}}</label>
-                        <input type="number" step="any" name="sale_price" class="form-control" value="{{$row->sale_price}}" placeholder="{{__("Event Sale Price")}}">
+                        <input type="number" step="any" name="sale_price" class="form-control" value="{{$row->sale_price}}" placeholder="{{__("Cultural Sale Price")}}">
                         <span><i>{{__("If the regular price is less than the discount , it will show the regular price")}}</i></span>
                     </div>
                 </div>

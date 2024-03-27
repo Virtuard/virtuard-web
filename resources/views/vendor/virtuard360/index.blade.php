@@ -8,7 +8,7 @@
     @if(auth()->user()->checkUserPlan())
         <div class="container">
             <div class="text-right mt-4">
-                <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.add') }}"><i class="icon ion-ios-add-circle-outline"></i> Add item</a>
+                <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.add') }}"><i class="icon ion-ios-add-circle-outline"></i> Add 360 Image</a>
             </div>
             <div class="row">
                 <div class="col-md-12">
