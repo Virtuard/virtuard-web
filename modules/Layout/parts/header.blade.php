@@ -1,7 +1,7 @@
 
 <div class="bravo_header">
     <div class="{{$container_class ?? 'container'}}">
-        <div class="content">
+        <div class="content justify-content-between">
             <div class="header-left">
                 <a href="{{url(app_get_locale(false,'/'))}}" class="bravo-logo">
                     @php
@@ -20,6 +20,7 @@
                 </div>
             </div>
             <div class="header-right">
+                <?php $header_right_menu = true ?>
                 @if(!empty($header_right_menu))
                     <ul class="topbar-items">
                         @include('Core::frontend.currency-switcher')
@@ -69,6 +70,12 @@
                                 </form>
                             </li>
                         @endif
+                        <li class="create-item @auth auth @endauth">
+                            <a href="{{ route('create') }}" class="btn">
+                                <i class="fa fa-list"></i>
+                                {{ __('Create') }}
+                            </a>
+                        </li>
                     </ul>
                 @endif
                 <button class="bravo-more-menu">

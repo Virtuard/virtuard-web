@@ -63,7 +63,7 @@
     @endif
     <div class="bravo_wrap">
         @if (!is_api())
-            @include('Layout::parts.topbar')
+            {{-- @include('Layout::parts.topbar') --}}
             @include('Layout::parts.header')
         @endif
 

@@ -13,6 +13,10 @@
     width: 75px;
 }
 
+.logo-header-new {
+    width: 75px;
+}
+
 .img-adventages-header {
     height: 400px;
     background-image: linear-gradient(0deg,rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)),url('http://localhost:8081/uploads/0000/9/2023/07/27/pexels-pixabay-219692.jpg') !important;
@@ -43,7 +47,7 @@
     background-color: #1e9bff !important;
 }
 
-li.create-item a {
+.topbar-items li.create-item a {
     color: #ffffff !important;
     background-color: #1e9bff !important;
     box-shadow: 0 0 20px #1e9bff !important;
@@ -51,12 +55,12 @@ li.create-item a {
     border-radius: 20px;
 }
 
-li.create-item a:focus {
+.topbar-items li.create-item a:focus {
     border: none;
     outline: none;
 }
 
-li.create-item a:before{
+.topbar-items li.create-item a:before{
     content: "";
     position: absolute;
     top: 50%;
