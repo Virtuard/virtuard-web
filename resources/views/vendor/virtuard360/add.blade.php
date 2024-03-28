@@ -31,11 +31,11 @@
     @endif
 
     @if(request()->has('id'))
-        {{-- <div class="col-md-12 p-0 mb-4">
+        <div class="col-md-12 p-0 mb-4">
             <button class="btn btn-primary w-100" data-toggle="modal" data-target="#modalAddImage">
                 + Add New Image
             </button>
-        </div> --}}
+        </div>
 
         <!-- Modal -->
         <div class="modal fade" id="modalAddImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -55,7 +55,7 @@
                                 <input type="text" name="title" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="exampleFormControlFile1">Proof of payment</label>
+                                <label for="exampleFormControlFile1">Image 360</label>
                                 <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1">
                             </div>
                         </div>

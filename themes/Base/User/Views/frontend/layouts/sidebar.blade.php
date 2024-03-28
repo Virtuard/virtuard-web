@@ -208,6 +208,11 @@ foreach ($menus as $k => $menuItem) {
         @if (Auth::user()->role_id == '3')
             <a href=" {{ route('user.upgrade_vendor') }}">{{ __('Become a vendor') }}</a>
         @endif
+        @if(!auth()->user()->checkUserPlan())
+            <a href="{{ route('user.plan') }}">{{ __('Upgrade PRO') }}</a>
+        @else
+            <a><i class="icon ion-ios-ribbon"></i> {{ __('PRO') }}</a>
+        @endif
     </div>
     <div class="sidebar-menu">
         <ul class="main-menu">
