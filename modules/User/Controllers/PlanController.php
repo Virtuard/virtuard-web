@@ -39,6 +39,12 @@ class PlanController extends FrontendController
         if (!auth()->user()->user_plan) {
             return redirect(route('plan'));
         }
+
+        $plans = Plan::query()
+            ->where('role_id', auth()->user()->role_id)
+            ->whereStatus('publish')
+            ->get();
+
         $data = [
             'user' => auth()->user(),
             'page_title' => __('My Plan'),
@@ -49,6 +55,7 @@ class PlanController extends FrontendController
                     'class' => 'active',
                 ],
             ],
+            'plans' => $plans,
         ];
         return view('User::frontend.plan.my-plan', $data);
     }

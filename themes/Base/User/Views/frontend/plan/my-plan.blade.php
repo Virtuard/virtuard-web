@@ -8,9 +8,9 @@
         <div class="col-lg-12">
             <div class="ls-widget">
                 <div class="tabs-box">
-                    <div class="widget-title text-right">
+                    {{-- <div class="widget-title text-right">
                         <a href="{{ route('plan') }}" class="btn btn-dark mb-3">List Plan</a>
-                    </div>
+                    </div> --}}
                     <div class="widget-content">
                         @php
                             $user_plans = $user->userPlans;
@@ -62,6 +62,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            @include('User::frontend.plan.list')
         </div>
     </div>
 @endsection
