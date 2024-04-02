@@ -152,6 +152,7 @@
     </div>
 @endsection
 @push('js')
+    <script src="{{ asset('themes/admin/libs/bootstrap-4.6.2-dist/js/bootstrap.bundle.min.js?_ver='.config('app.asset_version')) }}" ></script>
     <link rel="stylesheet" href="{{asset('libs/daterange/daterangepicker.css')}}">
     <script src="{{asset('libs/daterange/moment.min.js')}}"></script>
     <script src="{{asset('libs/daterange/daterangepicker.min.js')}}"></script>
