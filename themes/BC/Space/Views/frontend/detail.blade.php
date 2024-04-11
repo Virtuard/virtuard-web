@@ -30,9 +30,7 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
-                        @if($row->author->checkUserPlan())
                         @include('Space::frontend.layouts.details.space-form-book')
-                        @endif
                     </div>
                 </div>
                 <div class="row end_tour_sticky">
@@ -42,9 +40,7 @@
                 </div>
             </div>
         </div>
-        @if($row->author->checkUserPlan())
         @include('Space::frontend.layouts.details.space-form-book-mobile')
-        @endif
     </div>
 @endsection
 
