@@ -8,7 +8,7 @@
         </div>
         <div class="row">
             @forelse ($menus as $key => $menu)
-                <div class="col-4 mb-3">
+                <div class="col-md-4 mb-3">
                     <a href="{{ $menu['url'] }}" class="card h-100 text-decoration-none" @guest
                     data-toggle="modal"
                     data-target="#login"
