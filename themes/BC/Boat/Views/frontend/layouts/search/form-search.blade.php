@@ -18,10 +18,10 @@
                                 @include('Boat::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Boat::frontend.layouts.search.fields.location')
+                                @include('Boat::frontend.layouts.search-map.fields.location')
                             @break
                             @case ('date')
-                                @include('Boat::frontend.layouts.search.fields.date')
+                                @include('Boat::frontend.layouts.search.fields.category')
                             @break
                             @case ('guests')
                                 @include('Boat::frontend.layouts.search.fields.range')

@@ -137,6 +137,12 @@
         </div>
         <div class="g-menu">
             <?php generate_menu('primary') ?>
+            <li class="create-item @auth auth @endauth m-2">
+                <a href="{{ route('create') }}" class="btn">
+                    <i class="fa fa-list"></i>
+                    {{ __('Create') }}
+                </a>
+            </li>
         </div>
     </div>
 </div>

@@ -15,10 +15,11 @@
                                 @include('Natural::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Natural::frontend.layouts.search.fields.location')
+                                @include('Natural::frontend.layouts.search-map.fields.location')
                             @break
                             @case ('date')
-                                @include('Natural::frontend.layouts.search.fields.date')
+                                {{-- @include('Natural::frontend.layouts.search.fields.date') --}}
+                                @include('Natural::frontend.layouts.search.fields.category')
                             @break
                             @case ('guests')
                                 @include('Natural::frontend.layouts.search.fields.range')

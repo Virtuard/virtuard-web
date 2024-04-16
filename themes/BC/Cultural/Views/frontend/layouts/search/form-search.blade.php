@@ -15,10 +15,10 @@
                                 @include('Cultural::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Cultural::frontend.layouts.search.fields.location')
+                                @include('Cultural::frontend.layouts.search-map.fields.location')
                             @break
                             @case ('date')
-                                @include('Cultural::frontend.layouts.search.fields.date')
+                                @include('Cultural::frontend.layouts.search.fields.category')
                             @break
                             @case ('guests')
                                 @include('Cultural::frontend.layouts.search.fields.range')

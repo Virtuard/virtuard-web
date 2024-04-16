@@ -42,12 +42,12 @@
     vertical-align: middle;
 }
 
-.topbar-items li.create-item a {
+li.create-item a {
     color: #ffffff !important;
     background-color: #1e9bff !important;
 }
 
-.topbar-items li.create-item a {
+li.create-item a {
     color: #ffffff !important;
     background-color: #1e9bff !important;
     box-shadow: 0 0 20px #1e9bff !important;
@@ -55,12 +55,12 @@
     border-radius: 20px;
 }
 
-.topbar-items li.create-item a:focus {
+li.create-item a:focus {
     border: none;
     outline: none;
 }
 
-.topbar-items li.create-item a:before{
+li.create-item a:before{
     content: "";
     position: absolute;
     top: 50%;

@@ -15,10 +15,10 @@
                                 @include('Business::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Business::frontend.layouts.search.fields.location')
+                                @include('Business::frontend.layouts.search-map.fields.location')
                             @break
                             @case ('date')
-                                @include('Business::frontend.layouts.search.fields.date')
+                                @include('Business::frontend.layouts.search.fields.category')
                             @break
                             @case ('guests')
                                 @include('Business::frontend.layouts.search.fields.range')

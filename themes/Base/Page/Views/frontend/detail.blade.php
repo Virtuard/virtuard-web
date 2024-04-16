@@ -13,3 +13,6 @@
         </div>
     @endif
 @endsection
+@push('js')
+    {!! App\Helpers\MapEngine::scripts() !!}
+@endpush
