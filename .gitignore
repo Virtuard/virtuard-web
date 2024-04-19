@@ -22,3 +22,4 @@ storage/bc.php
 storage/installed
 public/themes/*/dist
 /local_note
+.DS_Store

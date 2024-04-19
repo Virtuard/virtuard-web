@@ -151,11 +151,7 @@ class ListSpace extends BaseBlock
 
     public function query($model)
     {
-        $listSpace = $this->spaceClass->search($model);
-        $limit = $model['number'] ?? 5;
-        return $listSpace->paginate($limit);
-
-        /*$model_space = Space::select("bravo_spaces.*")->with([
+        $model_space = Space::select("bravo_spaces.*")->with([
             'location',
             'translation',
             'hasWishList'
@@ -184,6 +180,6 @@ class ListSpace extends BaseBlock
         $model_space->where("bravo_spaces.status", "publish");
         $model_space->with('location');
         $model_space->groupBy("bravo_spaces.id");
-        return $model_space->limit($model['number'])->get();*/
+        return $model_space->limit($model['number'])->get();
     }
 }

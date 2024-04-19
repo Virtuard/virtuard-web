@@ -151,11 +151,7 @@ class ListBusiness extends BaseBlock
 
     public function query($model)
     {
-        $listBusiness = $this->businessClass->search($model);
-        $limit = $model['number'] ?? 5;
-        return $listBusiness->paginate($limit);
-
-        /*$model_business = Business::select("bravo_businesss.*")->with([
+        $model_business = Business::select("bravo_businesses.*")->with([
             'location',
             'translation',
             'hasWishList'
@@ -170,20 +166,20 @@ class ListBusiness extends BaseBlock
             $location = Location::where('id', $model['location_id'])->where("status", "publish")->first();
             if (!empty($location)) {
                 $model_business->join('bravo_locations', function ($join) use ($location) {
-                    $join->on('bravo_locations.id', '=', 'bravo_businesss.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
+                    $join->on('bravo_locations.id', '=', 'bravo_businesses.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
                 });
             }
         }
         if (!empty($model['is_featured'])) {
-            $model_business->where('bravo_businesss.is_featured', 1);
+            $model_business->where('bravo_businesses.is_featured', 1);
         }
         if (!empty($model['custom_ids'])) {
-            $model_business->whereIn("bravo_businesss.id", $model['custom_ids']);
+            $model_business->whereIn("bravo_businesses.id", $model['custom_ids']);
         }
-        $model_business->orderBy("bravo_businesss." . $model['order'], $model['order_by']);
-        $model_business->where("bravo_businesss.status", "publish");
+        $model_business->orderBy("bravo_businesses." . $model['order'], $model['order_by']);
+        $model_business->where("bravo_businesses.status", "publish");
         $model_business->with('location');
-        $model_business->groupBy("bravo_businesss.id");
-        return $model_business->limit($model['number'])->get();*/
+        $model_business->groupBy("bravo_businesses.id");
+        return $model_business->limit($model['number'])->get();
     }
 }

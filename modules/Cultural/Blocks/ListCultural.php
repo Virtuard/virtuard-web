@@ -148,9 +148,37 @@ class ListCultural extends BaseBlock
         return $model;
     }
 
-    public function query($model){
-        $listCar = $this->culturalClass->search($model);
-        $limit = $model['number'] ?? 5;
-        return $listCar->paginate($limit);
+    public function query($model)
+    {
+        $model_business = Cultural::select("bravo_culturals.*")->with([
+            'location',
+            'translation',
+            'hasWishList'
+        ]);
+        if (empty($model['order']))
+            $model['order'] = "id";
+        if (empty($model['order_by']))
+            $model['order_by'] = "desc";
+        if (empty($model['number']))
+            $model['number'] = 5;
+        if (!empty($model['location_id'])) {
+            $location = Location::where('id', $model['location_id'])->where("status", "publish")->first();
+            if (!empty($location)) {
+                $model_business->join('bravo_locations', function ($join) use ($location) {
+                    $join->on('bravo_locations.id', '=', 'bravo_culturals.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
+                });
+            }
+        }
+        if (!empty($model['is_featured'])) {
+            $model_business->where('bravo_culturals.is_featured', 1);
+        }
+        if (!empty($model['custom_ids'])) {
+            $model_business->whereIn("bravo_culturals.id", $model['custom_ids']);
+        }
+        $model_business->orderBy("bravo_culturals." . $model['order'], $model['order_by']);
+        $model_business->where("bravo_culturals.status", "publish");
+        $model_business->with('location');
+        $model_business->groupBy("bravo_culturals.id");
+        return $model_business->limit($model['number'])->get();
     }
 }
