@@ -57,6 +57,9 @@ class MemberController extends Controller
             ->when(auth()->check(), function($q){
                 $q->where('id', '!=', auth()->user()->id);
             })
+            ->when(isset($request->search), function($q) use ($request){
+                return $q->where('name', 'like', '%' . $request->search . '%');
+            })
             ->when(isset($request->type), function($q) use ($request) {
                 if ($request->type == 'following') {
                     return $q->whereHas('followers', function ($q1) {

@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-md-12" style="background: #f5f5f5; padding: 0 20px;">
                     <div class="w-100 mt-3 d-flex" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
-                        <div>
+                        <div class="label-member">
                             <a class="m-0" href="{{ route('member.index')}}">
                                 <i class="fa fa-globe mr-2"></i>
                                 All Members 
@@ -26,21 +26,27 @@
                             </a>
                         </div>
                         @auth
-                        <div class="ml-3">
+                        <div class="ml-3 label-member">
                             <a class="m-0" href="{{ route('member.index', ['type' => 'follower'])}}">
-                                <i class="fa fa-signal mr-2"></i>
+                                <i class="fa fa-users mr-2"></i>
                                 Followers
                                 <span class="badge badge-primary">{{ $followerCount }}</span>
                             </a>
                         </div>
-                        <div class="ml-3">
+                        <div class="ml-3 label-member">
                             <a class="m-0" href="{{ route('member.index', ['type' => 'following'])}}">
-                                <i class="fa fa-signal mr-2"></i>
+                                <i class="fa fa-user-plus mr-2"></i>
                                 Following 
                                 <span class="badge badge-primary">{{ $followingCount }}</span>
                             </a>
                         </div>
                         @endauth
+                        <div class="ml-3 label-member">
+                            <form action="{{ route('member.index') }}" class="form-search-member">
+                                <input type="text" name="search" placeholder="search">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
                     </div>  
                 </div>  
                 @foreach($users as $user)
@@ -105,3 +111,51 @@
             </div>
         </div>
 @endsection
+@push('css')
+<style>
+    .label-member {
+       background-color: #f5f5f5;
+       padding: 10px;
+       border-radius: 10px;
+       display: flex;
+       align-items: center;
+    }
+    * {
+  box-sizing: border-box;
+}
+
+    /* Style the search field */
+    .form-search-member input[type=text] {
+        padding: 5px;
+        font-size: 15px;
+        border: 1px solid grey;
+        float: left;
+        width: 80%;
+        background: #f1f1f1;
+    }
+
+    /* Style the submit button */
+    .form-search-member button {
+        float: left;
+        width: 20%;
+        padding: 5px;
+        font-size: 15px;
+        background: #2196F3;
+        color: white;
+        border: 1px solid grey;
+        border-left: none; /* Prevent double borders */
+        cursor: pointer;
+    }
+
+    .form-search-member button:hover {
+        background: #0b7dda;
+    }
+
+    /* Clear floats */
+    .form-search-member::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+</style>
+@endpush
