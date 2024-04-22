@@ -11,4 +11,14 @@ class FollowUser extends Model
 
     protected $fillable = ['user_id', 'follow_user_id'];
     public $timestamps = true;
+
+    public function followerUser()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function followingUser()
+    {
+        return $this->belongsTo(User::class, 'follow_user_id');
+    }
 }

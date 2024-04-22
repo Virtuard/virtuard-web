@@ -2,19 +2,9 @@
 namespace App\Http\Controllers;
 
 use App\User;
-use Modules\Hotel\Models\Hotel;
-use Modules\Location\Models\LocationCategory;
-use Modules\Page\Models\Page;
-use Modules\News\Models\NewsCategory;
-use Modules\News\Models\Tag;
-use Modules\News\Models\News;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\UserPost;
 use App\Models\FollowUser;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
 
 class MemberController extends Controller
 {
@@ -36,22 +26,56 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->user
+        $data = [
+            'pageTitle' => 'Members',
+            'memberCount' => 0,
+            'followerCount' => 0,
+            'followingCount' => 0,
+        ];
+
+        if (isset($request->type)) {
+            if ($request->type == 'follower') {
+                $data['pageTitle'] = 'Followers';
+            }
+            else if ($request->type == 'following') {
+                $data['pageTitle'] = 'Following';
+            }
+        }
+
+        $data['memberCount'] = $this->user->where([
+            ['role_id', '!=', 1]
+        ])->count();
+
+        if (auth()->check()) {
+            $data['followerCount'] = auth()->user()->followers->count();
+            $data['followingCount'] = auth()->user()->followings->count();
+        }
+
+        $data['users'] = $this->user
+            ->when(auth()->check(), function($q){
+                $q->where('id', '!=', auth()->user()->id);
+            })
+            ->when(isset($request->type), function($q) use ($request) {
+                if ($request->type == 'following') {
+                    return $q->whereHas('followers', function ($q1) {
+                        $q1->where('user_id', auth()->user()->id);
+                    });
+                }
+                elseif ($request->type == 'follower') {
+                    return $q->whereHas('followings', function ($q1) {
+                        $q1->where('follow_user_id', auth()->user()->id);
+                    });
+                }
+            })
             ->where([
                 ['role_id', '!=', 1]
             ])
             ->orderBy('id', 'DESC')
             ->get();
 
-        $myFollowerCount = 0;
-
-        if (auth()->check()) {
-            $myFollowerCount = $this->followUser->where('follow_user_id', auth()->user()->id)->count();;
-        } 
-
-        return view('members.index', compact('users', 'myFollowerCount'));
+        return view('members.index', $data);
     }
 
     public function store(Request $request) {
@@ -60,18 +84,27 @@ class MemberController extends Controller
         $indicator = $request->input('param');
 
         if($indicator === 'Follow'){
-            $follow = new FollowUser();
-            $follow->user_id = $idUser;
-            $follow->follow_user_id = $idFollowUser;
-            $follow->save();
+            $data = [
+                'user_id' => $idUser,
+                'follow_user_id' => $idFollowUser,
+            ];
+            FollowUser::create($data);
 
-            return back()->with('success', 'Following success');
+            return back()->with([
+                'status' => 'success',
+                'message' => 'Following success'
+            ]);
         }else{
-            $unfollow = FollowUser::where('user_id',$idUser)->orWhere('follow_user_id',$idFollowUser)->delete();
+            FollowUser::where([
+                ['user_id', $idUser],
+                ['follow_user_id', $idFollowUser],
+            ])->delete();
 
-            return back()->with('success', 'Unfollowing success');
+            return back()->with([
+                'status' => 'success',
+                'message' => 'Unfollowing success'
+            ]);
         }
 
     }
-
 }

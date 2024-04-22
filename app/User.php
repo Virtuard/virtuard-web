@@ -3,7 +3,8 @@
     namespace App;
 
     use App\Models\ChMessage as Message;
-    use Illuminate\Notifications\Notifiable;
+use App\Models\FollowUser;
+use Illuminate\Notifications\Notifiable;
     use Illuminate\Contracts\Auth\MustVerifyEmail;
     use Illuminate\Foundation\Auth\User as Authenticatable;
     use Illuminate\Support\Carbon;
@@ -535,6 +536,26 @@
 
         public function isAdmin(){
             return $this->hasRole('administrator');
+        }
+
+        public function followers()
+        {
+            return $this->hasMany(FollowUser::class, 'follow_user_id');
+        }
+
+        public function followerUsers()
+        {
+            return $this->followers()->with('followerUser');
+        }
+
+        public function followings()
+        {
+            return $this->hasMany(FollowUser::class, 'user_id');
+        }
+
+        public function followingUsers()
+        {
+            return $this->followings()->with('followingUser');
         }
 
     }

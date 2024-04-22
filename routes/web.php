@@ -60,8 +60,10 @@ Route::get('/user/like/{id}', 'FollowBoardsController@likePost')->name('user.pos
 Route::post('/user/comment/{id}', 'FollowBoardsController@commentPost')->name('user.post.comment');
 
 // Follow Members
-Route::get('/user/follow-member', 'MemberController@index')->name('user-follow.member');
-Route::post('/user/add/follow-member', 'MemberController@store')->name('user.add.follow.member');
+Route::get('/user/member', 'MemberController@index')->name('member.index');
+Route::post('/user/member', 'MemberController@store')->name('member.store');
+Route::post('/user/followers', 'MemberController@follower')->name('member.follower');
+Route::post('/user/following', 'MemberController@following')->name('member.following');
 
 // Social Login
 Route::get('social-login/{provider}', 'Auth\LoginController@socialLogin');

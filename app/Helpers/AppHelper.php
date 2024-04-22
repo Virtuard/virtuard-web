@@ -1,6 +1,7 @@
 <?php
 use Modules\Core\Models\Settings;
 use App\Currency;
+use App\Models\FollowUser;
 use App\Models\SubscribeVirtuard;
 use App\Models\UserPost;
 use Carbon\Carbon;
@@ -1511,6 +1512,17 @@ if (!function_exists('get_map_listing')) {
 if (!function_exists('get_listing_book')) {
     function get_listing_book() {
         $data = ['hotel', 'space', 'business', 'vehicle'];
+        return $data;
+    }
+}
+
+if (!function_exists('is_following')) {
+    function is_following($following_id) {
+        $data = FollowUser::where([
+            'user_id' => auth()->user()->id,
+            'follow_user_id' => $following_id
+        ])->exists();
+
         return $data;
     }
 }
