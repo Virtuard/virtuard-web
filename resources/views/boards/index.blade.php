@@ -46,7 +46,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="w-100" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
-                            <ul class="d-flex flex-wrap" style="list-style: none; ">
+                            <ul class="d-flex flex-wrap md-flex-column" style="list-style: none; ">
                                 <li
                                     style="background: #FFF;
                                     padding: 3px 18px;
@@ -109,7 +109,7 @@
 
                             <hr>
 
-                            <div class="w-100 d-flex justify-content-between">
+                            <div class="w-100 d-flex justify-content-between md-flex-column">
                                 <div class="d-flex align-items-center">
                                     <select class="h-100" name="type_post"
                                         style="
@@ -145,7 +145,7 @@
                                     ">
                                         <option value="My Profile">My Profile</option>
                                     </select>
-                                    <button type="submit" class="btn btn-primary ml-3"
+                                    <button type="submit" class="btn btn-primary btn-submit ml-3"
                                         style="border-radius: 100px; outline: none;"
                                     @guest
                                         disabled
@@ -374,7 +374,7 @@
                                             <div class="form-group" style="display: flex;">
                                                 <textarea class="form-control" id="comment" name="comment" placeholder="Write your comment here" rows="3"
                                                     style="flex: 1;"></textarea>
-                                                <button type="submit" class="btn btn-primary">Comment</button>
+                                                <button type="submit" class="btn btn-primary btn-submit">Comment</button>
                                             </div>
                                         </form>
                                     </div>
@@ -467,6 +467,17 @@
     <style>
         #search-tag span.select2.select2-container {
             width: 100% !important;
+        }
+        
+        @media(max-width: 768px) {
+            .md-flex-column {
+                gap: 5px;
+                flex-direction: column;
+            }
+
+            .btn-submit {
+                padding: 5px 10px;
+            }
         }
     </style>
 @endpush

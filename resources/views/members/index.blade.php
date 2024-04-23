@@ -17,7 +17,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12" style="background: #f5f5f5; padding: 0 20px;">
-                    <div class="w-100 mt-3 d-flex" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                    <div class="member-box">
                         <div class="label-member">
                             <a class="m-0" href="{{ route('member.index')}}">
                                 <i class="fa fa-globe mr-2"></i>
@@ -26,14 +26,14 @@
                             </a>
                         </div>
                         @auth
-                        <div class="ml-3 label-member">
+                        <div class="label-member">
                             <a class="m-0" href="{{ route('member.index', ['type' => 'follower'])}}">
                                 <i class="fa fa-users mr-2"></i>
                                 Followers
                                 <span class="badge badge-primary">{{ $followerCount }}</span>
                             </a>
                         </div>
-                        <div class="ml-3 label-member">
+                        <div class="label-member">
                             <a class="m-0" href="{{ route('member.index', ['type' => 'following'])}}">
                                 <i class="fa fa-user-plus mr-2"></i>
                                 Following 
@@ -41,7 +41,7 @@
                             </a>
                         </div>
                         @endauth
-                        <div class="ml-3 label-member">
+                        <div class="label-member label-search">
                             <form action="{{ route('member.index') }}" class="form-search-member">
                                 <input type="text" name="search" placeholder="search">
                                 <button type="submit"><i class="fa fa-search"></i></button>
@@ -113,6 +113,13 @@
 @endsection
 @push('css')
 <style>
+    .member-box {
+        display: flex;
+        background: #FFF;
+        border-radius: 8px;
+        padding: 23px 35px;
+        gap: 5px;
+    }
     .label-member {
        background-color: #f5f5f5;
        padding: 10px;
@@ -156,6 +163,19 @@
         content: "";
         clear: both;
         display: table;
+    }
+
+    @media(max-width: 768px) {
+        .member-box {
+            flex-direction: column;
+        }
+        .label-member {
+            width: 100%;
+        }
+
+        .label-member form {
+            width: 100%;
+        }
     }
 </style>
 @endpush
