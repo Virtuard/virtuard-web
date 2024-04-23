@@ -408,16 +408,27 @@
                             <p class="m-0">
                                 <i class="fa fa-globe mr-2"></i>
                                 All Members
-                                <span class="badge badge-primary">{{ $userCount }}</span>
+                                <span class="badge badge-primary">{{ $memberCount }}</span>
                             </p>
                         </div>
                     </div>
+                    @auth
                     <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
                             <p class="m-0">
-                                <i class="fa fa-signal mr-2"></i>
+                                <i class="fa fa-users mr-2"></i>
+                                Followers
+                                <span class="badge badge-primary">{{ $followerCount }}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="mx-4">
+                    <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                        <div>
+                            <p class="m-0">
+                                <i class="fa fa-user-plus mr-2"></i>
                                 Following
-                                <span class="badge badge-primary">0</span>
+                                <span class="badge badge-primary">{{ $followingCount }}</span>
                             </p>
                         </div>
                     </div>
@@ -440,6 +451,7 @@
                             </p>
                         </div>
                     </div>
+                    @endauth
                 </div>
             </div>
         </div>

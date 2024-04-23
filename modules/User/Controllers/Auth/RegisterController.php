@@ -89,6 +89,9 @@
                     'status'    => $request->input('publish','publish'),
                     'phone'    => $request->input('phone'),
                 ]);
+
+                $user->assignRole(setting_item('user_role'));
+                
                 event(new Registered($user));
                 Auth::loginUsingId($user->id);
                 try {
@@ -97,10 +100,6 @@
 
                     Log::warning("SendMailUserRegistered: " . $exception->getMessage());
                 }
-
-                $role = setting_item('user_role');
-                if(setting_item('enable_vendor_role_registered')) $role = setting_item('vendor_role');
-                $user->assignRole($role);
                 
                 return response()->json([
                     'error'    => false,

@@ -47,12 +47,24 @@ class FollowBoardsController extends Controller
         ->with(['ipanorama', 'medias', 'likes', 'comments'])
         ->orderBy('id', 'desc')
         ->get();
-        $userCount = User::count();
+        $memberCount = User::where('role_id', '!=', '1')->count();
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
         $dataFeedMe = Story::where('user_id', $idUser)->get();
 
-        return view('boards.index', compact('userCount', 'dataFeedMe', 'posts', 'dataIpanorama'));
+        $data = [
+            'posts' => $posts,
+            'memberCount' => $memberCount,
+            'dataIpanorama' => $dataIpanorama,
+            'dataFeedMe' => $dataFeedMe,
+        ];
+
+        if (auth()->check()) {
+            $data['followerCount'] = auth()->user()->followers->count();
+            $data['followingCount'] = auth()->user()->followings->count();
+        }
+
+        return view('boards.index', $data);
     }
 
     public function store(Request $request)
