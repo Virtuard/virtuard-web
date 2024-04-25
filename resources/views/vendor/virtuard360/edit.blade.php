@@ -108,7 +108,7 @@
 @endsection
 @push('js')
         <script>
-            @if (Auth::check() && Auth::user()->is_tour != 1)
+            function load360Tutorial(){
                 const tour = new Shepherd.Tour({
                     defaultStepOptions: {
                         cancelIcon: {
@@ -213,7 +213,7 @@
                         },
                         {
                             action() {
-                                updateIsTourField();
+                                // updateIsTourField();
                                 return this.complete();
                             },
                             text: 'Done'
@@ -223,7 +223,7 @@
                 });
 
                 tour.start();
-            @endif
+            }
 
             function updateIsTourField() {
                 const csrfToken = $('meta[name="csrf-token"]').attr('content');
@@ -245,6 +245,10 @@
                     }
                 });
             }
+
+            @if(request()->has('id'))
+                load360Tutorial();
+            @endif
         </script>
         <script>
             $(function() {

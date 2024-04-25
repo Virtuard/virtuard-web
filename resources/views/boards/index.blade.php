@@ -278,13 +278,15 @@
                                         @foreach ($comments as $comment)
                                             <div style="display: flex; align-items: center;">
                                                 <img class="mr-4"
-                                                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                                    src="{{ $comment->user->getAvatarUrl() }}"
                                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                                     alt="">
                                                 <div>
+                                                    <a href="{{ route('user.profile', $comment->user_id) }}">
                                                     <p class="m-0" style="font-weight: 600;">
                                                         {{ $comment->user->name }}
                                                     </p>
+                                                    </a>
                                                     <p class="m-0"
                                                         style="font-size: 0.7rem; font-weight: 500; color: #9b9b9b;">
                                                         {{ $comment->created_at->diffForHumans() }}
@@ -405,31 +407,31 @@
                 <div class="col-md-3" style="background: #f5f5f5; padding: 0 20px;">
                     <div class="w-100" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
-                            <p class="m-0">
+                            <a class="m-0" href="{{ route('member.index')}}">
                                 <i class="fa fa-globe mr-2"></i>
                                 All Members
                                 <span class="badge badge-primary">{{ $memberCount }}</span>
-                            </p>
+                            </a>
                         </div>
                     </div>
                     @auth
                     <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
-                            <p class="m-0">
+                            <a class="m-0" href="{{ route('member.index', ['type' => 'follower'])}}">
                                 <i class="fa fa-users mr-2"></i>
                                 Followers
                                 <span class="badge badge-primary">{{ $followerCount }}</span>
-                            </p>
+                            </a>
                         </div>
                     </div>
                     <hr class="mx-4">
                     <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
-                            <p class="m-0">
+                            <a class="m-0" href="{{ route('member.index', ['type' => 'following'])}}">
                                 <i class="fa fa-user-plus mr-2"></i>
                                 Following
                                 <span class="badge badge-primary">{{ $followingCount }}</span>
-                            </p>
+                            </a>
                         </div>
                     </div>
                     <hr class="mx-4">
