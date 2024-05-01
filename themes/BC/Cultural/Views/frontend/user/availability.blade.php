@@ -42,7 +42,7 @@
             </div>
         </div>
     @else
-        <div class="alert alert-warning">{{__("No events found")}}</div>
+        <div class="alert alert-warning">{{__("No culturals found")}}</div>
     @endif
     <div class="d-flex justify-content-center">
         {{$rows->appends($request->query())->links()}}

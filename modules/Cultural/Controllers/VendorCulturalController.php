@@ -18,6 +18,7 @@ use Modules\Location\Models\LocationCategory;
 use Modules\User\Models\Plan;
 use App\Models\RefIpanorama;
 use App\Models\RefRelationIpanorama;
+use Modules\Cultural\Models\CulturalCategory;
 
 class VendorCulturalController extends FrontendController
 {
@@ -27,6 +28,7 @@ class VendorCulturalController extends FrontendController
     protected $attributesClass;
     protected $locationClass;
     protected $bookingClass;
+    protected $culturalCategoryClass;
     /**
      * @var string
      */
@@ -42,6 +44,7 @@ class VendorCulturalController extends FrontendController
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
         $this->bookingClass = Booking::class;
+        $this->culturalCategoryClass = CulturalCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -105,7 +108,7 @@ class VendorCulturalController extends FrontendController
         if(!empty($query)){
             $query->restore();
         }
-        return redirect(route('cultural.vendor.recovery'))->with('success', __('Restore event success!'));
+        return redirect(route('cultural.vendor.recovery'))->with('success', __('Restore cultural success!'));
     }
 
     public function createCultural(Request $request)
@@ -120,6 +123,7 @@ class VendorCulturalController extends FrontendController
         $data = [
             'row'           => $row,
             'translation' => new $this->culturalTranslationClass(),
+            'cultural_category'     => $this->culturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'cultural_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'cultural')->get(),
@@ -172,6 +176,7 @@ class VendorCulturalController extends FrontendController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
@@ -219,7 +224,7 @@ class VendorCulturalController extends FrontendController
                     $ipanoramaInpNew->save();
                 }
 
-                return back()->with('success',  __('Event updated') );
+                return back()->with('success',  __('Cultural updated') );
             }else{
                 event(new CreatedServicesEvent($row));
 
@@ -228,7 +233,7 @@ class VendorCulturalController extends FrontendController
                 $ipanoramaInp->slug = $row->slug;
                 $ipanoramaInp->save();
 
-                return redirect(route('cultural.vendor.edit',['id'=>$row->id]))->with('success', __('Event created') );
+                return redirect(route('cultural.vendor.edit',['id'=>$row->id]))->with('success', __('Cultural created') );
             }
         }
     }
@@ -260,15 +265,16 @@ class VendorCulturalController extends FrontendController
         $row = $this->culturalClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
-            return redirect(route('cultural.vendor.index'))->with('warning', __('Event not found!'));
+            return redirect(route('cultural.vendor.index'))->with('warning', __('Cultural not found!'));
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
             'translation'    => $translation,
             'row'           => $row,
+            'cultural_category'     => $this->culturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'cultural_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
-            'attributes'    => $this->attributesClass::where('service', 'event')->get(),
+            'attributes'    => $this->attributesClass::where('service', 'cultural')->get(),
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [
@@ -303,7 +309,7 @@ class VendorCulturalController extends FrontendController
                 event(new UpdatedServiceEvent($query));
             }
         }
-        return redirect(route('cultural.vendor.index'))->with('success', __('Delete event success!'));
+        return redirect(route('cultural.vendor.index'))->with('success', __('Delete cultural success!'));
     }
 
     public function bulkEditCultural($id , Request $request){

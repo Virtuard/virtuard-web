@@ -24,6 +24,7 @@ use App\Models\RefRelationIpanorama;
 use App\Models\CategoryProduct;
 use App\Models\SubscribeVirtuard;
 use App\Models\ProductCategory;
+use Modules\Cultural\Models\CulturalCategory;
 
 class CulturalController extends AdminController
 {
@@ -32,6 +33,7 @@ class CulturalController extends AdminController
     protected $cultural_term;
     protected $attributes;
     protected $location;
+    protected $culturalCategoryClass;
     private $locationCategoryClass;
 
     public function __construct(Cultural $cultural, CulturalTranslation $cultural_translation, CulturalTerm $cultural_term, Attributes $attributes, Location $location,LocationCategory $locationCategoryClass)
@@ -43,6 +45,7 @@ class CulturalController extends AdminController
         $this->attributes = $attributes;
         $this->location = $location;
         $this->locationCategoryClass = $locationCategoryClass;
+        $this->culturalCategoryClass = CulturalCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -143,6 +146,7 @@ class CulturalController extends AdminController
         $data = [
             'row'               => $row,
             'attributes'        => $this->attributes::where('service', 'cultural')->get(),
+            'cultural_category'     => $this->culturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'cultural_location'    => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'translation'       => new $this->cultural_translation(),
@@ -156,10 +160,11 @@ class CulturalController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'        => __("Add new Cultural")
+            'page_title'        => __("Add new Cultural"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        // return view('Cultural::admin.detail', $data);
-        return view('Cultural::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'location_category' => $data['location_category'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'cultural_location' => $data['cultural_location'], 'categories' => $categories, ]);
+        return view('Cultural::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -184,6 +189,7 @@ class CulturalController extends AdminController
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),
             'attributes'        => $this->attributes::where('service', 'cultural')->get(),
+            'cultural_category'     => $this->culturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'cultural_location'    => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'enable_multi_lang' => true,
@@ -197,10 +203,11 @@ class CulturalController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'        => __("Edit: :name", ['name' => $row->title])
+            'page_title'        => __("Edit: :name", ['name' => $row->title]),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        // return view('Cultural::admin.detail', $data);
-        return view('Cultural::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'selected_terms' => $data['selected_terms'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'cultural_location' => $data['cultural_location'], 'location_category' => $data['location_category'], 'enable_multi_lang' => $data['enable_multi_lang'] ]);
+        return view('Cultural::admin.detail', $data);
     }
 
     public function store(Request $request, $id)
@@ -231,6 +238,7 @@ class CulturalController extends AdminController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',

@@ -108,7 +108,7 @@ class VendorNaturalController extends FrontendController
         if(!empty($query)){
             $query->restore();
         }
-        return redirect(route('natural.vendor.recovery'))->with('success', __('Restore event success!'));
+        return redirect(route('natural.vendor.recovery'))->with('success', __('Restore natural success!'));
     }
 
     public function createNatural(Request $request)
@@ -224,7 +224,7 @@ class VendorNaturalController extends FrontendController
                     $ipanoramaInpNew->save();
                 }
 
-                return back()->with('success',  __('Event updated') );
+                return back()->with('success',  __('Natural updated') );
             }else{
                 event(new CreatedServicesEvent($row));
 
@@ -233,7 +233,7 @@ class VendorNaturalController extends FrontendController
                 $ipanoramaInp->slug = $row->slug;
                 $ipanoramaInp->save();
 
-                return redirect(route('natural.vendor.edit',['id'=>$row->id]))->with('success', __('Event created') );
+                return redirect(route('natural.vendor.edit',['id'=>$row->id]))->with('success', __('Natural created') );
             }
         }
     }
@@ -265,7 +265,7 @@ class VendorNaturalController extends FrontendController
         $row = $this->naturalClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
-            return redirect(route('natural.vendor.index'))->with('warning', __('Event not found!'));
+            return redirect(route('natural.vendor.index'))->with('warning', __('Natural not found!'));
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
@@ -309,7 +309,7 @@ class VendorNaturalController extends FrontendController
                 event(new UpdatedServiceEvent($query));
             }
         }
-        return redirect(route('natural.vendor.index'))->with('success', __('Delete event success!'));
+        return redirect(route('natural.vendor.index'))->with('success', __('Delete natural success!'));
     }
 
     public function bulkEditNatural($id , Request $request){

@@ -4,7 +4,7 @@
     @php $services  = []; @endphp
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb20">
-            <h1 class="title-bar">{{__("Events Availability Calendar")}}</h1>
+            <h1 class="title-bar">{{__("Culturals Availability Calendar")}}</h1>
         </div>
         @include('admin.message')
         <div class="panel">
@@ -18,7 +18,7 @@
                     </div>
                     <div class="col-right">
                         @if($rows->total() > 0)
-                            <span class="count-string">{{ __("Showing :from - :to of :total events",["from"=>$rows->firstItem(),"to"=>$rows->lastItem(),"total"=>$rows->total()]) }}</span>
+                            <span class="count-string">{{ __("Showing :from - :to of :total culturals",["from"=>$rows->firstItem(),"to"=>$rows->lastItem(),"total"=>$rows->total()]) }}</span>
                         @endif
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                 </div>
             </div>
         @else
-            <div class="alert alert-warning">{{__("No events found")}}</div>
+            <div class="alert alert-warning">{{__("No culturals found")}}</div>
         @endif
         <div class="d-flex justify-content-center">
             {{$rows->appends($request->query())->links()}}
@@ -162,7 +162,7 @@
                 defaultView: 'dayGridMonth',
                 firstDay: daterangepickerLocale.first_day_of_week,
                 events:{
-                    url:"{{route('event.admin.availability.loadDates')}}",
+                    url:"{{route('cultural.admin.availability.loadDates')}}",
                     extraParams:{
                         id:lastId,
                     }
