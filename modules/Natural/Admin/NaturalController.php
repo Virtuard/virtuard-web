@@ -24,6 +24,7 @@ use App\Models\CategoryProduct;
 use App\Models\SubscribeVirtuard;
 use App\Models\ProductCategory;
 use Modules\Natural\Models\Natural;
+use Modules\Natural\Models\NaturalCategory;
 
 class NaturalController extends AdminController
 {
@@ -32,6 +33,7 @@ class NaturalController extends AdminController
     protected $natural_term;
     protected $attributes;
     protected $location;
+    protected $naturalCategoryClass;
     private $locationCategoryClass;
 
     public function __construct(Natural $natural, NaturalTranslation $natural_translation, NaturalTerm $natural_term, Attributes $attributes, Location $location,LocationCategory $locationCategoryClass)
@@ -43,6 +45,7 @@ class NaturalController extends AdminController
         $this->attributes = $attributes;
         $this->location = $location;
         $this->locationCategoryClass = $locationCategoryClass;
+        $this->naturalCategoryClass = NaturalCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -144,6 +147,7 @@ class NaturalController extends AdminController
             'row'               => $row,
             'attributes'        => $this->attributes::where('service', 'natural')->get(),
             'natural_location'    => $this->location::where('status', 'publish')->get()->toTree(),
+            'natural_category'     => $this->naturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'translation'       => new $this->natural_translation(),
             'breadcrumbs'       => [
@@ -156,10 +160,12 @@ class NaturalController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'        => __("Add new Natural")
+            'page_title'        => __("Add new Natural"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
+            'categories' => $categories,
         ];
-        // return view('Natural::admin.detail', $data);
-        return view('Natural::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'location_category' => $data['location_category'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'natural_location' => $data['natural_location'], 'categories' => $categories, ]);
+        return view('Natural::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -184,6 +190,7 @@ class NaturalController extends AdminController
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),
             'attributes'        => $this->attributes::where('service', 'natural')->get(),
+            'natural_category'     => $this->naturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'natural_location'    => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'enable_multi_lang' => true,

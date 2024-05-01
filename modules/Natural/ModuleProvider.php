@@ -58,6 +58,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Natural'),
                         'permission' => 'natural_create',
                     ],
+                    'category'=>[
+                        'url'        => route('natural.admin.category.index'),
+                        'title'      => __('Categories'),
+                        'permission' => 'natural_manage_others',
+                    ],
                     'attribute'=>[
                         'url'        => route('natural.admin.attribute.index'),
                         'title'      => __('Attributes'),

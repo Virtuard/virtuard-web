@@ -1526,3 +1526,16 @@ if (!function_exists('is_following')) {
         return $data;
     }
 }
+
+if (!function_exists('hide_submenu_setting')) {
+    function hide_submenu_setting() {
+        $data = [
+            'flight',
+            'car',
+            'event',
+            'tour',
+        ];
+
+        return $data;
+    }
+}

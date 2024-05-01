@@ -268,7 +268,7 @@ class VendorArtController extends FrontendController
             'row'           => $row,
             'art_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
-            'attributes'    => $this->attributesClass::where('service', 'event')->get(),
+            'attributes'    => $this->attributesClass::where('service', 'art')->get(),
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [

@@ -18,6 +18,7 @@ use Modules\Location\Models\LocationCategory;
 use Modules\User\Models\Plan;
 use App\Models\RefIpanorama;
 use App\Models\RefRelationIpanorama;
+use Modules\Natural\Models\NaturalCategory;
 
 class VendorNaturalController extends FrontendController
 {
@@ -27,6 +28,7 @@ class VendorNaturalController extends FrontendController
     protected $attributesClass;
     protected $locationClass;
     protected $bookingClass;
+    protected $naturalCategoryClass;
     /**
      * @var string
      */
@@ -42,6 +44,7 @@ class VendorNaturalController extends FrontendController
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
         $this->bookingClass = Booking::class;
+        $this->naturalCategoryClass = NaturalCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -120,6 +123,7 @@ class VendorNaturalController extends FrontendController
         $data = [
             'row'           => $row,
             'translation' => new $this->naturalTranslationClass(),
+            'natural_category'     => $this->naturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'natural_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'natural')->get(),
@@ -172,6 +176,7 @@ class VendorNaturalController extends FrontendController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
@@ -266,9 +271,10 @@ class VendorNaturalController extends FrontendController
         $data = [
             'translation'    => $translation,
             'row'           => $row,
+            'natural_category'     => $this->naturalCategoryClass::where('status', 'publish')->get()->toTree(),
             'natural_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
-            'attributes'    => $this->attributesClass::where('service', 'event')->get(),
+            'attributes'    => $this->attributesClass::where('service', 'natural')->get(),
             "selected_terms" => $row->terms->pluck('term_id'),
             'breadcrumbs'        => [
                 [

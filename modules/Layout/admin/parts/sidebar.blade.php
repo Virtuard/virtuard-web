@@ -209,6 +209,11 @@ if (!empty($menus)){
                 <span class="btn-toggle"><i class="fa fa-angle-left pull-right"></i></span>
                 <ul class="children">
                     @foreach($menuItem['children'] as $menuItem2)
+                        @if($menuItem['title'] == 'Setting')
+                            @if(in_array($menuItem2['id'], hide_submenu_setting()))
+                                @continue
+                            @endif
+                        @endif
                         <li class="{{$menuItem['class']}}"><a href="{{ url($menuItem2['url']) }}">
                                 @if(!empty($menuItem2['icon']))
                                     <i class="{{$menuItem2['icon']}}"></i>
