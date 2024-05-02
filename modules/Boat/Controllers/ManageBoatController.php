@@ -19,6 +19,7 @@ use Modules\User\Models\Plan;
 use App\Models\RefIpanorama;
 use App\Models\RefRelationIpanorama;
 use App\Models\ProductCategory;
+use Modules\Boat\Models\BoatCategory;
 
 class ManageBoatController extends FrontendController
 {
@@ -29,6 +30,7 @@ class ManageBoatController extends FrontendController
     protected $locationClass;
     protected $bookingClass;
     protected $enquiryClass;
+    protected $boatCategoryClass;
 
     public function __construct(Boat $boatClass, BoatTranslation $boatTranslationClass, BoatTerm $boatTermClass, Attributes $attributesClass, Location $locationClass, Booking $bookingClass, Enquiry $enquiryClass)
     {
@@ -40,6 +42,7 @@ class ManageBoatController extends FrontendController
         $this->locationClass = $locationClass;
         $this->bookingClass = $bookingClass;
         $this->enquiryClass = $enquiryClass;
+        $this->boatCategoryClass = BoatCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -122,6 +125,7 @@ class ManageBoatController extends FrontendController
         $data = [
             'row'           => $row,
             'translation' => new $this->boatTranslationClass(),
+            'boat_category'     => $this->boatCategoryClass::where('status', 'publish')->get()->toTree(),
             'boat_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'attributes'    => $this->attributesClass::where('service', 'boat')->get(),
             'breadcrumbs'        => [
@@ -172,6 +176,7 @@ class ManageBoatController extends FrontendController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
@@ -272,6 +277,7 @@ class ManageBoatController extends FrontendController
         $data = [
             'translation'    => $translation,
             'row'           => $row,
+            'boat_category'     => $this->boatCategoryClass::where('status', 'publish')->get()->toTree(),
             'boat_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'attributes'    => $this->attributesClass::where('service', 'boat')->get(),
             "selected_terms" => $row->terms->pluck('term_id'),

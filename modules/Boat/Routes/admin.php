@@ -8,6 +8,12 @@ Route::post('/bulkEdit','BoatController@bulkEdit')->name('boat.admin.bulkEdit');
 Route::get('/recovery','BoatController@recovery')->name('boat.admin.recovery');
 Route::get('/getForSelect2','BoatController@getForSelect2')->name('boat.admin.getForSelect2');
 
+Route::get('/category','CategoryController@index')->name('boat.admin.category.index');
+Route::get('/category/edit/{id}','CategoryController@edit')->name('boat.admin.category.edit');
+Route::post('/category/store/{id}','CategoryController@store')->name('boat.admin.category.store');
+Route::get('/category/getForSelect2','CategoryController@getForSelect2')->name('boat.admin.category.category.getForSelect2');
+Route::post('/category/bulkEdit','CategoryController@bulkEdit')->name('boat.admin.category.bulkEdit');
+
 Route::group(['prefix'=>'attribute'],function (){
     Route::get('/','AttributeController@index')->name('boat.admin.attribute.index');
     Route::get('/edit/{id}','AttributeController@edit')->name('boat.admin.attribute.edit');

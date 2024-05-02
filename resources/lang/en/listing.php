@@ -42,6 +42,8 @@ return [
         'add_new' => 'Add New Vehicle',
         'no' => 'No Vehicle',
         'content' => 'Vehicle Content',
+        'categories' => 'Vehicle Categories',
+        'category' => 'Vehicle Category',
     ],
     'natural' => [
         'title' => 'Natural and Landscape',

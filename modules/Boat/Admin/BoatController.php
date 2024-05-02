@@ -23,6 +23,7 @@ use App\Models\ProductCategory;
 use App\Models\RefIpanorama;
 use App\Models\RefRelationIpanorama;
 use App\Models\SubscribeVirtuard;
+use Modules\Boat\Models\BoatCategory;
 
 class BoatController extends AdminController
 {
@@ -31,6 +32,7 @@ class BoatController extends AdminController
     protected $boat_term;
     protected $attributes;
     protected $location;
+    protected $boatCategoryClass;
 
     public function __construct(Boat $boat,BoatTranslation $boat_translation,BoatTerm $boat_term,Attributes $attributes, Location $location)
     {
@@ -40,6 +42,7 @@ class BoatController extends AdminController
         $this->boat_term = $boat_term;
         $this->attributes = $attributes;
         $this->location = $location;
+        $this->boatCategoryClass = BoatCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -139,6 +142,7 @@ class BoatController extends AdminController
         $data = [
             'row'          => $row,
             'attributes'   => $this->attributes::where('service', 'boat')->get(),
+            'boat_category'     => $this->boatCategoryClass::where('status', 'publish')->get()->toTree(),
             'boat_location' => $this->location::where('status', 'publish')->get()->toTree(),
             'translation'  => new $this->boat_translation(),
             'breadcrumbs'  => [
@@ -151,10 +155,11 @@ class BoatController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'   => __("Add new Boat")
+            'page_title'   => __("Add new Boat"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        // return view('Boat::admin.detail', $data);
-        return view('Boat::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'boat_location' => $data['boat_location'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'categories' => $categories, ]);
+        return view('Boat::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -178,6 +183,7 @@ class BoatController extends AdminController
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),
             'attributes'        => $this->attributes::where('service', 'boat')->get(),
+            'boat_category'     => $this->boatCategoryClass::where('status', 'publish')->get()->toTree(),
             'boat_location'      => $this->location::where('status', 'publish')->get()->toTree(),
             'enable_multi_lang' => true,
             'breadcrumbs'       => [
@@ -190,10 +196,11 @@ class BoatController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'        => __("Edit: :name", ['name' => $row->title])
+            'page_title'        => __("Edit: :name", ['name' => $row->title]),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
-        // return view('Boat::admin.detail', $data);
-        return view('Boat::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'selected_terms' => $data['selected_terms'], 'attributes' => $data['attributes'], 'boat_location' => $data['boat_location'], 'breadcrumbs' => $data['breadcrumbs'], 'enable_multi_lang' => $data['enable_multi_lang'], 'page_title' => $data['page_title'] ]);
+        return view('Boat::admin.detail', $data);
     }
 
     public function store(Request $request, $id)
@@ -223,6 +230,7 @@ class BoatController extends AdminController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',

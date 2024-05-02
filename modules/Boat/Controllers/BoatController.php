@@ -137,7 +137,6 @@ class BoatController extends Controller
             'class' => 'active'
         ];
         $this->setActiveMenu($row);
-        // return view('Boat::frontend.detail', $data);
-        return view('Boat::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'boat_related' => $data['boat_related'], 'ipanorama' => $data['ipanorama'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Boat::frontend.detail', $data);
     }
 }
