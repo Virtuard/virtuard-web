@@ -2,7 +2,7 @@
 
 @section ('content')
     <h2 class="title-bar no-border-bottom">
-        {{ __("Availability Events") }}
+        {{ __("Availability Arts") }}
     </h2>
     <div class="language-navigation">
         <div class="panel-body">
@@ -42,7 +42,7 @@
             </div>
         </div>
     @else
-        <div class="alert alert-warning">{{__("No events found")}}</div>
+        <div class="alert alert-warning">{{__("No arts found")}}</div>
     @endif
     <div class="d-flex justify-content-center">
         {{$rows->appends($request->query())->links()}}

@@ -9,6 +9,11 @@ Route::get('/recovery','ArtController@recovery')->name('art.admin.recovery');
 Route::get('/getForSelect2','ArtController@getForSelect2')->name('art.admin.getForSelect2');
 Route::get('/getForSelect2','ArtController@getForSelect2')->name('art.admin.getForSelect2');
 
+Route::get('/category','CategoryController@index')->name('art.admin.category.index');
+Route::get('/category/edit/{id}','CategoryController@edit')->name('art.admin.category.edit');
+Route::post('/category/store/{id}','CategoryController@store')->name('art.admin.category.store');
+Route::get('/category/getForSelect2','CategoryController@getForSelect2')->name('art.admin.category.category.getForSelect2');
+Route::post('/category/bulkEdit','CategoryController@bulkEdit')->name('art.admin.category.bulkEdit');
 
 Route::group(['prefix'=>'attribute'],function (){
     Route::get('/','AttributeController@index')->name('art.admin.attribute.index');

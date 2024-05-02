@@ -47,7 +47,7 @@ class CategoryController extends AdminController
         $this->checkPermission('cultural_manage_others');
         $row = $this->culturalCategoryClass::find($id);
         if (empty($row)) {
-            return redirect(route('tour.admin.category.index'));
+            return redirect(route('cultural.admin.category.index'));
         }
         $translation = $row->translate($request->query('lang',get_main_lang()));
         $data = [
@@ -57,8 +57,8 @@ class CategoryController extends AdminController
             'parents'     => $this->culturalCategoryClass::get()->toTree(),
             'breadcrumbs' => [
                 [
-                    'name' => __('Tour'),
-                    'url'  => route('tour.admin.index')
+                    'name' => __('Cultural'),
+                    'url'  => route('cultural.admin.index')
                 ],
                 [
                     'name'  => __('Category'),
@@ -66,7 +66,7 @@ class CategoryController extends AdminController
                 ],
             ]
         ];
-        return view('Tour::admin.category.detail', $data);
+        return view('Cultural::admin.category.detail', $data);
     }
 
     public function store(Request $request , $id)
@@ -78,7 +78,7 @@ class CategoryController extends AdminController
         if($id>0){
             $row = $this->culturalCategoryClass::find($id);
             if (empty($row)) {
-                return redirect(route('tour.admin.category.index'));
+                return redirect(route('cultural.admin.category.index'));
             }
         }else{
             $row = new $this->culturalCategoryClass();

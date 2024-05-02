@@ -18,6 +18,7 @@ use Modules\Location\Models\LocationCategory;
 use Modules\User\Models\Plan;
 use App\Models\RefIpanorama;
 use App\Models\RefRelationIpanorama;
+use Modules\Art\Models\ArtCategory;
 
 class VendorArtController extends FrontendController
 {
@@ -27,6 +28,7 @@ class VendorArtController extends FrontendController
     protected $attributesClass;
     protected $locationClass;
     protected $bookingClass;
+    protected $artCategoryClass;
     /**
      * @var string
      */
@@ -42,6 +44,7 @@ class VendorArtController extends FrontendController
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
         $this->bookingClass = Booking::class;
+        $this->artCategoryClass = ArtCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -105,7 +108,7 @@ class VendorArtController extends FrontendController
         if(!empty($query)){
             $query->restore();
         }
-        return redirect(route('art.vendor.recovery'))->with('success', __('Restore event success!'));
+        return redirect(route('art.vendor.recovery'))->with('success', __('Restore art success!'));
     }
 
     public function createArt(Request $request)
@@ -121,6 +124,7 @@ class VendorArtController extends FrontendController
             'row'           => $row,
             'translation' => new $this->artTranslationClass(),
             'art_location' => $this->locationClass::where("status","publish")->get()->toTree(),
+            'art_category'     => $this->artCategoryClass::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'art')->get(),
             'breadcrumbs'        => [
@@ -172,6 +176,7 @@ class VendorArtController extends FrontendController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
@@ -219,7 +224,7 @@ class VendorArtController extends FrontendController
                     $ipanoramaInpNew->save();
                 }
 
-                return back()->with('success',  __('Event updated') );
+                return back()->with('success',  __('Art updated') );
             }else{
                 event(new CreatedServicesEvent($row));
 
@@ -228,7 +233,7 @@ class VendorArtController extends FrontendController
                 $ipanoramaInp->slug = $row->slug;
                 $ipanoramaInp->save();
 
-                return redirect(route('art.vendor.edit',['id'=>$row->id]))->with('success', __('Event created') );
+                return redirect(route('art.vendor.edit',['id'=>$row->id]))->with('success', __('Art created') );
             }
         }
     }
@@ -260,13 +265,14 @@ class VendorArtController extends FrontendController
         $row = $this->artClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
-            return redirect(route('art.vendor.index'))->with('warning', __('Event not found!'));
+            return redirect(route('art.vendor.index'))->with('warning', __('Art not found!'));
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
             'translation'    => $translation,
             'row'           => $row,
             'art_location' => $this->locationClass::where("status","publish")->get()->toTree(),
+            'art_category'     => $this->artCategoryClass::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'art')->get(),
             "selected_terms" => $row->terms->pluck('term_id'),
@@ -303,7 +309,7 @@ class VendorArtController extends FrontendController
                 event(new UpdatedServiceEvent($query));
             }
         }
-        return redirect(route('art.vendor.index'))->with('success', __('Delete event success!'));
+        return redirect(route('art.vendor.index'))->with('success', __('Delete art success!'));
     }
 
     public function bulkEditArt($id , Request $request){

@@ -1,37 +1,37 @@
 <?php
-namespace Modules\Natural\Admin;
+namespace Modules\Art\Admin;
 
 use Illuminate\Http\Request;
 use Modules\AdminController;
-use Modules\Natural\Hook;
-use Modules\Natural\Models\NaturalCategory;
-use Modules\Natural\Models\NaturalCategoryTranslation;
+use Modules\Art\Hook;
+use Modules\Art\Models\ArtCategory;
+use Modules\Art\Models\ArtCategoryTranslation;
 
 class CategoryController extends AdminController
 {
-    protected $naturalCategoryClass;
+    protected $artCategoryClass;
     public function __construct()
     {
-        $this->setActiveMenu(route('natural.admin.index'));
-        $this->naturalCategoryClass = NaturalCategory::class;
+        $this->setActiveMenu(route('art.admin.index'));
+        $this->artCategoryClass = ArtCategory::class;
     }
 
     public function index(Request $request)
     {
-        $this->checkPermission('natural_manage_others');
-        $listCategory = $this->naturalCategoryClass::query();
+        $this->checkPermission('art_manage_others');
+        $listCategory = $this->artCategoryClass::query();
         if (!empty($search = $request->query('s'))) {
             $listCategory->where('name', 'LIKE', '%' . $search . '%');
         }
         $listCategory->orderBy('created_at', 'desc');
         $data = [
             'rows'        => $listCategory->get()->toTree(),
-            'row'         => new $this->naturalCategoryClass(),
-            'translation'    => new NaturalCategoryTranslation(),
+            'row'         => new $this->artCategoryClass(),
+            'translation'    => new ArtCategoryTranslation(),
             'breadcrumbs' => [
                 [
-                    'name' => __('Natural'),
-                    'url'  => route('natural.admin.index')
+                    'name' => __('Art'),
+                    'url'  => route('art.admin.index')
                 ],
                 [
                     'name'  => __('Category'),
@@ -39,26 +39,26 @@ class CategoryController extends AdminController
                 ],
             ]
         ];
-        return view('Natural::admin.category.index', $data);
+        return view('Art::admin.category.index', $data);
     }
 
     public function edit(Request $request, $id)
     {
-        $this->checkPermission('natural_manage_others');
-        $row = $this->naturalCategoryClass::find($id);
+        $this->checkPermission('art_manage_others');
+        $row = $this->artCategoryClass::find($id);
         if (empty($row)) {
-            return redirect(route('natural.admin.category.index'));
+            return redirect(route('art.admin.category.index'));
         }
         $translation = $row->translate($request->query('lang',get_main_lang()));
         $data = [
             'translation'    => $translation,
             'enable_multi_lang'=>true,
             'row'         => $row,
-            'parents'     => $this->naturalCategoryClass::get()->toTree(),
+            'parents'     => $this->artCategoryClass::get()->toTree(),
             'breadcrumbs' => [
                 [
-                    'name' => __('Natural'),
-                    'url'  => route('natural.admin.index')
+                    'name' => __('Art'),
+                    'url'  => route('art.admin.index')
                 ],
                 [
                     'name'  => __('Category'),
@@ -66,22 +66,22 @@ class CategoryController extends AdminController
                 ],
             ]
         ];
-        return view('Natural::admin.category.detail', $data);
+        return view('Art::admin.category.detail', $data);
     }
 
     public function store(Request $request , $id)
     {
-        $this->checkPermission('natural_manage_others');
+        $this->checkPermission('art_manage_others');
         $this->validate($request, [
             'name' => 'required'
         ]);
         if($id>0){
-            $row = $this->naturalCategoryClass::find($id);
+            $row = $this->artCategoryClass::find($id);
             if (empty($row)) {
-                return redirect(route('natural.admin.category.index'));
+                return redirect(route('art.admin.category.index'));
             }
         }else{
-            $row = new $this->naturalCategoryClass();
+            $row = new $this->artCategoryClass();
             $row->status = "publish";
         }
 
@@ -96,7 +96,7 @@ class CategoryController extends AdminController
 
     public function bulkEdit(Request $request)
     {
-        $this->checkPermission('natural_manage_others');
+        $this->checkPermission('art_manage_others');
         $ids = $request->input('ids');
         $action = $request->input('action');
         if (empty($ids) or !is_array($ids)) {
@@ -107,10 +107,10 @@ class CategoryController extends AdminController
         }
         if ($action == "delete") {
             foreach ($ids as $id) {
-                $query = $this->naturalCategoryClass::where("id", $id)->first();
+                $query = $this->artCategoryClass::where("id", $id)->first();
                 if(!empty($query)){
                     //Sync child category
-                    $list_childs = $this->naturalCategoryClass::where("parent_id", $id)->get();
+                    $list_childs = $this->artCategoryClass::where("parent_id", $id)->get();
                     if(!empty($list_childs)){
                         foreach ($list_childs as $child){
                             $child->parent_id = null;
@@ -123,7 +123,7 @@ class CategoryController extends AdminController
             }
         } else {
             foreach ($ids as $id) {
-                $query = $this->naturalCategoryClass::where("id", $id);
+                $query = $this->artCategoryClass::where("id", $id);
                 $query->update(['status' => $action]);
             }
         }
@@ -136,7 +136,7 @@ class CategoryController extends AdminController
         $selected = $request->query('selected');
 
         if($pre_selected && $selected){
-            $item = $this->naturalCategoryClass::find($selected);
+            $item = $this->artCategoryClass::find($selected);
             if(empty($item)){
                 return response()->json([
                     'text'=>''
@@ -148,7 +148,7 @@ class CategoryController extends AdminController
             }
         }
         $q = $request->query('q');
-        $query = $this->naturalCategoryClass::select('id', 'name as text')->where("status","publish");
+        $query = $this->artCategoryClass::select('id', 'name as text')->where("status","publish");
         if ($q) {
             $query->where('name', 'like', '%' . $q . '%');
         }

@@ -162,7 +162,7 @@
                 defaultView: 'dayGridMonth',
                 firstDay: daterangepickerLocale.first_day_of_week,
                 events:{
-                    url:"{{route('event.admin.availability.loadDates')}}",
+                    url:"{{route('natural.admin.availability.loadDates')}}",
                     extraParams:{
                         id:lastId,
                     }
