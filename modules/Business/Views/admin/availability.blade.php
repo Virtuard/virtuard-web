@@ -150,7 +150,7 @@
 				defaultView: 'dayGridMonth',
                 firstDay: daterangepickerLocale.first_day_of_week,
 				events:{
-                    	url:"{{route('busines.admin.availability.loadDates')}}",
+                    	url:"{{route('business.admin.availability.loadDates')}}",
 						extraParams:{
 							id:lastId,
                         }
@@ -261,7 +261,7 @@
                     this.onSubmit = true;
                     this.form.person_types = Object.assign({},this.person_types);
                     $.ajax({
-                        url:'{{route('busines.admin.availability.store')}}',
+                        url:'{{route('business.admin.availability.store')}}',
                         data:this.form,
                         dataType:'json',
                         method:'post',

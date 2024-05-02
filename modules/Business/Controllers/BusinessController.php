@@ -12,11 +12,13 @@ use App\Models\Ipanorama;
 use App\Models\RefRelationIpanorama;
 use App\Models\RefIpanorama;
 use DB;
+use Modules\Business\Models\BusinessCategory;
 
 class BusinessController extends Controller
 {
     protected $businessClass;
     protected $locationClass;
+    protected $businessCategoryClass;
     /**
      * @var string
      */
@@ -27,6 +29,7 @@ class BusinessController extends Controller
         $this->businessClass = $businessClass;
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
+        $this->businessCategoryClass = BusinessCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -125,6 +128,7 @@ class BusinessController extends Controller
             'translation'       => $translation,
             'business_related' => $business_related,
             'ipanorama' => $dataIpanorama,
+            'business_category'     => $this->businessCategoryClass::where('status', 'publish')->get()->toTree(),
             'location_category'=>$this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
             'booking_data' => $row->getBookingData(),
             'review_list'  => $review_list,
@@ -143,7 +147,6 @@ class BusinessController extends Controller
             'class' => 'active'
         ];
         $this->setActiveMenu($row);
-        // return view('Business::frontend.detail', $data);
-        return view('Business::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'business_related' => $data['business_related'], 'ipanorama' => $data['ipanorama'], 'location_category' => $data['location_category'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Business::frontend.detail', $data);
     }
 }

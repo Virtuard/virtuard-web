@@ -16,6 +16,7 @@ use App\Models\RefRelationIpanorama;
 use App\Models\RefIpanorama;
 use App\Models\ProductCategory;
 use Modules\Booking\Models\Booking;
+use Modules\Business\Models\BusinessCategory;
 use Modules\Business\Models\BusinessTerm;
 use Modules\Business\Models\BusinessTranslation;
 use Modules\User\Models\Plan;
@@ -28,6 +29,7 @@ class ManageBusinessController extends FrontendController
     protected $attributesClass;
     protected $locationClass;
     protected $bookingClass;
+    protected $businessCategoryClass;
     /**
      * @var string
      */
@@ -43,6 +45,7 @@ class ManageBusinessController extends FrontendController
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
         $this->bookingClass = Booking::class;
+        $this->businessCategoryClass = BusinessCategory::class;
     }
     public function callAction($method, $parameters)
     {
@@ -123,6 +126,7 @@ class ManageBusinessController extends FrontendController
         $data = [
             'row'           => $row,
             'translation' => new $this->businessTranslationClass(),
+            'business_category'     => $this->businessCategoryClass::where('status', 'publish')->get()->toTree(),
             'business_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'business')->get(),
@@ -180,6 +184,7 @@ class ManageBusinessController extends FrontendController
             'bed',
             'bathroom',
             'square',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
@@ -273,6 +278,7 @@ class ManageBusinessController extends FrontendController
         $data = [
             'translation'    => $translation,
             'row'           => $row,
+            'business_category'     => $this->businessCategoryClass::where('status', 'publish')->get()->toTree(),
             'business_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'business')->get(),

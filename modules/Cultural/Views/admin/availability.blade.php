@@ -265,7 +265,7 @@
                     this.onSubmit = true;
                     this.form.ticket_types = this.ticket_types;
                     $.ajax({
-                        url:'{{route('event.admin.availability.store')}}',
+                        url:'{{route('cultural.admin.availability.store')}}',
                         data:this.form,
                         dataType:'json',
                         method:'post',

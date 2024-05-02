@@ -57,6 +57,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Business'),
                         'permission' => 'business_create',
                     ],
+                    'category'=>[
+                        'url'        => route('business.admin.category.index'),
+                        'title'      => __('Categories'),
+                        'permission' => 'business_manage_others',
+                    ],
                     'attribute'=>[
                         'url'        => route('business.admin.attribute.index'),
                         'title'      => __('Attributes'),

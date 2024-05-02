@@ -12,6 +12,11 @@ Route::get('/recovery','BusinessController@recovery')->name('business.admin.reco
 Route::get('/getForSelect2','BusinessController@getForSelect2')->name('business.admin.getForSelect2');
 Route::get('/getForSelect2','BusinessController@getForSelect2')->name('business.admin.getForSelect2');
 
+Route::get('/category','CategoryController@index')->name('business.admin.category.index');
+Route::get('/category/edit/{id}','CategoryController@edit')->name('business.admin.category.edit');
+Route::post('/category/store/{id}','CategoryController@store')->name('business.admin.category.store');
+Route::get('/category/getForSelect2','CategoryController@getForSelect2')->name('business.admin.category.category.getForSelect2');
+Route::post('/category/bulkEdit','CategoryController@bulkEdit')->name('business.admin.category.bulkEdit');
 
 Route::group(['prefix'=>'attribute'],function (){
     Route::get('/','AttributeController@index')->name('business.admin.attribute.index');
