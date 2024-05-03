@@ -22,6 +22,7 @@ use Modules\Hotel\Models\Hotel;
 use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
 use Modules\Booking\Models\Booking;
+use Modules\Hotel\Models\HotelCategory;
 use Modules\Hotel\Models\HotelTerm;
 use Modules\Hotel\Models\HotelTranslation;
 use Modules\Location\Models\LocationCategory;
@@ -35,6 +36,7 @@ class VendorController extends FrontendController
     protected $attributesClass;
     protected $locationClass;
     protected $bookingClass;
+    protected $hotelCategoryClass;
     /**
      * @var string
      */
@@ -50,6 +52,7 @@ class VendorController extends FrontendController
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
         $this->bookingClass = Booking::class;
+        $this->hotelCategoryClass = HotelCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -124,6 +127,7 @@ class VendorController extends FrontendController
         $data = [
             'row' => $row,
             'translation' => new $this->hotelTranslationClass(),
+            'hotel_category'     => $this->hotelCategoryClass::where('status', 'publish')->get()->toTree(),
             'hotel_location' => $this->locationClass
                 ::where('status', 'publish')
                 ->get()
@@ -278,6 +282,7 @@ class VendorController extends FrontendController
         $data = [
             'translation' => $translation,
             'row' => $row,
+            'hotel_category'     => $this->hotelCategoryClass::where('status', 'publish')->get()->toTree(),
             'hotel_location' => $this->locationClass
                 ::where('status', 'publish')
                 ->get()

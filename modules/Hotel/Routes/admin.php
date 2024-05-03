@@ -8,6 +8,11 @@ Route::post('/bulkEdit','HotelController@bulkEdit')->name('hotel.admin.bulkEdit'
 Route::get('/recovery','HotelController@recovery')->name('hotel.admin.recovery');
 Route::get('/getForSelect2','HotelController@getForSelect2')->name('hotel.admin.getForSelect2');
 
+Route::get('/category','CategoryController@index')->name('hotel.admin.category.index');
+Route::get('/category/edit/{id}','CategoryController@edit')->name('hotel.admin.category.edit');
+Route::post('/category/store/{id}','CategoryController@store')->name('hotel.admin.category.store');
+Route::get('/category/getForSelect2','CategoryController@getForSelect2')->name('hotel.admin.category.category.getForSelect2');
+Route::post('/category/bulkEdit','CategoryController@bulkEdit')->name('hotel.admin.category.bulkEdit');
 
 Route::group(['prefix'=>'attribute'],function (){
     Route::get('/','AttributeController@index')->name('hotel.admin.attribute.index');

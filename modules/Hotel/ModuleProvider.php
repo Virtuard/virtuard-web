@@ -57,6 +57,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Hotel'),
                         'permission' => 'hotel_create',
                     ],
+                    'category'=>[
+                        'url'        => route('hotel.admin.category.index'),
+                        'title'      => __('Categories'),
+                        'permission' => 'hotel_manage_others',
+                    ],
                     'attribute'=>[
                         'url'        => route('hotel.admin.attribute.index'),
                         'title'      => __('Attributes'),

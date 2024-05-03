@@ -14,6 +14,27 @@
         </div>
         @if (is_default_lang())
             <div class="form-group">
+                <label class="control-label">{{ __('Category') }}</label>
+                <div class="">
+                    <select name="category_id" class="form-control">
+                        <option value="">{{ __('-- Please Select --') }}</option>
+                        <?php
+                        $traverse = function ($categories, $prefix = '') use (&$traverse, $row) {
+                            foreach ($categories as $category) {
+                                $selected = '';
+                                if ($row->category_id == $category->id) {
+                                    $selected = 'selected';
+                                }
+                                printf("<option value='%s' %s>%s</option>", $category->id, $selected, $prefix . ' ' . $category->name);
+                                $traverse($category->children, $prefix . '-');
+                            }
+                        };
+                        $traverse($hotel_category);
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
                 <label class="control-label">{{ __('Youtube Video') }}</label>
                 <input type="text" name="video" class="form-control" value="{{ $row->video }}"
                     placeholder="{{ __('Youtube link video') }}">
@@ -35,7 +56,6 @@
 </div>
 
 @include('partials.listing.form-ipanorama')
-@include('partials.listing.form-category')
 
 <div class="panel">
     <div class="panel-title"><strong>{{ __('Accomodation Policy') }}</strong></div>

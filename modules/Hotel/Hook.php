@@ -10,4 +10,9 @@ class Hook
     const AFTER_SAVING = 'hotel_after_saving';
     const HOTEL_SETTING_CONFIG = 'hotel_setting_config';
     const HOTEL_SETTING_AFTER_MAP = 'hotel_setting_after_map';
+
+    const FORM_AFTER_MAX_PEOPLE = 'hotel_form_after_max_people';
+    const FORM_AFTER_CATEGORY = 'hotel_form_after_category';
+
+    const AFTER_SAVING_CATEGORY = 'hotel_after_saving_category';
 }
