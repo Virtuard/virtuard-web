@@ -12,6 +12,11 @@ Route::get('/recovery','SpaceController@recovery')->name('space.admin.recovery')
 Route::get('/getForSelect2','SpaceController@getForSelect2')->name('space.admin.getForSelect2');
 Route::get('/getForSelect2','SpaceController@getForSelect2')->name('space.admin.getForSelect2');
 
+Route::get('/category','CategoryController@index')->name('space.admin.category.index');
+Route::get('/category/edit/{id}','CategoryController@edit')->name('space.admin.category.edit');
+Route::post('/category/store/{id}','CategoryController@store')->name('space.admin.category.store');
+Route::get('/category/getForSelect2','CategoryController@getForSelect2')->name('space.admin.category.category.getForSelect2');
+Route::post('/category/bulkEdit','CategoryController@bulkEdit')->name('space.admin.category.bulkEdit');
 
 Route::group(['prefix'=>'attribute'],function (){
     Route::get('/','AttributeController@index')->name('space.admin.attribute.index');

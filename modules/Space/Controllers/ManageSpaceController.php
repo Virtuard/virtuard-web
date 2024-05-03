@@ -16,6 +16,7 @@ use App\Models\RefRelationIpanorama;
 use App\Models\RefIpanorama;
 use App\Models\ProductCategory;
 use Modules\Booking\Models\Booking;
+use Modules\Space\Models\SpaceCategory;
 use Modules\Space\Models\SpaceTerm;
 use Modules\Space\Models\SpaceTranslation;
 use Modules\User\Models\Plan;
@@ -28,6 +29,7 @@ class ManageSpaceController extends FrontendController
     protected $attributesClass;
     protected $locationClass;
     protected $bookingClass;
+    protected $spaceCategoryClass;
     /**
      * @var string
      */
@@ -43,6 +45,7 @@ class ManageSpaceController extends FrontendController
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
         $this->bookingClass = Booking::class;
+        $this->spaceCategoryClass = SpaceCategory::class;
     }
     public function callAction($method, $parameters)
     {
@@ -123,6 +126,7 @@ class ManageSpaceController extends FrontendController
         $data = [
             'row'           => $row,
             'translation' => new $this->spaceTranslationClass(),
+            'space_category'     => $this->spaceCategoryClass::where('status', 'publish')->get()->toTree(),
             'space_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'space')->get(),
@@ -179,6 +183,7 @@ class ManageSpaceController extends FrontendController
             'bed',
             'bathroom',
             'square',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
@@ -272,6 +277,7 @@ class ManageSpaceController extends FrontendController
         $data = [
             'translation'    => $translation,
             'row'           => $row,
+            'space_category'     => $this->spaceCategoryClass::where('status', 'publish')->get()->toTree(),
             'space_location' => $this->locationClass::where("status","publish")->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'attributes'    => $this->attributesClass::where('service', 'space')->get(),
