@@ -16,13 +16,13 @@
     <div class="bravo_detail_event">
         @include('Layout::parts.bc')
         @include('Art::frontend.layouts.details.banner')
-        <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
+        <input type="hidden" id="panId" value="{{$ipanorama}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        @if($data['ipanorama'])
+                        @if($ipanorama)
                         <div id="panorama"></div>
                         @endif
                         @include('Art::frontend.layouts.details.detail')

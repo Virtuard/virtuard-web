@@ -141,8 +141,7 @@
                 'class' => 'active'
             ];
             $this->setActiveMenu($row);
-            // return view('Tour::frontend.detail', $data);
-            return view('Tour::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'tour_related' => $data['tour_related'], 'ipanorama' => $data['ipanorama'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+            return view('Tour::frontend.detail', $data);
 
         }
     }

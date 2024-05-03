@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        @if($data['ipanorama'])
+                        @if($ipanorama)
                         <div id="panorama"></div>
                         @endif
                         @include('Tour::frontend.layouts.details.tour-detail')

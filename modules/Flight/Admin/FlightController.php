@@ -144,6 +144,8 @@
             'status' => 'publish'
         ]);
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'            => $row,
             'attributes'     => $this->attributes::where('service', 'flight')->get(),
             'translation'    => $row,
@@ -159,8 +161,7 @@
             ],
             'page_title'     => __("Add new Flight")
         ];
-        // return view('Flight::admin.detail', $data);
-        return view('Flight::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'categories'     => $categories, ]);
+        return view('Flight::admin.detail', $data);
     }
 
         public function edit(Request $request, $id)
@@ -180,6 +181,8 @@
                 }
             }
             $data = [
+                'isVirtuard360' => $isVirtuard360,
+                'dataIpanorama' => $dataIpanorama,
                 'row'               => $row,
                 "selected_terms"    => $row->terms->pluck('term_id'),
                 'attributes'        => $this->attributes::where('service', 'flight')->get(),
@@ -196,8 +199,7 @@
                 ],
                 'page_title'        => __("Edit: #:name", ['name' => $row->id])
             ];
-            // return view('Flight::admin.detail', $data);
-            return view('Flight::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'enable_multi_lang' => $data['enable_multi_lang'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'selected_terms' => $data['selected_terms'] ]);
+            return view('Flight::admin.detail', $data);
         }
 
         public function store(Request $request, $id)

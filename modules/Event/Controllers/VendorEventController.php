@@ -118,6 +118,8 @@ class VendorEventController extends FrontendController
         $this->checkPermission('event_create');
         $row = new $this->eventClass();
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation' => new $this->eventTranslationClass(),
             'event_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -135,7 +137,7 @@ class VendorEventController extends FrontendController
             ],
             'page_title'         => __("Create Events"),
         ];
-        return view('Event::frontend.vendorEvent.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'event_location' => $data['event_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'] ]);
+        return view('Event::frontend.vendorEvent.detail', $data);
     }
 
 
@@ -262,6 +264,8 @@ class VendorEventController extends FrontendController
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'translation'    => $translation,
             'row'           => $row,
             'event_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -280,7 +284,7 @@ class VendorEventController extends FrontendController
             ],
             'page_title'         => __("Edit Events"),
         ];
-        return view('Event::frontend.vendorEvent.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'], 'event_location' => $data['event_location'], 'location_category' => $data['location_category'] ]);
+        return view('Event::frontend.vendorEvent.detail', $data);
     }
 
     public function deleteEvent($id)

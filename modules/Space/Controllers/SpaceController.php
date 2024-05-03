@@ -143,7 +143,6 @@ class SpaceController extends Controller
             'class' => 'active'
         ];
         $this->setActiveMenu($row);
-        // return view('Space::frontend.detail', $data);
-        return view('Space::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'space_related' => $data['space_related'], 'ipanorama' => $data['ipanorama'], 'location_category' => $data['location_category'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Space::frontend.detail', $data);
     }
 }

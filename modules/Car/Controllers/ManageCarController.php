@@ -120,6 +120,8 @@ class ManageCarController extends FrontendController
         $this->checkPermission('car_create');
         $row = new $this->carClass();
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation' => new $this->carTranslationClass(),
             'car_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -136,7 +138,7 @@ class ManageCarController extends FrontendController
             ],
             'page_title'         => __("Create Cars"),
         ];
-        return view('Car::frontend.manageCar.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'car_location' => $data['car_location'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'categories' => $categories, 'page_title' => $data['page_title'] ]);
+        return view('Car::frontend.manageCar.detail', $data);
     }
 
 
@@ -267,6 +269,8 @@ class ManageCarController extends FrontendController
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'translation'    => $translation,
             'row'           => $row,
             'car_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -284,7 +288,7 @@ class ManageCarController extends FrontendController
             ],
             'page_title'         => __("Edit Cars"),
         ];
-        return view('Car::frontend.manageCar.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'], 'car_location' => $data['car_location'] ]);
+        return view('Car::frontend.manageCar.detail', $data);
     }
 
     public function deleteCar($id)

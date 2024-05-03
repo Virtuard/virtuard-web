@@ -163,7 +163,6 @@ class HotelController extends Controller
         ];
 
         $this->setActiveMenu($row);
-        // return view('Hotel::frontend.detail', compact('data'));
 
         return view('Hotel::frontend.detail', $data);
     }

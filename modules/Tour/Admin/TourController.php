@@ -150,6 +150,8 @@ class TourController extends AdminController
             'status' => 'publish'
         ]);
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'attributes'        => $this->attributesClass::where('service', 'tour')->get(),
             'tour_category'     => $this->tourCategoryClass::where('status', 'publish')->get()->toTree(),
@@ -167,8 +169,7 @@ class TourController extends AdminController
                 ],
             ]
         ];
-        // return view('Tour::admin.detail', $data);
-        return view('Tour::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'tour_category' => $data['tour_category'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'tour_location' => $data['tour_location'], 'location_category' => $data['location_category'], 'categories'     => $categories, ]);
+        return view('Tour::admin.detail', $data);
 
     }
 
@@ -191,6 +192,8 @@ class TourController extends AdminController
             }
         }
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->tour_term->pluck('term_id'),
@@ -211,8 +214,7 @@ class TourController extends AdminController
             ],
             'page_title'=>__('Edit Tour')
         ];
-        // return view('Tour::admin.detail', $data);
-        return view('Tour::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'selected_terms' => $data['selected_terms'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'tour_category' => $data['tour_category'], 'location_category' => $data['location_category'], 'enable_multi_lang' => $data['enable_multi_lang'], 'tour_location' => $data['tour_location'] ]);
+        return view('Tour::admin.detail', $data);
     }
 
     public function store(Request $request, $id)

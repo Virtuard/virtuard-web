@@ -186,6 +186,8 @@ class NaturalController extends AdminController
             }
         }
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),
@@ -206,8 +208,7 @@ class NaturalController extends AdminController
             ],
             'page_title'        => __("Edit: :name", ['name' => $row->title])
         ];
-        // return view('Natural::admin.detail', $data);
-        return view('Natural::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'selected_terms' => $data['selected_terms'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'natural_location' => $data['natural_location'], 'location_category' => $data['location_category'], 'enable_multi_lang' => $data['enable_multi_lang'] ]);
+        return view('Natural::admin.detail', $data);
     }
 
     public function store(Request $request, $id)

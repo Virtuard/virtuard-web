@@ -120,6 +120,8 @@ class ManageTourController extends FrontendController
 
         $row = new $this->tourClass();
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation'   => new $this->tourTranslationClass(),
             'tour_category' => $this->tourCategoryClass::get()->toTree(),
@@ -140,7 +142,7 @@ class ManageTourController extends FrontendController
             'page_title'    => __("Create Tours"),
         ];
 
-        return view('Tour::frontend.manageTour.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'row' => $row, 'dataIpanorama' => $dataIpanorama, 'translation' => $data['translation'], 'tour_category' => $data['tour_category'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'tour_location' => $data['tour_location'], 'location_category' => $data['location_category'], 'page_title' => $data['page_title'], 'categories'     => $categories, ]);
+        return view('Tour::frontend.manageTour.detail', $data);
     }
 
     public function editTour(Request $request, $id)

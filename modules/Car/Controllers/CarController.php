@@ -137,8 +137,6 @@ class CarController extends Controller
             'class' => 'active'
         ];
         $this->setActiveMenu($row);
-        // return view('Car::frontend.detail', $data);
-        
-        return view('Car::frontend.detail', ['data' => $data, 'row' => $row, 'translation' => $data['translation'], 'car_related' => $data['car_related'], 'ipanorama' => $data['ipanorama'], 'booking_data' => $data['booking_data'], 'review_list' => $data['review_list'], 'seo_meta' => $data['seo_meta'], 'body_class' => $data['body_class'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Car::frontend.detail', $data);
     }
 }

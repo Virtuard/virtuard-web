@@ -139,6 +139,8 @@ class CarController extends AdminController
             'status' => 'publish'
         ]);
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'          => $row,
             'attributes'   => $this->attributes::where('service', 'car')->get(),
             'car_location' => $this->location::where('status', 'publish')->get()->toTree(),
@@ -155,9 +157,7 @@ class CarController extends AdminController
             ],
             'page_title'   => __("Add new Car")
         ];
-        // return view('Car::admin.detail', $data);
-
-        return view('Car::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'car_location' => $data['car_location'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'],'categories' => $categories, ]);
+        return view('Car::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -178,6 +178,8 @@ class CarController extends AdminController
             }
         }
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),
@@ -196,8 +198,7 @@ class CarController extends AdminController
             ],
             'page_title'        => __("Edit: :name", ['name' => $row->title])
         ];
-        // return view('Car::admin.detail', $data);
-        return view('Car::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'selected_terms' => $data['selected_terms'], 'attributes' => $data['attributes'], 'car_location' => $data['car_location'], 'breadcrumbs' => $data['breadcrumbs'], 'enable_multi_lang' => $data['enable_multi_lang'], 'page_title' => $data['page_title'] ]);
+        return view('Car::admin.detail', $data);
     }
 
     public function store(Request $request, $id)

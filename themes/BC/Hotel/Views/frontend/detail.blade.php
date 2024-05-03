@@ -17,13 +17,13 @@
     <div class="bravo_detail_hotel">
         @include('Layout::parts.bc')
         @include('Hotel::frontend.layouts.details.hotel-banner')
-        <input type="hidden" id="panId" value="{{$data['ipanorama']}}">
+        <input type="hidden" id="panId" value="{{$ipanorama}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        @if($data['ipanorama'])
+                        @if($ipanorama)
                         <div id="panorama"></div>
                         @endif
                         @include('Hotel::frontend.layouts.details.hotel-detail')

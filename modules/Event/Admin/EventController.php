@@ -141,6 +141,8 @@ class EventController extends AdminController
             'status' => 'publish'
         ]);
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'attributes'        => $this->attributes::where('service', 'event')->get(),
             'event_location'    => $this->location::where('status', 'publish')->get()->toTree(),
@@ -158,8 +160,7 @@ class EventController extends AdminController
             ],
             'page_title'        => __("Add new Event")
         ];
-        // return view('Event::admin.detail', $data);
-        return view('Event::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'location_category' => $data['location_category'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'event_location' => $data['event_location'], 'categories' => $categories, ]);
+        return view('Event::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -180,6 +181,8 @@ class EventController extends AdminController
             }
         }
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),
@@ -199,8 +202,7 @@ class EventController extends AdminController
             ],
             'page_title'        => __("Edit: :name", ['name' => $row->title])
         ];
-        // return view('Event::admin.detail', $data);
-        return view('Event::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'selected_terms' => $data['selected_terms'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'event_location' => $data['event_location'], 'location_category' => $data['location_category'], 'enable_multi_lang' => $data['enable_multi_lang'] ]);
+        return view('Event::admin.detail', $data);
     }
 
     public function store(Request $request, $id)

@@ -120,6 +120,8 @@ class ManageFlightController extends FrontendController
         $this->checkPermission('flight_create');
         $row = new $this->flightClass();
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation' => $row,
             'flight_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -137,7 +139,7 @@ class ManageFlightController extends FrontendController
             ],
             'page_title'         => __("Create Flights"),
         ];
-        return view('Flight::frontend.manageFlight.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'flight_location' => $data['flight_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'categories' => $categories, 'page_title' => $data['page_title'] ]);
+        return view('Flight::frontend.manageFlight.detail', $data);
     }
 
 
@@ -258,6 +260,8 @@ class ManageFlightController extends FrontendController
             return redirect(route('flight.vendor.index'))->with('warning', __('Flight not found!'));
         }
         $data = [
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
             'translation'    => $row,
             'row'           => $row,
             'attributes'    => $this->attributesClass::where('service', 'flight')->get(),
@@ -274,7 +278,7 @@ class ManageFlightController extends FrontendController
             ],
             'page_title'         => __("Edit Flights"),
         ];
-        return view('Flight::frontend.manageFlight.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'selected_terms' => $data['selected_terms'], 'translation' => $data['translation'], 'attributes' => $data['attributes'], 'breadcrumbs' => $data['breadcrumbs'], 'page_title' => $data['page_title'] ]);
+        return view('Flight::frontend.manageFlight.detail', $data);
     }
 
     public function deleteFlight($id)
