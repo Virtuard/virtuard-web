@@ -5,26 +5,18 @@
     <div class="form-content">
         <label> Category </label>
         <?php
-        $location_name = "";
-        $list_json[] = [
-            'id' => 1,
-            'title' => 'Restaurants and Cafes',
-        ];
-        $list_json[] = [
-            'id' => 2,
-            'title' => 'Shops',
-        ];
-        $list_json[] = [
-            'id' => 3,
-            'title' => 'Clinic/Doctor/Dentist',
-        ];
-        $list_json[] = [
-            'id' => 4,
-            'title' => 'Other Service',
-        ];
+        $category_name = "";
+        $list_json = [];
+        $categories = \Modules\Hotel\Models\HotelCategory::where('status', 'publish')->get();
+        foreach ($categories as $category) {
+            $list_json[] = [
+                'id' => $category->id,
+                'title' => $category->name,
+            ];
+        }
         ?>
         <div class="smart-search">
-            <input type="text" class="smart-search-location parent_text form-control" {{ ( empty(setting_item("hotel_location_search_style")) or setting_item("hotel_location_search_style") == "normal" ) ? "readonly" : ""  }} placeholder="{{__("Select Category")}}" value="{{ $location_name }}" data-onLoad="{{__("Loading...")}}"
+            <input type="text" class="smart-search-location parent_text form-control" {{ ( empty(setting_item("hotel_location_search_style")) or setting_item("hotel_location_search_style") == "normal" ) ? "readonly" : ""  }} placeholder="{{__("Select Category")}}" value="{{ $category_name }}" data-onLoad="{{__("Loading...")}}"
                    data-default="{{ json_encode($list_json) }}">
             <input type="hidden" class="child_id" name="category_id" value="{{Request::query('category_id')}}">
         </div>
