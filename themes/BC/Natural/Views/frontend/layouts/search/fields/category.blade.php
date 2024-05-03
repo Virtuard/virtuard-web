@@ -7,7 +7,7 @@
         <?php
         $category_name = "";
         $list_json = [];
-        $categories = \Modules\natural\Models\naturalCategory::where('status', 'publish')->get();
+        $categories = \Modules\Natural\Models\NaturalCategory::where('status', 'publish')->get();
         foreach ($categories as $category) {
             $list_json[] = [
                 'id' => $category->id,
