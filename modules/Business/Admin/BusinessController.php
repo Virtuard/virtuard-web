@@ -24,6 +24,7 @@ use App\Models\RefRelationIpanorama;
 use App\Models\SubscribeVirtuard;
 use App\Models\CategoryProduct;
 use App\Models\ProductCategory;
+use Modules\Business\Models\BusinessCategory;
 
 class BusinessController extends AdminController
 {
@@ -32,6 +33,7 @@ class BusinessController extends AdminController
     protected $business_term;
     protected $attributes;
     protected $location;
+    protected $businessCategoryClass;
     /**
      * @var string
      */
@@ -46,6 +48,7 @@ class BusinessController extends AdminController
         $this->attributes = Attributes::class;
         $this->location = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
+        $this->businessCategoryClass = BusinessCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -148,6 +151,7 @@ class BusinessController extends AdminController
         $data = [
             'row'            => $row,
             'attributes'     => $this->attributes::where('service', 'business')->get(),
+            'business_category' => $this->businessCategoryClass::where('status', 'publish')->get()->toTree(),
             'business_location' => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'translation'    => new $this->business_translation(),
@@ -161,10 +165,12 @@ class BusinessController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'     => __("Add new Business")
+            'page_title'     => __("Add new Business"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
 
-        return view('Business::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'attributes' => $data['attributes'], 'business_location' => $data['business_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'breadcrumbs' => $data['breadcrumbs'], 'categories'     => $categories, ]);
+        return view('Business::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -191,6 +197,7 @@ class BusinessController extends AdminController
             'translation'    => $translation,
             "selected_terms" => $row->terms->pluck('term_id'),
             'attributes'     => $this->attributes::where('service', 'business')->get(),
+            'business_category'  => $this->businessCategoryClass::where('status', 'publish')->get()->toTree(),
             'business_location'  => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'enable_multi_lang'=>true,
@@ -204,10 +211,12 @@ class BusinessController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Edit: :name",['name'=>$row->title])
+            'page_title'=>__("Edit: :name",['name'=>$row->title]),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
 
-        return view('Business::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'attributes' => $data['attributes'], 'business_location' => $data['business_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Business::admin.detail', $data);
     }
 
     public function store( Request $request, $id ){
@@ -238,6 +247,7 @@ class BusinessController extends AdminController
             'faqs',
             'image_id',
             'banner_image_id',
+            'category_id',
             'gallery',
             'bed',
             'bathroom',

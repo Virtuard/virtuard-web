@@ -24,6 +24,7 @@ use App\Models\RefRelationIpanorama;
 use App\Models\SubscribeVirtuard;
 use App\Models\CategoryProduct;
 use App\Models\ProductCategory;
+use Modules\Space\Models\SpaceCategory;
 
 class SpaceController extends AdminController
 {
@@ -32,6 +33,7 @@ class SpaceController extends AdminController
     protected $space_term;
     protected $attributes;
     protected $location;
+    protected $spaceCategoryClass;
     /**
      * @var string
      */
@@ -46,6 +48,7 @@ class SpaceController extends AdminController
         $this->attributes = Attributes::class;
         $this->location = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
+        $this->spaceCategoryClass = SpaceCategory::class;
     }
 
     public function callAction($method, $parameters)
@@ -148,6 +151,7 @@ class SpaceController extends AdminController
         $data = [
             'row'            => $row,
             'attributes'     => $this->attributes::where('service', 'space')->get(),
+            'space_category' => $this->spaceCategoryClass::where('status', 'publish')->get()->toTree(),
             'space_location' => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'translation'    => new $this->space_translation(),
@@ -161,10 +165,12 @@ class SpaceController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'     => __("Add new Space")
+            'page_title'     => __("Add new Space"),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
 
-        return view('Space::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'attributes' => $data['attributes'], 'space_location' => $data['space_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'breadcrumbs' => $data['breadcrumbs'], 'categories'     => $categories, ]);
+        return view('Space::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -191,6 +197,7 @@ class SpaceController extends AdminController
             'translation'    => $translation,
             "selected_terms" => $row->terms->pluck('term_id'),
             'attributes'     => $this->attributes::where('service', 'space')->get(),
+            'space_category' => $this->spaceCategoryClass::where('status', 'publish')->get()->toTree(),
             'space_location'  => $this->location::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'enable_multi_lang'=>true,
@@ -204,10 +211,12 @@ class SpaceController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title'=>__("Edit: :name",['name'=>$row->title])
+            'page_title'=>__("Edit: :name",['name'=>$row->title]),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
 
-        return view('Space::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'attributes' => $data['attributes'], 'space_location' => $data['space_location'], 'location_category' => $data['location_category'], 'translation' => $data['translation'], 'breadcrumbs' => $data['breadcrumbs'] ]);
+        return view('Space::admin.detail', $data);
     }
 
     public function store( Request $request, $id ){
@@ -242,6 +251,7 @@ class SpaceController extends AdminController
             'bed',
             'bathroom',
             'square',
+            'category_id',
             'location_id',
             'address',
             'map_lat',

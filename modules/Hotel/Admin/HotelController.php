@@ -17,6 +17,7 @@ use App\Models\SubscribeVirtuard;
 use App\Models\ProductCategory;
 use Modules\Location\Models\Location;
 use Modules\Hotel\Models\Hotel;
+use Modules\Hotel\Models\HotelCategory;
 use Modules\Hotel\Models\HotelTerm;
 use Modules\Hotel\Models\HotelTranslation;
 use Modules\Location\Models\LocationCategory;
@@ -28,6 +29,7 @@ class HotelController extends AdminController
     protected $hotelTermClass;
     protected $attributesClass;
     protected $locationClass;
+    protected $hotelCategoryClass;
     /**
      * @var string
      */
@@ -42,6 +44,7 @@ class HotelController extends AdminController
         $this->attributesClass = Attributes::class;
         $this->locationClass = Location::class;
         $this->locationCategoryClass = LocationCategory::class;
+        $this->hotelCategoryClass = HotelCategory::class;
     }
     public function callAction($method, $parameters)
     {
@@ -145,6 +148,7 @@ class HotelController extends AdminController
         $data = [
             'row'            => $row,
             'attributes'     => $this->attributesClass::where('service', 'hotel')->get(),
+            'hotel_category' => $this->hotelCategoryClass::where('status', 'publish')->get()->toTree(),
             'hotel_location' => $this->locationClass::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'translation'    => new $this->hotelTranslationClass(),
@@ -160,21 +164,11 @@ class HotelController extends AdminController
             ],
             'page_title'     => __("Add new Hotel"),
             'categories'     => $categories,
-        ];
-
-        return view('Hotel::admin.detail', [
-            'data' => $data,
-            'isVirtuard360' => $isVirtuard360,
             'virtuard360' => $virtuard360,
             'dataIpanorama' => $dataIpanorama,
-            'row' => $row,
-            'translation' => $data['translation'],
-            'hotel_location' => $data['hotel_location'],
-            'attributes' => $data['attributes'],
-            'location_category' => $data['location_category'],
-            'breadcrumbs' => $data['breadcrumbs'],
-            'categories' => $categories,
-        ]);
+        ];
+
+        return view('Hotel::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
@@ -200,6 +194,7 @@ class HotelController extends AdminController
             'translation'    => $translation,
             "selected_terms" => $row->terms->pluck('term_id'),
             'attributes'     => $this->attributesClass::where('service', 'hotel')->get(),
+            'hotel_category' => $this->hotelCategoryClass::where('status', 'publish')->get()->toTree(),
             'hotel_location'  => $this->locationClass::where('status', 'publish')->get()->toTree(),
             'location_category' => $this->locationCategoryClass::where('status', 'publish')->get(),
             'enable_multi_lang' => true,
@@ -213,10 +208,12 @@ class HotelController extends AdminController
                     'class' => 'active'
                 ],
             ],
-            'page_title' => __("Edit: :name", ['name' => $row->title])
+            'page_title' => __("Edit: :name", ['name' => $row->title]),
+            'isVirtuard360' => $isVirtuard360,
+            'dataIpanorama' => $dataIpanorama,
         ];
 
-        return view('Hotel::admin.detail', ['data' => $data, 'isVirtuard360' => $isVirtuard360, 'dataIpanorama' => $dataIpanorama, 'row' => $row, 'translation' => $data['translation'], 'hotel_location' => $data['hotel_location'], 'attributes' => $data['attributes'], 'location_category' => $data['location_category'], 'breadcrumbs' => $data['breadcrumbs']]);
+        return view('Hotel::admin.detail', $data);
     }
 
     public function store(Request $request, $id)
@@ -246,6 +243,7 @@ class HotelController extends AdminController
             'gallery',
             'is_featured',
             'policy',
+            'category_id',
             'location_id',
             'address',
             'map_lat',
