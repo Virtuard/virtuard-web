@@ -50,6 +50,11 @@ class BusinessController extends Controller
         }else{
             $limit = !empty(setting_item("business_page_limit_item"))? setting_item("business_page_limit_item") : 9;
         }
+
+        if (isset($request->map_place)) {
+            $request->merge(['service_name' => $request->map_place]);
+        }
+        
         $query = $this->businessClass->search($request->input());
         $list = $query->paginate($limit);
         $markers = [];

@@ -1,6 +1,6 @@
 <form action="{{ route("natural.search") }}" class="form bravo_form" method="get">
     <div class="g-field-search">
-        <div class="row d-flex align-items-center">
+        {{-- <div class="row d-flex align-items-center">
             @php $natural_search_fields = setting_item_array('natural_search_fields');
             $natural_search_fields = array_values(\Illuminate\Support\Arr::sort($natural_search_fields, function ($value) {
                 return $value['position'] ?? 0;
@@ -18,8 +18,7 @@
                                 @include('Natural::frontend.layouts.search-map.fields.location')
                             @break
                             @case ('date')
-                                {{-- @include('Natural::frontend.layouts.search.fields.date') --}}
-                                @include('Natural::frontend.layouts.search.fields.category')
+                                @include('Natural::frontend.layouts.search.fields.date')
                             @break
                             @case ('guests')
                                 @include('Natural::frontend.layouts.search.fields.range')
@@ -28,6 +27,18 @@
                     </div>
                 @endforeach
             @endif
+        </div> --}}
+
+        <div class="row d-flex align-items-center">
+            <div class="col-md-4 border-right">
+                @include('Natural::frontend.layouts.search.fields.service_name')
+            </div>
+            <div class="col-md-4 border-right">
+                @include('Natural::frontend.layouts.search.fields.category')
+            </div>
+            <div class="col-md-4 border-right">
+                @include('Natural::frontend.layouts.search.fields.range')
+            </div>
         </div>
     </div>
     <div class="g-button-submit">

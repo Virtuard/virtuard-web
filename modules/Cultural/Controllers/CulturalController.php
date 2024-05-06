@@ -47,6 +47,10 @@ class CulturalController extends Controller
             $limit = !empty(setting_item("cultural_page_limit_item"))? setting_item("cultural_page_limit_item") : 9;
         }
 
+        if (isset($request->map_place)) {
+            $request->merge(['service_name' => $request->map_place]);
+        }
+        
         $query = $this->culturalClass->search($request->input());
         $list = $query->paginate($limit);
 

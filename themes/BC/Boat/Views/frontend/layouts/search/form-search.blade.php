@@ -1,6 +1,6 @@
 <form action="{{ route("boat.search") }}" class="form bravo_form" method="get">
     <div class="g-field-search">
-        <div class="row d-flex align-items-center">
+        {{-- <div class="row d-flex align-items-center">
             @php
                 $boat_search_fields = setting_item_array('boat_search_fields');
                 $boat_search_fields = array_values(\Illuminate\Support\Arr::sort($boat_search_fields, function ($value) {
@@ -30,6 +30,15 @@
                     </div>
                 @endforeach
             @endif
+        </div> --}}
+
+        <div class="row d-flex align-items-center">
+            <div class="col-md-6 border-right">
+                @include('Boat::frontend.layouts.search.fields.service_name')
+            </div>
+            <div class="col-md-6 border-right">
+                @include('Boat::frontend.layouts.search.fields.category')
+            </div>
         </div>
     </div>
     <div class="g-button-submit">

@@ -1,6 +1,6 @@
 <form action="{{ route("business.search") }}" class="form bravo_form" method="get">
     <div class="g-field-search">
-        <div class="row d-flex align-items-center">
+        {{-- <div class="row d-flex align-items-center">
             @php $business_search_fields = setting_item_array('business_search_fields');
             $business_search_fields = array_values(\Illuminate\Support\Arr::sort($business_search_fields, function ($value) {
                 return $value['position'] ?? 0;
@@ -27,6 +27,18 @@
                     </div>
                 @endforeach
             @endif
+        </div> --}}
+
+        <div class="row d-flex align-items-center">
+            <div class="col-md-4 border-right">
+                @include('Business::frontend.layouts.search.fields.service_name')
+            </div>
+            <div class="col-md-4 border-right">
+                @include('Business::frontend.layouts.search.fields.category')
+            </div>
+            <div class="col-md-4 border-right">
+                @include('Business::frontend.layouts.search.fields.range')
+            </div>
         </div>
     </div>
     <div class="g-button-submit">

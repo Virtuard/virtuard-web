@@ -1,24 +1,16 @@
-@php($location_search_style = setting_item('space_location_search_style'))
-
 <div class="form-group">
-    <i class="field-icon fa icofont-list"></i>
-    <div class="form-content">
+    <div class="form-content" style="padding: 20px 0 10px 10px">
         <label> Category </label>
-        <?php
-        $category_name = "";
-        $list_json = [];
-        $categories = \Modules\Space\Models\SpaceCategory::where('status', 'publish')->get();
-        foreach ($categories as $category) {
-            $list_json[] = [
-                'id' => $category->id,
-                'title' => $category->name,
-            ];
-        }
-        ?>
-        <div class="smart-search">
-            <input type="text" class="smart-search-location parent_text form-control" {{ ( empty(setting_item("space_location_search_style")) or setting_item("space_location_search_style") == "normal" ) ? "readonly" : ""  }} placeholder="{{__("Select Category")}}" value="{{ $category_name }}" data-onLoad="{{__("Loading...")}}"
-                   data-default="{{ json_encode($list_json) }}">
-            <input type="hidden" class="child_id" name="category_id" value="{{Request::query('category_id')}}">
+        @php
+            $categories = \Modules\Space\Models\SpaceCategory::where('status', 'publish')->get();
+        @endphp
+        <div class="smart-search smart-search-category">
+            <select name="category" class="form-control" style="width: 100%;">
+                <option value="">-- Select Categoty --</option>
+                @foreach ($categories as $category)
+                    <option value="{{$category->id}}">{{$category->name}}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 </div>
