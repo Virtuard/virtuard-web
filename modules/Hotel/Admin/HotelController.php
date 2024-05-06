@@ -300,19 +300,6 @@ class HotelController extends AdminController
                     $ipanoramaInpNew->save();
                 }
 
-                $categoryProduct = CategoryProduct::where('slug', '=', $row->slug)->first();
-
-                if ($categoryProduct) {
-                    $categoryProduct->category = $inpCategoryProduct;
-                    $categoryProduct->save();
-                } else {
-                    $categoryProductNew = new CategoryProduct();
-                    $categoryProductNew->slug = $row->slug;
-                    $categoryProductNew->category = $inpCategoryProduct;
-                    $categoryProductNew->save();
-                }
-
-
                 return back()->with('success',  __('Hotel updated'));
             } else {
                 event(new CreatedServicesEvent($row));
@@ -321,11 +308,6 @@ class HotelController extends AdminController
                 $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
                 $ipanoramaInp->slug = $row->slug;
                 $ipanoramaInp->save();
-
-                $categoryProductNew = new CategoryProduct();
-                $categoryProductNew->slug = $row->slug;
-                $categoryProductNew->category = $inpCategoryProduct;
-                $categoryProductNew->save();
 
                 return redirect(route('hotel.admin.edit', $row->id))->with('success', __('Hotel created'));
             }

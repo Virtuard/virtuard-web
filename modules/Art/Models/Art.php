@@ -925,6 +925,10 @@ class Art extends Bookable
     {
         $model_art = parent::query()->select("bravo_arts.*");
         $model_art->where("bravo_arts.status", "publish");
+
+        if (!empty($category_id = $request['category_id'] ?? "")) {
+            $model_art->where('category_id', $category_id)->get();
+        }
         if (!empty($location_id = $request['location_id'] ?? "")) {
             $location = Location::where('id', $location_id)->where("status", "publish")->first();
             if (!empty($location)) {

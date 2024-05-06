@@ -5,7 +5,7 @@
             $categories = \Modules\Space\Models\SpaceCategory::where('status', 'publish')->get();
         @endphp
         <div class="smart-search smart-search-category">
-            <select name="category" class="form-control" style="width: 100%;">
+            <select name="category_id" class="form-control" style="width: 100%;">
                 <option value="">-- Select Categoty --</option>
                 @foreach ($categories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>

@@ -905,6 +905,10 @@ class Business extends Bookable
     {
         $model_business = parent::query()->select("bravo_businesses.*");
         $model_business->where("bravo_businesses.status", "publish");
+
+        if (!empty($category_id = $request['category_id'] ?? "")) {
+            $model_business->where('category_id', $category_id)->get();
+        }
         if (!empty($location_id = $request['location_id'] ?? '')) {
             $location = Location::query()->where('id', $location_id)->where("status","publish")->first();
             if(!empty($location)){

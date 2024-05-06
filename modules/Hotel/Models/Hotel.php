@@ -964,6 +964,10 @@ class Hotel extends Bookable
     {
         $model_hotel = parent::query()->select("bravo_hotels.*");
         $model_hotel->where("bravo_hotels.status", "publish");
+        
+        if (!empty($category_id = $request['category_id'] ?? "")) {
+            $model_hotel->where('category_id', $category_id)->get();
+        }
         if (!empty($location_id = $request['location_id'] ?? "")) {
             $location = Location::query()->where('id', $location_id)->where("status","publish")->first();
             if(!empty($location)){
@@ -976,9 +980,6 @@ class Hotel extends Bookable
                 $model_hotel->where('address', 'LIKE', '%' . $location_id . '%')->get();
             }
         }
-        // if (!empty($category_id = $request['category_id'])) {
-        //     $model_hotel->where('category_id', $category_id)->get();
-        // }
 
         if (!empty($price_range = $request["price_range"] ?? "")) {
             $pri_from = explode(";", $price_range)[0];

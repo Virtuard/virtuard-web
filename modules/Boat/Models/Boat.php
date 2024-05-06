@@ -842,6 +842,10 @@ class Boat extends Bookable
     {
         $model_boat = parent::query()->select("bravo_boats.*");
         $model_boat->where("bravo_boats.status", "publish");
+
+        if (!empty($category_id = $request['category_id'] ?? "")) {
+            $model_boat->where('category_id', $category_id)->get();
+        }
         if (!empty($location_id = $request["location_id"] ?? "")) {
             $location = Location::query()->where('id', $location_id)->where("status","publish")->first();
             if(!empty($location)){

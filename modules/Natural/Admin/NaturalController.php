@@ -239,6 +239,7 @@ class NaturalController extends AdminController
             'image_id',
             'banner_image_id',
             'gallery',
+            'category_id',
             'location_id',
             'address',
             'map_lat',

@@ -925,6 +925,10 @@ class Natural extends Bookable
     {
         $model_natural = parent::query()->select("bravo_naturals.*");
         $model_natural->where("bravo_naturals.status", "publish");
+
+        if (!empty($category_id = $request['category_id'] ?? "")) {
+            $model_natural->where('category_id', $category_id)->get();
+        }
         if (!empty($location_id = $request['location_id'] ?? "")) {
             $location = Location::where('id', $location_id)->where("status", "publish")->first();
             if (!empty($location)) {
