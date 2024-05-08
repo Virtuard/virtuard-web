@@ -81,7 +81,7 @@
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
     <script type="text/javascript" src="{{ asset('module/hotel/js/single-hotel.js?_ver='.config('app.asset_version')) }}"></script>
 
-    <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script>
