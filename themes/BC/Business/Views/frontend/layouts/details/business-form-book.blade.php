@@ -62,7 +62,7 @@
                         </div>
                         <input type="text" class="start_date" ref="start_date" style="height: 1px; visibility: hidden">
                     </div>
-                    <!-- <div class="" >
+                    <div class="" >
                         <div class="form-group form-guest-search">
                             <div class="guest-wrapper d-flex justify-content-between align-items-center">
                                 <div class="flex-grow-1">
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="form-section-group form-group" v-if="extra_price.length">
                         <h4 class="form-section-title">{{__('Extra prices:')}}</h4>
                         <div class="form-group " v-for="(type,index) in extra_price">

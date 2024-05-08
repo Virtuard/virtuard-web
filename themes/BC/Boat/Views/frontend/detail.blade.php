@@ -81,7 +81,7 @@
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
     <script type="text/javascript" src="{{ asset('module/boat/js/single-boat.js?_ver='.config('app.asset_version')) }}"></script>
 
-    <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script>
