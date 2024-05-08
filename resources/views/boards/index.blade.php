@@ -6,38 +6,6 @@
 <link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
 <link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
 @section('content')
-    <style>
-        textarea {
-            resize: none;
-            overflow: hidden;
-            min-height: 30px;
-            max-height: auto;
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        .grid-item {
-            background-color: #f5f5f5;
-            color: #fff;
-            text-align: center;
-        }
-
-        .grid-item img {
-            width: 100%;
-            height: 20vw;
-            object-fit: cover;
-        }
-
-        .thumb-panorama {
-            width: 350px;
-        }
-    </style>
     <div style="padding: 40px 0; background: #f5f5f5;">
         <div class="col-md-12">
             <div class="row">
@@ -62,7 +30,7 @@
                                         @endauth
                                         ">
                                         <input type="file" id="fileInput" style="display: none;" name="media_user[]"
-                                            accept=".jpeg, .jpg, .png, .webp, .pdf, .doc, .docx, .xls, .xlsx, .mp4, .mkv"
+                                            accept="image/*, video/*"
                                             multiple>
                                         <i class="fa fa-picture-o"></i> Media
                                     </li>
@@ -202,62 +170,33 @@
                                 </div>
                                 <hr>
 
-                                {{-- Ipanorama --}}
-                                @if ($post->ipanorama)
-                                    <a data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}" class="preview-panorama cursor-pointer">
-                                        <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" class="thumb-panorama">
-                                    </a>
-                                @endif
-                                @php 
-                                    $count = 0; 
-                                    $medias = $post->medias;
-                                @endphp
-
-                                {{-- Media --}}
-                                @if ($medias->count() > 0)
-                                @foreach ($medias as $pm)
-                                    @if ($pm->post_id == $post->id)
-                                        @php
-                                            $fileType = pathinfo($pm->media, PATHINFO_EXTENSION);
-                                        @endphp
-
-                                        @if (in_array(strtolower($fileType), ['jpeg', 'jpg', 'png', 'webp']))
-                                            <a href="{{ asset('uploads/' . $pm->media) }}" data-lightbox="image-1">
-                                                <img src="{{ url('uploads/' . $pm->media) }}" alt="image"
-                                                    style="width: 320px; height: 220px; position: relative;"
-                                                    class="{{ $count >= 4 ? 'd-none' : '' }}">
-                                            </a>
-                                        @elseif (in_array(strtolower($fileType), ['pdf', 'doc', 'docx', 'xls', 'xlsx']))
-                                            <a href="{{ url('uploads/' . $pm->media) }}" download
-                                                style="text-decoration: none; color: #333;"
-                                                class="{{ $count >= 4 ? ' d-none' : '' }}">
-                                                <div style="display: flex; align-items: center;">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                                        width="20" height="20" fill="none"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round" style="margin-right: 5px;">
-                                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                                                        <polyline points="7 10 12 15 17 10"></polyline>
-                                                        <line x1="12" y1="15" x2="12"
-                                                            y2="3">
-                                                        </line>
-                                                    </svg>
-                                                    Download File
-                                                </div>
-                                            </a>
-                                        @elseif (in_array(strtolower($fileType), ['mp4', 'mkv']))
-                                            <a href="{{ url('uploads/' . $pm->media) }}" data-lightbox="videos"
-                                                data-title="Video Title">
-                                                <video width="320" height="240" controls
-                                                    class="{{ $count >= 4 ? 'd-none' : '' }}">
-                                                    <source src="{{ url('uploads/' . $pm->media) }}">
-                                                </video>
+                                <div class="card-file">
+                                    <div class="g-ipanorama">
+                                        @if ($post->ipanorama)
+                                            <a data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}" class="preview-panorama cursor-pointer">
+                                                <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" class="thumb-panorama">
                                             </a>
                                         @endif
-                                        @php $count++; @endphp
-                                    @endif
-                                @endforeach
-                                @endif
+                                    </div>
+
+                                    <div class="g-gallery">
+                                        <div class="fotorama" data-width="100%" data-thumbwidth="135" data-thumbheight="135" data-thumbmargin="15" data-nav="thumbs" data-allowfullscreen="true">
+                                            @foreach($post->medias->where('type', 'image') as $img)
+                                                <a href="{{url('uploads/'.$img['media'])}}" data-thumb="{{url('uploads/'.$img['media'])}}" data-alt="{{ __("Media") }}"></a>
+                                            @endforeach
+                                        </div>
+                                    </div>
+
+                                    <div class="g-video">
+                                        @foreach ($post->medias->where('type', 'video') as $vid)
+                                            <div class="mt-2">
+                                                <video>
+                                                    <source src="{{ url('uploads/' . $vid->media) }}">
+                                                </video>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
 
                                 <p class="mt-3"
                                     style="
@@ -374,7 +313,7 @@
                                         <form action="{{ route('user.post.comment', ['id' => $post->id]) }}" method="POST">
                                             @csrf
                                             <div class="form-group" style="display: flex;">
-                                                <textarea class="form-control" id="comment" name="comment" placeholder="Write your comment here" rows="3"
+                                                <textarea class="form-control" name="comment" placeholder="Write your comment here" rows="3"
                                                     style="flex: 1;"></textarea>
                                                 <button type="submit" class="btn btn-primary btn-submit">Comment</button>
                                             </div>
@@ -384,7 +323,7 @@
                                     <div id="commentInput_{{ $post->id }}" style="display:none;" class="mt-2">
                                         <form id="commentForm">
                                             <div class="form-group" style="display: flex;">
-                                                <textarea class="form-control" id="comment" name="comment" rows="3" style="flex: 1;"
+                                                <textarea class="form-control" name="comment" rows="3" style="flex: 1;"
                                                     placeholder="You need to log in to comment" disabled></textarea>
                                                 <button type="button" class="btn btn-primary" onclick="submitComment()"
                                                     disabled>Comment</button>
@@ -465,12 +404,114 @@
 @endsection
 
 @push('css')
+    <link rel="stylesheet" type="text/css" href="{{asset('libs/fotorama/fotorama.css')}}"/>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        .g-gallery .fotorama .fotorama__fullscreen-icon {
+            background: none;
+            bottom: 30px;
+            height: 40px;
+            right: 30px;
+            top: auto;
+            width: 40px;
+        }
+        .g-gallery .fotorama .fotorama__fullscreen-icon:before {
+            background: url(/images/ico_full_3.svg);
+            content: "";
+            height: 24px;
+            left: 50%;
+            margin-left: -11px;
+            position: absolute;
+            top: 7px;
+            width: 24px;
+            z-index: 1;
+        }
+        .g-gallery .fotorama .fotorama__fullscreen-icon:after {
+            background: rgba(26, 43, 72, .5);
+            border-radius: 3px;
+            content: "";
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        .g-gallery .fotorama .fotorama__arr {
+            background: none;
+            background-color: rgba(26, 43, 72, .6);
+            border-radius: 3px;
+            height: 40px;
+            width: 40px;
+        }
+        .g-gallery .fotorama .fotorama__arr:after {
+            height: 24px;
+            left: 50%;
+            margin-left: -13px;
+            position: absolute;
+            top: 7px;
+            width: 24px;
+        }
+        .g-gallery .fotorama .fotorama__arr.fotorama__arr--prev {
+            left: 30px;
+        }
+        .g-gallery .fotorama .fotorama__arr.fotorama__arr--prev:after {
+            background: url(/images/ico_pre.svg);
+            content: "";
+        }
+        .g-gallery .fotorama .fotorama__arr.fotorama__arr--next {
+            right: 30px;
+        }
+        .g-gallery .fotorama .fotorama__arr.fotorama__arr--next:after {
+            background: url(/images/ico_next.svg);
+            content: "";
+        }
+        .g-gallery .fotorama .fotorama__stage {
+            width: 100%;
+            height: auto;
+            max-height: 420px;
+        }
+        .g-gallery .fotorama .fotorama__stage .fotorama__img {
+            top: 0 !important;
+        }
+        .g-video video {
+            width: 100%;
+            height: 450px;
+        }
+        .thumb-panorama {
+            width: 100%;
+            height: 450px;
+        }
         #search-tag span.select2.select2-container {
             width: 100% !important;
         }
-        
+
+        textarea {
+            resize: none;
+            overflow: hidden;
+            min-height: 30px;
+            max-height: auto;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .grid-item {
+            background-color: #f5f5f5;
+            color: #fff;
+            text-align: center;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 20vw;
+            object-fit: cover;
+        }
+    
         @media(max-width: 768px) {
             .md-flex-column {
                 gap: 5px;
@@ -489,6 +530,7 @@
     {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
     <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
+    <script type="text/javascript" src="{{asset('libs/fotorama/fotorama.js')}}"></script>
     <script>
         function feedShow() {
             document.getElementById('content_status_post').style.display = "none"

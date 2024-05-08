@@ -82,14 +82,16 @@ class FollowBoardsController extends Controller
 
         if ($request->hasFile('media_user')) {
             $files = $request->file('media_user');
-
             foreach ($files as $file) {
                 $filename = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $type = getMimeTypeFromExtension($extension);
                 $path = $file->storeAs('/media', $filename);
 
                 $mediaItem = new PostMedia();
                 $mediaItem->post_id = $post->id;
                 $mediaItem->media = $path;
+                $mediaItem->type = $type;
                 $mediaItem->save();
             }
         }

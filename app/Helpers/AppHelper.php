@@ -1539,3 +1539,20 @@ if (!function_exists('hide_submenu_setting')) {
         return $data;
     }
 }
+
+if (!function_exists('getMimeTypeFromExtension')) {
+    function getMimeTypeFromExtension($ext) {
+        switch ($ext) {
+            case 'jpg':
+            case 'jpeg':
+            case 'png':
+            case 'svg':
+                return 'image';
+            case 'mp4':
+            case 'mkv':
+                return 'video';
+            default:
+                return 'document';
+        }
+    }
+}
