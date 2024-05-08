@@ -475,11 +475,13 @@
         }
         .g-video video {
             width: 100%;
-            height: 450px;
+            height: auto;
+            max-height: 450px;
         }
         .thumb-panorama {
             width: 100%;
-            height: 450px;
+            height: auto;
+            max-height: 450px;
         }
         #search-tag span.select2.select2-container {
             width: 100% !important;
