@@ -979,6 +979,11 @@ class Business extends Bookable
 						 ) <= ?';
                 $model_business->whereRaw($string,[$distanceType,$lat,$lgn,$lat,$distance]);
             }
+            else {
+                $model_business->where("bravo_businesses.map_lat", $lat);
+                $model_business->where("bravo_businesses.map_lng", $lgn);
+                $model_business->where("bravo_businesses.address", $request['map_place']);
+            }
 //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
             $model_business->orderByRaw("POW((bravo_businesses.map_lng-?),2) + POW((bravo_businesses.map_lat-?),2)",[$lgn,$lat]);
         }

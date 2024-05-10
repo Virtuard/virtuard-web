@@ -917,6 +917,11 @@ class Boat extends Bookable
 						 ) <= ?';
                 $model_boat->whereRaw($string,[$distanceType,$lat,$lgn,$lat,$distance]);
             }
+            else {
+                $model_boat->where("bravo_boats.map_lat", $lat);
+                $model_boat->where("bravo_boats.map_lng", $lgn);
+                $model_boat->where("bravo_boats.address", $request['map_place']);
+            }
 
             $model_boat->orderByRaw("POW((bravo_boats.map_lng-".$lgn."),2) + POW((bravo_boats.map_lat-".$lat."),2)");
         }

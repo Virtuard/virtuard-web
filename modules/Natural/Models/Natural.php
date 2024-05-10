@@ -1002,6 +1002,11 @@ class Natural extends Bookable
 						 ) <= ?';
                 $model_natural->whereRaw($string, [$distanceType, $lat, $lgn, $lat, $distance]);
             }
+            else {
+                $model_natural->where("bravo_naturals.map_lat", $lat);
+                $model_natural->where("bravo_naturals.map_lng", $lgn);
+                $model_natural->where("bravo_naturals.address", $request['map_place']);
+            }
 
             //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
             $model_natural->orderByRaw("POW((bravo_naturals.map_lng-?),2) + POW((bravo_naturals.map_lat-?),2)", [$lgn, $lat]);

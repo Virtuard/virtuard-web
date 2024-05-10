@@ -33,10 +33,13 @@
         </div> --}}
 
         <div class="row d-flex align-items-center">
-            <div class="col-md-6 border-right">
+            <div class="col-md-4 border-right">
                 @include('Boat::frontend.layouts.search.fields.service_name')
             </div>
-            <div class="col-md-6 border-right">
+            <div class="col-md-4 border-right">
+                @include('Boat::frontend.layouts.search.fields.location')
+            </div>
+            <div class="col-md-4 border-right">
                 @include('Boat::frontend.layouts.search.fields.category')
             </div>
         </div>

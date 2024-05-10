@@ -979,6 +979,11 @@ class Space extends Bookable
 						 ) <= ?';
                 $model_space->whereRaw($string,[$distanceType,$lat,$lgn,$lat,$distance]);
             }
+            else {
+                $model_space->where("bravo_spaces.map_lat", $lat);
+                $model_space->where("bravo_spaces.map_lng", $lgn);
+                $model_space->where("bravo_spaces.address", $request['map_place']);
+            }
 //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
             $model_space->orderByRaw("POW((bravo_spaces.map_lng-?),2) + POW((bravo_spaces.map_lat-?),2)",[$lgn,$lat]);
         }

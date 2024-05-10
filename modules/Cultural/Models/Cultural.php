@@ -1002,6 +1002,11 @@ class Cultural extends Bookable
 						 ) <= ?';
                 $model_cultural->whereRaw($string, [$distanceType, $lat, $lgn, $lat, $distance]);
             }
+            else {
+                $model_cultural->where("bravo_culturals.map_lat", $lat);
+                $model_cultural->where("bravo_culturals.map_lng", $lgn);
+                $model_cultural->where("bravo_culturals.address", $request['map_place']);
+            }
 
             //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
             $model_cultural->orderByRaw("POW((bravo_culturals.map_lng-?),2) + POW((bravo_culturals.map_lat-?),2)", [$lgn, $lat]);

@@ -1055,6 +1055,11 @@ class Hotel extends Bookable
 						 ) <= ?';
                 $model_hotel->whereRaw($string,[$distanceType,$lat,$lgn,$lat,$distance]);
             }
+            else {
+                $model_hotel->where("bravo_hotels.map_lat", $lat);
+                $model_hotel->where("bravo_hotels.map_lng", $lgn);
+                $model_hotel->where("bravo_hotels.address", $request['map_place']);
+            }
 
 //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
             $model_hotel->orderByRaw("POW((bravo_hotels.map_lng-?),2) + POW((bravo_hotels.map_lat-?),2)",[$lgn,$lat]);

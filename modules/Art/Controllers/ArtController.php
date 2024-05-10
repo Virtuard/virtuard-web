@@ -46,10 +46,6 @@ class ArtController extends Controller
         }else{
             $limit = !empty(setting_item("art_page_limit_item"))? setting_item("art_page_limit_item") : 9;
         }
-
-        if (isset($request->map_place)) {
-            $request->merge(['service_name' => $request->map_place]);
-        }
         
         $query = $this->artClass->search($request->input());
         $list = $query->paginate($limit);

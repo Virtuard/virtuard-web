@@ -1002,6 +1002,11 @@ class Art extends Bookable
 						 ) <= ?';
                 $model_art->whereRaw($string, [$distanceType, $lat, $lgn, $lat, $distance]);
             }
+            else {
+                $model_art->where("bravo_arts.map_lat", $lat);
+                $model_art->where("bravo_arts.map_lng", $lgn);
+                $model_art->where("bravo_arts.address", $request['map_place']);
+            }
 
             //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
             $model_art->orderByRaw("POW((bravo_arts.map_lng-?),2) + POW((bravo_arts.map_lat-?),2)", [$lgn, $lat]);
