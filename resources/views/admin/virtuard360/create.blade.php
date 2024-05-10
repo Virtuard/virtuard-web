@@ -43,8 +43,7 @@
 
                     <div class="row">
                         <div class="col-md-12 p-0 mb-4">
-                            <iframe id="ipanorama-frame"></iframe>
-                            {{-- <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}"></iframe> --}}
+                            <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}"></iframe>
                         </div>
                     </div>
                 </div>

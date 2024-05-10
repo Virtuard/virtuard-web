@@ -69,13 +69,16 @@
             </div>
         </div>
 
-        <iframe id="ipanorama-frame"></iframe>
-        {{-- <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}" width="100%" height="100%"></iframe> --}}
+        <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}" width="100%" height="100%"></iframe>
     @endif
 
 @endsection
 @push('css')
     <style>
+        #ipanorama-frame {
+            width: 100%;
+            height: 850px;
+        }
         .shepherd-overlay {
             position: fixed;
             top: 0;
