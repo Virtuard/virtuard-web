@@ -29,7 +29,6 @@
                 </div>
             </div>
         @else
-            @csrf
             <div class="row">
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between mb20">
@@ -43,7 +42,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-12 p-0 mb-4">
-                            <iframe id="ipanorama-frame"></iframe>
+                            <div id="ipanorama-frame"></div>
                         </div>
                     </div>
                 </div>

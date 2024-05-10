@@ -69,7 +69,7 @@
             </div>
         </div>
 
-        <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}" width="100%" height="100%"></iframe>
+        <div id="ipanorama-frame"></div>
     @endif
 
 @endsection
