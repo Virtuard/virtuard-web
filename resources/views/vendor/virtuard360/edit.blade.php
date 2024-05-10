@@ -70,8 +70,8 @@
             </div>
         </div>
 
-        {{-- <div id="ipanorama-frame"></div> --}}
-        <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}"></iframe>
+        <div id="ipanorama-frame"></div>
+        {{-- <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}"></iframe> --}}
     @endif
 @endsection
 @push('css')
@@ -258,20 +258,20 @@
             @endif
         </script>
         <script>
-            // $(function() {
-            //     var iframe = $('<iframe>').attr({
-            //         src: "{{ url('/uploads/ipanoramaBuilder/?idItem=' . request('id')) }}",
-            //         id: "frame-panorama",
-            //         width: '100%',
-            //         style: 'height: 310vh'
-            //     });
-            //     $('#ipanorama-frame').append(iframe);
-            //     $('#frame-panorama').on('load', function(){
-            //         var iframeContent = $('#frame-panorama').contents();
-            //         iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-            //         iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-            //         iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
-            //     });
-            // });
+            $(function() {
+                var iframe = $('<iframe>').attr({
+                    src: "{{ url('/uploads/ipanoramaBuilder/?idItem=' . request('id')) }}",
+                    id: "frame-panorama",
+                    width: '100%',
+                    style: 'height: 310vh'
+                });
+                $('#ipanorama-frame').append(iframe);
+                $('#frame-panorama').on('load', function(){
+                    var iframeContent = $('#frame-panorama').contents();
+                    iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+                    iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+                    iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
+                });
+            });
         </script>
     @endpush
