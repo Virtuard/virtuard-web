@@ -1,42 +1,91 @@
-@extends('layouts.user')
+@extends('admin.layouts.app')
 @section('content')
+    <div class="container-fluid">
+        @if (!request()->has('id'))
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="alert alert-primary" role="alert">
+                        <b>You must first create a title for your Virtuard 360!</b>
+                    </div>
 
-    <h2 class="title-bar no-border-bottom">
-        Add Virtuard 360
-    </h2>
-
-    @if(!request()->has('id'))
-        <div class="alert alert-primary" role="alert">
-            <b>You must first create a title for your Virtuard 360!</b>
-        </div>
-
-        <form action="{{ route('user.virtuard-360.add-new-service') }}" method="POST">
-        @csrf
-
-            <div class="card p-4">
-                <div class="row">
-                    <div class="col-md-10">
-                        <div class="form-group">
-                            <input placeholder="Your title..." type="text" name="title" class="form-control">
+                    <form action="{{ route('user.virtuard-360.add-new-service') }}" method="POST">
+                        @csrf
+                        <div class="card p-4">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <div class="form-group">
+                                        <input placeholder="Your title..." type="text" name="title"
+                                            class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 p-0">
+                                    <button class="btn btn-primary w-100">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-2 p-0">
-                        <button class="btn btn-primary w-100">
-                            Submit
-                        </button>
-                    </div>
+                    </form>
                 </div>
             </div>
-            
-        </form>
-    @endif
+        @else
+            @csrf
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="d-flex justify-content-between mb20">
+                        <div class="title-bar"></div>
+                        <div class="title-actions">
+                            <button class="btn btn-primary w-100 add-image" data-toggle="modal" data-target="#modalAddImage"
+                                id="btn-image">
+                                + Add New Image
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 p-0 mb-4">
+                            <iframe id="ipanorama-frame"
+                                src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}"></iframe>
+                        </div>
+                    </div>
+                </div>
 
-    @if(request()->has('id'))
-        <div class="col-md-12 p-0 mb-4">
-            <button class="btn btn-primary w-100 add-image" data-toggle="modal" data-target="#modalAddImage" id="btn-image">
-                + Add New Image
-            </button>
-        </div>
+                <div class="col-md-3">
+                    <form action="{{ route('admin.virtuard360.store') }}" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="hidden" name="id" value="{{ request()->input('id') }}">
+                        </div>
+                        <div class="panel">
+                            <div class="panel-title"><strong>{{ __('Author Setting') }}</strong></div>
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <?php
+                                    $user = $row->author;
+                                    \App\Helpers\AdminForm::select2(
+                                        'id_user',
+                                        [
+                                            'configs' => [
+                                                'ajax' => [
+                                                    'url' => route('user.admin.getForSelect2'),
+                                                    'dataType' => 'json',
+                                                ],
+                                                'allowClear' => true,
+                                                'placeholder' => __('-- Select User --'),
+                                            ],
+                                        ],
+                                        !empty($user->id) ? [$user->id, $user->getDisplayName() . ' (#' . $user->id . ')'] : false,
+                                    );
+                                    ?>
+                                </div>
+                                <div class="text-right">
+                                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>
+                                        {{ __('Save Changes') }}</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        @endif
 
         <!-- Modal -->
         <div class="modal fade" id="modalAddImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -45,11 +94,12 @@
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Insert New Image</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ route('user.virtuard-360.add-new-image-service') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+                    <form action="{{ route('user.virtuard-360.add-new-image-service') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
                         <div class="modal-body">
                             <div class="form-group title-image">
                                 <label for="exampleFormControlFile1">Title Image</label>
@@ -61,20 +111,24 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" id="modal-close">Close</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                id="modal-close">Close</button>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
-        <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}" width="100%" height="100%"></iframe>
-    @endif
-
+    </div>
 @endsection
 @push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
     <style>
+        #ipanorama-frame {
+            width: 100%;
+            height: 850px;
+        }
+
         .shepherd-overlay {
             position: fixed;
             top: 0;
@@ -109,6 +163,7 @@
     </style>
 @endpush
 @push('js')
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
     <script>
         function load360Tutorial() {
             const tour = new Shepherd.Tour({
@@ -215,7 +270,6 @@
                     },
                     {
                         action() {
-                            // updateIsTourField();
                             return this.complete();
                         },
                         text: 'Done'
@@ -227,46 +281,25 @@
             tour.start();
         }
 
-        function updateIsTourField() {
-            const csrfToken = $('meta[name="csrf-token"]').attr('content');
-
-            $.ajax({
-                url: '{{ route('user.virtuard-360.update-tour') }}',
-                method: 'POST',
-                data: {
-                    _token: csrfToken,
-                },
-                success: function(response) {
-                    console.log('AJAX request successful');
-                    console.log(response);
-                },
-                error: function(error) {
-                    console.error('AJAX request failed');
-                    console.error(error);
-                    e
-                }
-            });
-        }
-        
-        @if(request()->has('id'))
+        @if (request()->has('id'))
             load360Tutorial();
         @endif
     </script>
     <script>
         $(function() {
-            var iframe = $('<iframe>').attr({
-                src: "{{ url('/uploads/ipanoramaBuilder/?idItem=' . request('id')) }}",
-                id: "frame-panorama",
-                width: '100%',
-                style: 'height: 310vh'
-            });
-            $('#ipanorama-frame').append(iframe);
-            $('#frame-panorama').on('load', function(){
-                var iframeContent = $('#frame-panorama').contents();
-                iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-                iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-                iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
-            });
+            // var iframe = $('<iframe>').attr({
+            //     src: "{{ url('/uploads/ipanoramaBuilder/?idItem=' . request('id')) }}",
+            //     id: "frame-panorama",
+            //     width: '100%',
+            //     style: 'height: 310vh'
+            // });
+            // $('#ipanorama-frame').append(iframe);
+            // $('#frame-panorama').on('load', function() {
+            //     var iframeContent = $('#frame-panorama').contents();
+            //     iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+            //     iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+            //     iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
+            // });
         });
     </script>
-    @endpush
+@endpush

@@ -31,3 +31,19 @@
         abort(404);
     });
 });*/
+
+Route::group([
+    'prefix'=>'admin',
+    'as'=>'admin.',
+    'middleware' => ['auth','dashboard']
+], function() {
+    Route::group([
+        'prefix'=>'virtuard360',
+        'as' => 'virtuard360.'
+    ], function() {
+        Route::get('/', 'Admin\Virtuard360Controller@index')->name('index');
+        Route::get('create', 'Admin\Virtuard360Controller@create')->name('create');
+        Route::get('edit', 'Admin\Virtuard360Controller@edit')->name('edit');
+        Route::post('store', 'Admin\Virtuard360Controller@store')->name('store');
+    });
+});

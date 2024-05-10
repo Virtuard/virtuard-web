@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\BaseModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Modules\User\Models\User;
 
-class RefIpanorama extends Model
+class RefIpanorama extends BaseModel
 {
-    public $incrementing = true;
+    use SoftDeletes;
+
     protected $table = 'ref_add_ipanorama';
-    public $timestamps = false;
 
     protected $fillable = [
         'id_user', 
@@ -16,5 +19,11 @@ class RefIpanorama extends Model
         'code',
         'json_data',
         'thumb',
+        'status',
     ];
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, "id_user", "id")->withDefault();
+    }
 }

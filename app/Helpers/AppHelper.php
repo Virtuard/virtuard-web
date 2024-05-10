@@ -1329,6 +1329,7 @@ if (!function_exists('menu_admin')) {
             'cultural',
             'art',
             'theme',
+            'virtuard360',
         ];
 
         return $data;

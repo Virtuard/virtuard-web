@@ -6,6 +6,12 @@ $menus = [
         'icon'  => 'icon ion-ios-desktop',
         "position"=>0
     ],
+    'virtuard360'=>[
+        'url'   => route('admin.virtuard360.index'),
+        'title' => __("Virtuard 360"),
+        'icon'  => 'icon ion-ios-camera',
+        "position"=>0
+    ],
     'menu'=>[
         "position"=>60,
         'url'        => route('core.admin.menu.index'),

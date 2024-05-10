@@ -1,38 +1,5 @@
 @extends('layouts.user')
 @section('content')
-    <style>
-        .shepherd-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            /* Ensure it's above other elements */
-            pointer-events: none;
-            /* Allow clicking through the overlay */
-        }
-
-        .shepherd-blur {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            backdrop-filter: blur(5px);
-            /* Adjust the blur amount as needed */
-        }
-
-        .shepherd-highlight {
-            position: absolute;
-            top: 50%;
-            /* Adjust the position based on your design */
-            left: 50%;
-            /* Adjust the position based on your design */
-            transform: translate(-50%, -50%);
-            /* Add any other styles for highlighting the element */
-        }
-    </style>
     <h2 class="title-bar no-border-bottom">
         Edit Virtuard 360
     </h2>
@@ -103,9 +70,49 @@
             </div>
         </div>
 
-        <div id="ipanorama-frame"></div>
+        {{-- <div id="ipanorama-frame"></div> --}}
+        <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?idItem={{ request()->id }}"></iframe>
     @endif
 @endsection
+@push('css')
+    <style>
+        #ipanorama-frame {
+            width: 100%;
+            height: 850px;
+        }
+        .shepherd-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            /* Ensure it's above other elements */
+            pointer-events: none;
+            /* Allow clicking through the overlay */
+        }
+
+        .shepherd-blur {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(5px);
+            /* Adjust the blur amount as needed */
+        }
+
+        .shepherd-highlight {
+            position: absolute;
+            top: 50%;
+            /* Adjust the position based on your design */
+            left: 50%;
+            /* Adjust the position based on your design */
+            transform: translate(-50%, -50%);
+            /* Add any other styles for highlighting the element */
+        }
+    </style>
+@endpush
 @push('js')
         <script>
             function load360Tutorial(){
@@ -251,20 +258,20 @@
             @endif
         </script>
         <script>
-            $(function() {
-                var iframe = $('<iframe>').attr({
-                    src: "{{ url('/uploads/ipanoramaBuilder/?idItem=' . request('id')) }}",
-                    id: "frame-panorama",
-                    width: '100%',
-                    style: 'height: 310vh'
-                });
-                $('#ipanorama-frame').append(iframe);
-                $('#frame-panorama').on('load', function(){
-                    var iframeContent = $('#frame-panorama').contents();
-                    iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-                    iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-                    iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
-                });
-            });
+            // $(function() {
+            //     var iframe = $('<iframe>').attr({
+            //         src: "{{ url('/uploads/ipanoramaBuilder/?idItem=' . request('id')) }}",
+            //         id: "frame-panorama",
+            //         width: '100%',
+            //         style: 'height: 310vh'
+            //     });
+            //     $('#ipanorama-frame').append(iframe);
+            //     $('#frame-panorama').on('load', function(){
+            //         var iframeContent = $('#frame-panorama').contents();
+            //         iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+            //         iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+            //         iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
+            //     });
+            // });
         </script>
     @endpush

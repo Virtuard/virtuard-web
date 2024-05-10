@@ -21,19 +21,21 @@ Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 // Virtuard 360
 Route::group([
     'prefix' => '/user/virtuard-360',
-    'as' => 'user.virtuard-360.'
+    'as' => 'user.virtuard-360.',
+    'middleware' => ['auth'],
 ], function (){
 Route::get('/', 'VirtuardController@vendorVirtuardIndex')->name('index');
+Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
+Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api');
+Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');
+Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
+
 Route::group([
     'middleware' => ['user_plan']
 ], function (){
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
 Route::post('/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');
 Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
-Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
-Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api');
-Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');
-Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
 Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
 Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
 Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
@@ -44,8 +46,8 @@ Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('des
 Route::get('/user/get/story/api', 'StoryController@getStory')->name('get-story');
 Route::post('/user/add/story/api', 'StoryController@addStory')->name('add-story');
 
-Route::get('/admin/virtuard-360', 'VirtuardController@adminVirtuardIndex')->name('admin-virtuard');
-Route::post('/admin/submission-virtuard-360', 'VirtuardController@validateService')->name('validate-service');
+// Route::get('/admin/virtuard-360', 'VirtuardController@adminVirtuardIndex')->name('admin-virtuard');
+// Route::post('/admin/submission-virtuard-360', 'VirtuardController@validateService')->name('validate-service');
 
 // Category
 Route::get('/admin/add/category/product/{type}', 'CategoryController@index');
