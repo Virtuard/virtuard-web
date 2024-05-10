@@ -125,7 +125,7 @@
     <style>
         #ipanorama-frame {
             width: 100%;
-            height: 850px;
+            height: auto;
         }
 
         .shepherd-overlay {
