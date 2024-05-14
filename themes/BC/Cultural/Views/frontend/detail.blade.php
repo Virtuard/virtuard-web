@@ -76,7 +76,7 @@
     <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
-    <script type="text/javascript" src="{{ asset('module/event/js/single-event.js?_ver='.config('app.asset_version')) }}"></script>
+    <script type="text/javascript" src="{{ asset('module/cultural/js/single-event.js?_ver='.config('app.asset_version')) }}"></script>
 
     {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
     <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
