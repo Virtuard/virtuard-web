@@ -17,9 +17,13 @@ class FormSearchAllService extends BaseBlock
     {
         $list_service = [];
         foreach (get_bookable_services() as $key => $service) {
-            $list_service[] = ['value'   => $key,
+            $res = [
+                'value'   => $key,
                 'name' => ucwords($key)
             ];
+            if (in_array($key, menu_listing())) {
+                $list_service[] = $res;
+            }
             $arg[] = [
                 'id'        => 'title_for_'.$key,
                 'type'      => 'input',
