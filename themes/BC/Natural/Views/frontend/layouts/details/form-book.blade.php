@@ -119,4 +119,4 @@
         </div>
     </div>
 </div>
-@include("Booking::frontend.global.enquiry-form",['service_type'=>'event'])
+@include("Booking::frontend.global.enquiry-form",['service_type'=>'natural'])

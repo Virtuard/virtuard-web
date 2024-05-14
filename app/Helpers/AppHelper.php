@@ -751,9 +751,9 @@ function get_bookable_services(){
     foreach ($all as $id=>$class){
         $all[$id] = get_class(app()->make($class));
 
-        if (!in_array($id, menu_listing())) {
-            unset($all[$id]);
-        }
+        // if (!in_array($id, menu_listing())) {
+        //     unset($all[$id]);
+        // }
     }
 
     return $all;
