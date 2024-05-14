@@ -21,15 +21,18 @@ class FormSearchAllService extends BaseBlock
                 'value'   => $key,
                 'name' => ucwords($key)
             ];
-            if (in_array($key, menu_listing())) {
-                $list_service[] = $res;
-            }
-            $arg[] = [
+            
+            $resArg = [
                 'id'        => 'title_for_'.$key,
                 'type'      => 'input',
                 'inputType' => 'text',
                 'label'     => __('Title for :service',['service'=>ucwords($key)])
             ];
+
+            if (in_array($key, menu_listing())) {
+                $list_service[] = $res;
+                $arg[] = $resArg;
+            }
         }
         $arg[] = [
             'id'            => 'service_types',
