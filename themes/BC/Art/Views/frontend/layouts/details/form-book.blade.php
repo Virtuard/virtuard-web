@@ -18,13 +18,16 @@
                 </div>
             </div>
             <div class="nav-enquiry" v-if="is_form_enquiry_and_book">
+                @if($row->author->checkUserPlan())
                 <div class="enquiry-item active" >
                     <span>{{ __("Book") }}</span>
                 </div>
+                @endif
                 <div class="enquiry-item" data-toggle="modal" data-target="#enquiry_form_modal">
                     <span>{{ __("Enquiry") }}</span>
                 </div>
             </div>
+            @if($row->author->checkUserPlan())
             <div class="form-book" :class="{'d-none':enquiry_type!='book'}">
                 <div class="form-content">
                     <div class="form-group form-date-field form-date-search clearfix " data-format="{{get_moment_date_format()}}">
@@ -111,6 +114,7 @@
                     <div class="alert-text mt10" v-show="message.content" v-html="message.content" :class="{'danger':!message.type,'success':message.type}"></div>
                 </div>
             </div>
+            @endif
             <div class="form-send-enquiry" v-show="enquiry_type=='enquiry'">
                 <button class="btn btn-primary" data-toggle="modal" data-target="#enquiry_form_modal">
                     {{ __("Contact Now") }}

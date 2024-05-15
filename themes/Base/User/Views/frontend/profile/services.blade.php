@@ -12,7 +12,7 @@ $list_service = [];
             </li>
             @foreach($types as $type=>$moduleClass)
                 @php
-                    if($type == "flight")  continue;
+                    if(!in_array($type, menu_listing()))  continue;
                     if(!$moduleClass::isEnable()) continue;
                     if(!$user->hasPermission($type.'_create')) continue;
                     $services = $moduleClass::getVendorServicesQuery($user->id)->orderBy('id','desc')->paginate(6);
