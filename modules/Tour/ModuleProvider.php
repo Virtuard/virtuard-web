@@ -119,16 +119,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Tour'),
                         'permission' => 'tour_create',
                     ],
-                    // [
-                    //     'url'        => route('tour.vendor.availability.index'),
-                    //     'title'      => __("Availability"),
-                    //     'permission' => 'tour_create',
-                    // ],
-                    // [
-                    //     'url'   => route('tour.vendor.recovery'),
-                    //     'title'      => __("Recovery"),
-                    //     'permission' => 'tour_create',
-                    // ],
+                    [
+                        'url'        => route('tour.vendor.availability.index'),
+                        'title'      => __("Availability"),
+                        'permission' => 'tour_create',
+                    ],
+                    [
+                        'url'   => route('tour.vendor.recovery'),
+                        'title'      => __("Recovery"),
+                        'permission' => 'tour_create',
+                    ],
                 ]
             ];
         }

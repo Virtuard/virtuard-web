@@ -35,13 +35,6 @@
     <link href="{{ asset('themes/admin/libs/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dist/admin/css/app.css') }}" rel="stylesheet">
 
-    <!-- iPanorama -->
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.default.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.modern.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.dark.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
 
     {!! \App\Helpers\Assets::css() !!}
     {!! \App\Helpers\Assets::js() !!}
@@ -219,10 +212,6 @@
 <script src="{{url('libs/daterange/moment.min.js')}}"></script>
 <script src="{{url('libs/daterange/daterangepicker.min.js?_ver='.config('app.asset_version'))}}"></script>
 
-<script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
-<script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
-<script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
-{{-- <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script> --}}
 
 {!! \App\Helpers\Assets::js(true) !!}
 

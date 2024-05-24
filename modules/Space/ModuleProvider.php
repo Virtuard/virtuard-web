@@ -124,16 +124,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('listing.property.add'),
                         'permission' => 'space_create',
                     ],
-                    // [
-                    //     'url'        => route('space.vendor.availability.index'),
-                    //     'title'      => __("Availability"),
-                    //     'permission' => 'space_create',
-                    // ],
-                    // [
-                    //     'url'   => route('space.vendor.recovery'),
-                    //     'title'      => __("Recovery"),
-                    //     'permission' => 'space_create',
-                    // ],
+                    [
+                        'url'        => route('space.vendor.availability.index'),
+                        'title'      => __("Availability"),
+                        'permission' => 'space_create',
+                    ],
+                    [
+                        'url'   => route('space.vendor.recovery'),
+                        'title'      => __("Recovery"),
+                        'permission' => 'space_create',
+                    ],
                 ]
             ];
         }

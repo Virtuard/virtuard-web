@@ -17,14 +17,6 @@
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/daterange/daterangepicker.css") }}" >
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/select2/css/select2.min.css") }}" >
 
-    <!-- iPanorama -->
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.default.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.modern.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.dark.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
-    
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link rel='stylesheet' id='google-font-css-css'  href='https://fonts.googleapis.com/css?family=Poppins%3A400%2C500%2C600' type='text/css' media='all' />
@@ -139,10 +131,6 @@
     <script src="{{ asset('libs/filerobot-image-editor/filerobot-image-editor.min.js?_ver='.config('app.asset_version')) }}"></script>
     <script src="{{ asset('libs/bootstrap/js/bootstrap.js') }}"></script>
 
-    <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script>
-    <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
-    <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
-    {{-- <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script> --}}
     <script src="{{ asset('assets/js/custom-user.js') }}"></script>
     @if(!is_demo_mode())
     {!! setting_item('footer_scripts') !!}

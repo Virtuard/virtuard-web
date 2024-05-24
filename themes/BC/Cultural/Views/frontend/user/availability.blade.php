@@ -172,15 +172,15 @@
                     });
                 },
                 eventClick:function (info) {
-                    var form = Object.assign({},info.cultural.extendedProps);
-                    form.start_date = moment(info.cultural.start).format('YYYY-MM-DD');
-                    form.end_date = moment(info.cultural.start).format('YYYY-MM-DD');
+                    var form = Object.assign({},info.event.extendedProps);
+                    form.start_date = moment(info.event.start).format('YYYY-MM-DD');
+                    form.end_date = moment(info.event.start).format('YYYY-MM-DD');
                     console.log(form);
                     formModal.show(form);
                 },
                 eventRender: function (info) {
-                    $(info.el).find('.fc-title').html(info.cultural.title);
-                    $(info.el).find('.fc-content').attr("data-html","true").attr("title",info.cultural.title).tooltip({ boundary: 'window' })
+                    $(info.el).find('.fc-title').html(info.event.title);
+                    $(info.el).find('.fc-content').attr("data-html","true").attr("title",info.event.title).tooltip({ boundary: 'window' })
                 }
             });
             calendar.render();

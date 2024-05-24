@@ -124,16 +124,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('listing.business.add'),
                         'permission' => 'business_create',
                     ],
-                    // [
-                    //     'url'        => route('business.vendor.availability.index'),
-                    //     'title'      => __("Availability"),
-                    //     'permission' => 'business_create',
-                    // ],
-                    // [
-                    //     'url'   => route('business.vendor.recovery'),
-                    //     'title'      => __("Recovery"),
-                    //     'permission' => 'business_create',
-                    // ],
+                    [
+                        'url'        => route('business.vendor.availability.index'),
+                        'title'      => __("Availability"),
+                        'permission' => 'business_create',
+                    ],
+                    [
+                        'url'   => route('business.vendor.recovery'),
+                        'title'      => __("Recovery"),
+                        'permission' => 'business_create',
+                    ],
                 ]
             ];
         }

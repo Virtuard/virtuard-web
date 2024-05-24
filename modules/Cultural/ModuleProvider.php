@@ -124,16 +124,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('listing.cultural.add'),
                         'permission' => 'cultural_create',
                     ],
-                    // 'availability'=>[
-                    //     'url'        => route('cultural.vendor.availability.index'),
-                    //     'title'      => __('Availability'),
-                    //     'permission' => 'cultural_create',
-                    // ],
-                    // [
-                    //     'url'   => route('cultural.vendor.recovery'),
-                    //     'title'      => __("Recovery"),
-                    //     'permission' => 'cultural_create',
-                    // ],
+                    'availability'=>[
+                        'url'        => route('cultural.vendor.availability.index'),
+                        'title'      => __('Availability'),
+                        'permission' => 'cultural_create',
+                    ],
+                    [
+                        'url'   => route('cultural.vendor.recovery'),
+                        'title'      => __("Recovery"),
+                        'permission' => 'cultural_create',
+                    ],
                 ]
             ],
         ];

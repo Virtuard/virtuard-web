@@ -124,16 +124,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('listing.art.add'),
                         'permission' => 'art_create',
                     ],
-                    // 'availability'=>[
-                    //     'url'        => route('art.vendor.availability.index'),
-                    //     'title'      => __('Availability'),
-                    //     'permission' => 'art_create',
-                    // ],
-                    // [
-                    //     'url'   => route('art.vendor.recovery'),
-                    //     'title'      => __("Recovery"),
-                    //     'permission' => 'art_create',
-                    // ],
+                    'availability'=>[
+                        'url'        => route('art.vendor.availability.index'),
+                        'title'      => __('Availability'),
+                        'permission' => 'art_create',
+                    ],
+                    [
+                        'url'   => route('art.vendor.recovery'),
+                        'title'      => __("Recovery"),
+                        'permission' => 'art_create',
+                    ],
                 ]
             ],
         ];
