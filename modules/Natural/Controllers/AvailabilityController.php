@@ -116,10 +116,10 @@ class AvailabilityController extends FrontendController{
             if($natural->default_state){
                 $date['active'] = 1;
             }else{
-                $date['title'] = $date['natural'] = __('Blocked');
+                $date['title'] = $date['event'] = __('Blocked');
                 $date['backgroundColor'] = 'orange';
                 $date['borderColor'] = '#fe2727';
-                $date['classNames'] = ['blocked-natural'];
+                $date['classNames'] = ['blocked-event'];
                 $date['textColor'] = '#fe2727';
             }
             if ($natural->ticket_types and $natural->getBookingType() == "ticket") {
@@ -143,13 +143,13 @@ class AvailabilityController extends FrontendController{
                     }
                 }
                 $date['ticket_types'] = array_values($date['ticket_types']);
-                $date['title'] = $date['natural'] = $c_title;
+                $date['title'] = $date['event'] = $c_title;
             }
             if ($natural->getBookingType() == "time_slot") {
                 if (!$is_single) {
-                    $date['title'] = $date['natural'] = format_money_main($date['price']);
+                    $date['title'] = $date['event'] = format_money_main($date['price']);
                 } else {
-                    $date['title'] = $date['natural'] = format_money($date['price']);
+                    $date['title'] = $date['event'] = format_money($date['price']);
                 }
                 if ($time_slots = $natural->getBookingTimeSlot()) {
                     $date['booking_time_slots'] = $time_slots;
@@ -198,11 +198,11 @@ class AvailabilityController extends FrontendController{
                 {
                     $ticketData['title'] = $row->natural = __('Blocked');
                     $ticketData['backgroundColor'] = '#fe2727';
-                    $ticketData['classNames'] = ['blocked-natural'];
+                    $ticketData['classNames'] = ['blocked-event'];
                     $ticketData['textColor'] = '#fe2727';
                     $ticketData['active'] = 0;
                 }else{
-                    $ticketData['classNames'] = ['active-natural'];
+                    $ticketData['classNames'] = ['active-event'];
                     $ticketData['active'] = 1;
                 }
                 $allDates[date('Y-m-d',strtotime($row->start_date))] = $ticketData;
@@ -258,9 +258,9 @@ class AvailabilityController extends FrontendController{
 
                         if($isBook == false){
                             $allDates[$date]['active'] = 0;
-                            $allDates[$date]['natural'] = __('Full Book');
+                            $allDates[$date]['event'] = __('Full Book');
                             $allDates[$date]['title'] = __('Full Book');
-                            $allDates[$date]['classNames'] = ['full-book-natural'];
+                            $allDates[$date]['classNames'] = ['full-book-event'];
                         }
                     }
                 }
