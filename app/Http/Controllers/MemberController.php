@@ -72,11 +72,8 @@ class MemberController extends Controller
                     });
                 }
             })
-            ->where([
-                ['role_id', '!=', 1]
-            ])
             ->orderBy('id', 'DESC')
-            ->get();
+            ->paginate(15);
 
         return view('members.index', $data);
     }

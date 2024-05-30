@@ -58,9 +58,9 @@
                             </div>
                         
                             <div>
-                                <p class="m-0">
+                                <a class="m-0" href="{{ route('user.profile', $user->id) }}">
                                     <b>{{ $user->name }}</b>
-                                </p>
+                                </a>
                                 <p class="m-0">
                                     {{ $user->business_name }}
                                 </p>
@@ -100,7 +100,7 @@
                             </button>
                         @endauth
 
-                        <a href="/profile/<?=$user->id?>">
+                        <a href="{{ route('user.profile', $user->id) }}">
                             <button class="btn btn-primary w-100">
                                 View Site
                             </button>
@@ -108,6 +108,9 @@
                     </div>
                 </div>  
                 @endforeach
+            </div>
+            <div class="d-flex justify-content-center mt-5">
+                {{ $users->links() }}
             </div>
         </div>
 @endsection
