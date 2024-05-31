@@ -35,6 +35,7 @@
                                 </li>
                             @endif
                         @else
+                            @include('Layout::parts.notification')
                             <li class="login-item dropdown">
                                 <a href="#" data-toggle="dropdown" class="is_login">
                                     @if($avatar_url = Auth::user()->getAvatarUrl())

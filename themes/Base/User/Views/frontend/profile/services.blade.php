@@ -20,10 +20,11 @@ $list_service = [];
                     $list_service[$type] = $services;
 
                     $attrType = get_attribute_listing($type);
+                    $typeKey = $attrType['old_key'];
                     $typeText = $attrType['new_key'];
                 @endphp
                     <li class="nav-item">
-                        <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$typeText}}">{{ $typeText }}</a>
+                        <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$typeKey}}">{{ $typeText }}</a>
                     </li>
                 @php $i++; @endphp
             @endforeach

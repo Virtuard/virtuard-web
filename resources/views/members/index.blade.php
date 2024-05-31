@@ -61,9 +61,7 @@
                                 <a class="m-0" href="{{ route('user.profile', $user->id) }}">
                                     <b>{{ $user->name }}</b>
                                 </a>
-                                <p class="m-0">
-                                    {{ $user->business_name }}
-                                </p>
+                                <div class="mb-1"><span class="role-name  badge badge-primary">{{ $user->role_name }}</span></div>
                             </div>
                         </div>
 
@@ -100,11 +98,11 @@
                             </button>
                         @endauth
 
-                        <a href="{{ route('user.profile', $user->id) }}">
+                        {{-- <a href="{{ route('user.profile', $user->id) }}">
                             <button class="btn btn-primary w-100">
-                                View Site
+                                View Profile
                             </button>
-                        </a>
+                        </a> --}}
                     </div>
                 </div>  
                 @endforeach
