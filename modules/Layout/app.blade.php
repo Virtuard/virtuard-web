@@ -75,7 +75,7 @@
         {!! setting_item('footer_scripts') !!}
         {!! setting_item_with_lang_raw('footer_scripts') !!}
     @endif
-
+    <script src="{{ asset('assets/js/custom-app.js') }}"></script>
 </body>
 
 </html>

@@ -21,6 +21,9 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
+                        @include('partials.listing.share-action')
+                    </div>
+                    <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
                         @if($ipanorama)
                         <div id="panorama"></div>

@@ -42,7 +42,7 @@
                 <a href="{{$item['large']}}" data-thumb="{{$item['thumb']}}" data-alt="{{ __("Gallery") }}"></a>
             @endforeach
         </div>
-        <div class="social">
+        <div class="social d-none">
             <div class="social-share">
                 <span class="social-icon">
                     <i class="icofont-share"></i>
@@ -140,6 +140,7 @@
         <div class="location-map">
             <div id="map_content"></div>
         </div>
+        @include('partials.listing.location-map-direction')
     </div>
 @endif
 <div class="bravo-hr"></div>
