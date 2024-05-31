@@ -10,12 +10,12 @@
 
 @push('js')
     <script>
-        const artSearchRadiusInput = document.getElementById('boat_search_radius');
-        const artProximityText = document.getElementById('boat_proximity_text');
-        artSearchRadiusInput.value = "0";
+        const boatSearchRadiusInput = document.getElementById('boat_search_radius');
+        const boatProximityText = document.getElementById('boat_proximity_text');
+        boatSearchRadiusInput.value = "0";
 
-        artSearchRadiusInput.addEventListener('input', function() {
-            artProximityText.textContent = this.value;
+        boatSearchRadiusInput.addEventListener('input', function() {
+            boatProximityText.textContent = this.value;
         });
     </script>
 @endpush

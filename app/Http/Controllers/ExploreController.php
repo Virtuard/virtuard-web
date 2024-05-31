@@ -82,6 +82,11 @@ class ExploreController extends Controller
     private function getListing($model, $search)
     {   
         $data = $model
+                ->with([
+                    'user' => function($query) {
+                        $query->select('id','name');
+                    },
+                ])
                 ->when(isset($search['location']), function ($query) use ($search) {
                     $query->where('address', 'like', "%{$search['location']}%");
                 })
@@ -93,9 +98,10 @@ class ExploreController extends Controller
                     ['map_lat', '!=', null],
                     ['map_lng', '!=', null],
                 ])
+                ->select(['create_user','title','slug','image_id','banner_image_id','status','address','map_lat','map_lng'])
                 ->orderBy('id', 'DESC')
                 ->get();
-
+// dd($data[0]);
         return $data;
     }
 }

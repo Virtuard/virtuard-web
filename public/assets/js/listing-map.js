@@ -69,7 +69,7 @@ function getPopupMarker(data) {
     const contentString =
         `
             <div class="card" style="overflow: hidden;">
-                <div class="card card-custom card-has-bg click-col" style="background-image: url(${data.image}); width: 250px;">
+                <div class="card card-custom card-has-bg click-col" style="background-image: url(${data.banner_image_id}); width: 250px;">
                     <div class="card-img-overlay d-flex align-items-end">
                         <div>
                             <h5 class="card-title mt-0 mb-0" style="text-overflow: ellipsis; overflow:hidden; font-size: 16px;">

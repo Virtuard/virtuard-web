@@ -20,7 +20,7 @@
                             <div class="col-12 mb-4">
                                 <div class="card" style="overflow: hidden;">
                                     <div class="card card-custom card-has-bg click-col"
-                                        style="background-image: url({{ $list['image'] }}); height: 250px;">
+                                        style="background-image: url({{ $list['banner_image_id'] }}); height: 250px;">
                                         <div class="card-img-overlay d-flex align-items-end">
                                             <img src="{{ asset($list['image']) }}" alt=""
                                                 style="width:50px; height:50px;border-radius:50%">

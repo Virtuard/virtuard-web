@@ -1498,6 +1498,7 @@ if (!function_exists('get_map_listing')) {
             'address' => $data->address ?? '',
             'icon' => asset($attr['svg']),
             'image' => get_file_url($data->image_id),
+            'banner_image_id' => get_file_url($data->image_id),
             'url' => route($attr['route_as'] . ".detail", $data->slug),
             'created_at' => $data->created_at,
             'user' => [
