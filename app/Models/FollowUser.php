@@ -9,7 +9,7 @@ class FollowUser extends Model
     public $incrementing = true;
     protected $table = 'follow_member';
 
-    protected $fillable = ['user_id', 'follow_user_id'];
+    protected $fillable = ['user_id', 'follower_id'];
     public $timestamps = true;
 
     public function followerUser()
@@ -19,6 +19,6 @@ class FollowUser extends Model
 
     public function followingUser()
     {
-        return $this->belongsTo(User::class, 'follow_user_id');
+        return $this->belongsTo(User::class, 'follower_id');
     }
 }

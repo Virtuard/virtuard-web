@@ -1522,7 +1522,7 @@ if (!function_exists('is_following')) {
     function is_following($following_id) {
         $data = FollowUser::where([
             'user_id' => auth()->user()->id,
-            'follow_user_id' => $following_id
+            'follower_id' => $following_id
         ])->exists();
 
         return $data;

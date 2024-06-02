@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FollowUser;
 use App\User;
 use Modules\Hotel\Models\Hotel;
 use Modules\Location\Models\LocationCategory;
@@ -41,22 +42,40 @@ class FollowBoardsController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $posts = $this->userPost
         ->with(['ipanorama', 'medias', 'likes', 'comments'])
+        ->when(isset($request->filter), function($q) use ($request){
+            if (auth()->check()) {
+                if ($request->filter == 'me') {
+                    $q->where('user_id', auth()->user()->id);
+                }
+                elseif ($request->filter == 'friend') {
+                    $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
+                    $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
+                    $ids = array_merge($following_ids, $follwer_ids);
+                    $q->whereIn('user_id', $ids);
+                }
+            }
+        })
         ->orderBy('id', 'desc')
-        ->get();
+        ->paginate(20)
+        ->withQueryString();
+        
         $memberCount = User::where('role_id', '!=', '1')->count();
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $dataFeedMe = Story::where('user_id', $idUser)->get();
+        $myFeeds = Story::where('user_id', $idUser)
+            ->orderByDesc('id')
+            ->paginate(50)
+            ->withQueryString();
 
         $data = [
             'posts' => $posts,
             'memberCount' => $memberCount,
             'dataIpanorama' => $dataIpanorama,
-            'dataFeedMe' => $dataFeedMe,
+            'myFeeds' => $myFeeds,
         ];
 
         if (auth()->check()) {

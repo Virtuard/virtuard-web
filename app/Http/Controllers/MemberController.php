@@ -68,7 +68,7 @@ class MemberController extends Controller
                 }
                 elseif ($request->type == 'follower') {
                     return $q->whereHas('followings', function ($q1) {
-                        $q1->where('follow_user_id', auth()->user()->id);
+                        $q1->where('follower_id', auth()->user()->id);
                     });
                 }
             })
@@ -86,7 +86,7 @@ class MemberController extends Controller
         if($indicator === 'Follow'){
             $data = [
                 'user_id' => $idUser,
-                'follow_user_id' => $idFollowUser,
+                'follower_id' => $idFollowUser,
             ];
             FollowUser::create($data);
 
@@ -97,7 +97,7 @@ class MemberController extends Controller
         }else{
             FollowUser::where([
                 ['user_id', $idUser],
-                ['follow_user_id', $idFollowUser],
+                ['follower_id', $idFollowUser],
             ])->delete();
 
             return back()->with([

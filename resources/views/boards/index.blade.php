@@ -79,7 +79,7 @@
 
                             <div class="w-100 d-flex justify-content-between md-flex-column">
                                 <div class="d-flex align-items-center">
-                                    <select class="h-100" name="type_post"
+                                    <select class="h-100" id="filter-post" name="type_post"
                                         style="
                                         padding: 0 13px;
                                         background: #f5f5f5;
@@ -88,19 +88,19 @@
                                         font-weight: 600;
                                         outline: none;
                                     ">
-                                        <option value="Public">Public</option>
-                                        <option value="Only Me">Only Me</option>
-                                        <option value="My Friend">My Friend</option>
-                                        <option value="Members">Members</option>
+                                        <option value="public">{{ __('Public') }}</option>
+                                        <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
+                                        <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
                                     </select>
                                     <a class="cursor-pointer d-none">
                                         <i class="fa fa-lg fa-smile-o ml-3"></i>
                                     </a>
-                                    <div class="cursor-pointer" id="toogle-tag" onclick="showSelect()">
+                                    <div class="cursor-pointer d-none" id="toogle-tag" onclick="showSelect()">
                                         <i class="fa fa-lg fa-tags ml-3"></i>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
+                                    <div class="d-none">
                                     <span>Posts in :</span>
                                     <select class="h-100 ml-3" name="type_post"
                                         style="
@@ -113,6 +113,7 @@
                                     ">
                                         <option value="My Profile">My Profile</option>
                                     </select>
+                                    </div>
                                     <button type="submit" class="btn btn-primary btn-submit ml-3"
                                         style="border-radius: 100px; outline: none;"
                                     @guest
@@ -333,14 +334,23 @@
                                 @endauth
                             </div>
                         @endforeach
+
+                        <div>
+                            {{ $posts->links() }}
+                        </div>
                     </div>
-                    <div id="content_feed_post" class="w-100 mt-3 grid-container"
+                    <div id="content_feed_post" class="w-100 mt-3"
                         style="background: #FFF; border-radius: 8px; display: none; padding: 23px 35px;">
-                        @foreach ($dataFeedMe as $feedMe)
-                            <div class="grid-item">
-                                <img src="/uploads/<?= $feedMe->media ?>" alt="">
-                            </div>
-                        @endforeach
+                        <div class="grid-container">
+                            @foreach ($myFeeds as $feedMe)
+                                <div class="grid-item">
+                                    <img src="{{ asset('uploads/' . $feedMe->media) }}" alt="">
+                                </div>
+                            @endforeach
+                        </div>
+                        <div>
+                            {{ $myFeeds->links() }}
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-3" style="background: #f5f5f5; padding: 0 20px;">
@@ -497,9 +507,9 @@
         .grid-container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 20px;
-            width: 80%;
-            margin: 0 auto;
+            gap: 10px;
+            /* width: 80%; */
+            /* margin: 0 auto; */
         }
 
         .grid-item {
@@ -590,5 +600,22 @@
             // Optionally, hide the comment input after submission
             document.getElementById('commentInput_' + postId).style.display = 'none';
         }
+
+        $('#filter-post').on('change', function(){
+            const val = $(this).val();
+
+            switch (val) {
+                case 'public' :
+                    window.location.href = `/user/follow-boards`;
+                case 'me' :
+                    window.location.href = `/user/follow-boards?filter=me`;
+                    break;
+                case 'friend' :
+                    window.location.href = `/user/follow-boards?filter=friend`;
+                    break;
+                default :
+                    $('#login').modal('show');
+            }
+        })
     </script>
 @endpush

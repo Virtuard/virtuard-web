@@ -540,7 +540,7 @@ use Illuminate\Notifications\Notifiable;
 
         public function followers()
         {
-            return $this->hasMany(FollowUser::class, 'follow_user_id');
+            return $this->hasMany(FollowUser::class, 'follower_id');
         }
 
         public function followerUsers()

@@ -98,7 +98,7 @@ class UserController extends FrontendController
 
         $user = Auth::user();
         $followUser = FollowUser::where('user_id', Auth::user()->id)->count();
-        $followingUser = FollowUser::where('follow_user_id', Auth::user()->id)->count();
+        $followingUser = FollowUser::where('follower_id', Auth::user()->id)->count();
         $userPosts = UserPost::with('medias', 'ipanorama')->where('user_id', $user->id)->get();
         
         $data = [
