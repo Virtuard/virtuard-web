@@ -2,12 +2,17 @@
     <div class="form-content" style="padding: 20px 0 10px 10px">
         <label> Category </label>
         @php
-            $categories = \Modules\Art\Models\ArtCategory::where('status', 'publish')->get();
+            $artCategories = \Modules\Core\Models\Terms::query()
+                ->select('id', 'name')
+                ->whereHas('attribute', function($q){
+                    $q->where('slug', 'art-category');
+                })
+                ->get();
         @endphp
         <div class="smart-search smart-search-category">
-            <select name="category_id" class="form-control" style="width: 100%;">
+            <select name="terms[]" class="form-control" style="width: 100%;">
                 <option value="">-- Select Categoty --</option>
-                @foreach ($categories as $category)
+                @foreach ($artCategories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                 @endforeach
             </select>

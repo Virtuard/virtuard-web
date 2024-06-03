@@ -58,11 +58,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Art'),
                         'permission' => 'art_create',
                     ],
-                    'category'=>[
-                        'url'        => route('art.admin.category.index'),
-                        'title'      => __('Categories'),
-                        'permission' => 'art_manage_others',
-                    ],
+                    // 'category'=>[
+                    //     'url'        => route('art.admin.category.index'),
+                    //     'title'      => __('Categories'),
+                    //     'permission' => 'art_manage_others',
+                    // ],
                     'attribute'=>[
                         'url'        => route('art.admin.attribute.index'),
                         'title'      => __('Attributes'),

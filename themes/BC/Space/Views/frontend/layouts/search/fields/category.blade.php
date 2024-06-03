@@ -2,12 +2,17 @@
     <div class="form-content" style="padding: 20px 0 10px 10px">
         <label> Category </label>
         @php
-            $categories = \Modules\Space\Models\SpaceCategory::where('status', 'publish')->get();
+            $spaceCategories = \Modules\Core\Models\Terms::query()
+                ->select('id', 'name')
+                ->whereHas('attribute', function($q){
+                    $q->where('slug', 'space-type');
+                })
+                ->get();
         @endphp
         <div class="smart-search smart-search-category">
-            <select name="category_id" class="form-control" style="width: 100%;">
+            <select name="terms[]" class="form-control" style="width: 100%;">
                 <option value="">-- Select Categoty --</option>
-                @foreach ($categories as $category)
+                @foreach ($spaceCategories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                 @endforeach
             </select>

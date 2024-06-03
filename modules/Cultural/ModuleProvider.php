@@ -67,11 +67,11 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __("Add Cultural"),
                         'permission' => 'cultural_create',
                     ],
-                    'cultural_category'=>[
-                        'url'        => route('cultural.admin.category.index'),
-                        'title'      => __('Categories'),
-                        'permission' => 'cultural_manage_others',
-                    ],
+                    // 'cultural_category'=>[
+                    //     'url'        => route('cultural.admin.category.index'),
+                    //     'title'      => __('Categories'),
+                    //     'permission' => 'cultural_manage_others',
+                    // ],
                     'cultural_attribute'=>[
                         'url'        => route('cultural.admin.attribute.index'),
                         'title'      => __('Attributes'),

@@ -1204,9 +1204,4 @@ class Hotel extends Bookable
         return $search_fields;
 
     }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'create_user');
-    }
 }

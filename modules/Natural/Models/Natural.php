@@ -2,6 +2,8 @@
 namespace Modules\Natural\Models;
 
 use App\Currency;
+use App\Models\MediaFile;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;

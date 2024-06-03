@@ -37,11 +37,11 @@
                                     <div class="card-footer">
                                         <div class="d-flex justify-content-between">
                                             <div class="d-flex align-items-center">
-                                                <img src="{{ $list['user']['image'] }}" alt=""
+                                                <img src="{{ $list['author']['image'] }}" alt=""
                                                     style="width:25px; height:25px;border-radius:50%; font-size: 12px;"
                                                     >
                                                 <div class="ml-2">
-                                                    <p class="card-title mt-0 mb-0 text-dark">{{ $list['user']['name'] }}</p>
+                                                    <p class="card-title mt-0 mb-0 text-dark">{{ $list['author']['name'] }}</p>
                                                 </div>
                                             </div>
                                             <div class="d-flex align-items-center" style="display: none !important;">

@@ -1159,14 +1159,4 @@ class Art extends Bookable
         }
         return $search_fields;
     }
-
-    public function image()
-    {
-        return $this->belongsTo(MediaFile::class, 'image_id');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'create_user');
-    }
 }

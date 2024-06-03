@@ -33,5 +33,5 @@ Route::group(['prefix'=>'user/'.config('cultural.cultural_route_prefix')],functi
 // Cultural
 Route::group(['prefix'=>config('cultural.cultural_route_prefix')],function(){
     Route::get('/','\Modules\Cultural\Controllers\CulturalController@index')->name('cultural.search'); // Search
-    Route::get('/{slug}','\Modules\Cultural\Controllers\CulturalController@detail');// Detail
+    Route::get('/{slug}','\Modules\Cultural\Controllers\CulturalController@detail')->name('cultural.detail');// Detail
 });

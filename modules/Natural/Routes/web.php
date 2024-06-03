@@ -10,6 +10,7 @@
 |
 */
 use Illuminate\Support\Facades\Route;
+
 // Vendor Manage Natural
 Route::group(['prefix'=>'user/'.config('natural.natural_route_prefix'),'middleware' => ['auth','verified']],function(){
     Route::get('/','ManageNaturalController@manageNatural')->name('natural.vendor.index');
@@ -33,5 +34,5 @@ Route::group(['prefix'=>'user/'.config('natural.natural_route_prefix')],function
 // Natural
 Route::group(['prefix'=>config('natural.natural_route_prefix')],function(){
     Route::get('/','\Modules\Natural\Controllers\NaturalController@index')->name('natural.search'); // Search
-    Route::get('/{slug}','\Modules\Natural\Controllers\NaturalController@detail');// Detail
+    Route::get('/{slug}','\Modules\Natural\Controllers\NaturalController@detail')->name('natural.detail');// Detail
 });

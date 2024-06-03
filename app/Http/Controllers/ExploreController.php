@@ -83,7 +83,7 @@ class ExploreController extends Controller
     {   
         $data = $model
                 ->with([
-                    'user' => function($query) {
+                    'author' => function($query) {
                         $query->select('id','name');
                     },
                 ])
@@ -98,10 +98,10 @@ class ExploreController extends Controller
                     ['map_lat', '!=', null],
                     ['map_lng', '!=', null],
                 ])
-                ->select(['create_user','title','slug','image_id','banner_image_id','status','address','map_lat','map_lng'])
+                ->select(['author_id','title','slug','image_id','banner_image_id','status','address','map_lat','map_lng'])
                 ->orderBy('id', 'DESC')
                 ->get();
-// dd($data[0]);
+
         return $data;
     }
 }

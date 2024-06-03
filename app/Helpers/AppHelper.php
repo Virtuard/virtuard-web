@@ -1501,9 +1501,9 @@ if (!function_exists('get_map_listing')) {
             'banner_image_id' => get_file_url($data->image_id),
             'url' => route($attr['route_as'] . ".detail", $data->slug),
             'created_at' => $data->created_at,
-            'user' => [
-                'name' => $data->user->name,
-                'image' => $data->user->getAvatarUrl(),
+            'author' => [
+                'name' => $data->author->name,
+                'image' => $data->author->getAvatarUrl(),
             ]
         ];
 
