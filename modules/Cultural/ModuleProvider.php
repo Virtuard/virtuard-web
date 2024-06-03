@@ -1,22 +1,22 @@
 <?php
 namespace Modules\Cultural;
+
+use Illuminate\Support\ServiceProvider;
 use Modules\Core\Helpers\SitemapHelper;
-use Modules\Cultural\Models\Cultural;
 use Modules\ModuleServiceProvider;
-use Modules\News\Models\News;
+use Modules\Cultural\Models\Cultural;
 use Modules\User\Helpers\PermissionHelper;
 
 class ModuleProvider extends ModuleServiceProvider
 {
-
-    public function boot(SitemapHelper $sitemapHelper){
-
+    public function boot(SitemapHelper $sitemapHelper)
+    {
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
 
         if(is_installed() and Cultural::isEnable()){
-
-            $sitemapHelper->add("cultural",[app()->make(Cultural::class),'getForSitemap']);
+            $sitemapHelper->add("Cultural",[app()->make(Cultural::class),'getForSitemap']);
         }
+
         PermissionHelper::add([
             // Cultural
             'cultural_view',
@@ -27,6 +27,7 @@ class ModuleProvider extends ModuleServiceProvider
             'cultural_manage_attributes',
         ]);
     }
+
     /**
      * Register bindings in the container.
      *
@@ -37,40 +38,53 @@ class ModuleProvider extends ModuleServiceProvider
         $this->app->register(RouterServiceProvider::class);
     }
 
-    public static function getAdminMenu()
+    public static function getBookableServices()
     {
         if(!Cultural::isEnable()) return [];
         return [
-            'cultural'=>[
-                "position"=>12,
+            'cultural' => Cultural::class,
+        ];
+    }
+
+    public static function getAdminMenu()
+    {
+        $res = [];
+        if(Cultural::isEnable()){
+            $res['cultural'] = [
+                "position"=>11,
                 'url'        => route('cultural.admin.index'),
-                'title'      => __('listing.cultural.title'),
-                'icon'       => 'fa fa-bank',
+                'title'      => __('Cultural'),
+                'icon'       => 'fa fa-tree',
                 'permission' => 'cultural_view',
                 'children'   => [
-                    'add'=>[
+                    'cultural_view'=>[
                         'url'        => route('cultural.admin.index'),
                         'title'      => __('All Culturals'),
                         'permission' => 'cultural_view',
                     ],
-                    'create'=>[
+                    'cultural_create'=>[
                         'url'        => route('cultural.admin.create'),
-                        'title'      => __('Add new Cultural'),
+                        'title'      => __("Add Cultural"),
                         'permission' => 'cultural_create',
                     ],
-                    'category'=>[
+                    'cultural_category'=>[
                         'url'        => route('cultural.admin.category.index'),
                         'title'      => __('Categories'),
                         'permission' => 'cultural_manage_others',
                     ],
-                    'attribute'=>[
+                    'cultural_attribute'=>[
                         'url'        => route('cultural.admin.attribute.index'),
                         'title'      => __('Attributes'),
                         'permission' => 'cultural_manage_attributes',
                     ],
-                    'availability'=>[
+                    'cultural_availability'=>[
                         'url'        => route('cultural.admin.availability.index'),
                         'title'      => __('Availability'),
+                        'permission' => 'cultural_create',
+                    ],
+                    'cultural_booking'=>[
+                        'url'        => route('cultural.admin.booking.index'),
+                        'title'      => __('Booking Calendar'),
                         'permission' => 'cultural_create',
                     ],
                     'recovery'=>[
@@ -79,54 +93,35 @@ class ModuleProvider extends ModuleServiceProvider
                         'permission' => 'cultural_view',
                     ],
                 ]
-            ]
-        ];
+            ];
+        }
+        return $res;
     }
 
-    public static function getBookableServices()
-    {
-        if(!Cultural::isEnable()) return [];
-        return [
-            'cultural'=>Cultural::class
-        ];
-    }
-
-    public static function getMenuBuilderTypes()
-    {
-        if(!Cultural::isEnable()) return [];
-        return [
-            'cultural'=>[
-                'class' => Cultural::class,
-                'name'  => "Cultural",
-                'items' => Cultural::searchForMenu(),
-                'position'=>51
-            ]
-        ];
-    }
 
     public static function getUserMenu()
     {
-        if(!Cultural::isEnable()) return [];
-        return [
-            'cultural' => [
+        $res = [];
+        if(Cultural::isEnable()){
+            $res['cultural'] = [
                 'url'   => route('cultural.vendor.index'),
-                'title'      => __('listing.cultural.sidebar_menu_title'),
+                'title'      => __('Cultural'),
                 'icon'       => Cultural::getServiceIconFeatured(),
-                'position'   => 80,
                 'permission' => 'cultural_view',
-                'children' => [
+                'position'   => 40,
+                'children'   => [
                     [
                         'url'   => route('cultural.vendor.index'),
-                        'title'  => __('listing.cultural.all'),
+                        'title' => __('All Culturals'),
                     ],
                     [
-                        'url'   => route('cultural.vendor.create'),
-                        'title'      => __('listing.cultural.add'),
+                        'url'        => route('cultural.vendor.create'),
+                        'title'      => __('Add new Cultural'),
                         'permission' => 'cultural_create',
                     ],
-                    'availability'=>[
+                    [
                         'url'        => route('cultural.vendor.availability.index'),
-                        'title'      => __('Availability'),
+                        'title'      => __("Availability"),
                         'permission' => 'cultural_create',
                     ],
                     [
@@ -135,16 +130,38 @@ class ModuleProvider extends ModuleServiceProvider
                         'permission' => 'cultural_create',
                     ],
                 ]
+            ];
+        }
+        return $res;
+    }
+
+    public static function getMenuBuilderTypes()
+    {
+        if(!Cultural::isEnable()) return [];
+
+        return [
+            [
+                'class' => \Modules\Cultural\Models\Cultural::class,
+                'name'  => __("Cultural"),
+                'items' => \Modules\Cultural\Models\Cultural::searchForMenu(),
+                'position'=>20
+            ],
+            [
+                'class' => \Modules\Cultural\Models\CulturalCategory::class,
+                'name'  => __('Cultural category'),
+                'items' => \Modules\Cultural\Models\CulturalCategory::searchForMenu(),
+                'position'=>30
             ],
         ];
     }
 
     public static function getTemplateBlocks(){
         if(!Cultural::isEnable()) return [];
+
         return [
+            'list_culturals'=>"\\Modules\\Cultural\\Blocks\\ListCulturals",
             'form_search_cultural'=>"\\Modules\\Cultural\\Blocks\\FormSearchCultural",
-            'list_cultural'=>"\\Modules\\Cultural\\Blocks\\ListCultural",
-            'cultural_term_featured_box'=>"\\Modules\\Cultural\\Blocks\\CulturalTermFeaturedBox",
+            'box_category_cultural'=>"\\Modules\\Cultural\\Blocks\\BoxCategoryCultural",
         ];
     }
 }

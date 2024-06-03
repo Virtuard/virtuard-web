@@ -2,7 +2,7 @@
 $translation = $service->translate();
 $lang_local = app()->getLocale();
 ?>
-<div class="b-panel-title">{{__('Event information')}}</div>
+<div class="b-panel-title">{{__('Cultural information')}}</div>
 <div class="b-table-wrap">
     <table class="b-table" cellspacing="0" cellpadding="0">
         <tr>
@@ -26,7 +26,7 @@ $lang_local = app()->getLocale();
             </tr>
         @endif
         <tr>
-            <td class="label">{{__('Event name')}}</td>
+            <td class="label">{{__('Cultural name')}}</td>
             <td class="val">
                 <a href="{{$service->getDetailUrl()}}">{!! clean($translation->title) !!}</a>
             </td>
@@ -45,52 +45,20 @@ $lang_local = app()->getLocale();
                 <td class="label">{{__('Start date')}}</td>
                 <td class="val">{{display_date($booking->start_date)}}</td>
             </tr>
-            @if($booking->getMeta("booking_type") == "ticket")
-                <tr>
-                    <td class="label">{{__('Duration:')}}</td>
-                    <td class="val">
-                        @php $duration = $booking->getMeta("duration") @endphp
-                        @if( $duration <= 1)
-                            {{__(':count hour',['count'=>$duration])}}
-                        @else
-                            {{__(':count hours',['count'=>$duration])}}
-                        @endif
-                    </td>
-                </tr>
-            @endif
 
-            @if($booking->getMeta("booking_type") == "time_slot")
-                <tr>
-                    <td class="label">{{__('Duration:')}}</td>
-                    <td class="val">
-                        {{ $booking->getMeta("duration")  }}
-                        {{ $booking->getMeta("duration_unit")  }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="label" colspan="2">{{__('Start Time:')}}</td>
-                </tr>
-                <tr class="flex-wrap">
-                    <td colspan="2">
-                        <div class="slots-wrapper d-flex justify-content-start flex-wrap">
-                            @if(!empty($timeSlots = $booking->time_slots))
-                                @foreach( $timeSlots as $item )
-                                    <div class="btn btn-sm mr-2 mb-2 btn-success">
-                                        {{ date( "H:i",strtotime($item->start_time)) }}
-                                    </div>
-                                @endforeach
-                            @endif
-                        </div>
-                    </td>
-                </tr>
-            @endif
+            <tr>
+                <td class="label">{{__('Duration:')}}</td>
+                <td class="val">
+                    {{human_time_diff($booking->end_date,$booking->start_date)}}
+                </td>
+            </tr>
         @endif
 
-        @php $ticket_types = $booking->getJsonMeta('ticket_types')
+        @php $person_types = $booking->getJsonMeta('person_types')
         @endphp
 
-        @if(!empty($ticket_types))
-            @foreach($ticket_types as $type)
+        @if(!empty($person_types))
+            @foreach($person_types as $type)
                 <tr>
                     <td class="label">{{$type['name']}}:</td>
                     <td class="val">
@@ -98,34 +66,41 @@ $lang_local = app()->getLocale();
                     </td>
                 </tr>
             @endforeach
+        @else
+            <tr>
+                <td class="label">{{__("Guests")}}:</td>
+                <td class="val">
+                    <strong>{{$booking->total_guests}}</strong>
+                </td>
+            </tr>
         @endif
         <tr>
             <td class="label">{{__('Pricing')}}</td>
             <td class="val no-r-padding">
                 <table class="pricing-list" width="100%">
-                    @if($booking->getMeta("booking_type") == "time_slot")
+                    @php $person_types = $booking->getJsonMeta('person_types')
+                    @endphp
+
+                    @if(!empty($person_types))
+                        @foreach($person_types as $type)
+                            <tr>
+                                <td class="label">{{$type['name']}}: {{$type['number']}} * {{format_money($type['price'])}}</td>
+                                <td class="val no-r-padding">
+                                    <strong>{{format_money($type['price'] * $type['number'])}}</strong>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                         <tr>
-                            <td class="label">{{ $booking->total_guests }} x {{ format_money( $booking->getJsonMeta('base_price')) }}</td>
+                            <td class="label">{{__("Guests")}}: {{$booking->total_guests}} {{format_money($booking->getMeta('base_price'))}}</td>
                             <td class="val no-r-padding">
-                                {{format_money( $booking->getJsonMeta('base_price') * $booking->total_guests )  }}
+                                <strong>{{format_money($booking->getMeta('base_price') * $booking->total_guests)}}</strong>
                             </td>
                         </tr>
                     @endif
-                    @if($booking->getMeta("booking_type") == "ticket")
-                        @php $ticket_types = $booking->getJsonMeta('ticket_types')
-                        @endphp
-                        @if(!empty($ticket_types))
-                            @foreach($ticket_types as $type)
-                                <tr>
-                                    <td class="label">{{$type['name']}}: {{$type['number']}} * {{format_money($type['price'])}}</td>
-                                    <td class="val no-r-padding">
-                                        <strong>{{format_money($type['price'] * $type['number'])}}</strong>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                    @endif
+
                     @php $extra_price = $booking->getJsonMeta('extra_price')@endphp
+
                     @if(!empty($extra_price))
                         <tr>
                             <td colspan="2" class="label-title"><strong>{{__("Extra Prices:")}}</strong></td>
@@ -133,18 +108,49 @@ $lang_local = app()->getLocale();
                         <tr class="">
                             <td colspan="2" class="no-r-padding no-b-border">
                                 <table width="100%">
-                                    @foreach($extra_price as $type)
-                                        <tr>
-                                            <td class="label">{{$type['name']}}:</td>
-                                            <td class="val no-r-padding">
-                                                <strong>{{format_money($type['total'] ?? 0)}}</strong>
-                                            </td>
-                                        </tr>
-                                    @endforeach
+                                @foreach($extra_price as $type)
+                                    <tr>
+                                        <td class="label">{{$type['name']}}:</td>
+                                        <td class="val no-r-padding">
+                                            <strong>{{format_money($type['total'] ?? 0)}}</strong>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </table>
+                            </td>
+                        </tr>
+
+                    @endif
+
+                    @php $discount_by_people = $booking->getJsonMeta('discount_by_people')
+                    @endphp
+                    @if(!empty($discount_by_people))
+                        <tr>
+                            <td colspan="2" class="label-title"><strong>{{__("Discounts:")}}</strong></td>
+                        </tr>
+                        <tr class="">
+                            <td colspan="2" class="no-r-padding no-b-border">
+                                <table width="100%">
+                                @foreach($discount_by_people as $type)
+                                    <tr>
+                                        <td class="label">
+                                            @if(!$type['to'])
+                                                {{__('from :from guests',['from'=>$type['from']])}}
+                                            @else
+                                                {{__(':from - :to guests',['from'=>$type['from'],'to'=>$type['to']])}}
+                                            @endif
+                                            :
+                                        </td>
+                                        <td class="val no-r-padding">
+                                            <strong>- {{format_money($type['total'] ?? 0)}}</strong>
+                                        </td>
+                                    </tr>
+                                @endforeach
                                 </table>
                             </td>
                         </tr>
                     @endif
+
                     @php
                         $list_all_fee = [];
                         if(!empty($booking->buyer_fees)){

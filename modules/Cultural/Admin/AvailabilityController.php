@@ -1,24 +1,26 @@
 <?php
 namespace Modules\Cultural\Admin;
 
-use Modules\Booking\Models\Booking;
-use Modules\Cultural\Models\Cultural;
-use Modules\Cultural\Models\CulturalDate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\AdminController;
+use Modules\Space\Models\Space;
+use Modules\Space\Models\SpaceDate;
 
 class AvailabilityController extends \Modules\Cultural\Controllers\AvailabilityController
 {
-    protected $culturalClass;
-    protected $culturalDateClass;
-    protected $bookingClass;
+    protected $spaceClass;
+    /**
+     * @var SpaceDate
+     */
+    protected $spaceDateClass;
     protected $indexView = 'Cultural::admin.availability';
 
-    public function __construct(Cultural $culturalClass, CulturalDate $culturalDateClass,Booking $bookingClass)
+    public function __construct()
     {
+        parent::__construct();
         $this->setActiveMenu(route('cultural.admin.index'));
         $this->middleware('dashboard');
-        $this->culturalDateClass = $culturalDateClass;
-        $this->bookingClass = $bookingClass;
-        $this->culturalClass = $culturalClass;
     }
 
 }

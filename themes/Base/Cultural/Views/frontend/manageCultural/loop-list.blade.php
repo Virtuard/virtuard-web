@@ -12,7 +12,7 @@
             <div class="thumb-image">
                 <a href="{{$row->getDetailUrl()}}" target="_blank">
                     @if($row->image_url)
-                        <img src="{{$row->image_url}}" class="img-responsive" alt="">
+                        <img src="{{$row->image_url}}" class="img-responsive" alt="{{$row->title}}">
                     @endif
                 </a>
                 <div class="service-wishlist {{$row->isWishList()}}" data-id="{{$row->id}}" data-type="{{$row->type}}">
@@ -51,6 +51,7 @@
                         <a href="{{ route("cultural.vendor.delete",['id'=>$row->id,'permanently_delete'=>1]) }}" class="btn btn-danger" data-confirm="<?php echo e(__("Do you want to permanently delete?")); ?>">{{__("Del")}}</a>
                     @endif
                 @else
+                    <a href="{{route('cultural.vendor.clone',[$row->id])}}" target="_blank" class="btn btn-primary">{{__("Clone")}}</a>
                     <a href="{{$row->getDetailUrl()}}" target="_blank" class="btn btn-info">{{__("View")}}</a>
 
                     @if(Auth::user()->hasPermission('cultural_update'))

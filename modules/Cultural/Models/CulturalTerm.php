@@ -8,6 +8,6 @@ class CulturalTerm extends BaseModel
     protected $table = 'bravo_cultural_term';
     protected $fillable = [
         'term_id',
-        'target_id'
+        'cultural_id'
     ];
 }

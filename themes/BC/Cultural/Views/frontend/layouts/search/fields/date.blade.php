@@ -1,39 +1,18 @@
-@php($location_search_style = setting_item('cultural_location_search_style'))
-
 <div class="form-group">
-    <i class="field-icon fa icofont-map"></i>
+    <i class="field-icon icofont-wall-clock"></i>
     <div class="form-content">
-        <label> Category </label>
-        @if($location_search_style=='autocompletePlace')
-            <div class="g-map-place" >
-                <input type="text" name="map_place" placeholder="{{__("Select category")}}"  value="{{request()->input('map_place')}}" class="form-control border-0">
-                <div class="map d-none" id="map-{{\Illuminate\Support\Str::random(10)}}"></div>
-                <input type="hidden" name="map_lat" value="{{request()->input('map_lat')}}">
-                <input type="hidden" name="map_lgn" value="{{request()->input('map_lgn')}}">
+        <div class="form-date-search">
+            <div class="date-wrapper">
+                <div class="check-in-wrapper">
+                    <label>{{ $field['title'] ?? "" }}</label>
+                    <div class="render check-in-render">{{Request::query('start',display_date(strtotime("today")))}}</div>
+                    <span> - </span>
+                    <div class="render check-out-render">{{Request::query('end',display_date(strtotime("+1 day")))}}</div>
+                </div>
             </div>
-
-        @else
-        <?php
-        $location_name = "";
-        $list_json = [];
-        $list_json[] = [
-            'id' => 1,
-            'title' => 'Sales',
-        ];
-        $list_json[] = [
-            'id' => 2,
-            'title' => 'Rent',
-        ];
-        $list_json[] = [
-            'id' => 3,
-            'title' => 'Showroom',
-        ];
-        ?>
-        <div class="smart-search">
-            <input type="text" class="smart-search-location parent_text form-control" {{ ( empty(setting_item("cultural_location_search_style")) or setting_item("cultural_location_search_style") == "normal" ) ? "readonly" : ""  }} placeholder="{{__("Where are you going?")}}" value="{{ $location_name }}" data-onLoad="{{__("Loading...")}}"
-                   data-default="{{ json_encode($list_json) }}">
-            <input type="hidden" class="child_id" name="category_id" value="{{Request::query('category_id')}}">
+            <input type="hidden" class="check-in-input" value="{{Request::query('start',display_date(strtotime("today")))}}" name="start">
+            <input type="hidden" class="check-out-input" value="{{Request::query('end',display_date(strtotime("+1 day")))}}" name="end">
+            <input type="text" class="check-in-out" name="date" value="{{Request::query('date',date("Y-m-d")." - ".date("Y-m-d",strtotime("+1 day")))}}">
         </div>
-            @endif
     </div>
 </div>

@@ -1,15 +1,13 @@
 <?php
-namespace Modules\Cultural\Blocks;
+namespace Modules\Natural\Blocks;
 
 use Modules\Template\Blocks\BaseBlock;
 use Modules\Location\Models\Location;
 use Modules\Media\Helpers\FileHelper;
 
-class FormSearchCultural extends BaseBlock
+class  FormSearchNatural extends BaseBlock
 {
-
-    public function getOptions()
-    {
+    public function getOptions(){
         return [
             'settings' => [
                 [
@@ -36,6 +34,10 @@ class FormSearchCultural extends BaseBlock
                         [
                             'value'   => 'carousel',
                             'name' => __("Slider Carousel")
+                        ],
+                        [
+                            'value'   => 'carousel_v2',
+                            'name' => __("Slider Carousel Ver 2")
                         ]
                     ]
                 ],
@@ -51,6 +53,18 @@ class FormSearchCultural extends BaseBlock
                     'title_field' => 'title',
                     'settings'    => [
                         [
+                            'id'        => 'title',
+                            'type'      => 'input',
+                            'inputType' => 'text',
+                            'label'     => __('Title (using for slider ver 2)')
+                        ],
+                        [
+                            'id'        => 'desc',
+                            'type'      => 'input',
+                            'inputType' => 'text',
+                            'label'     => __('Desc (using for slider ver 2)')
+                        ],
+                        [
                             'id'    => 'bg_image',
                             'type'  => 'uploader',
                             'label' => __('Background Image Uploader')
@@ -58,23 +72,23 @@ class FormSearchCultural extends BaseBlock
                     ]
                 ]
             ],
-            'category'=>__("Service Cultural")
+            'category'=>__("Service Natural")
         ];
     }
 
     public function getName()
     {
-        return __('Cultural: Form Search');
+        return __('Natural: Form Search');
     }
 
     public function content($model = [])
     {
         $limit_location = 15;
-        if( empty(setting_item("cultural_location_search_style")) or setting_item("cultural_location_search_style") == "normal" ){
+        if( empty(setting_item("natural_location_search_style")) or setting_item("natural_location_search_style") == "normal" ){
             $limit_location = 1000;
         }
         $data = [
-            'list_location' => Location::where("status","publish")->limit($limit_location)->with(['translation'])->get()->toTree(),
+            'natural_location' => Location::where("status","publish")->limit($limit_location)->with(['translation'])->get()->toTree(),
             'bg_image_url'  => '',
         ];
         $data = array_merge($model, $data);
@@ -83,7 +97,7 @@ class FormSearchCultural extends BaseBlock
         }
         $data['style'] = $model['style'] ?? "";
         $data['list_slider'] = $model['list_slider'] ?? "";
-        return view('Cultural::frontend.blocks.form-search-cultural.index', $data);
+        return view('Natural::frontend.blocks.form-search-natural.index', $data);
     }
 
     public function contentAPI($model = []){

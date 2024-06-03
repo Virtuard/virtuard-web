@@ -18,7 +18,7 @@
             </div>
         </div>
         @if (is_default_lang())
-            <div class="form-group">
+            <div class="form-group d-none">
                 <label class="control-label">{{ __('Category') }}</label>
                 <div class="">
                     <select name="category_id" class="form-control">

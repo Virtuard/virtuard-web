@@ -1,45 +1,39 @@
 <?php
-
 namespace Modules\Cultural\Models;
 
 use App\BaseModel;
+use Modules\Cultural\Models\Cultural;
 
-class CulturalTranslation extends Cultural
+class CulturalTranslation extends BaseModel
 {
     protected $table = 'bravo_cultural_translations';
-
     protected $fillable = [
         'title',
         'content',
-        'faqs',
+        'short_desc',
         'address',
-        'surrounding'
+        'faqs',
+        'include',
+        'exclude',
+        'itinerary',
+        'surrounding',
     ];
-
     protected $slugField     = false;
     protected $seo_type = 'cultural_translation';
-
     protected $cleanFields = [
         'content'
     ];
     protected $casts = [
-        'faqs'  => 'array',
-        'surrounding'  => 'array',
+        'faqs' => 'array',
+        'include' => 'array',
+        'exclude' => 'array',
+        'itinerary' => 'array',
+        'surrounding' => 'array',
     ];
-
     public function getSeoType(){
         return $this->seo_type;
     }
     public function getRecordRoot(){
         return $this->belongsTo(Cultural::class,'origin_id');
-
     }
-    public static function boot() {
-		parent::boot();
-		static::saving(function($table)  {
-			unset($table->extra_price);
-			unset($table->price);
-			unset($table->sale_price);
-		});
-	}
 }

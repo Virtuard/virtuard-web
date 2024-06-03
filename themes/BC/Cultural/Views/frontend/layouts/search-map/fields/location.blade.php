@@ -1,5 +1,4 @@
 @php($location_search_style = setting_item('cultural_location_search_style'))
-
 <div class="filter-item">
     <div class="form-group">
         <i class="field-icon fa icofont-map"></i>
@@ -30,7 +29,7 @@
                         $traverse($location->children, $prefix . '-');
                     }
                 };
-                $traverse($list_location);
+                $traverse($cultural_location);
                 ?>
                 <div class="smart-search">
                     <input type="text" class="smart-search-location parent_text form-control"

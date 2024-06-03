@@ -1,5 +1,5 @@
 <div class="panel">
-    <div class="panel-title"><strong>{{__("Locations")}}</strong></div>
+    <div class="panel-title"><strong>{{__("Cultural Locations")}}</strong></div>
     <div class="panel-body">
         @if(is_default_lang())
             <div class="form-group d-none">
@@ -28,7 +28,7 @@
                             <div class="smart-search">
                                 <input type="text" class="smart-search-location parent_text form-control" placeholder="{{__("-- Please Select --")}}" value="{{ $location_name }}" data-onLoad="{{__("Loading...")}}"
                                        data-default="{{ json_encode($list_json) }}">
-                                <input type="hidden" class="child_id" name="location_id" value="{{ $row->location_id ?? Request::query('location_id') }}">
+                                <input type="hidden" class="child_id" name="location_id" value="{{$row->location_id ?? Request::query('location_id')}}">
                             </div>
                         </div>
                     </div>
@@ -54,8 +54,8 @@
             </div>
         @endif
         <div class="form-group">
-            <label class="control-label">{{__("Real address")}}</label>
-            <input type="text" name="address" id="customPlaceAddress"  class="form-control" placeholder="{{__("Real address")}}" value="{{$translation->address}}">
+            <label class="control-label">{{__("Real cultural address")}}</label>
+            <input type="text" name="address" id="customPlaceAddress" class="form-control" placeholder="{{__("Real cultural address")}}" value="{{$translation->address}}">
         </div>
         @if(is_default_lang())
             <div class="form-group">

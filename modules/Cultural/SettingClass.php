@@ -1,9 +1,13 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: Admin
+ * Date: 7/2/2019
+ * Time: 10:26 AM
+ */
 namespace  Modules\Cultural;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
-use Modules\Core\Models\Settings;
 
 class SettingClass extends BaseSettingsClass
 {
@@ -28,12 +32,10 @@ class SettingClass extends BaseSettingsClass
                     'cultural_enable_review_after_booking',
                     'cultural_review_number_per_page',
                     'cultural_review_stats',
-
                     'cultural_page_list_seo_title',
                     'cultural_page_list_seo_desc',
                     'cultural_page_list_seo_image',
                     'cultural_page_list_seo_share',
-
                     'cultural_booking_buyer_fees',
                     'cultural_vendor_create_service_must_approved_by_admin',
                     'cultural_allow_vendor_can_change_their_booking_status',
@@ -49,16 +51,14 @@ class SettingClass extends BaseSettingsClass
                     'cultural_deposit_fomular',
 
                     'cultural_layout_map_option',
-
-                    'cultural_booking_type',
                     'cultural_icon_marker_map',
 
                     'cultural_map_lat_default',
                     'cultural_map_lng_default',
                     'cultural_map_zoom_default',
 
-                    'cultural_location_search_value',
-                    'cultural_location_search_style',
+                    'cultural_location_radius_value',
+                    'cultural_location_radius_type',
                 ],
                 'html_keys'=>[
 

@@ -1,5 +1,5 @@
 @php
-    $terms_ids = $row->terms->pluck('term_id');
+    $terms_ids = $row->cultural_term->pluck('term_id');
     $attributes = \Modules\Core\Models\Terms::getTermsById($terms_ids);
 @endphp
 @if(!empty($terms_ids) and !empty($attributes))
@@ -9,7 +9,7 @@
             <div class="g-attributes {{$attribute['parent']->slug}} attr-{{$attribute['parent']->id}}">
                 <h3>{{ $translate_attribute->name }}</h3>
                 @php $terms = $attribute['child'] @endphp
-                <div class="list-attributes {{$attribute['parent']['display_type'] ?? ""}}">
+                <div class="list-attributes">
                     @foreach($terms as $term )
                         @php $translate_term = $term->translate() @endphp
                         <div class="item {{$term->slug}} term-{{$term->id}}">
@@ -19,12 +19,10 @@
                             @else
                                 <i class="{{ $term->icon ?? "icofont-check-circled icon-default" }}"></i>
                             @endif
-                            {{$translate_term->name}}
-                        </div>
+                            {{$translate_term->name}}</div>
                     @endforeach
                 </div>
             </div>
         @endif
-
     @endforeach
 @endif

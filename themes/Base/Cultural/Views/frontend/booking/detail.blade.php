@@ -15,11 +15,6 @@
                         </p>
                     @endif
                 </div>
-                <div>
-                    @if($image_url = $service->getImageUrl())
-                        <img src="{{$image_url}}" alt="{!! clean($service_translation->title) !!}">
-                    @endif
-                </div>
                 @php $vendor = $service->author; @endphp
                 @if($vendor->hasPermission('dashboard_vendor_access') and !$vendor->hasPermission('dashboard_access'))
                     <div class="mt-1">
@@ -38,77 +33,54 @@
                             {{display_date($booking->start_date)}}
                         </div>
                     </li>
-                    @if($booking->getMeta("booking_type") == "ticket")
-                        <li>
-                            <div class="label">{{__('Duration:')}}</div>
-                            <div class="val">
-                                @php $duration = $booking->getMeta("duration") @endphp
-                                {{duration_format($duration)}}
-                            </div>
-                        </li>
-                    @endif
-                    @if($booking->getMeta("booking_type") == "time_slot")
-                        <li>
-                            <div class="label">{{__('Duration:')}}</div>
-                            <div class="val">
-                                {{ $booking->getMeta("duration")  }}
-                                {{ $booking->getMeta("duration_unit")  }}
-                            </div>
-                        </li>
-                        <li class="flex-wrap">
-                            <div class="label w-100 mb-2">{{__('Start Time:')}}</div>
-                            <div class="val w-100">
-                                <div class="slots-wrapper d-flex justify-content-start flex-wrap">
-                                    @if(!empty($timeSlots = $booking->time_slots))
-                                        @foreach( $timeSlots as $item )
-                                            <div class="btn btn-sm mr-2 mb-2 btn-success">
-                                                {{ date( "H:i",strtotime($item->start_time)) }}
-                                            </div>
-                                        @endforeach
-                                    @endif
-                                </div>
-                            </div>
-                        </li>
-                    @endif
+                    <li>
+                        <div class="label">{{__('Duration:')}}</div>
+                        <div class="val">
+                            {{human_time_diff($booking->end_date,$booking->start_date)}}
+                        </div>
+                    </li>
                 @endif
-                @if($booking->getMeta("booking_type") == "ticket")
-                    @php $ticket_types = $booking->getJsonMeta('ticket_types')@endphp
-                    @if(!empty($ticket_types))
-                        @foreach($ticket_types as $type)
-                            <li>
-                                <div class="label">{{$type['name_'.$lang_local] ?? $type['name']}}:</div>
-                                <div class="val">
-                                    {{$type['number']}}
-                                </div>
-                            </li>
-                        @endforeach
-                    @endif
+                @php $person_types = $booking->getJsonMeta('person_types')@endphp
+                @if(!empty($person_types))
+                    @foreach($person_types as $type)
+                        <li>
+                            <div class="label">{{$type['name_'.$lang_local] ?? __($type['name'])}}:</div>
+                            <div class="val">
+                                {{$type['number']}}
+                            </div>
+                        </li>
+                    @endforeach
+                @else
+                    <li>
+                        <div class="label">{{__("Guests")}}:</div>
+                        <div class="val">
+                            {{$booking->total_guests}}
+                        </div>
+                    </li>
                 @endif
+
             </ul>
         </div>
         @do_action('booking.checkout.before_total_review')
         <div class="review-section total-review">
             <ul class="review-list">
-                @if($booking->getMeta("booking_type") == "time_slot")
+                @php $person_types = $booking->getJsonMeta('person_types') @endphp
+                @if(!empty($person_types))
+                    @foreach($person_types as $type)
+                        <li>
+                            <div class="label">{{ $type['name_'.$lang_local] ?? __($type['name'])}}: {{$type['number']}} * {{format_money($type['price'])}}</div>
+                            <div class="val">
+                                {{format_money($type['price'] * $type['number'])}}
+                            </div>
+                        </li>
+                    @endforeach
+                @else
                     <li>
-                        <div class="label">{{ $booking->total_guests }} x {{ format_money( $booking->getJsonMeta('base_price')) }}</div>
+                        <div class="label">{{__("Guests")}}: {{$booking->total_guests}} * {{format_money($booking->getMeta('base_price'))}}</div>
                         <div class="val">
-                            {{format_money( $booking->getJsonMeta('base_price') * $booking->total_guests )  }}
+                            {{format_money($booking->getMeta('base_price') * $booking->total_guests)}}
                         </div>
                     </li>
-                @endif
-                @if($booking->getMeta("booking_type") == "ticket")
-                    @php $ticket_types = $booking->getJsonMeta('ticket_types') @endphp
-                    @if(!empty($ticket_types))
-                        @foreach($ticket_types as $type)
-                            <li>
-                                <div class="label">{{ $type['name_'.$lang_local] ?? $type['name']}}: {{$type['number']}} * {{format_money($type['price'])}}</div>
-                                <div class="val">
-                                    {{format_money($type['price'] * $type['number'])}}
-                                </div>
-                            </li>
-                        @endforeach
-                    @endif
                 @endif
                 @php $extra_price = $booking->getJsonMeta('extra_price') @endphp
                 @if(!empty($extra_price))
@@ -119,9 +91,34 @@
                         <ul>
                             @foreach($extra_price as $type)
                                 <li>
-                                    <div class="label">{{$type['name_'.$lang_local] ?? $type['name']}}:</div>
+                                    <div class="label">{{$type['name_'.$lang_local] ?? __($type['name'])}}:</div>
                                     <div class="val">
                                         {{format_money($type['total'] ?? 0)}}
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endif
+                @php $discount_by_people = $booking->getJsonMeta('discount_by_people')@endphp
+                @if(!empty($discount_by_people))
+                    <li>
+                        <div class="label-title"><strong>{{__("Discounts:")}}</strong></div>
+                    </li>
+                    <li class="no-flex">
+                        <ul>
+                            @foreach($discount_by_people as $type)
+                                <li>
+                                    <div class="label">
+                                        @if(!$type['to'])
+                                            {{__('from :from guests',['from'=>$type['from']])}}
+                                        @else
+                                            {{__(':from - :to guests',['from'=>$type['from'],'to'=>$type['to']])}}
+                                        @endif
+                                        :
+                                    </div>
+                                    <div class="val">
+                                        - {{format_money($type['total'] ?? 0)}}
                                     </div>
                                 </li>
                             @endforeach
@@ -144,24 +141,27 @@
                             $fee_price = $item['price'];
                             if(!empty($item['unit']) and $item['unit'] == "percent"){
                                 $fee_price = ( $booking->total_before_fees / 100 ) * $item['price'];
-                            }else{
-                                 if (!empty($item['per_ticket']) and $item['per_ticket'] == "on") {
-                                    $fee_price = $fee_price * $booking->total_guests;
-                                }
                             }
                         @endphp
                         <li>
                             <div class="label">
                                 {{$item['name_'.$lang_local] ?? $item['name']}}
                                 <i class="icofont-info-circle" data-toggle="tooltip" data-placement="top" title="{{ $item['desc_'.$lang_local] ?? $item['desc'] }}"></i>
+                                @if(!empty($item['per_person']) and $item['per_person'] == "on")
+                                    : {{$booking->total_guests}} * {{format_money( $fee_price )}}
+                                @endif
                             </div>
                             <div class="val">
-                                {{ format_money( $fee_price ) }}
+                                @if(!empty($item['per_person']) and $item['per_person'] == "on")
+                                    {{ format_money( $fee_price * $booking->total_guests ) }}
+                                @else
+                                    {{ format_money( $fee_price ) }}
+                                @endif
                             </div>
                         </li>
                     @endforeach
                 @endif
-                    @includeIf('Coupon::frontend/booking/checkout-coupon')
+                @includeIf('Coupon::frontend/booking/checkout-coupon')
                 <li class="final-total d-block">
                     <div class="d-flex justify-content-between">
                         <div class="label">{{__("Total:")}}</div>

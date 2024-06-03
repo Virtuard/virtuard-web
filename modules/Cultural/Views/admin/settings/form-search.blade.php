@@ -17,16 +17,18 @@
                         </div>
                         <div class="g-items">
                             @php
-                            $event_search_fields = setting_item_array('event_search_fields');
+                            $cultural_search_fields = setting_item_array('cultural_search_fields');
                             $types = [
                                 'service_name'=>__("Service name"),
                                 'location'=>__("Location"),
-                                'date'=>__("Date"),
+                                //'category'=>__("Category"),
                                 'attr'=>__("Attribute"),
+                                'date'=>__("Date"),
+                                'price'=>__("Price"),
                             ];
-                            $attrs = \Modules\Core\Models\Attributes::where('service', 'event')->get();
+                             $attrs = \Modules\Core\Models\Attributes::where('service', 'cultural')->get();
                             @endphp
-                            @foreach($event_search_fields as $key=>$item)
+                            @foreach($cultural_search_fields as $key=>$item)
                                 <div class="item" data-number="{{$key}}">
                                     <div class="row">
                                         <div class="col-md-7">
@@ -35,27 +37,27 @@
                                                     <?php $key_lang = setting_item('site_locale') != $language->locale ? "_".$language->locale : ""   ?>
                                                     <div class="g-lang">
                                                         <div class="title-lang">{{$language->name}}</div>
-                                                        <input type="text" name="event_search_fields[{{$key}}][title{{$key_lang}}]" value="{{$item['title'.$key_lang] ?? ''}}" class="form-control">
+                                                        <input type="text" name="cultural_search_fields[{{$key}}][title{{$key_lang}}]" value="{{$item['title'.$key_lang] ?? ''}}" class="form-control">
                                                     </div>
                                                 @endforeach
                                             @else
-                                                <input type="text" name="event_search_fields[{{$key}}][title]" value="{{$item['title']}}" class="form-control">
+                                                <input type="text" name="cultural_search_fields[{{$key}}][title]" value="{{$item['title']}}" class="form-control">
                                             @endif
-                                            <select name="event_search_fields[{{$key}}][field]" class="custom-select">
+                                            <select name="cultural_search_fields[{{$key}}][field]" class="custom-select">
                                                 <option value="">{{__("-- Select field type --")}}</option>
                                                 @foreach($types as $type=>$name)
                                                     <option @if($item['field'] == $type) selected @endif value="{{$type}}">{{$name}}</option>
                                                 @endforeach
                                             </select>
                                             <br>
-                                            <select name="event_search_fields[{{$key}}][attr]" class="mt-2 custom-select">
+                                            <select name="cultural_search_fields[{{$key}}][attr]" class="mt-2 custom-select">
                                                 <option value="">{{__("-- Select Attribute --")}}</option>
                                                 @foreach($attrs as $attr)
                                                     <option @if($item['attr'] ?? "" == $attr->id) selected @endif value="{{$attr->id}}">{{$attr->name}}</option>
                                                 @endforeach
                                             </select>
                                             <br>
-                                            <select name="event_search_fields[{{$key}}][size]" class="mt-2 custom-select">
+                                            <select name="cultural_search_fields[{{$key}}][size]" class="mt-2 custom-select">
                                                 <option @if($item['size'] == 6) selected @endif value="6">{{ __("Size Column 6") }}</option>
                                                 <option @if($item['size'] == 4) selected @endif value="4">{{ __("Size Column 4") }}</option>
                                                 <option @if($item['size'] == 3) selected @endif value="3">{{ __("Size Column 3") }}</option>
@@ -64,7 +66,7 @@
                                             </select>
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="number" name="event_search_fields[{{$key}}][position]" min="0" value="{{$item['position'] ?? 0}}" class="form-control">
+                                            <input type="number" name="cultural_search_fields[{{$key}}][position]" min="0" value="{{$item['position'] ?? 0}}" class="form-control">
                                         </div>
                                         <div class="col-md-1">
                                             <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
@@ -85,27 +87,27 @@
                                                 <?php $key_lang = setting_item('site_locale') != $language->locale ? "_".$language->locale : ""   ?>
                                                 <div class="g-lang">
                                                     <div class="title-lang">{{$language->name}}</div>
-                                                    <input type="text" __name__="event_search_fields[__number__][title{{$key_lang}}]" class="form-control">
+                                                    <input type="text" __name__="cultural_search_fields[__number__][title{{$key_lang}}]" class="form-control">
                                                 </div>
                                             @endforeach
                                         @else
-                                            <input type="text" __name__="event_search_fields[__number__][title]"  class="form-control">
+                                            <input type="text" __name__="cultural_search_fields[__number__][title]"  class="form-control">
                                         @endif
-                                        <select __name__="event_search_fields[__number__][field]" class="custom-select">
+                                        <select __name__="cultural_search_fields[__number__][field]" class="custom-select">
                                             <option value="">{{__("-- Select field type --")}}</option>
                                             @foreach($types as $type=>$name)
                                                 <option value="{{$type}}">{{$name}}</option>
                                             @endforeach
                                         </select>
                                         <br>
-                                        <select __name__="event_search_fields[__number__][attr]" class="mt-2 custom-select">
+                                        <select __name__="cultural_search_fields[__number__][attr]" class="mt-2 custom-select">
                                             <option value="">{{__("-- Select Attribute --")}}</option>
                                             @foreach($attrs as $attr)
                                                 <option value="{{$attr->id}}">{{$attr->name}}</option>
                                             @endforeach
                                         </select>
                                         <br>
-                                        <select __name__="event_search_fields[__number__][size]" class="mt-2 custom-select">
+                                        <select __name__="cultural_search_fields[__number__][size]" class="mt-2 custom-select">
                                             <option value="6">{{ __("Size Column 6") }}</option>
                                             <option value="4">{{ __("Size Column 4") }}</option>
                                             <option value="3">{{ __("Size Column 3") }}</option>
@@ -114,7 +116,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="number" __name__="event_search_fields[__number__][position]" min="0"  class="form-control">
+                                        <input type="number" __name__="cultural_search_fields[__number__][position]" min="0"  class="form-control">
                                     </div>
                                     <div class="col-md-1">
                                         <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>

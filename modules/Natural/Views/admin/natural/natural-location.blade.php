@@ -2,7 +2,7 @@
     <div class="panel-title"><strong>{{__("Natural Locations")}}</strong></div>
     <div class="panel-body">
         @if(is_default_lang())
-            <div class="form-group">
+            <div class="form-group d-none">
                 <label class="control-label">{{__("Location")}}</label>
                 @if(!empty($is_smart_search))
                     <div class="form-group-smart-search">

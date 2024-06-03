@@ -1,12 +1,12 @@
 @extends('admin.layouts.app')
 @section('content')
-    <form action="{{route('cultural.admin.attribute.term.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post">
+    <form action="{{route('Cultural.admin.attribute.term.store',['id'=>($row->id) ? $row->id : '-1','lang'=>request()->query('lang')])}}" method="post">
         @csrf
         <input type="hidden" name="id" value="{{$row->id}}">
         <div class="container">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
                     <div class="d-flex justify-content-between mb20">
                         <div class="">
                             <h1 class="title-bar">{{$row->id ? __('Edit: ').$row->name : __('Add new term')}}</h1>
@@ -20,7 +20,7 @@
                         <div class="panel">
                             <div class="panel-title"><strong>{{__("Term Content")}}</strong></div>
                             <div class="panel-body">
-                                @include('Event::admin.terms.form')
+                                @include('cultural::admin.terms.form')
                             </div>
                         </div>
                     </div>

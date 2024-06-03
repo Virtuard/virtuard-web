@@ -8,17 +8,19 @@
             @endphp
             @if(!empty($cultural_search_fields))
                 @foreach($cultural_search_fields as $field)
-                @php $field['title'] = $field['title_'.app()->getLocale()] ?? $field['title'] ?? "" @endphp
+                    @php
+                        $field['title'] = $field['title_'.app()->getLocale()] ?? $field['title'] ?? "";
+                    @endphp
                     <div class="col-md-{{ $field['size'] ?? "4" }} border-right">
                         @switch($field['field'])
                             @case ('service_name')
                                 @include('Cultural::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Cultural::frontend.layouts.search-map.fields.location')
+                                @include('Cultural::frontend.layouts.search.fields.location')
                             @break
                             @case ('date')
-                                @include('Cultural::frontend.layouts.search.fields.category')
+                                @include('Cultural::frontend.layouts.search.fields.date')
                             @break
                             @case ('guests')
                                 @include('Cultural::frontend.layouts.search.fields.range')
@@ -28,7 +30,6 @@
                 @endforeach
             @endif
         </div> --}}
-
         <div class="row d-flex align-items-center">
             <div class="col-md-3 border-right">
                 @include('Cultural::frontend.layouts.search.fields.service_name')
