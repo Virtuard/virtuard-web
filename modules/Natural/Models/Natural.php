@@ -1,96 +1,130 @@
 <?php
-
 namespace Modules\Natural\Models;
 
 use App\Currency;
-use Illuminate\Http\Response;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Modules\Booking\Models\Bookable;
 use Modules\Booking\Models\Booking;
-use Modules\Booking\Models\BookingTimeSlots;
 use Modules\Booking\Traits\CapturesService;
-use Modules\Core\Models\Attributes;
-use Modules\Core\Models\SEO;
 use Modules\Core\Models\Terms;
 use Modules\Location\Models\Location;
-use Modules\Media\Helpers\FileHelper;
 use Modules\Review\Models\Review;
+use Modules\Media\Helpers\FileHelper;
+use Illuminate\Support\Facades\Cache;
+use Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Modules\Natural\Models\NaturalTranslation;
+use Modules\Core\Models\SEO;
 use Modules\User\Models\UserWishList;
-use App\Models\MediaFile;
-use App\Models\User;
+use Modules\Core\Models\Attributes;
 
 class Natural extends Bookable
 {
     use Notifiable;
     use SoftDeletes;
     use CapturesService;
-    protected $table = 'bravo_naturals';
-    public $type = 'natural';
-    public $checkout_booking_detail_file       = 'Natural::frontend/booking/detail';
-    public $checkout_booking_detail_modal_file = 'Natural::frontend/booking/detail-modal';
 
+    protected $table                              = 'bravo_naturals';
+    public    $checkout_booking_detail_file       = 'Natural::frontend/booking/detail';
+    public    $checkout_booking_detail_modal_file = 'Natural::frontend/booking/detail-modal';
     public    $set_paid_modal_file                = 'Natural::frontend/booking/set-paid-modal';
-    public $email_new_booking_file             = 'Natural::emails.new_booking_detail';
+    public    $email_new_booking_file             = 'Natural::emails.new_booking_detail';
+    public    $type                               = 'natural';
+    public    $availabilityClass                  = NaturalDate::class;
     protected $translation_class = NaturalTranslation::class;
 
-    protected $fillable = [
+    protected $fillable                           = [
+        //Natural info
         'title',
         'content',
+        'image_id',
+        'banner_image_id',
+        'short_desc',
+        'category_id',
+        'location_id',
+        'address',
+        'map_lat',
+        'map_lng',
+        'map_zoom',
+        'is_featured',
+        'gallery',
+        'video',
+        'price',
+        'sale_price',
+        //Natural type
+        'duration',
+        'max_people',
+        'min_people',
+        //Extra Info
+        'faqs',
         'status',
-        'faqs'
+        'include',
+        'exclude',
+        'itinerary',
+        'surrounding',
+        'min_day_before_booking',
+        'enable_fixed_date',
+        'start_date',
+        'end_date',
+        'last_booking_date',
     ];
-    protected $slugField     = 'slug';
-    protected $slugFromField = 'title';
-    protected $seo_type = 'natural';
+    protected $slugField                          = 'slug';
+    protected $slugFromField                      = 'title';
+    protected $seo_type                           = 'natural';
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
     protected $casts = [
-        'faqs'         => 'array',
-        'extra_price'  => 'array',
-        'price'        => 'float',
-        'sale_price'   => 'float',
-        'ticket_types' => 'array',
-        'service_fee'  => 'array',
+        'faqs'      => 'array',
+        'include'   => 'array',
+        'exclude'   => 'array',
+        'itinerary' => 'array',
+        'service_fee' => 'array',
         'surrounding' => 'array',
+        'start_date'=> 'date',
+        'end_date'=> 'date',
+        'last_booking_date'   => 'date',
 
     ];
+
+    public static function getModelName()
+    {
+        return __("Natural");
+    }
+
     protected $bookingClass;
-    protected $bookingTimeSlotsClass;
-    protected $reviewClass;
-    protected $naturalDateClass;
     protected $naturalTermClass;
     protected $naturalTranslationClass;
+    protected $naturalMetaClass;
+    protected $naturalDateClass;
     protected $userWishListClass;
-    protected $locationClass;
-
-    protected $tmp_price = 0;
-    protected $tmp_dates = [];
+    protected $reviewClass;
 
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
         $this->bookingClass = Booking::class;
-        $this->bookingTimeSlotsClass = BookingTimeSlots::class;
-        $this->reviewClass = Review::class;
-        $this->naturalDateClass = NaturalDate::class;
         $this->naturalTermClass = NaturalTerm::class;
         $this->naturalTranslationClass = NaturalTranslation::class;
+        $this->naturalMetaClass = NaturalMeta::class;
+        $this->naturalDateClass = NaturalDate::class;
         $this->userWishListClass = UserWishList::class;
-        $this->locationClass = Location::class;
+        $this->reviewClass = Review::class;
     }
 
-    public static function getModelName()
+    /**
+     * Get Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function category_natural()
     {
-        return "Natural";
-    }
-
-    public static function getTableName()
-    {
-        return with(new static)->table;
+        return $this->hasOne("Modules\Natural\Models\NaturalCategory", "id", 'category_id')->with(['translation']);
     }
 
     /**
@@ -118,30 +152,39 @@ class Natural extends Bookable
         return $meta;
     }
 
-    public function terms()
+    /**
+     * Get Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function meta()
     {
-        return $this->hasMany($this->naturalTermClass, "target_id");
+        return $this->hasOne($this->naturalMetaClass, "natural_id");
+    }
+
+    /**
+     * Get Category
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function natural_term()
+    {
+        return $this->hasMany($this->naturalTermClass, "natural_id");
     }
 
     public function getDetailUrl($include_param = true)
     {
         $param = [];
         if ($include_param) {
-            if (!empty($date =  request()->input('date'))) {
+            if (!empty($date = request()->input('date'))) {
                 $dates = explode(" - ", $date);
                 if (!empty($dates)) {
                     $param['start'] = $dates[0] ?? "";
                     $param['end'] = $dates[1] ?? "";
                 }
             }
-            if (!empty($adults =  request()->input('adults'))) {
-                $param['adults'] = $adults;
-            }
-            if (!empty($children =  request()->input('children'))) {
-                $param['children'] = $children;
-            }
         }
-        $urlDetail = app_get_locale(false, false, '/') . env('NATURAL_ROUTE_PREFIX', 'natural') . "/" . $this->slug;
+        $urlDetail = app_get_locale(false, false, '/') . config('natural.natural_route_prefix') . "/" . $this->slug;
         if (!empty($param)) {
             $urlDetail .= "?" . http_build_query($param);
         }
@@ -151,24 +194,40 @@ class Natural extends Bookable
     public static function getLinkForPageSearch($locale = false, $param = [])
     {
 
-        return url(app_get_locale(false, false, '/') . env('NATURAL_ROUTE_PREFIX', 'natural') . "?" . http_build_query($param));
+        return url(app_get_locale(false, false, '/') . config('natural.natural_route_prefix') . "?" . http_build_query($param));
     }
 
     public function getEditUrl()
     {
-        return url(route('natural.admin.edit', ['id' => $this->id]));
+        return route('natural.admin.edit',['id'=>$this->id]);
     }
 
     public function getDiscountPercentAttribute()
     {
-        if (
-            !empty($this->price) and $this->price > 0
-            and !empty($this->sale_price) and $this->sale_price > 0
-            and $this->price > $this->sale_price
-        ) {
+        if (!empty($this->price) and $this->price > 0 and !empty($this->sale_price) and $this->sale_price > 0 and $this->price > $this->sale_price) {
             $percent = 100 - ceil($this->sale_price / ($this->price / 100));
             return $percent . "%";
         }
+    }
+
+    function getDatefomat($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('j F, Y');
+    }
+
+    public function saveMeta(\Illuminate\Http\Request $request)
+    {
+        $meta = $this->naturalMetaClass::where('natural_id', $this->id)->first();
+        if (!$meta) {
+            $meta = new $this->naturalMetaClass();
+            $meta->natural_id = $this->id;
+        }
+        $arg = $request->input();
+        if (!empty($arg['person_types'])) {
+            $arg['person_types'] = array_values($arg['person_types']);
+        }
+        $meta->fill($arg);
+        return $meta->save();
     }
 
     public function fill(array $attributes)
@@ -191,78 +250,112 @@ class Natural extends Bookable
     public function addToCart(Request $request)
     {
         $res = $this->addToCartValidate($request);
-        if ($res !== true) return $res;
-
+        if ($res !== true)
+            return $res;
+        // Add Booking
+        // get Price Availability Calendar
+        $dataPriceAvailability = $this->getDataPriceAvailabilityInRanges($request->input('start_date'));
         $total = 0;
-        $total_tickets = 0;
-
+        $total_guests = 0;
+        $discount = 0;
+        $base_price = ($this->sale_price and $this->sale_price > 0 and $this->sale_price < $this->price) ? $this->sale_price : $this->price;
+        // for Availability Calendar
+        $base_price = $dataPriceAvailability['base_price'] ?? $base_price;
         $extra_price = [];
         $extra_price_input = $request->input('extra_price');
-        $ticket_types = [];
-        $ticket_types_input = $request->input('ticket_types');
-        $base_price = ($this->sale_price and $this->sale_price > 0 and $this->sale_price < $this->price) ? $this->sale_price : $this->price;
-        if ($this->getBookingType() == "ticket") {
-            $ticketsAvailableBook = $this->getDataAvailableBooking($request->input("start_date"));
-            if (!empty($ticketsAvailableBook)) {
-                foreach ($ticketsAvailableBook as $k => $type) {
-                    if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
-                        $type['number'] = $ticket_types_input[$k]['number'];
-                        $ticket_types[] = $type;
-                        $total += $type['price'] * $type['number'];
-                        $total_tickets += $type['number'];
+        $person_types = [];
+        $person_types_input = $request->input('person_types');
+        $discount_by_people = [];
+        $meta = $this->meta;
+        if ($meta) {
+            // for Availability Calendar
+            $meta->person_types = $dataPriceAvailability['person_types'] ?? $meta->person_types;
+            if ($meta->enable_person_types and !empty($meta->person_types)) {
+                if (!empty($meta->person_types)) {
+                    foreach ($meta->person_types as $k => $type) {
+                        if (isset($person_types_input[$k]) and $person_types_input[$k]['number']) {
+                            $type['number'] = $person_types_input[$k]['number'];
+                            $person_types[] = $type;
+                            $total += $type['price'] * $type['number'];
+                            $total_guests += $type['number'];
+                        }
+                    }
+                }
+            } else {
+                $total += $base_price * $request->input('guests');
+                $total_guests += $request->input('guests');
+            }
+            if ($meta->enable_extra_price and !empty($meta->extra_price)) {
+                if (!empty($meta->extra_price)) {
+                    foreach ($meta->extra_price as $k => $type) {
+                        if (isset($extra_price_input[$k]) and !empty($extra_price_input[$k]['enable'])) {
+                            $type_total = 0;
+                            switch ($type['type']) {
+                                case "one_time":
+                                    $type_total = $type['price'];
+                                    break;
+                                case "per_hour":
+                                    $type_total = $type['price'] * $this->duration;
+                                    break;
+                                case "per_day":
+                                    $type_total = $type['price'] * ceil($this->duration / 24);
+                                    break;
+                            }
+                            if (!empty($type['per_person'])) {
+                                $type_total *= $total_guests;
+                            }
+                            $type['total'] = $type_total;
+                            $total += $type_total;
+                            $extra_price[] = $type;
+                        }
                     }
                 }
             }
-        }
-        if ($this->getBookingType() == "time_slot") {
-            $total_tickets = count($request->input('select_start_time'));
-            $total += $base_price * $total_tickets;
-        }
+            if ($meta->discount_by_people and !empty($meta->discount_by_people)) {
+                foreach ($meta->discount_by_people as $type) {
+                    if ($type['from'] <= $total_guests and (!$type['to'] or $type['to'] >= $total_guests)) {
 
-        if ($this->enable_extra_price and !empty($this->extra_price)) {
-            foreach ($this->extra_price as $k => $type) {
-                if (isset($extra_price_input[$k]) and !empty($extra_price_input[$k]['enable'])) {
-                    $type_total = 0;
-                    switch ($type['type']) {
-                        case "one_time":
-                            $type_total = $type['price'];
-                            break;
-                        case "per_hour":
-                            $type_total = $type['price'] * $this->duration;
-                            break;
+                        $type_total = 0;
+                        switch ($type['type']) {
+                            case "fixed":
+                                $type_total = $type['amount'];
+                                break;
+                            case "percent":
+                                $type_total = $total / 100 * $type['amount'];
+                                break;
+                        }
+                        $total -= $type_total;
+                        $discount += $type_total;
+                        $type['total'] = $type_total;
+                        $discount_by_people[] = $type;
                     }
-                    $type['total'] = $type_total;
-                    $total += $type_total;
-                    $extra_price[] = $type;
                 }
             }
+        } else {
+            // Default
+            $total += $base_price * $request->input('guests');
+            $total_guests += $request->input('guests');
         }
-
         $start_date = new \DateTime($request->input('start_date'));
         if (empty($start_date)) {
             return $this->sendError(__("Start date is not a valid date"));
         }
-
         if (!$this->checkBusyDate($start_date)) {
             return $this->sendError(__("Start date is not a valid date"));
         }
-        if (empty($total_tickets)) {
-            return $this->sendError(__("Please select ticket!"));
-        }
-
         //Buyer Fees for Admin
         $total_before_fees = $total;
         $total_buyer_fee = 0;
         if (!empty($list_buyer_fees = setting_item('natural_booking_buyer_fees'))) {
             $list_fees = json_decode($list_buyer_fees, true);
-            $total_buyer_fee = $this->calculateServiceFees($list_fees, $total_before_fees, $total_tickets);
+            $total_buyer_fee = $this->calculateServiceFees($list_fees , $total_before_fees , $total_guests);
             $total += $total_buyer_fee;
         }
 
         //Service Fees for Vendor
         $total_service_fee = 0;
-        if (!empty($this->enable_service_fee) and !empty($list_service_fee = $this->service_fee)) {
-            $total_service_fee = $this->calculateServiceFees($list_service_fee, $total_before_fees, $total_tickets);
+        if(!empty($this->enable_service_fee) and !empty($list_service_fee = $this->service_fee)){
+            $total_service_fee = $this->calculateServiceFees($list_service_fee , $total_before_fees , $total_guests);
             $total += $total_service_fee;
         }
 
@@ -273,8 +366,9 @@ class Natural extends Bookable
         $booking->vendor_id = $this->author_id;
         $booking->customer_id = Auth::id();
         $booking->total = $total;
-        $booking->total_guests = $total_tickets;
+        $booking->total_guests = $total_guests;
         $booking->start_date = $start_date->format('Y-m-d H:i:s');
+        $start_date->modify('+ ' . max(1, $this->duration) . ' hours');
         $booking->end_date = $start_date->format('Y-m-d H:i:s');
 
         $booking->vendor_service_fee_amount = $total_service_fee ?? '';
@@ -283,6 +377,12 @@ class Natural extends Bookable
         $booking->total_before_fees = $total_before_fees;
         $booking->total_before_discount = $total_before_fees;
 
+
+        if($this->isFixedDate()){
+            $booking->start_date = $this->start_date;
+            $booking->end_date = $this->end_date;
+        }
+
         $booking->calculateCommission();
         if ($this->isDepositEnable()) {
             $booking_deposit_fomular = $this->getDepositFomular();
@@ -290,7 +390,6 @@ class Natural extends Bookable
             if ($booking_deposit_fomular == "deposit_and_fee") {
                 $tmp_price_total = $booking->total_before_fees;
             }
-
             switch ($this->getDepositType()) {
                 case "percent":
                     $booking->deposit = $tmp_price_total * $this->getDepositAmount() / 100;
@@ -303,278 +402,248 @@ class Natural extends Bookable
                 $booking->deposit = $booking->deposit + $total_buyer_fee + $total_service_fee;
             }
         }
-
         $check = $booking->save();
         if ($check) {
-
             $this->bookingClass::clearDraftBookings();
             $booking->addMeta('duration', $this->duration);
-            $booking->addMeta('start_time', $this->start_time);
-            $booking->addMeta('total_tickets', $total_tickets);
-            $booking->addMeta('extra_price', $extra_price);
             $booking->addMeta('base_price', $base_price);
-            $booking->addMeta('booking_type', $this->getBookingType());
-            if ($this->getBookingType() == "ticket") {
-                $booking->addMeta('ticket_types', $ticket_types);
+            $booking->addMeta('guests', max($total_guests, $request->input('guests')));
+            $booking->addMeta('extra_price', $extra_price);
+            $booking->addMeta('person_types', $person_types);
+            $booking->addMeta('discount_by_people', $discount_by_people);
+            if($this->isFixedDate()){
+                $booking->addMeta('enable_fixed_date',1);
+                $booking->addMeta('fixed_date_data',['start_date'=>$this->start_date,'end_date'=>$this->end_date,'last_booking_date'=>$this->last_booking_date]);
             }
-            if ($this->getBookingType() == "time_slot") {
-                $booking->addMeta('duration_unit', $this->duration_unit);
-                if (!empty($timeSlots = $request->input('select_start_time'))) {
-                    $booking->addMeta('select_start_time', $request->input('select_start_time'));
-                    foreach ($timeSlots as $item) {
-                        $bookingTimeSlot = new $this->bookingTimeSlotsClass();
-                        $bookingTimeSlot->booking_id = $booking->id;
-                        $bookingTimeSlot->object_id = $request->input('service_id');
-                        $bookingTimeSlot->object_model = $request->input('service_type');
-                        $bookingTimeSlot->duration = $this->duration;
-                        $bookingTimeSlot->duration_unit = $this->duration_unit;
-                        $bookingTimeSlot->start_time = $item;
-                        $type_time =  $this->duration_unit == "hour" ? HOUR_IN_SECONDS : MINUTE_IN_SECONDS;
-                        $end_time = strtotime($item) + $type_time * $this->duration;
-                        $bookingTimeSlot->end_time = date("H:i", $end_time);
-                        $bookingTimeSlot->save();
-                    }
-                }
-            }
-
             if ($this->isDepositEnable()) {
                 $booking->addMeta('deposit_info', [
-                    'type' => $this->getDepositType(),
-                    'amount' => $this->getDepositAmount(),
+                    'type'    => $this->getDepositType(),
+                    'amount'  => $this->getDepositAmount(),
                     'fomular' => $this->getDepositFomular(),
                 ]);
             }
             return $this->sendSuccess([
-                'url' => $booking->getCheckoutUrl(),
+                'url'          => $booking->getCheckoutUrl(),
                 'booking_code' => $booking->code,
             ]);
         }
         return $this->sendError(__("Can not check availability"));
     }
 
-    public function calculateServiceFees($list_buyer_fees, $amount, $guests)
+    public function getDataPriceAvailabilityInRanges($start_date)
     {
-        $total_amount_fee = 0;
-        if (!empty($list_buyer_fees)) {
-            foreach ($list_buyer_fees as $item) {
-                //for Fixed
-                $fee_price = $item['price'];
-                // for Percent
-                if (!empty($item['unit']) and $item['unit'] == "percent") {
-                    $fee_price = ($amount / 100) * $item['price'];
-                } else {
-                    //for Fixed and per Ticket
-                    if (!empty($item['per_ticket']) and $item['per_ticket'] == "on") {
-                        $fee_price = $fee_price * $guests;
-                    }
-                }
-                $total_amount_fee += $fee_price;
-            }
+        $datesRaw = $this->naturalDateClass::getDatesInRanges($start_date, $this->id);
+        $dates = [
+            'base_price'   => null,
+            'person_types' => null,
+        ];
+        if (!empty($datesRaw)) {
+            $dates = [
+                'base_price'   => $datesRaw->price,
+                'person_types' => is_array($datesRaw->person_types) ? $datesRaw->person_types : false,
+            ];
         }
-        return $total_amount_fee;
+        return $dates;
     }
 
-    public function getDataAvailableBooking($start_date)
+    public function beforeCheckout(Request $request, $booking)
     {
-        $ticket_types = $this->ticket_types;
-        $naturalDate = $this->naturalDateClass::where('target_id', $this->id)->where('start_date', $start_date)->first();
-        if (!empty($naturalDate) and $naturalDate->active == 0) {
-            return [];
+        $maxGuests = $this->getNumberAvailableBooking($booking->start_date);
+        if ($booking->total_guests > $maxGuests) {
+            return $this->sendError(__("There are " . $maxGuests . " guests available for your selected date"));
         }
-        if (!empty($naturalDate->ticket_types)) {
-            $ticket_types = $naturalDate->ticket_types;
-        }
-        $dataBooking = $this->bookingClass::select("id")->where('object_id', $this->id)->where('start_date', $start_date)->whereNotIn('status', $this->bookingClass::$notAcceptedStatus)->get();
-        foreach ($dataBooking as $booking) {
-            $bookingTicketTypes = $booking->getJsonMeta('ticket_types') ?? [];
-            if (!empty($bookingTicketTypes)) {
-                foreach ($bookingTicketTypes as $bookingTicket) {
-                    $numberBoook = $bookingTicket['number'];
-                    foreach ($ticket_types as &$ticket) {
-                        if ($ticket['code'] == $bookingTicket['code']) {
-                            $ticket['number'] =  $ticket['number'] - $numberBoook;
-                            if ($ticket['number'] < 0) {
-                                $ticket['number'] = 0;
-                            }
+    }
+
+    public function getNumberAvailableBooking($start_date)
+    {
+        $naturalDate = $this->naturalDateClass::where('target_id', $this->id)->where('start_date', $start_date)->where('active', 1)->first();
+        $totalGuests = $this->bookingClass::where('object_id', $this->id)->where('start_date', $start_date)->whereNotIn('status', $this->bookingClass::$notAcceptedStatus)->sum('total_guests');
+        $maxGuests = !empty($naturalDate->max_guests) ? $naturalDate->max_guests : $this->max_people;
+        $number = $maxGuests - $totalGuests;
+        return $number > 0 ? $number : 0;
+    }
+
+    public function addToCartValidate(Request $request)
+    {
+        $meta = $this->meta;
+        $rules = [
+            'guests'     => 'required|integer|min:1',
+            'start_date' => 'required|date_format:Y-m-d'
+        ];
+        $start_date = $request->input('start_date');
+        if ($meta) {
+
+            // Percent Types
+            if ($meta->enable_person_types) {
+                unset($rules['guests']);
+                $rules['person_types'] = 'required';
+                $person_types_configs = $meta->person_types;
+                if (!empty($person_types_configs) and is_array($person_types_configs)) {
+                    foreach ($person_types_configs as $k => $person_type) {
+                        $ruleStr = 'integer';
+                        if ($person_type['min']) {
+                            $ruleStr .= '|min:' . $person_type['min'];
+                        }
+                        if ($person_type['max']) {
+                            $ruleStr .= '|max:' . $person_type['max'];
+                        }
+                        if ($ruleStr) {
+                            $rules['person_types.' . $k . '.number'] = $ruleStr;
                         }
                     }
                 }
             }
         }
-        return is_array($ticket_types) ? array_values($ticket_types) : [];
-    }
-
-    public function getDataTimeSlotsAvailableBooking($start_date)
-    {
-        $time_slots = $this->getBookingTimeSlot();
-        $naturalDate = $this->naturalDateClass::where('target_id', $this->id)->where('start_date', $start_date)->first();
-        if (!empty($naturalDate) and $naturalDate->active == 0) {
-            return [];
-        }
-        $dataBooking = $this->bookingClass::select("id")->where('object_id', $this->id)->where('start_date', $start_date)->whereNotIn('status', $this->bookingClass::$notAcceptedStatus)->get();
-        foreach ($dataBooking as $booking) {
-            $timeSlots = $booking->time_slots;
-            foreach ($timeSlots as $item) {
-                $value = date("H:i", strtotime($item->start_time));
-                if (in_array($value, $time_slots)) {
-                    $time_slots = array_diff($time_slots, [$value]);
-                }
-            }
-        }
-        return $time_slots;
-    }
-
-    public function addToCartValidate(Request $request)
-    {
-        $rules = [
-            'start_date' => 'required|date_format:Y-m-d',
-        ];
+        // Validation
         if (!empty($rules)) {
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return $this->sendError('', ['errors' => $validator->errors()]);
             }
         }
-        if (strtotime($request->input("start_date")) < strtotime(date('Y-m-d 00:00:00'))) {
+        if (strtotime($start_date) < strtotime(date('Y-m-d 00:00:00'))) {
             return $this->sendError(__("Your selected dates are not valid"));
         }
 
-        if ($this->getBookingType() == "ticket") {
-            $ticket_types_input = $request->input('ticket_types');
-            $ticketsAvailableBook = $this->getDataAvailableBooking($request->input("start_date"));
-            if (!empty($ticketsAvailableBook)) {
-                foreach ($ticketsAvailableBook as $k => $ticketBook) {
-                    if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
-                        $currentNumberUserBook = $ticket_types_input[$k]['number'];
-                        if ($ticketBook["number"] < $currentNumberUserBook) {
-                            $lang_local = app()->getLocale();
-                            $title = $ticketBook['name_' . $lang_local] ?? $ticketBook["name"];
-                            return $this->sendError(__("There are :numberTicket :titleTicket available for your selected date", ["numberTicket" => $ticketBook["number"], "titleTicket" => $title]));
-                        }
+        if($this->isFixedDate()){
+            if(Carbon::parse($request->start_date.' 00:00:00') <= $this->last_booking_date){
+                return $this->sendError(__("This natural is not available at selected dates"));
+            }
+        }else{
+            // Validate Date and Booking
+            if(!$this->isAvailableInRanges($start_date)){
+                return $this->sendError(__("This natural is not available at selected dates"));
+            }
+
+            if ($meta) {
+                // Open Hours
+                if ($meta->enable_open_hours) {
+                    $open_hours = $meta->open_hours;
+                    $nDate = date('N', strtotime($start_date));
+                    if (!isset($open_hours[$nDate]) or empty($open_hours[$nDate]['enable'])) {
+                        return $this->sendError(__("This natural is not open on your selected day"));
                     }
                 }
             }
-        }
-        if ($this->getBookingType() == "time_slot") {
-            $time_slot_select = $request->input("select_start_time");
-            if (empty($time_slot_select)) {
-                return $this->sendError(__("Please select start time!"));
-            }
-            $time_slots_availableBook = $this->getDataTimeSlotsAvailableBooking($request->input("start_date"));
-            foreach ($time_slot_select as $itemSelect) {
-                if (!in_array($itemSelect, $time_slots_availableBook)) {
-                    return $this->sendError(__(":slot not available for your selected ", ["slot" => $itemSelect]));
+
+            if(!empty($this->min_day_before_booking)){
+                $minday_before = strtotime("today +".$this->min_day_before_booking." days");
+                if(  strtotime($start_date) < $minday_before){
+                    return $this->sendError(__("You must book the service for :number days in advance",["number"=>$this->min_day_before_booking]));
                 }
             }
+        }
+
+
+
+        if (!empty($request->person_types)) {
+            $totalGuests = array_sum(Arr::pluck($request->person_types, 'number')) ?? 0;
+        } else {
+            $totalGuests = $request->guests;
+        }
+        $numberGuestsCanBook = $this->getNumberAvailableBooking($start_date);
+        if ($totalGuests > $numberGuestsCanBook) {
+            return $this->sendError(__("There are " . $numberGuestsCanBook . " guests available for your selected date"));
         }
         return true;
     }
 
-    public function beforeCheckout(Request $request, $booking)
-    {
-        $service = $booking->service;
-        if ($service->getBookingType() == "ticket") {
-            $ticket_types_input = $booking->getMeta('ticket_types');
-            if (!empty($ticket_types_input)) {
-                $ticket_types_input = json_decode($ticket_types_input, true);
-                $ticketsAvailableBook = $this->getDataAvailableBooking($booking->start_date);
-                if (!empty($ticketsAvailableBook)) {
-                    foreach ($ticketsAvailableBook as $k => $ticketBook) {
-                        if (isset($ticket_types_input[$k]) and $ticket_types_input[$k]['number']) {
-                            $currentNumberUserBook = $ticket_types_input[$k]['number'];
-                            if ($ticketBook["number"] < $currentNumberUserBook) {
-                                $lang_local = app()->getLocale();
-                                $title = $ticketBook['name_' . $lang_local] ?? $ticketBook["name"];
-                                return $this->sendError(__("There are :numberTicket :titleTicket available for your selected date", ["numberTicket" => $ticketBook["number"], "titleTicket" => $title]));
-                            }
-                        }
-                    }
-                }
-            }
+    public function isAvailableInRanges($start_date){
+
+        if($this->default_state)
+        {
+            $notAvailableDates = $this->naturalDateClass::query()->where([
+                ['start_date','>=',$start_date],
+                ['end_date','<=',$start_date],
+                ['active','0'],
+                ['target_id','=',$this->id],
+            ])->count('id');
+            if($notAvailableDates) return false;
+        }else{
+            $availableDates = $this->naturalDateClass::query()->where([
+                ['start_date','>=',$start_date],
+                ['end_date','<=',$start_date],
+                ['active','=',1],
+                ['target_id','=',$this->id],
+            ])->count('id');
+            if($availableDates < 1) return false;
         }
-        if ($service->getBookingType() == "time_slot") {
-            $time_slot_select = $booking->getMeta("select_start_time");
-            if (!empty($time_slot_select)) {
-                $time_slot_select = json_decode($time_slot_select, true);
-                $time_slots_availableBook = $this->getDataTimeSlotsAvailableBooking($booking->start_date);
-                foreach ($time_slot_select as $itemSelect) {
-                    if (!in_array($itemSelect, $time_slots_availableBook)) {
-                        return $this->sendError(__(":slot not available for your selected ", ["slot" => $itemSelect]));
-                    }
-                }
-            }
-        }
-        return null;
+        return true;
     }
 
     public function getBookingData()
     {
         $booking_data = [
-            'id'              => $this->id,
-            'ticket_types'    => [],
-            'extra_price'     => [],
-            'minDate'         => date('m/d/Y'),
-            'max_number'      => $this->number ?? 1,
-            'duration'        => $this->duration,
-            'buyer_fees'      => [],
-            'start_date'      => request()->input('start') ?? "",
-            'start_date_html' => request()->input('start') ? display_date(request()->input('start')) : __('Please select date!'),
-            'end_date'        => request()->input('end') ?? "",
-            'end_date_html'   => request()->input('end') ? display_date(request()->input('end')) : "",
-            'deposit' => $this->isDepositEnable(),
-            'deposit_type' => $this->getDepositType(),
-            'deposit_amount' => $this->getDepositAmount(),
-            'deposit_fomular' => $this->getDepositFomular(),
-
+            'id'                       => $this->id,
+            'person_types'             => [],
+            'max'                      => 0,
+            'open_hours'               => [],
+            'extra_price'              => [],
+            'minDate'                  => date('m/d/Y'),
+            'duration'                 => $this->duration,
+            'buyer_fees'               => [],
+            'start_date'               => request()->input('start') ?? "",
+            'start_date_html'          => request()->input('start') ? display_date(request()->input('start')) : __('Please select date!'),
+            'end_date'                 => request()->input('end') ?? "",
+            'end_date_html'            => request()->input('end') ? display_date(request()->input('end')) : "",
+            'deposit'                  => $this->isDepositEnable(),
+            'deposit_type'             => $this->getDepositType(),
+            'deposit_amount'           => $this->getDepositAmount(),
+            'deposit_fomular'          => $this->getDepositFomular(),
             'is_form_enquiry_and_book' => $this->isFormEnquiryAndBook(),
-            'enquiry_type' => $this->getBookingEnquiryType(),
-            'booking_type' => $this->getBookingType(),
+            'enquiry_type'             => $this->getBookingEnquiryType(),
+            'is_fixed_date'            => false,
         ];
+        $meta = $this->meta ?? false;
         $lang = app()->getLocale();
-
-        if ($this->ticket_types and $this->getBookingType() == "ticket") {
-            $ticket_types = $this->ticket_types;
-            foreach ($ticket_types as $k => &$type) {
-                if (!empty($lang) and !empty($type['name_' . $lang])) {
-                    $type['name'] = $type['name_' . $lang];
-                }
-                $type['min'] = 0;
-                $type['max'] = (int)$type['number'];
-                $type['number'] = 0;
-                $type['display_price'] = format_money($type['price']);
-            }
-            $booking_data['ticket_types'] = $ticket_types;
-        }
-        if ($time_slots = $this->getBookingTimeSlot() and $this->getBookingType() == "time_slot") {
-            $booking_data['booking_time_slots'] = $time_slots;
-        }
-
-        if ($this->enable_extra_price) {
-            $booking_data['extra_price'] = $this->extra_price;
-            if (!empty($booking_data['extra_price'])) {
-                foreach ($booking_data['extra_price'] as $k => &$type) {
-                    if (!empty($lang) and !empty($type['name_' . $lang])) {
-                        $type['name'] = $type['name_' . $lang];
+        if ($meta) {
+            if ($meta->enable_person_types) {
+                $booking_data['person_types'] = $meta->person_types;
+                if (!empty($booking_data['person_types'])) {
+                    foreach ($booking_data['person_types'] as $k => &$type) {
+                        if (!empty($lang)) {
+                            $type['name'] = !empty($type['name_' . $lang])?$type['name_' . $lang]:$type['name'];
+                            $type['desc'] = !empty($type['desc_' . $lang])?$type['desc_' . $lang]:$type['desc'];
+                        }
+                        $type['min'] = (int)$type['min'];
+                        $type['max'] = (int)$type['max'];
+                        $type['number'] = $type['min'];
+                        $type['display_price'] = format_money($type['price']);
                     }
-                    $type['number'] = 0;
-                    $type['enable'] = 0;
-                    $type['price_html'] = format_money($type['price']);
-                    $type['price_type'] = '';
-                    switch ($type['type']) {
-                        case "per_day":
-                            $type['price_type'] .= '/' . __('day');
-                            break;
-                        case "per_hour":
-                            $type['price_type'] .= '/' . __('hour');
-                            break;
-                    }
-                    if (!empty($type['per_ticket'])) {
-                        $type['price_type'] .= '/' . __('ticket');
-                    }
+                    $booking_data['person_types'] = array_values((array)$booking_data['person_types']);
+                } else {
+                    $booking_data['person_types'] = [];
                 }
             }
-
-            $booking_data['extra_price'] = array_values((array)$booking_data['extra_price']);
+            if ($meta->enable_extra_price) {
+                $booking_data['extra_price'] = $meta->extra_price;
+                if (!empty($booking_data['extra_price'])) {
+                    foreach ($booking_data['extra_price'] as $k => &$type) {
+                        if (!empty($lang) and !empty($type['name_' . $lang])) {
+                            $type['name'] = $type['name_' . $lang];
+                        }
+                        $type['number'] = 0;
+                        $type['enable'] = 0;
+                        $type['price_html'] = format_money($type['price']);
+                        $type['price_type'] = '';
+                        switch ($type['type']) {
+                            case "per_day":
+                                $type['price_type'] .= '/' . __('day');
+                                break;
+                            case "per_hour":
+                                $type['price_type'] .= '/' . __('hour');
+                                break;
+                        }
+                        if (!empty($type['per_person'])) {
+                            $type['price_type'] .= '/' . __('guest');
+                        }
+                    }
+                }
+                $booking_data['extra_price'] = array_values((array)$booking_data['extra_price']);
+            }
+            if ($meta->enable_open_hours) {
+                $booking_data['open_hours'] = $meta->open_hours;
+            }
         }
         $list_fees = setting_item_array('natural_booking_buyer_fees');
         if (!empty($list_fees)) {
@@ -582,23 +651,35 @@ class Natural extends Bookable
                 $item['type_name'] = $item['name_' . app()->getLocale()] ?? $item['name'] ?? '';
                 $item['type_desc'] = $item['desc_' . app()->getLocale()] ?? $item['desc'] ?? '';
                 $item['price_type'] = '';
-                if (!empty($item['per_ticket']) and $item['per_ticket'] == 'on') {
-                    $item['price_type'] .= '/' . __('ticket');
+                if (!empty($item['per_person']) and $item['per_person'] == 'on') {
+                    $item['price_type'] .= '/' . __('guest');
                 }
                 $booking_data['buyer_fees'][] = $item;
             }
         }
-        if (!empty($this->enable_service_fee) and !empty($service_fee = $this->service_fee)) {
+        if(!empty($this->enable_service_fee) and !empty($service_fee = $this->service_fee)){
             foreach ($service_fee as $item) {
                 $item['type_name'] = $item['name_' . app()->getLocale()] ?? $item['name'] ?? '';
                 $item['type_desc'] = $item['desc_' . app()->getLocale()] ?? $item['desc'] ?? '';
                 $item['price_type'] = '';
-                if (!empty($item['per_ticket']) and $item['per_ticket'] == 'on') {
-                    $item['price_type'] .= '/' . __('ticket');
+                if (!empty($item['per_person']) and $item['per_person'] == 'on') {
+                    $item['price_type'] .= '/' . __('guest');
                 }
                 $booking_data['buyer_fees'][] = $item;
             }
         }
+
+        if($this->isFixedDate()){
+            $booking_data['is_fixed_date'] = true;
+            $booking_data['start_date'] = $this->start_date->format('Y-m-d');
+            $booking_data['start_date_html'] =display_date($this->start_date);
+            $booking_data['end_date_html'] =display_date($this->end_date);
+            $booking_data['end_date'] = $this->end_date;
+            $booking_data['last_booking_date'] = $this->last_booking_date;
+            $booking_data['last_booking_date_html'] = display_date($this->last_booking_date);
+            $booking_data['open_hours'] =[];
+        }
+
         return $booking_data;
     }
 
@@ -639,8 +720,7 @@ class Natural extends Bookable
         return setting_item("natural_review_approved", 0);
     }
 
-    public function review_after_booking()
-    {
+    public function review_after_booking(){
         return setting_item("natural_enable_review_after_booking", 0);
     }
 
@@ -652,9 +732,9 @@ class Natural extends Bookable
             $status_making_completed_booking = json_decode($options);
         }
         $number_review = $this->reviewClass::countReviewByServiceID($this->id, Auth::id(), false, $this->type) ?? 0;
-        $number_booking = $this->bookingClass::countBookingByServiceID($this->id, Auth::id(), $status_making_completed_booking) ?? 0;
+        $number_booking = $this->bookingClass::countBookingByServiceID($this->id, Auth::id(),$status_making_completed_booking) ?? 0;
         $number = $number_booking - $number_review;
-        if ($number < 0) $number = 0;
+        if($number < 0) $number = 0;
         return $number;
     }
 
@@ -674,14 +754,14 @@ class Natural extends Bookable
     {
         $list_score = [
             'score_total'  => 0,
-            'score_text'   => __("Not rated"),
+            'score_text'   => __("Not Rated"),
             'total_review' => 0,
             'rate_score'   => [],
         ];
-        $dataTotalReview = $this->reviewClass::selectRaw(" AVG(rate_number) as score_total , COUNT(id) as total_review ")->where('object_id', $this->id)->where('object_model', $this->type)->where("status", "approved")->first();
+        $dataTotalReview = $this->reviewClass::selectRaw(" AVG(rate_number) as score_total , COUNT(id) as total_review ")->where('object_id', $this->id)->where('object_model', "natural")->where("status", "approved")->first();
         if (!empty($dataTotalReview->score_total)) {
             $list_score['score_total'] = number_format($dataTotalReview->score_total, 1);
-            $list_score['score_text'] = Review::getDisplayTextScoreByLever(round($list_score['score_total']));
+            $list_score['score_text'] = $this->reviewClass::getDisplayTextScoreByLever(round($list_score['score_total']));
         }
         if (!empty($dataTotalReview->total_review)) {
             $list_score['total_review'] = $dataTotalReview->total_review;
@@ -706,18 +786,21 @@ class Natural extends Bookable
         return $list_score;
     }
 
+    /**
+     * Get Score Review
+     *
+     * Using for loop natural
+     */
     public function getScoreReview()
     {
         $natural_id = $this->id;
         $list_score = Cache::rememberForever('review_' . $this->type . '_' . $natural_id, function () use ($natural_id) {
             $dataReview = $this->reviewClass::selectRaw(" AVG(rate_number) as score_total , COUNT(id) as total_review ")->where('object_id', $natural_id)->where('object_model', "natural")->where("status", "approved")->first();
-            $score_total = !empty($dataReview->score_total) ? number_format($dataReview->score_total, 1) : 0;
             return [
-                'score_total'  => $score_total,
+                'score_total'  => !empty($dataReview->score_total) ? number_format($dataReview->score_total, 1) : 0,
                 'total_review' => !empty($dataReview->total_review) ? $dataReview->total_review : 0,
             ];
         });
-        $list_score['review_text'] =  $list_score['score_total'] ? Review::getDisplayTextScoreByLever(round($list_score['score_total'])) : __("Not rated");
         return $list_score;
     }
 
@@ -726,44 +809,54 @@ class Natural extends Bookable
         return $this->reviewClass::countReviewByServiceID($this->id, false, $status, $this->type) ?? 0;
     }
 
-    public function getReviewList()
-    {
-        return $this->reviewClass::select(['id', 'title', 'content', 'rate_number', 'author_ip', 'status', 'created_at', 'vendor_id', 'author_id'])->where('object_id', $this->id)->where('object_model', 'natural')->where("status", "approved")->orderBy("id", "desc")->with('author')->paginate(setting_item('natural_review_number_per_page', 5));
-    }
-
     public function getNumberServiceInLocation($location)
     {
         $number = 0;
         if (!empty($location)) {
             $number = parent::join('bravo_locations', function ($join) use ($location) {
-                $join->on('bravo_locations.id', '=', $this->table . '.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
-            })->where($this->table . ".status", "publish")->with(['translation'])->count($this->table . ".id");
+                $join->on('bravo_locations.id', '=', 'bravo_naturals.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
+            })->where("bravo_naturals.status", "publish")->with(['translation'])->count("bravo_naturals.id");
         }
-        if (empty($number)) return false;
+        if (empty($number))
+            return false;
         if ($number > 1) {
             return __(":number Naturals", ['number' => $number]);
         }
         return __(":number Natural", ['number' => $number]);
     }
 
+    public function getReviewList(){
+        return $this->reviewClass::select(['id','title','content','rate_number','author_ip','status','created_at','vendor_id','author_id'])
+            ->where('object_id', $this->id)
+            ->where('object_model', 'natural')
+            ->where("status", "approved")
+            ->orderBy("id", "desc")
+            ->with('author')
+            ->paginate(setting_item('natural_review_number_per_page', 5));
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function getBookingsInRange($from, $to)
     {
 
         $query = $this->bookingClass::query();
-        $query->whereNotIn('status', $this->bookingClass::$notAcceptedStatus);
-        $query->where('start_date', '<=', $to)->where('end_date', '>=', $from)->take(100);
-
+        $query->whereNotIn('status', ['draft']);
+        $query->where('start_date', '<=', $to)->where('end_date', '>=', $from)->take(50);
         $query->where('object_id', $this->id);
-        $query->where('object_model', $this->type);
-
+        $query->where('object_model', 'natural');
         return $query->orderBy('id', 'asc')->get();
     }
 
     public function saveCloneByID($clone_id)
     {
         $old = parent::find($clone_id);
-        if (empty($old)) return false;
-        $selected_terms = $old->terms->pluck('term_id');
+        if (empty($old))
+            return false;
+        $selected_terms = $old->natural_term->pluck('term_id');
         $old->title = $old->title . " - Copy";
         $new = $old->replicate();
         $new->save();
@@ -771,7 +864,7 @@ class Natural extends Bookable
         foreach ($selected_terms as $term_id) {
             $this->naturalTermClass::firstOrCreate([
                 'term_id' => $term_id,
-                'target_id' => $new->id
+                'natural_id' => $new->id
             ]);
         }
         //Language
@@ -796,6 +889,13 @@ class Natural extends Bookable
             $metaSeoNew->object_id = $new->id;
             $metaSeoNew->save();
         }
+        //Meta
+        $metaNatural = $this->naturalMetaClass::where('natural_id', $old->id)->first();
+        if (!empty($metaNatural)) {
+            $metaNaturalNew = $metaNatural->replicate();
+            $metaNaturalNew->natural_id = $new->id;
+            $metaNaturalNew->save();
+        }
     }
 
     public function hasWishList()
@@ -815,7 +915,7 @@ class Natural extends Bookable
 
     public static function getServiceIconFeatured()
     {
-        return "icofont-hill";
+        return "icofont-island-alt";
     }
 
     public static function isEnable()
@@ -823,76 +923,24 @@ class Natural extends Bookable
         return setting_item('natural_disable') == false;
     }
 
-    public function getBookingInRanges($object_id, $object_model, $from, $to, $object_child_id = false)
-    {
-
-        $query = $this->bookingClass::selectRaw(" * , SUM( number ) as total_numbers ")->where([
-            'object_id' => $object_id,
-            'object_model' => $object_model,
-        ])->whereNotIn('status', $this->bookingClass::$notAcceptedStatus)
-            ->where('end_date', '>=', $from)
-            ->where('start_date', '<=', $to)
-            ->groupBy('start_date')
-            ->take(200);
-
-        if ($object_child_id) {
-            $query->where('object_child_id', $object_child_id);
-        }
-
-        return $query->get();
-    }
-
     public function isDepositEnable()
     {
         return (setting_item('natural_deposit_enable') and setting_item('natural_deposit_amount'));
     }
+
     public function getDepositAmount()
     {
         return setting_item('natural_deposit_amount');
     }
+
     public function getDepositType()
     {
         return setting_item('natural_deposit_type');
     }
+
     public function getDepositFomular()
     {
         return setting_item('natural_deposit_fomular', 'default');
-    }
-
-    public function detailBookingEachDate($booking)
-    {
-        $startDate = $booking->start_date;
-        $endDate = $booking->end_date;
-        $rowDates = json_decode($booking->getMeta('tmp_dates'));
-
-        $allDates = [];
-        $service = $booking->service;
-        $period = periodDate($startDate, $endDate);
-        foreach ($period as $dt) {
-            $price = (!empty($service->sale_price) and $service->sale_price > 0 and $service->sale_price < $service->price) ? $service->sale_price : $service->price;
-            $date['price'] = $price;
-            $date['price_html'] = format_money($price);
-            $date['from'] = $dt->getTimestamp();
-            $date['from_html'] = $dt->format('d/m/Y');
-            $date['to'] = $dt->getTimestamp();
-            $date['to_html'] = $dt->format('d/m/Y');
-            $allDates[date('Y-m-d', $i)] = $date;
-        }
-
-        if (!empty($rowDates)) {
-            foreach ($rowDates as $item => $row) {
-                $startDate = strtotime($item);
-                $price = $row->price;
-                $date['price'] = $price;
-                $date['price_html'] = format_money($price);
-                $date['from'] = $startDate;
-                $date['from_html'] = date('d/m/Y', $startDate);
-                $date['to'] = $startDate;
-                $date['to_html'] = date('d/m/Y', ($startDate));
-                $allDates[date('Y-m-d', $startDate)] = $date;
-            }
-        }
-        return $allDates;
     }
 
     public static function isEnableEnquiry()
@@ -902,6 +950,7 @@ class Natural extends Bookable
         }
         return false;
     }
+
     public static function isFormEnquiryAndBook()
     {
         $check = setting_item('booking_enquiry_for_natural');
@@ -910,6 +959,7 @@ class Natural extends Bookable
         }
         return false;
     }
+
     public static function getBookingEnquiryType()
     {
         $check = setting_item('booking_enquiry_for_natural');
@@ -921,21 +971,21 @@ class Natural extends Bookable
         return "book";
     }
 
+    /**
+     * @param $request
+     * [location_id] -> number
+     * [s] -> keyword
+     * @return array|\Illuminate\Database\Eloquent\Builder
+     */
     public function search($request)
     {
         $model_natural = parent::query()->select("bravo_naturals.*");
         $model_natural->where("bravo_naturals.status", "publish");
-
-        if (!empty($category_id = $request['category_id'] ?? "")) {
-            $model_natural->where('category_id', $category_id)->get();
-        }
-        if (!empty($location_id = $request['location_id'] ?? "")) {
+        if (!empty($location_id = $request['location_id'] ?? "" )) {
             $location = Location::where('id', $location_id)->where("status", "publish")->first();
             if (!empty($location)) {
                 $model_natural->join('bravo_locations', function ($join) use ($location) {
-                    $join->on('bravo_locations.id', '=', 'bravo_naturals.location_id')
-                        ->where('bravo_locations._lft', '>=', $location->_lft)
-                        ->where('bravo_locations._rgt', '<=', $location->_rgt);
+                    $join->on('bravo_locations.id', '=', 'bravo_naturals.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
                 });
             } else {
                 $model_natural->where('address', 'LIKE', '%' . $location_id . '%')->get();
@@ -944,39 +994,52 @@ class Natural extends Bookable
         if (!empty($price_range = $request['price_range'] ?? "")) {
             $pri_from = explode(";", $price_range)[0];
             $pri_to = explode(";", $price_range)[1];
-            $raw_sql_min_max = "( (IFNULL(bravo_naturals.sale_price,0) > 0 and bravo_naturals.sale_price >= ? ) OR (IFNULL(bravo_naturals.sale_price,0) <= 0 and bravo_naturals.price >= ? ) )
-                            AND ( (IFNULL(bravo_naturals.sale_price,0) > 0 and bravo_naturals.sale_price <= ? ) OR (IFNULL(bravo_naturals.sale_price,0) <= 0 and bravo_naturals.price <= ? ) )";
-            $model_natural->WhereRaw($raw_sql_min_max, [$pri_from, $pri_from, $pri_to, $pri_to]);
+            $raw_sql_min_max = "( (IFNULL(bravo_naturals.sale_price,0) > 0 and bravo_naturals.sale_price >= ? ) OR (IFNULL(bravo_naturals.sale_price,0) <= 0 and bravo_naturals.price >= ?) )
+								AND ( (IFNULL(bravo_naturals.sale_price,0) > 0 and bravo_naturals.sale_price <= ? ) OR (IFNULL(bravo_naturals.sale_price,0) <= 0 and bravo_naturals.price <= ?) )";
+            $model_natural->WhereRaw($raw_sql_min_max, [
+                $pri_from,
+                $pri_from,
+                $pri_to,
+                $pri_to
+            ]);
         }
 
-        $terms = $request['terms'] ?? "";
-        if ($term_id = $request['term_id'] ?? "") {
-            $terms[] = $term_id;
+        $category_ids = $request['cat_id'] ?? [];
+        if(!is_array($category_ids)) $category_ids = [$category_ids];
+        $category_ids = array_filter(array_values($category_ids));
+        $list_cat = NaturalCategory::whereIn('id', $category_ids)->where("status", "publish")->get();
+        foreach ($list_cat as $index=>$cat){
+            $model_natural->join('bravo_natural_category as tc'.$index, function ($join) use ($cat,$index) {
+                $join->on('tc'.$index.'.id', '=', 'bravo_naturals.category_id')
+                    ->where('tc'.$index.'._lft','>=',$cat->_lft)
+                    ->where('tc'.$index.'._rgt','<=',$cat->_rgt);
+            });
         }
 
+        $terms = $request['terms'] ?? [];
         if (is_array($terms) and !empty($terms = array_filter(array_values($terms)))) {
-            foreach ($terms as $index => $termId) {
-                $model_natural->join('bravo_natural_term as tt' . $index, function ($join) use ($termId, $index) {
-                    $join->on('tt' . $index . '.target_id', "bravo_naturals.id");
-                    $join->where('tt' . $index . '.term_id', $termId);
+            foreach ($terms as $index=>$termId){
+                $model_natural->join('bravo_natural_term as tt'.$index, function($join) use ($termId,$index){
+                    $join->on('tt'.$index.'.natural_id', "bravo_naturals.id");
+                    $join->where('tt'.$index.'.term_id', $termId);
                 });
             }
         }
 
-        $review_scores = $request['review_score'] ?? "";
-        if (is_array($review_scores) && !empty($review_scores)) {
+        $review_scores = $request['review_score'] ?? [];
+        if (is_array($review_scores)) $review_scores = array_filter($review_scores);
+        if (!empty($review_scores) && count($review_scores)) {
             $where_review_score = [];
             $params = [];
             foreach ($review_scores as $number) {
                 $where_review_score[] = " ( bravo_naturals.review_score >= ? AND bravo_naturals.review_score <= ? ) ";
                 $params[] = $number;
-                $params[] = $number . '.9';
+                $params[] = $number.'.9';
             }
             $sql_where_review_score = " ( " . implode("OR", $where_review_score) . " )  ";
-            $model_natural->WhereRaw($sql_where_review_score, $params);
+            $model_natural->WhereRaw($sql_where_review_score,$params);
         }
-
-        if (!empty($service_name = $request["service_name"] ?? "")) {
+        if (!empty($service_name = $request['service_name'] ?? [])) {
             if (setting_item('site_enable_multi_lang') && setting_item('site_locale') != app()->getLocale()) {
                 $model_natural->leftJoin('bravo_natural_translations', function ($join) {
                     $join->on('bravo_naturals.id', '=', 'bravo_natural_translations.origin_id');
@@ -986,41 +1049,33 @@ class Natural extends Bookable
                 $model_natural->where('bravo_naturals.title', 'LIKE', '%' . $service_name . '%');
             }
         }
-
-        if (!empty($lat = $request['map_lat'] ?? "") and !empty($lgn = $request['map_lgn'] ?? "") and !empty($request['map_place'])) {
+        if(!empty($lat = $request['map_lat'] ?? '') and !empty($lgn = $request['map_lgn'] ?? '') and !empty($request['map_place'] ?? '')){
             //			3959 - Miles(dặm), 6371 - Kilometers
-            $distance  = setting_item('natural_location_radius_value', 0);
-            if (!empty($distance) and setting_item('natural_location_search_style') == 'autocompletePlace') {
-                $distanceType = setting_item('natural_location_radius_type', 3959);
-                if (empty($distanceType)) {
-                    $distanceType = 3959;
-                }
-                $string = '( ? * acos(
+                $distance  = setting_item('natural_location_radius_value',0);
+                if(!empty($distance) and setting_item('natural_location_search_style')=='autocompletePlace'){
+                    $distanceType = setting_item('natural_location_radius_type',3959);
+                    if(empty($distanceType)){
+                        $distanceType = 3959;
+                    }
+                    $string = '( ? * acos(
 								cos( radians(?) ) * cos( radians( map_lat ) ) * cos( radians( map_lng ) - radians(?) )
 							    + sin( radians(?) ) * sin( radians(map_lat) )
 							     )
 						 ) <= ?';
-                $model_natural->whereRaw($string, [$distanceType, $lat, $lgn, $lat, $distance]);
-            }
-            else {
-                $model_natural->where("bravo_naturals.map_lat", $lat);
-                $model_natural->where("bravo_naturals.map_lng", $lgn);
-                $model_natural->where("bravo_naturals.address", $request['map_place']);
-            }
-
-            //            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
-            $model_natural->orderByRaw("POW((bravo_naturals.map_lng-?),2) + POW((bravo_naturals.map_lat-?),2)", [$lgn, $lat]);
+                    $model_natural->whereRaw($string,[$distanceType,$lat,$lgn,$lat,$distance]);
+                }
+//            ORDER BY (POW((lon-$lon),2) + POW((lat-$lat),2))";
+            $model_natural->orderByRaw("POW((bravo_naturals.map_lng-?),2) + POW((bravo_naturals.map_lat-?),2)",[$lgn,$lat]);
         }
-
-        if (!empty($request['is_featured'])) {
-            $model_natural->where('bravo_naturals.is_featured', 1);
+        if(!empty($request['is_featured']))
+        {
+            $model_natural->where('bravo_naturals.is_featured',1);
         }
         if (!empty($request['custom_ids'])) {
             $model_natural->whereIn("bravo_naturals.id", $request['custom_ids']);
         }
-
-        $orderby = $request["orderby"] ?? "";
-        switch ($orderby) {
+        $orderby = $request['orderby'] ?? "";
+        switch ($orderby){
             case "price_low_high":
                 $raw_sql = "CASE WHEN IFNULL( bravo_naturals.sale_price, 0 ) > 0 THEN bravo_naturals.sale_price ELSE bravo_naturals.price END AS tmp_min_price";
                 $model_natural->selectRaw($raw_sql);
@@ -1035,49 +1090,71 @@ class Natural extends Bookable
                 $model_natural->orderBy("review_score", "desc");
                 break;
             default:
-                if (!empty($request['order']) and !empty($request['order_by'])) {
-                    $model_natural->orderBy("bravo_naturals." . $request['order'], $request['order_by']);
-                } else {
+                if(!empty($request['order']) and !empty($request['order_by'])){
+                    $model_natural->orderBy("bravo_naturals.".$request['order'], $request['order_by']);
+                }else{
                     $model_natural->orderBy("is_featured", "desc");
                     $model_natural->orderBy("id", "desc");
                 }
         }
 
         $model_natural->groupBy("bravo_naturals.id");
-
-        $max_guests = (int)(($request['adults'] ?? 0) + ($request['children'] ?? 0));
-        if ($max_guests) {
-            $model_natural->where('max_guests', '>=', $max_guests);
-        }
-        return $model_natural->with(['location', 'hasWishList', 'translation']);
-    }
-
-    public function getNumberWishlistInService($status = false)
-    {
-        return $this->hasOne($this->userWishListClass, 'object_id', 'id')->where('object_model', $this->type)->count();
+        return $model_natural->with([
+            'location',
+            'hasWishList',
+            'translation'
+        ]);
     }
 
     public function dataForApi($forSingle = false)
     {
         $data = parent::dataForApi($forSingle);
-        $data['duration'] = duration_format($this->duration, true);
-        $data['start_time'] = $this->start_time;
+        $data['duration'] = duration_format($this->duration);
         if ($forSingle) {
             $data['review_score'] = $this->getReviewDataAttribute();
             $data['review_stats'] = $this->getReviewStats();
             $data['review_lists'] = $this->getReviewList();
+            $data['category'] = NaturalCategory::selectRaw("id,name")->find($this->category_id) ?? null;
+            $data['min_people'] = $this->min_people;
+            $data['max_people'] = $this->max_people;
             $data['faqs'] = $this->faqs;
-            $data['ticket_types'] = $this->ticket_types;
-            $data['is_instant'] = $this->is_instant;
-            $data['default_state'] = $this->default_state;
+            $data['include'] = $this->include;
+            $data['exclude'] = $this->exclude;
+            $data["itinerary"] = null;
+            if (!empty($this->itinerary)) {
+                $itinerary = $this->itinerary;
+                foreach ($itinerary as &$item) {
+                    $item['image'] = get_file_url($item['image_id'], 'full');
+                }
+                $data["itinerary"] = $itinerary;
+            }
+            $meta = $this->meta;
+            if ($meta->enable_extra_price and !empty($meta->extra_price)) {
+                $data["enable_extra_price"] = $meta->enable_extra_price ?? 0;
+                $data["extra_price"] = $meta->extra_price ?? null;
+            }
+            $data["person_types"] = null;
+            if (!empty($meta->person_types)) {
+                $data["person_types"] = $meta->person_types;
+            }
+            $data["discount_by_people"] = null;
+            if (!empty($meta->discount_by_people)) {
+                $data["person_types"] = $meta->discount_by_people;
+            }
+            $data["enable_open_hours"] = 0;
+            $data["open_hours"] = null;
+            if (!empty($meta->enable_open_hours)) {
+                $data["enable_open_hours"] = $meta->enable_open_hours;
+                $data["open_hours"] = $meta->open_hours;
+            }
             $data['booking_fee'] = setting_item_array('natural_booking_buyer_fees');
             if (!empty($location_id = $this->location_id)) {
-                $related =  parent::query()->where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$this->id])->with(['location', 'translation', 'hasWishList'])->get();
+                $related =  parent::query()->where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$this->id])->with(['location','translation','hasWishList'])->get();
                 $data['related'] = $related->map(function ($related) {
-                    return $related->dataForApi();
-                }) ?? null;
+                        return $related->dataForApi();
+                    }) ?? null;
             }
-            $data['terms'] = Terms::getTermsByIdForAPI($this->terms->pluck('term_id'));
+            $data['terms'] = Terms::getTermsByIdForAPI($this->natural_term->pluck('term_id'));
         } else {
             $data['review_score'] = $this->getScoreReview();
         }
@@ -1091,14 +1168,16 @@ class Natural extends Bookable
 
     static public function getFiltersSearch()
     {
+
         $min_max_price = self::getMinMaxPrice();
+        $category = NaturalCategory::selectRaw("id,name,slug")->where('status', 'publish')->with(['translation'])->get()->toTree();
         return [
             [
                 "title"    => __("Filter Price"),
                 "field"    => "price_range",
                 "position" => "1",
-                "min_price" => floor(Currency::convertPrice($min_max_price[0])),
-                "max_price" => ceil(Currency::convertPrice($min_max_price[1])),
+                "min_price" => floor ( Currency::convertPrice($min_max_price[0]) ),
+                "max_price" => ceil (Currency::convertPrice($min_max_price[1]) ),
             ],
             [
                 "title"    => __("Review Score"),
@@ -1108,34 +1187,20 @@ class Natural extends Bookable
                 "max" => "5",
             ],
             [
+                "title"    => __("Natural Type"),
+                "field"    => "cat_id",
+                "position" => "3",
+                "data" => $category->map(function($category){
+                    return $category->dataForApi();
+                })
+            ],
+            [
                 "title"    => __("Attributes"),
                 "field"    => "terms",
-                "position" => "3",
+                "position" => "4",
                 "data" => Attributes::getAllAttributesForApi("natural")
             ]
         ];
-    }
-
-    public static function getBookingType()
-    {
-        return setting_item('natural_booking_type', 'ticket');
-    }
-
-    public function getBookingTimeSlot()
-    {
-        $this->start_time = $this->start_time ?? "00:00";
-        $this->end_time = $this->end_time ?? "23:00";
-        $this->duration = $this->duration ?? "1";
-        $this->duration_unit = $this->duration_unit ?? "hour";
-        $type_time = MINUTE_IN_SECONDS;
-        if ($this->duration_unit == "hour") {
-            $type_time = HOUR_IN_SECONDS;
-        }
-        $time_slots = [];
-        for ($i = strtotime($this->start_time); $i < strtotime($this->end_time); $i += ($type_time * $this->duration)) {
-            $time_slots[] = date('H:i', $i);
-        }
-        return $time_slots;
     }
 
     static public function getFormSearch()
@@ -1144,11 +1209,12 @@ class Natural extends Bookable
         $search_fields = array_values(\Illuminate\Support\Arr::sort($search_fields, function ($value) {
             return $value['position'] ?? 0;
         }));
-        foreach ($search_fields as &$item) {
-            if ($item['field'] == 'attr' and !empty($item['attr'])) {
+        foreach ( $search_fields as &$item){
+            if($item['field'] == 'attr' and !empty($item['attr']) ){
                 $attr = Attributes::find($item['attr']);
                 $item['attr_title'] = $attr->translate()->name;
-                foreach ($attr->terms as $term) {
+                foreach($attr->terms as $term)
+                {
                     $translate = $term->translate();
                     $item['terms'][] =  [
                         'id' => $term->id,
@@ -1160,13 +1226,11 @@ class Natural extends Bookable
         return $search_fields;
     }
 
-    public function image()
+    public function isFixedDate(): bool
     {
-        return $this->belongsTo(MediaFile::class, 'image_id');
+        if(!empty($this->enable_fixed_date) and $this->last_booking_date >= Carbon::today()) return    true;
+        return false;
+
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'create_user');
-    }
 }

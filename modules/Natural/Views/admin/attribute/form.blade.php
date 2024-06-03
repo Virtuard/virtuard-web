@@ -11,13 +11,6 @@
         </small>
     </div>
     <div class="form-group">
-        <label>{{__("Display Type in detail service")}}</label>
-        <select name="display_type" class="form-control">
-            <option  @if($row->display_type == "icon_left") selected @endif value="icon_left">{{__("Display Left Icon")}}</option>
-            <option  @if($row->display_type == "icon_center") selected @endif value="icon_center">{{__("Display Center Icon")}}</option>
-        </select>
-    </div>
-    <div class="form-grou">
         <label>{{__('Hide in detail service')}}</label>
         <br>
         <label>

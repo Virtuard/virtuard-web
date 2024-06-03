@@ -1,4 +1,3 @@
-
 <div class="item">
     <a href="{{ route("natural.search",['_layout'=>'map']) }}">{{__("Show on the map")}}</a>
 </div>

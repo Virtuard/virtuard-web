@@ -1,14 +1,20 @@
 <div class="panel">
-    <div class="panel-title"><strong>{{ __('Natural and Landscape') }}</strong></div>
+    <div class="panel-title"><strong>{{ __('Natural') }}</strong></div>
     <div class="panel-body">
         <div class="form-group">
             <label>{{ __('Title') }}</label>
-            <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Name of the Natural and Landscape') }}" name="title" class="form-control">
+            <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Natural title') }}" name="title" class="form-control">
         </div>
         <div class="form-group">
             <label class="control-label">{{ __('Content') }}</label>
             <div class="">
                 <textarea name="content" class="d-none has-ckeditor" cols="30" rows="10">{{ $translation->content }}</textarea>
+            </div>
+        </div>
+        <div class="form-group d-none">
+            <label class="control-label">{{ __('Description') }}</label>
+            <div class="">
+                <textarea name="short_desc" class="form-control" cols="30" rows="4">{{ $translation->short_desc }}</textarea>
             </div>
         </div>
         @if (is_default_lang())
@@ -37,48 +43,48 @@
                 <label class="control-label">{{ __('Youtube Video') }}</label>
                 <input type="text" name="video" class="form-control" value="{{ $row->video }}" placeholder="{{ __('Youtube link video') }}">
             </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="control-label">{{ __('Start Time') }}</label>
-                        <input type="text" name="start_time" class="form-control" value="{{ $row->start_time }}" placeholder="{{ __('Ex: 15:00') }}">
-                        <small>
-                            {{ __('Input time format, ex: 15:00') }}
-                        </small>
+
+
+            @if (is_default_lang())
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label class="control-label">{{ __('Minimum advance reservations') }}</label>
+                            <input type="number" name="min_day_before_booking" class="form-control" value="{{ $row->min_day_before_booking }}" placeholder="{{ __('Ex: 3') }}">
+                            <i>{{ __('Leave blank if you dont need to use the min day option') }}</i>
+                        </div>
                     </div>
-                </div>
-                <div class="col-lg-6 @if ($row->getBookingType() == 'ticket') d-none @endif">
-                    <div class="form-group">
-                        <label class="control-label">{{ __('End Time') }}</label>
-                        <input type="text" name="end_time" class="form-control" value="{{ $row->end_time }}" placeholder="{{ __('Ex: 21:00') }}">
-                        <small>
-                            {{ __('Input time format, ex: 21:00') }}
-                        </small>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group">
-                        @if ($row->getBookingType() == 'ticket')
-                            <label class="control-label">{{ __('Duration (hour)') }}</label>
-                        @else
+                    <div class="col-lg-6">
+                        <div class="form-group">
                             <label class="control-label">{{ __('Duration') }}</label>
-                        @endif
-                        <input type="number" name="duration" class="form-control" value="{{ $row->duration }}" placeholder="{{ __('Ex: 3') }}">
+                            <div class="input-group mb-3">
+                                <input type="text" name="duration" class="form-control" value="{{ $row->duration }}" placeholder="{{ __('Duration') }}" aria-describedby="basic-addon2">
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="basic-addon2">{{ __('hours') }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="control-label">{{ __('Natural Min People') }}</label>
+                        <input type="text" name="min_people" class="form-control" value="{{ $row->min_people }}" placeholder="{{ __('Natural Min People') }}">
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="form-group @if ($row->getBookingType() == 'ticket') d-none @endif">
-                        <label class="control-label">{{ __('Duration Unit') }}</label>
-                        <select name="duration_unit" class="form-control">
-                            <option value="hour" @if ($row->duration_unit == 'hour') selected @endif> {{ __('Hour') }}</option>
-                            <option value="minute" @if ($row->duration_unit == 'minute') selected @endif> {{ __('Minute') }}</option>
-                        </select>
+                    <div class="form-group">
+                        <label class="control-label">{{ __('Natural Max People') }}</label>
+                        <input type="text" name="max_people" class="form-control" value="{{ $row->max_people }}" placeholder="{{ __('Natural Max People') }}">
                     </div>
                 </div>
             </div>
+
         @endif
+        <?php do_action(\Modules\Natural\Hook::FORM_AFTER_MAX_PEOPLE, $row); ?>
         <div class="form-group-item">
             <label class="control-label">{{ __('FAQs') }}</label>
             <div class="g-items-header">
@@ -99,10 +105,10 @@
                         <div class="item" data-number="{{ $key }}">
                             <div class="row">
                                 <div class="col-md-5">
-                                    <input type="text" name="faqs[{{ $key }}][title]" class="form-control" value="{{ $faq['title'] }}" placeholder="{{ __('Eg: When and where does the tour end?') }}">
+                                    <input type="text" name="faqs[{{ $key }}][title]" class="form-control" value="{{ $faq['title'] }}" placeholder="{{ __('Eg: When and where does the natural end?') }}">
                                 </div>
                                 <div class="col-md-6">
-                                    <textarea name="faqs[{{ $key }}][content]" class="form-control" placeholder="...">{{ $faq['content'] }}</textarea>
+                                    <textarea name="faqs[{{ $key }}][content]" class="form-control full-h" placeholder="...">{{ $faq['content'] }}</textarea>
                                 </div>
                                 <div class="col-md-1">
                                     <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
@@ -119,10 +125,10 @@
                 <div class="item" data-number="__number__">
                     <div class="row">
                         <div class="col-md-5">
-                            <input type="text" __name__="faqs[__number__][title]" class="form-control" placeholder="{{ __('Eg: Can I bring my pet?') }}">
+                            <input type="text" __name__="faqs[__number__][title]" class="form-control" placeholder="{{ __('Eg: When and where does the natural end?') }}">
                         </div>
                         <div class="col-md-6">
-                            <textarea __name__="faqs[__number__][content]" class="form-control" placeholder=""></textarea>
+                            <textarea __name__="faqs[__number__][content]" class="form-control full-h" placeholder="..."></textarea>
                         </div>
                         <div class="col-md-1">
                             <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
@@ -131,6 +137,8 @@
                 </div>
             </div>
         </div>
+        @include('Natural::admin/natural/include-exclude')
+        @include('Natural::admin/natural/itinerary')
         @if (is_default_lang())
             <div class="form-group">
                 <label class="control-label">{{ __('Banner Image') }}</label>
@@ -145,6 +153,3 @@
         @endif
     </div>
 </div>
-
-@include('partials.listing.form-ipanorama')
-{{-- @include('partials.listing.form-category') --}}

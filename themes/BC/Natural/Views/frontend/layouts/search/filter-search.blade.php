@@ -1,15 +1,15 @@
 <div class="bravo_filter">
-    <form action="{{url(app_get_locale(false,false,'/').env('NATURAL_ROUTE_PREFIX','natural'))}}" class="bravo_form_filter">
+    <form action="{{url(app_get_locale(false,false,'/').config('natural.natural_route_prefix'))}}" class="bravo_form_filter">
         @if( !empty(Request::query('location_id')) )
             <input type="hidden" name="location_id" value="{{Request::query('location_id')}}">
         @endif
-        @if( !empty(Request::query('map_place')) )
+            @if( !empty(Request::query('map_place')) )
             <input type="hidden" name="map_place" value="{{Request::query('map_place')}}">
         @endif
-        @if( !empty(Request::query('map_lat')) )
+            @if( !empty(Request::query('map_lat')) )
             <input type="hidden" name="map_lat" value="{{Request::query('map_lat')}}">
         @endif
-        @if( !empty(Request::query('map_lgn')) )
+            @if( !empty(Request::query('map_lgn')) )
             <input type="hidden" name="map_lgn" value="{{Request::query('map_lgn')}}">
         @endif
         @if( !empty(Request::query('start')) and !empty(Request::query('end')) )
@@ -68,6 +68,48 @@
                         </li>
                     @endfor
                 </ul>
+            </div>
+        </div>
+        <div class="g-filter-item">
+            <div class="item-title">
+                <h3>{{__("Natural Type")}}</h3>
+                <i class="fa fa-angle-up" aria-hidden="true"></i>
+            </div>
+            <div class="item-content">
+                <ul>
+                    <?php
+                    $current_category_ids = Request::query('cat_id');
+                    $traverse = function ($categories, $prefix = '') use (&$traverse, $current_category_ids) {
+                    $i = 0;
+                    foreach ($categories as $category) {
+                        $checked = '';
+                        if (!empty($current_category_ids)) {
+                            foreach ($current_category_ids as $key => $current) {
+                                if ($current == $category->id)
+                                    $checked = 'checked';
+                            }
+                        }
+                        $traslate = $category->translate()
+                        ?>
+                        <li @if($i > 2 and empty($current_category_ids)) class="hide" @endif>
+                            <div class="bravo-checkbox">
+                                <label>
+                                    <input name="cat_id[]" {{$checked}} type="checkbox" value="{{$category->id}}"> {{$prefix}} {{$traslate->name}}
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </li>
+                        <?php
+                        $i++;
+                        $traverse($category->children, $prefix . '-');
+                        }
+                    };
+                    $traverse($natural_category);
+                    ?>
+                </ul>
+                @if(count($natural_category) > 3 and empty($current_category_ids))
+                    <button type="button" class="btn btn-link btn-more-item">{{__("More")}} <i class="fa fa-caret-down"></i></button>
+                @endif
             </div>
         </div>
         @php

@@ -1,24 +1,26 @@
 <?php
 namespace Modules\Natural\Admin;
 
-use Modules\Booking\Models\Booking;
-use Modules\Natural\Models\Natural;
-use Modules\Natural\Models\NaturalDate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Modules\AdminController;
+use Modules\Space\Models\Space;
+use Modules\Space\Models\SpaceDate;
 
 class AvailabilityController extends \Modules\Natural\Controllers\AvailabilityController
 {
-    protected $naturalClass;
-    protected $naturalDateClass;
-    protected $bookingClass;
+    protected $spaceClass;
+    /**
+     * @var SpaceDate
+     */
+    protected $spaceDateClass;
     protected $indexView = 'Natural::admin.availability';
 
-    public function __construct(Natural $naturalClass, NaturalDate $naturalDateClass,Booking $bookingClass)
+    public function __construct()
     {
+        parent::__construct();
         $this->setActiveMenu(route('natural.admin.index'));
         $this->middleware('dashboard');
-        $this->naturalDateClass = $naturalDateClass;
-        $this->bookingClass = $bookingClass;
-        $this->naturalClass = $naturalClass;
     }
 
 }

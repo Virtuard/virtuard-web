@@ -1,9 +1,13 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: Admin
+ * Date: 7/2/2019
+ * Time: 10:26 AM
+ */
 namespace  Modules\Natural;
 
 use Modules\Core\Abstracts\BaseSettingsClass;
-use Modules\Core\Models\Settings;
 
 class SettingClass extends BaseSettingsClass
 {
@@ -28,12 +32,10 @@ class SettingClass extends BaseSettingsClass
                     'natural_enable_review_after_booking',
                     'natural_review_number_per_page',
                     'natural_review_stats',
-
                     'natural_page_list_seo_title',
                     'natural_page_list_seo_desc',
                     'natural_page_list_seo_image',
                     'natural_page_list_seo_share',
-
                     'natural_booking_buyer_fees',
                     'natural_vendor_create_service_must_approved_by_admin',
                     'natural_allow_vendor_can_change_their_booking_status',
@@ -49,16 +51,14 @@ class SettingClass extends BaseSettingsClass
                     'natural_deposit_fomular',
 
                     'natural_layout_map_option',
-
-                    'natural_booking_type',
                     'natural_icon_marker_map',
 
                     'natural_map_lat_default',
                     'natural_map_lng_default',
                     'natural_map_zoom_default',
 
-                    'natural_location_search_value',
-                    'natural_location_search_style',
+                    'natural_location_radius_value',
+                    'natural_location_radius_type',
                 ],
                 'html_keys'=>[
 

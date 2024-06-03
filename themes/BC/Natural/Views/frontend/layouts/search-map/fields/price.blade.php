@@ -23,6 +23,7 @@
             <div class="text-right">
                 <br>
                 <a href="#" onclick="return false;" class="btn btn-primary btn-sm btn-apply-advances">{{__("APPLY")}}</a>
+
             </div>
         </div>
     </div>

@@ -22,35 +22,27 @@
         </div>
     </div>
     @if(count($rows))
-        <div class="user-panel">
-            <input type="hidden" id="list-id" value="{{ request('id') }}">
-            <div class="panel-title d-flex justify-content-between">
-                <strong>{{__('Availability')}}</strong>
-                @if(request()->has('id'))
-                    <div class="form-group">
-                        <a href="{{ route('natural.vendor.edit', request('id')) }}" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> {{  __('Back to Editor') }}</a>
-                    </div>
-                @endif
-            </div>
-            <div class="panel-body no-padding" style="background: #f4f6f8;padding: 0px 15px;">
-                <div class="row">
-                    <div class="col-md-3" style="border-right: 1px solid #dee2e6;">
-                        <ul class="nav nav-tabs  flex-column vertical-nav" id="items_tab"  role="tablist">
-                            @foreach($rows as $k=>$item)
-                                <li class="nav-item event-name ">
-                                    <a class="nav-link" data-id="{{$item->id}}" data-toggle="tab" href="#calendar-{{$item->id}}" title="{{$item->title}}" >#{{$item->id}} - {{$item->title}}</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                    <div class="col-md-9" style="background: white;padding: 15px;">
-                        <div id="dates-calendar" class="dates-calendar"></div>
-                    </div>
+    <div class="user-panel">
+        <div class="panel-title"><strong>{{__('Availability')}}</strong></div>
+        <div class="panel-body no-padding" style="background: #f4f6f8;padding: 0px 15px;">
+            <div class="row">
+                <div class="col-md-3" style="border-right: 1px solid #dee2e6;">
+                    <ul class="nav nav-tabs  flex-column vertical-nav" id="items_tab"  role="tablist">
+                        @foreach($rows as $k=>$item)
+                            <li class="nav-item event-name ">
+                                <a class="nav-link" data-id="{{$item->id}}" data-toggle="tab" href="#calendar-{{$item->id}}" title="{{$item->title}}" >#{{$item->id}} - {{$item->title}}</a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+                <div class="col-md-9" style="background: white;padding: 15px;">
+                    <div id="dates-calendar" class="dates-calendar"></div>
                 </div>
             </div>
         </div>
+    </div>
     @else
-        <div class="alert alert-warning">{{__("No Naturals found")}}</div>
+        <div class="alert alert-warning">{{__("No naturals found")}}</div>
     @endif
     <div class="d-flex justify-content-center">
         {{$rows->appends($request->query())->links()}}
@@ -79,24 +71,40 @@
                                 <label ><input true-value=1 false-value=0 type="checkbox" v-model="form.active"> {{__('Available for booking?')}}</label>
                             </div>
                         </div>
-                        <div class="col-md-12" v-if="ticket_types">
-                            <div v-for="(type,index) in ticket_types">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label >{{__('Max Guest')}}</label>
+                                <input type="number"  v-model="form.max_guests" class="form-control">
+                            </div>
+                        </div>
+                        <div class="" v-if="person_types">
+                            <div class="col-md-12" v-for="(type,index) in person_types">
                                 <div class="form-group">
                                     <div class="row">
-                                        <div class="col-md-5">
+                                        <div class="col-md-2">
                                             <label>{{__("Name")}}</label>
-                                            <input type="text" readonly class="form-control" v-model="ticket_types[index].name">
-                                        </div>
-                                        <div class="col-md-3">
-                                            <label>{{__("Number")}}</label>
-                                            <input type="text" v-model="ticket_types[index].number" class="form-control">
+                                            <input type="text" readonly class="form-control" v-model="person_types[index].name">
                                         </div>
                                         <div class="col-md-4">
+                                            <label>{{__("Min")}}</label>
+                                            <input type="text" v-model="person_types[index].min" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>{{__("Max")}}</label>
+                                            <input type="text" v-model="person_types[index].max" class="form-control">
+                                        </div>
+                                        <div class="col-md-3">
                                             <label>{{__("Price")}}</label>
-                                            <input type="text" v-model="ticket_types[index].price" class="form-control">
+                                            <input type="text" v-model="person_types[index].price" class="form-control">
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" v-else>
+                            <div class="form-group">
+                                <label >{{__('Price')}}</label>
+                                <input type="text" v-model="form.price" class="form-control">
                             </div>
                         </div>
                     </form>
@@ -208,6 +216,8 @@
                     price:'',
                     start_date:'',
                     end_date:'',
+                    min_guests:0,
+                    max_guests:0,
                     active:0
                 },
                 formDefault:{
@@ -215,15 +225,18 @@
                     price:'',
                     start_date:'',
                     end_date:'',
+                    min_guests:0,
+                    max_guests:0,
                     active:0
                 },
-                ticket_types:[
+                person_types:[
 
                 ],
-                ticket_type_item:{
+                person_type_item:{
                     name:'',
                     desc:'',
-                    number:'',
+                    min:'',
+                    max:'',
                     price:'',
                 },
                 onSubmit:false
@@ -236,10 +249,10 @@
 
                     if(typeof form !='undefined'){
                         this.form = Object.assign({},form);
-                        if(typeof this.form.ticket_types == 'object'){
-                            this.ticket_types = this.form.ticket_types;
+                        if(typeof this.form.person_types == 'object'){
+                            this.person_types = this.form.person_types;
                         }else{
-                            this.ticket_types = false;
+                            this.person_types = false;
                         }
                         if(form.start_date){
                             var drp = $('.has-daterangepicker').data('daterangepicker');
@@ -251,7 +264,7 @@
                 hide:function () {
                     $(this.$el).modal('hide');
                     this.form = Object.assign({},this.formDefault);
-                    this.ticket_types = false;
+                    this.person_types = false;
                 },
                 saveForm:function () {
                     this.form.target_id = lastId;
@@ -262,7 +275,7 @@
                     if(!this.validateForm()) return;
 
                     this.onSubmit = true;
-                    this.form.ticket_types = this.ticket_types;
+                    this.form.person_types = this.person_types;
                     $.ajax({
                         url:'{{route('natural.vendor.availability.store')}}',
                         data:this.form,
@@ -294,30 +307,23 @@
                 this.$nextTick(function () {
                     $('.has-daterangepicker').daterangepicker({ "locale": {"format": bookingCore.date_format}})
                         .on('apply.daterangepicker',function (e,picker) {
-                            console.log(picker);
                             me.form.start_date = picker.startDate.format('YYYY-MM-DD');
                             me.form.end_date = picker.endDate.format('YYYY-MM-DD');
                         });
+
                     $(me.$el).on('hide.bs.modal',function () {
 
                         this.form = Object.assign({},this.formDefault);
-                        this.ticket_types = [];
+                        this.person_types = [];
+
                     });
+
                 })
             },
             mounted:function () {
+                // $(this.$el).modal();
             }
         });
-    </script>
-    <script>
-        // auto select event with params
-        const listId = $('#list-id').val();
-        if (listId) {
-            $('.event-name:last-child a').trigger('click');
-            const element = document.querySelector(`[data-id="${listId}"]`);
-            if (element) {
-                element.click();
-            }
-        }
+
     </script>
 @endpush

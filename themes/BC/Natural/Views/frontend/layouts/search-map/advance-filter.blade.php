@@ -11,11 +11,11 @@
 @endphp
 <div id="advance_filters" class="d-none">
     <div class="ad-filter-b">
-        @foreach ($attributes as $item)
+         @foreach ($attributes as $item)
             @if(empty($item['hide_in_filter_search']))
                 @php
-                if(in_array($item->id,$usedAttrs)) continue;
-                    $translate = $item->translate();
+                    if(in_array($item->id,$usedAttrs)) continue;
+                        $translate = $item->translate();
                 @endphp
                 <div class="filter-item">
                     <div class="filter-title"><strong>{{$translate->name}}</strong></div>
@@ -30,7 +30,7 @@
                     </ul>
                 </div>
             @endif
-        @endforeach
+         @endforeach
     </div>
     <div class="ad-filter-f text-right">
         <a href="#" onclick="return false" class="btn btn-primary btn-apply-advances">{{__("Apply Filters")}}</a>

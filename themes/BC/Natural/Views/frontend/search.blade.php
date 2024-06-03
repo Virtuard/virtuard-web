@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @push('css')
-    <link href="{{ asset('dist/frontend/module/event/css/event.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
+    <link href="{{ asset('dist/frontend/module/tour/css/tour.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/ion_rangeslider/css/ion.rangeSlider.min.css") }}"/>
 @endpush
 @section('content')
-    <div class="bravo_search_event">
+    <div class="bravo_search_tour">
         <div class="bravo_banner" @if($bg = setting_item("natural_page_search_banner")) style="background-image: url({{get_file_url($bg,'full')}})" @endif >
             <div class="container">
                 <h1>
@@ -15,7 +15,7 @@
         <div class="bravo_form_search">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12 col-md-12">
+                    <div class="col-12">
                         @include('Natural::frontend.layouts.search.form-search')
                     </div>
                 </div>
@@ -29,5 +29,5 @@
 
 @push('js')
     <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
-    <script type="text/javascript" src="{{ asset('module/natural/js/event.js?_ver='.config('app.asset_version')) }}"></script>
+    <script type="text/javascript" src="{{ asset('module/tour/js/tour.js?_ver='.config('app.asset_version')) }}"></script>
 @endpush

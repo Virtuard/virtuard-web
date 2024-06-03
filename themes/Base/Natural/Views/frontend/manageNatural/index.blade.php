@@ -1,9 +1,9 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar">
-        {{!empty($recovery) ?__('Recovery Naturals') : __('listing.natural.manage')}}
+        {{!empty($recovery) ?__('Recovery Naturals') : __('Manage Naturals')}}
         @if(Auth::user()->hasPermission('natural_create') && empty($recovery))
-            <a href="{{ route("natural.vendor.create") }}" class="btn-change-password">{{__('listing.natural.add')}}</a>
+            <a href="{{ route("natural.vendor.create") }}" class="btn-change-password">{{__('Add New Natural')}}</a>
         @endif
     </h2>
     @include('admin.message')
@@ -17,7 +17,7 @@
                 <div class="row">
                     @foreach($rows as $row)
                         <div class="col-md-12">
-                            @include('Natural::frontend.vendorNatural.loop-list')
+                            @include('Natural::frontend.manageNatural.loop-list')
                         </div>
                     @endforeach
                 </div>
@@ -28,6 +28,6 @@
             </div>
         </div>
     @else
-        {{__('listing.natural.no')}}
+        {{__('No Naturals')}}
     @endif
 @endsection

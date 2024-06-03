@@ -1,22 +1,22 @@
 <?php
 namespace Modules\Natural;
+
+use Illuminate\Support\ServiceProvider;
 use Modules\Core\Helpers\SitemapHelper;
-use Modules\Natural\Models\Natural;
 use Modules\ModuleServiceProvider;
-use Modules\News\Models\News;
+use Modules\Natural\Models\Natural;
 use Modules\User\Helpers\PermissionHelper;
 
 class ModuleProvider extends ModuleServiceProvider
 {
-
-    public function boot(SitemapHelper $sitemapHelper){
-
+    public function boot(SitemapHelper $sitemapHelper)
+    {
         $this->loadMigrationsFrom(__DIR__ . '/Migrations');
 
         if(is_installed() and Natural::isEnable()){
-
             $sitemapHelper->add("natural",[app()->make(Natural::class),'getForSitemap']);
         }
+
         PermissionHelper::add([
             // Natural
             'natural_view',
@@ -27,6 +27,7 @@ class ModuleProvider extends ModuleServiceProvider
             'natural_manage_attributes',
         ]);
     }
+
     /**
      * Register bindings in the container.
      *
@@ -37,40 +38,53 @@ class ModuleProvider extends ModuleServiceProvider
         $this->app->register(RouterServiceProvider::class);
     }
 
-    public static function getAdminMenu()
+    public static function getBookableServices()
     {
         if(!Natural::isEnable()) return [];
         return [
-            'natural'=>[
-                "position"=>12,
+            'natural' => Natural::class,
+        ];
+    }
+
+    public static function getAdminMenu()
+    {
+        $res = [];
+        if(Natural::isEnable()){
+            $res['natural'] = [
+                "position"=>11,
                 'url'        => route('natural.admin.index'),
-                'title'      => __('listing.natural.title'),
-                'icon'       => 'fa fa-image',
+                'title'      => __('Natural'),
+                'icon'       => 'fa fa-tree',
                 'permission' => 'natural_view',
                 'children'   => [
-                    'add'=>[
+                    'natural_view'=>[
                         'url'        => route('natural.admin.index'),
                         'title'      => __('All Naturals'),
                         'permission' => 'natural_view',
                     ],
-                    'create'=>[
+                    'natural_create'=>[
                         'url'        => route('natural.admin.create'),
-                        'title'      => __('Add new Natural'),
+                        'title'      => __("Add Natural"),
                         'permission' => 'natural_create',
                     ],
-                    'category'=>[
+                    'natural_category'=>[
                         'url'        => route('natural.admin.category.index'),
                         'title'      => __('Categories'),
                         'permission' => 'natural_manage_others',
                     ],
-                    'attribute'=>[
+                    'natural_attribute'=>[
                         'url'        => route('natural.admin.attribute.index'),
                         'title'      => __('Attributes'),
                         'permission' => 'natural_manage_attributes',
                     ],
-                    'availability'=>[
+                    'natural_availability'=>[
                         'url'        => route('natural.admin.availability.index'),
                         'title'      => __('Availability'),
+                        'permission' => 'natural_create',
+                    ],
+                    'natural_booking'=>[
+                        'url'        => route('natural.admin.booking.index'),
+                        'title'      => __('Booking Calendar'),
                         'permission' => 'natural_create',
                     ],
                     'recovery'=>[
@@ -79,54 +93,35 @@ class ModuleProvider extends ModuleServiceProvider
                         'permission' => 'natural_view',
                     ],
                 ]
-            ]
-        ];
+            ];
+        }
+        return $res;
     }
 
-    public static function getBookableServices()
-    {
-        if(!Natural::isEnable()) return [];
-        return [
-            'natural'=>Natural::class
-        ];
-    }
-
-    public static function getMenuBuilderTypes()
-    {
-        if(!Natural::isEnable()) return [];
-        return [
-            'natural'=>[
-                'class' => Natural::class,
-                'name'  => "Natural",
-                'items' => Natural::searchForMenu(),
-                'position'=>51
-            ]
-        ];
-    }
 
     public static function getUserMenu()
     {
-        if(!Natural::isEnable()) return [];
-        return [
-            'natural' => [
+        $res = [];
+        if(Natural::isEnable()){
+            $res['natural'] = [
                 'url'   => route('natural.vendor.index'),
-                'title'      => __('listing.natural.title'),
+                'title'      => __('Natural'),
                 'icon'       => Natural::getServiceIconFeatured(),
-                'position'   => 80,
                 'permission' => 'natural_view',
-                'children' => [
+                'position'   => 40,
+                'children'   => [
                     [
                         'url'   => route('natural.vendor.index'),
-                        'title'  => __('listing.natural.all'),
+                        'title' => __('All Naturals'),
                     ],
                     [
-                        'url'   => route('natural.vendor.create'),
-                        'title'      => __('listing.natural.add'),
+                        'url'        => route('natural.vendor.create'),
+                        'title'      => __('Add new Natural'),
                         'permission' => 'natural_create',
                     ],
-                    'availability'=>[
+                    [
                         'url'        => route('natural.vendor.availability.index'),
-                        'title'      => __('Availability'),
+                        'title'      => __("Availability"),
                         'permission' => 'natural_create',
                     ],
                     [
@@ -135,16 +130,38 @@ class ModuleProvider extends ModuleServiceProvider
                         'permission' => 'natural_create',
                     ],
                 ]
+            ];
+        }
+        return $res;
+    }
+
+    public static function getMenuBuilderTypes()
+    {
+        if(!Natural::isEnable()) return [];
+
+        return [
+            [
+                'class' => \Modules\Natural\Models\Natural::class,
+                'name'  => __("Natural"),
+                'items' => \Modules\Natural\Models\Natural::searchForMenu(),
+                'position'=>20
+            ],
+            [
+                'class' => \Modules\Natural\Models\NaturalCategory::class,
+                'name'  => __('Natural category'),
+                'items' => \Modules\Natural\Models\NaturalCategory::searchForMenu(),
+                'position'=>30
             ],
         ];
     }
 
     public static function getTemplateBlocks(){
         if(!Natural::isEnable()) return [];
+
         return [
+            'list_naturals'=>"\\Modules\\Natural\\Blocks\\ListNaturals",
             'form_search_natural'=>"\\Modules\\Natural\\Blocks\\FormSearchNatural",
-            'list_natural'=>"\\Modules\\Natural\\Blocks\\ListNatural",
-            'natural_term_featured_box'=>"\\Modules\\Natural\\Blocks\\NaturalTermFeaturedBox",
+            'box_category_natural'=>"\\Modules\\Natural\\Blocks\\BoxCategoryNatural",
         ];
     }
 }

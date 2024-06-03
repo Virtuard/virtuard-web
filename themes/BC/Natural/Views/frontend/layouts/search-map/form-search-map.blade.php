@@ -1,4 +1,5 @@
-<form action="{{url( app_get_locale(false,false,'/').env('NATURAL_ROUTE_PREFIX','event') )}}" class="form bravo_form d-flex justify-content-start" method="get" onsubmit="return false;">
+<form action="{{url( app_get_locale(false,false,'/').config('natural.natural_route_prefix') )}}" class="form bravo_form d-flex justify-content-start" method="get" onsubmit="return false;">
+
     @php $natural_map_search_fields = setting_item_array('natural_map_search_fields');
 
     $natural_map_search_fields = array_values(\Illuminate\Support\Arr::sort($natural_map_search_fields, function ($value) {
@@ -12,6 +13,9 @@
                 @case ('location')
                     @include('Natural::frontend.layouts.search-map.fields.location')
                 @break
+                @case ('category')
+                    @include('Natural::frontend.layouts.search-map.fields.category')
+                @break
                 @case ('attr')
                     @include('Natural::frontend.layouts.search-map.fields.attr')
                 @break
@@ -21,18 +25,14 @@
                 @case ('price')
                     @include('Natural::frontend.layouts.search-map.fields.price')
                 @break
-                @case ('advance')
+                    @case ('advance')
                     <div class="filter-item filter-simple">
                         <div class="form-group">
                             <span class="filter-title toggle-advance-filter" data-target="#advance_filters">{{__('More filters')}} <i class="fa fa-angle-down"></i></span>
                         </div>
                     </div>
                 @break
-
             @endswitch
         @endforeach
     @endif
-
-
-
 </form>

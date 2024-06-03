@@ -8,14 +8,16 @@
             @endphp
             @if(!empty($natural_search_fields))
                 @foreach($natural_search_fields as $field)
-                @php $field['title'] = $field['title_'.app()->getLocale()] ?? $field['title'] ?? "" @endphp
+                    @php
+                        $field['title'] = $field['title_'.app()->getLocale()] ?? $field['title'] ?? "";
+                    @endphp
                     <div class="col-md-{{ $field['size'] ?? "4" }} border-right">
                         @switch($field['field'])
                             @case ('service_name')
                                 @include('Natural::frontend.layouts.search.fields.service_name')
                             @break
                             @case ('location')
-                                @include('Natural::frontend.layouts.search-map.fields.location')
+                                @include('Natural::frontend.layouts.search.fields.location')
                             @break
                             @case ('date')
                                 @include('Natural::frontend.layouts.search.fields.date')
@@ -28,7 +30,6 @@
                 @endforeach
             @endif
         </div> --}}
-
         <div class="row d-flex align-items-center">
             <div class="col-md-3 border-right">
                 @include('Natural::frontend.layouts.search.fields.service_name')

@@ -1,6 +1,6 @@
 @extends('layouts.app',['container_class'=>'container-fluid','header_right_menu'=>true])
 @push('css')
-    <link href="{{ asset('dist/frontend/module/event/css/event.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
+    <link href="{{ asset('dist/frontend/module/tour/css/tour.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/ion_rangeslider/css/ion.rangeSlider.min.css") }}"/>
     <style type="text/css">
         .bravo_topbar, .bravo_footer {
@@ -9,14 +9,14 @@
     </style>
 @endpush
 @section('content')
-    <div class="bravo_search_tour bravo_search_event">
+    <div class="bravo_search_tour">
         <h1 class="d-none">
-            {{setting_item_with_lang("event_page_search_title")}}
+            {{setting_item_with_lang("natural_page_search_title")}}
         </h1>
         <div class="bravo_form_search_map">
             @include('Natural::frontend.layouts.search-map.form-search-map')
         </div>
-        <div class="bravo_search_map {{ setting_item_with_lang("event_layout_map_option",false,"map_left") }}"">
+        <div class="bravo_search_map {{ setting_item_with_lang("natural_layout_map_option",false,"map_left") }}">
             <div class="results_map">
                 <div class="map-loading d-none">
                     <div class="st-loader"></div>
@@ -38,11 +38,11 @@
     <script>
         var bravo_map_data = {
             markers:{!! json_encode($markers) !!},
-            map_lat_default:{{setting_item('event_map_lat_default','0')}},
-            map_lng_default:{{setting_item('event_map_lng_default','0') }},
-            map_zoom_default:{{setting_item('event_map_zoom_default','06')}},
+            map_lat_default:{{setting_item('natural_map_lat_default','0')}},
+            map_lng_default:{{setting_item('natural_map_lng_default','0')}},
+            map_zoom_default:{{setting_item('natural_map_zoom_default','6')}},
         };
     </script>
     <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
-    <script type="text/javascript" src="{{ asset('module/natural/js/event-map.js?_ver='.config('app.asset_version')) }}"></script>
+    <script type="text/javascript" src="{{ asset('module/tour/js/tour-map.js?_ver='.config('app.asset_version')) }}"></script>
 @endpush

@@ -2,7 +2,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb20">
-            <h1 class="title-bar">{{__('listing.natural.categories')}}</h1>
+            <h1 class="title-bar">{{__('Natural Categories')}}</h1>
         </div>
         @include('admin.message')
         <div class="row">

@@ -16,10 +16,8 @@
     </td>
     <td class="a-hidden">{{display_date($booking->created_at)}}</td>
     <td class="a-hidden">
-        {{__("Start date")}} : {{display_date($booking->start_date)}} <br>
-        {{__("Duration")}} :
-        @php $duration = $booking->getMeta("duration") @endphp
-        {{duration_format($duration)}}
+        {{__("Check in")}} : {{display_date($booking->start_date)}} <br>
+        {{__("Duration")}} : {{ $booking->getMeta("duration") ?? "1"  }} {{__("hours")}}
     </td>
     <td>
         <div>{{__("Total")}}: {{format_money_main($booking->total)}}</div>

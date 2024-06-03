@@ -58,18 +58,17 @@
                                 @if(count($rows) > 0)
                                     @foreach($rows as $row)
                                         <tr>
-                                            <td><input type="checkbox" class="check-item" name="ids[]" value="{{$row->id}}">
-                                            </td>
+                                            <td><input type="checkbox" class="check-item" name="ids[]" value="{{$row->id}}"></td>
                                             <td class="title">
-                                                <a href="{{route('natural.admin.attribute.edit',['id'=>$row->id])}}">{{$row->name}}</a>
+                                                <a href="{{route('natural.admin.attribute.edit', ['id' => $row->id]) }}">{{$row->name}}</a>
                                             </td>
                                             <td>
                                                 {{$row->position ?? 0}}
                                             </td>
                                             <td>
-                                                <a href="{{route('natural.admin.attribute.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}
+                                                <a href="{{route('natural.admin.attribute.edit', ['id' => $row->id]) }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}
                                                 </a>
-                                                <a href="{{route('natural.admin.attribute.term.index',['id'=>$row->id])}}" class="btn btn-sm btn-success"><i class="fa fa"></i> {{__("Manage Terms")}}
+                                                <a href="{{route('natural.admin.attribute.term.index', ['attr_id' => $row->id]) }}" class="btn btn-sm btn-success"><i class="fa fa"></i> {{__("Manage Terms")}}
                                                 </a>
 
                                             </td>

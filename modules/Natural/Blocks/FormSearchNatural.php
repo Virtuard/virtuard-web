@@ -5,11 +5,9 @@ use Modules\Template\Blocks\BaseBlock;
 use Modules\Location\Models\Location;
 use Modules\Media\Helpers\FileHelper;
 
-class FormSearchNatural extends BaseBlock
+class  FormSearchNatural extends BaseBlock
 {
-
-    public function getOptions()
-    {
+    public function getOptions(){
         return [
             'settings' => [
                 [
@@ -36,6 +34,10 @@ class FormSearchNatural extends BaseBlock
                         [
                             'value'   => 'carousel',
                             'name' => __("Slider Carousel")
+                        ],
+                        [
+                            'value'   => 'carousel_v2',
+                            'name' => __("Slider Carousel Ver 2")
                         ]
                     ]
                 ],
@@ -50,6 +52,18 @@ class FormSearchNatural extends BaseBlock
                     'label'       => __('- Layout Slider: List Item(s)'),
                     'title_field' => 'title',
                     'settings'    => [
+                        [
+                            'id'        => 'title',
+                            'type'      => 'input',
+                            'inputType' => 'text',
+                            'label'     => __('Title (using for slider ver 2)')
+                        ],
+                        [
+                            'id'        => 'desc',
+                            'type'      => 'input',
+                            'inputType' => 'text',
+                            'label'     => __('Desc (using for slider ver 2)')
+                        ],
                         [
                             'id'    => 'bg_image',
                             'type'  => 'uploader',
@@ -74,7 +88,7 @@ class FormSearchNatural extends BaseBlock
             $limit_location = 1000;
         }
         $data = [
-            'list_location' => Location::where("status","publish")->limit($limit_location)->with(['translation'])->get()->toTree(),
+            'natural_location' => Location::where("status","publish")->limit($limit_location)->with(['translation'])->get()->toTree(),
             'bg_image_url'  => '',
         ];
         $data = array_merge($model, $data);
