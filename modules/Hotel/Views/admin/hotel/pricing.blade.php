@@ -273,6 +273,11 @@
                     </div>
                 </div>
             @endif
+            <div class="button-action">
+                <a class="btn btn-info btn-sm" href="{{route('hotel.vendor.room.index',['hotel_id'=>$row->id])}}">
+                    <i class="fa fa-hand-o-right"></i> {{__("Manage Rooms")}}
+                </a>
+            </div>
         </div>
     </div>
 @endif

@@ -848,6 +848,7 @@ class Hotel extends Bookable
                 $res[] = [
                     'id'              => $room->id,
                     'title'           => $translation->title,
+                    'content'           => $translation->content,
                     'price'           => $room->tmp_price ?? 0,
                     'size_html'       => $room->size ? size_unit_format($room->size) : '',
                     'beds_html'       => $room->beds ? 'x' . $room->beds : '',

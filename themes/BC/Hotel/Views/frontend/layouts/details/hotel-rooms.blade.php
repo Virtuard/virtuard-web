@@ -98,6 +98,7 @@
                                                 </span>
                                             </div>
                                             <div class="modal-body">
+                                                <p>@{{ room.content }}</p>
                                                 <div class="fotorama" data-nav="thumbs" data-width="100%" data-auto="false" data-allowfullscreen="true">
                                                     <a v-for="g in room.gallery" :href="g.large"></a>
                                                 </div>
