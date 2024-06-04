@@ -273,11 +273,13 @@
                     </div>
                 </div>
             @endif
+            @if(str_contains(url()->current(), 'edit'))
             <div class="button-action">
                 <a class="btn btn-info btn-sm" href="{{route('hotel.vendor.room.index',['hotel_id'=>$row->id])}}">
                     <i class="fa fa-hand-o-right"></i> {{__("Manage Rooms")}}
                 </a>
             </div>
+            @endif
         </div>
     </div>
 @endif
