@@ -103,7 +103,7 @@ class ListAllService extends BaseBlock
                 'link' => route('boat.search'),
             ],
             [
-                'name' => 'Virtuard',
+                'name' => 'hide',
                 'image' => '/uploads/0000/11/2023/07/20/virtuard.png',
                 'link' => '/',
             ],
