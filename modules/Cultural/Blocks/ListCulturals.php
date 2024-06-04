@@ -1,18 +1,18 @@
 <?php
-namespace Modules\Natural\Blocks;
+namespace Modules\Cultural\Blocks;
 
 use Modules\Template\Blocks\BaseBlock;
-use Modules\Natural\Models\Natural;
-use Modules\Natural\Models\NaturalCategory;
+use Modules\Cultural\Models\Cultural;
+use Modules\Cultural\Models\CulturalCategory;
 use Modules\Location\Models\Location;
 
-class ListNaturals extends BaseBlock
+class ListCulturals extends BaseBlock
 {
-    protected $naturalClass;
+    protected $culturalClass;
 
-    public function __construct(Natural $naturalClass)
+    public function __construct(Cultural $culturalClass)
     {
-        $this->naturalClass = $naturalClass;
+        $this->culturalClass = $culturalClass;
     }
 
     public function getOptions(){
@@ -65,14 +65,14 @@ class ListNaturals extends BaseBlock
                     'label'   => __('Filter by Category'),
                     'select2' => [
                         'ajax'  => [
-                            'url'      => route('natural.admin.category.category.getForSelect2'),
+                            'url'      => route('cultural.admin.category.category.getForSelect2'),
                             'dataType' => 'json'
                         ],
                         'width' => '100%',
                         'allowClear' => 'true',
                         'placeholder' => __('-- Select --')
                     ],
-                    'pre_selected'=>route('natural.admin.category.category.getForSelect2',['pre_selected'=>1])
+                    'pre_selected'=>route('cultural.admin.category.category.getForSelect2',['pre_selected'=>1])
                 ],
                 [
                     'id'      => 'location_id',
@@ -131,25 +131,25 @@ class ListNaturals extends BaseBlock
                     'label'        => __('List by IDs'),
                     'select2'      => [
                         'ajax'     => [
-                            'url'      => route('natural.admin.getForSelect2'),
+                            'url'      => route('cultural.admin.getForSelect2'),
                             'dataType' => 'json'
                         ],
                         'width'    => '100%',
                         'multiple' => "true",
                         'placeholder' => __('-- Select --')
                     ],
-                    'pre_selected' => route('natural.admin.getForSelect2', [
+                    'pre_selected' => route('cultural.admin.getForSelect2', [
                         'pre_selected' => 1
                     ])
                 ],
             ],
-            'category'=>__("Service Natural")
+            'category'=>__("Service Cultural")
         ];
     }
 
     public function getName()
     {
-        return __('Natural: List Items');
+        return __('Cultural: List Items');
     }
 
     public function content($model = [])
@@ -161,7 +161,7 @@ class ListNaturals extends BaseBlock
             'title'      => $model['title'] ?? "",
             'desc'      => $model['desc'] ?? "",
         ];
-        return view('Natural::frontend.blocks.list-natural.index', $data);
+        return view('Cultural::frontend.blocks.list-cultural.index', $data);
     }
 
     public function contentAPI($model = []){
@@ -173,8 +173,8 @@ class ListNaturals extends BaseBlock
     }
 
     public function query($model){
-        $listNatural = $this->naturalClass->search($model);
+        $listCultural = $this->culturalClass->search($model);
         $limit = $model['number'] ?? 5;
-        return $listNatural->paginate($limit);
+        return $listCultural->paginate($limit);
     }
 }

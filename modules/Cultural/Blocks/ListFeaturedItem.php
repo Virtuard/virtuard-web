@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Natural\Blocks;
+namespace Modules\Cultural\Blocks;
 
 use Modules\Template\Blocks\BaseBlock;
 use Modules\Media\Helpers\FileHelper;
@@ -79,7 +79,7 @@ class ListFeaturedItem extends BaseBlock
 
     public function content($model = [])
     {
-        return view('Natural::frontend.blocks.list-featured-item.index', $model);
+        return view('Cultural::frontend.blocks.list-featured-item.index', $model);
     }
     public function contentAPI($model = []){
         if(!empty($model['list_item'])){

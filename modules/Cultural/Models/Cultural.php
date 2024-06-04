@@ -917,7 +917,7 @@ class Cultural extends Bookable
 
     public static function getServiceIconFeatured()
     {
-        return "icofont-island-alt";
+        return "icofont-university";
     }
 
     public static function isEnable()

@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'event' => [
                 'url'   => route('event.vendor.index'),
-                'title'      => __("Manage Event"),
+                'title'      => __("Event"),
                 'icon'       => Event::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'event_view',

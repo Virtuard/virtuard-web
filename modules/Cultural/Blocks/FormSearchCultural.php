@@ -1,11 +1,11 @@
 <?php
-namespace Modules\Natural\Blocks;
+namespace Modules\Cultural\Blocks;
 
 use Modules\Template\Blocks\BaseBlock;
 use Modules\Location\Models\Location;
 use Modules\Media\Helpers\FileHelper;
 
-class  FormSearchNatural extends BaseBlock
+class  FormSearchCultural extends BaseBlock
 {
     public function getOptions(){
         return [
@@ -72,23 +72,23 @@ class  FormSearchNatural extends BaseBlock
                     ]
                 ]
             ],
-            'category'=>__("Service Natural")
+            'category'=>__("Service Cultural")
         ];
     }
 
     public function getName()
     {
-        return __('Natural: Form Search');
+        return __('Cultural: Form Search');
     }
 
     public function content($model = [])
     {
         $limit_location = 15;
-        if( empty(setting_item("natural_location_search_style")) or setting_item("natural_location_search_style") == "normal" ){
+        if( empty(setting_item("cultural_location_search_style")) or setting_item("cultural_location_search_style") == "normal" ){
             $limit_location = 1000;
         }
         $data = [
-            'natural_location' => Location::where("status","publish")->limit($limit_location)->with(['translation'])->get()->toTree(),
+            'cultural_location' => Location::where("status","publish")->limit($limit_location)->with(['translation'])->get()->toTree(),
             'bg_image_url'  => '',
         ];
         $data = array_merge($model, $data);
@@ -97,7 +97,7 @@ class  FormSearchNatural extends BaseBlock
         }
         $data['style'] = $model['style'] ?? "";
         $data['list_slider'] = $model['list_slider'] ?? "";
-        return view('Natural::frontend.blocks.form-search-natural.index', $data);
+        return view('Cultural::frontend.blocks.form-search-cultural.index', $data);
     }
 
     public function contentAPI($model = []){

@@ -1385,25 +1385,28 @@ if (!function_exists('setMenuPosition')) {
 
         switch ($menu['id']) {
             case 'natural':
-                $position = 11;
-                break;
-            case 'cultural':
-                $position = 12;
-                break;
-            case 'art':
-                $position = 13;
-                break;
-            case 'hotel':
-                $position = 14;
-                break;
-            case 'space':
                 $position = 16;
                 break;
+            case 'cultural':
+                $position = 17;
+                break;
+            case 'art':
+                $position = 18;
+                break;
+            case 'hotel':
+                $position = 11;
+                break;
+            case 'space':
+                $position = 12;
+                break;
             case 'business':
-                $position = 15;
+                $position = 13;
                 break;
             case 'boat':
-                $position = 17;
+                $position = 14;
+                break;
+            case 'event':
+                $position = 15;
                 break;
         }
 
