@@ -9,6 +9,7 @@ use Modules\Space\Models\Space;
 use Modules\Boat\Models\Boat;
 use Modules\Business\Models\Business;
 use Modules\Cultural\Models\Cultural;
+use Modules\Event\Models\Event;
 use Modules\Hotel\Models\Hotel;
 use Modules\Natural\Models\Natural;
 
@@ -21,6 +22,7 @@ class ExploreController extends Controller
     protected $natural;
     protected $cultural;
     protected $art;
+    protected $event;
     protected $productCategory;
 
     public function __construct()
@@ -32,6 +34,7 @@ class ExploreController extends Controller
         $this->cultural = new Cultural();
         $this->natural = new Natural();
         $this->art = new Art();
+        $this->event = new Event();
         $this->productCategory = new ProductCategory();
     }
 
@@ -53,6 +56,7 @@ class ExploreController extends Controller
             'properties' => $this->getListing($this->property, $search),
             'accomodations' => $this->getListing($this->accomodation, $search),
             'vehicles' => $this->getListing($this->vehicle, $search),
+            'events' => $this->getListing($this->event, $search),
             'naturals' => $this->getListing($this->natural, $search),
             'culturals' => $this->getListing($this->cultural, $search),
             'arts' => $this->getListing($this->art, $search),

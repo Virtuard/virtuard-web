@@ -47,6 +47,11 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @if(str_contains(url()->current(), 'edit'))
+                                    <div class="form-group">
+                                        <a href="{{ route('event.vendor.availability.index', ['id' => $row->id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-calendar"></i> {{  __('Availability Events') }}</a>
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

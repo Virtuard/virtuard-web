@@ -41,9 +41,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Business::isEnable()) return [];
         return [
             'business'=>[
-                "position"=>15,
+                "position" => setMenuAdminPosition('business'),
                 'url'        => route('business.admin.index'),
-                'title'      => __('listing.business.title'),
+                'title'      => __('listing.business.manage'),
                 'icon'       => 'fa fa-shopping-bag',
                 'permission' => 'business_view',
                 'children'   => [
@@ -110,7 +110,7 @@ class ModuleProvider extends ModuleServiceProvider
         if (Business::isEnable()) {
             $res['business'] = [
                 'url'        => route('business.vendor.index'),
-                'title'      => __('listing.business.title'),
+                'title'      => __('listing.business.manage'),
                 'icon'       => Business::getServiceIconFeatured(),
                 'position'   => 50,
                 'permission' => 'business_view',

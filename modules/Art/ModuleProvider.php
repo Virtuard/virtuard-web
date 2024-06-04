@@ -42,9 +42,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Art::isEnable()) return [];
         return [
             'art'=>[
-                "position"=>13,
+                "position" => setMenuAdminPosition('art'),
                 'url'        => route('art.admin.index'),
-                'title'      => __('listing.art.title'),
+                'title'      => __('listing.art.manage'),
                 'icon'       => 'fa fa-laptop',
                 'permission' => 'art_view',
                 'children'   => [
@@ -110,7 +110,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'art' => [
                 'url'   => route('art.vendor.index'),
-                'title'      => __('listing.art.title'),
+                'title'      => __('listing.art.manage'),
                 'icon'       => Art::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'art_view',

@@ -1,9 +1,8 @@
 <div class="form-group">
-    <i class="field-icon fa icofont-search"></i>
-    <div class="form-content">
-        <label>{{ $field['title'] ?? "" }}</label>
+    <div class="form-content" style="padding: 20px 0 10px 5px;">
+        <label>Service</label>
         <div class="input-search">
-            <input type="text" name="service_name" class="form-control" placeholder="{{__("Search for...")}}" value="{{ request()->input("service_name") }}">
+            <input type="text" name="service_name" class="form-control" placeholder="{{__("Search by name...")}}" value="{{ request()->input("service_name") }}">
         </div>
     </div>
 </div>

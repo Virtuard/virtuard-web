@@ -31,7 +31,7 @@ class ModuleProvider extends ModuleServiceProvider
         $count = News::whereStatus('pending')->count('id');
         return [
             'news'=>[
-                "position"=>10,
+                "position"=>50,
                 'url'        => route('news.admin.index'),
                 'title'      => __("News").($count ? ' <span class="badge badge-warning">'.$count.'</span>':''),
                 'icon'       => 'ion-md-bookmarks',

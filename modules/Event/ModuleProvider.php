@@ -42,9 +42,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Event::isEnable()) return [];
         return [
             'event'=>[
-                "position"=>50,
+                "position" => setMenuAdminPosition('event'),
                 'url'        => route('event.admin.index'),
-                'title'      => __('Event'),
+                'title'      => __('Manage Event'),
                 'icon'       => 'ion-ios-calendar',
                 'permission' => 'event_view',
                 'children'   => [
@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         return [
             'event' => [
                 'url'   => route('event.vendor.index'),
-                'title'      => __("Event"),
+                'title'      => __("Manage Event"),
                 'icon'       => Event::getServiceIconFeatured(),
                 'position'   => 80,
                 'permission' => 'event_view',

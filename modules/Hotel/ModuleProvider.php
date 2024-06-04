@@ -41,9 +41,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Hotel::isEnable()) return [];
         return [
             'hotel'=>[
-                "position"=>14,
+                "position" => setMenuAdminPosition('hotel'),
                 'url'        => route('hotel.admin.index'),
-                'title'      => __('listing.accomodation.title'),
+                'title'      => __('listing.accomodation.manage'),
                 'icon'       => 'fa fa-building-o',
                 'permission' => 'hotel_view',
                 'children'   => [
@@ -110,7 +110,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Hotel::isEnable()){
             $res['hotel'] = [
                 'url'   => route('hotel.vendor.index'),
-                'title'      => __('listing.accomodation.title'),
+                'title'      => __('listing.accomodation.manage'),
                 'icon'       => Hotel::getServiceIconFeatured(),
                 'position'   => 30,
                 'permission' => 'hotel_view',

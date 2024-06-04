@@ -51,10 +51,10 @@ class ModuleProvider extends ModuleServiceProvider
         $res = [];
         if(Natural::isEnable()){
             $res['natural'] = [
-                "position"=>11,
+                "position" => setMenuAdminPosition('natural'),
                 'url'        => route('natural.admin.index'),
-                'title'      => __('Natural'),
-                'icon'       => 'fa fa-tree',
+                'title'      => __('Manage Natural'),
+                'icon'       => 'fa fa-image',
                 'permission' => 'natural_view',
                 'children'   => [
                     'natural_view'=>[
@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Natural::isEnable()){
             $res['natural'] = [
                 'url'   => route('natural.vendor.index'),
-                'title'      => __('Natural'),
+                'title'      => __('Manage Natural'),
                 'icon'       => Natural::getServiceIconFeatured(),
                 'permission' => 'natural_view',
                 'position'   => 40,

@@ -37,9 +37,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Boat::isEnable()) return [];
         return [
             'boat'=>[
-                "position"=>17,
+                "position" => setMenuAdminPosition('boat'),
                 'url'        => route('boat.admin.index'),
-                'title'      => __('listing.vehicle.title'),
+                'title'      => __('listing.vehicle.manage'),
                 'icon'       => 'ion-md-boat',
                 'permission' => 'boat_view',
                 'children'   => [
@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Boat::isEnable()){
             $res['boat'] = [
                 'url'   => route('boat.vendor.index'),
-                'title'      => __('listing.vehicle.title'),
+                'title'      => __('listing.vehicle.manage'),
                 'icon'       => Boat::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'boat_view',

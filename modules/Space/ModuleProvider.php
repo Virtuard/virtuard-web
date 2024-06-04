@@ -41,9 +41,9 @@ class ModuleProvider extends ModuleServiceProvider
         if(!Space::isEnable()) return [];
         return [
             'space'=>[
-                "position"=>15,
+                "position" => setMenuAdminPosition('space'),
                 'url'        => route('space.admin.index'),
-                'title'      => __('listing.property.title'),
+                'title'      => __('listing.property.manage'),
                 'icon'       => 'ion ion-md-home',
                 'permission' => 'space_view',
                 'children'   => [
@@ -110,7 +110,7 @@ class ModuleProvider extends ModuleServiceProvider
         if (Space::isEnable()) {
             $res['space'] = [
                 'url'        => route('space.vendor.index'),
-                'title'      => __('listing.property.title'),
+                'title'      => __('listing.property.manage'),
                 'icon'       => Space::getServiceIconFeatured(),
                 'position'   => 50,
                 'permission' => 'space_view',

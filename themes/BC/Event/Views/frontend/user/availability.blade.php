@@ -23,7 +23,15 @@
     </div>
     @if(count($rows))
         <div class="user-panel">
-            <div class="panel-title"><strong>{{__('Availability')}}</strong></div>
+            <input type="hidden" id="list-id" value="{{ request('id') }}">
+            <div class="panel-title d-flex justify-content-between">
+                <strong>{{__('Availability')}}</strong>
+                @if(request()->has('id'))
+                    <div class="form-group">
+                        <a href="{{ route('event.vendor.edit', request('id')) }}" class="btn btn-warning btn-sm"><i class="fa fa-pencil"></i> {{  __('Back to Editor') }}</a>
+                    </div>
+                @endif
+            </div>
             <div class="panel-body no-padding" style="background: #f4f6f8;padding: 0px 15px;">
                 <div class="row">
                     <div class="col-md-3" style="border-right: 1px solid #dee2e6;">
@@ -300,5 +308,16 @@
             mounted:function () {
             }
         });
+    </script>
+    <script>
+        // auto select event with params
+        const listId = $('#list-id').val();
+        if (listId) {
+            $('.event-name:last-child a').trigger('click');
+            const element = document.querySelector(`[data-id="${listId}"]`);
+            if (element) {
+                element.click();
+            }
+        }
     </script>
 @endpush

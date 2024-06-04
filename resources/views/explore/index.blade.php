@@ -87,17 +87,17 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="accomodations-tab" data-toggle="tab"
                             data-target="#accomodations" type="button" role="tab" aria-controls="accomodations"
-                            aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> Accomodations</button>
+                            aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> {{ __('Accomodation') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="properties-tab" data-toggle="tab"
                             data-target="#properties" type="button" role="tab" aria-controls="properties"
-                            aria-selected="false"><i class="fa fa-sm mr-2 fa-home"></i> Properties</button>
+                            aria-selected="false"><i class="fa fa-sm mr-2 fa-home"></i> {{ __('Property') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="vehicles-tab" data-toggle="tab"
                             data-target="#vehicles" type="button" role="tab" aria-controls="vehicles"
-                            aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> Vehicles</button>
+                            aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> {{ __('Vehicle') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
@@ -105,19 +105,24 @@
                             <i class="fa fa-sm mr-2 fa-shopping-bag"></i>Business</button>
                     </li>
                     <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-category text-capitalize" id="events-tab" data-toggle="tab"
+                            data-target="#events" type="button" role="tab" aria-controls="events"
+                            aria-selected="false"><i class="icofont-ticket"></i> {{ __('Event') }}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="naturals-tab" data-toggle="tab"
                             data-target="#naturals" type="button" role="tab" aria-controls="naturals"
-                            aria-selected="false"><i class="material-icons">landscape</i> Natural and Landscape</button>
+                            aria-selected="false"><i class="material-icons">landscape</i> {{ __('Natural and Landscape') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="culturals-tab" data-toggle="tab"
                             data-target="#culturals" type="button" role="tab" aria-controls="culturals"
-                            aria-selected="false"><i class="material-icons">church</i> Cultural Heritage</button>
+                            aria-selected="false"><i class="material-icons">church</i> {{ __('Cultural Heritage') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="arts-tab" data-toggle="tab"
                             data-target="#arts" type="button" role="tab" aria-controls="arts"
-                            aria-selected="false"><i class="material-icons font-size-inherit">design_services</i> Rendering and Art</button>
+                            aria-selected="false"><i class="material-icons font-size-inherit">design_services</i> {{ __('Rendering and Art') }}</button>
                     </li>
                 </ul>
             </div>

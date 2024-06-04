@@ -47,7 +47,7 @@ return [
     ],
     'natural' => [
         'title' => 'Natural and Landscape',
-        'manage' => 'Manage Natural and Landscape',
+        'manage' => 'Manage Natural',
         'all' => 'All Natural',
         'add' => 'Add Natural',
         'add_new' => 'Add New Natural',
@@ -58,7 +58,7 @@ return [
     'cultural' => [
         'title' => 'Cultural Heritage and Public Work',
         'sidebar_menu_title' => 'Cultural Heritage',
-        'manage' => 'Manage Cultural Heritage and Public Work',
+        'manage' => 'Manage Cultural',
         'all' => 'All Cultural',
         'add' => 'Add Cultural',
         'add_new' => 'Add New Cultural',
@@ -69,7 +69,7 @@ return [
     'art' => [
         'title' => 'Rendering and Art',
         'title_full' => 'Rendering and Art',
-        'manage' => 'Manage Rendering and Art',
+        'manage' => 'Manage Rendering',
         'all' => 'All Rendering and Art',
         'add' => 'Add Rendering and Art',
         'add_new' => 'Add New Rendering and Art',

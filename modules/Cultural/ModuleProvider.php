@@ -51,10 +51,10 @@ class ModuleProvider extends ModuleServiceProvider
         $res = [];
         if(Cultural::isEnable()){
             $res['cultural'] = [
-                "position"=>11,
+                "position" => setMenuAdminPosition('cultural'),
                 'url'        => route('cultural.admin.index'),
-                'title'      => __('Cultural'),
-                'icon'       => 'fa fa-tree',
+                'title'      => __('Manage Cultural'),
+                'icon'       => 'fa fa-bank',
                 'permission' => 'cultural_view',
                 'children'   => [
                     'cultural_view'=>[
@@ -105,7 +105,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Cultural::isEnable()){
             $res['cultural'] = [
                 'url'   => route('cultural.vendor.index'),
-                'title'      => __('Cultural'),
+                'title'      => __('Manage Cultural'),
                 'icon'       => Cultural::getServiceIconFeatured(),
                 'permission' => 'cultural_view',
                 'position'   => 40,

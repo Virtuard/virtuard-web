@@ -1235,6 +1235,7 @@ if (!function_exists('menu_listing')) {
             'natural',
             'cultural',
             'art',
+            'event',
         ];
 
         return $data;
@@ -1277,7 +1278,7 @@ if (!function_exists('menu_vendor')) {
             'hotel',
             'space',
             // 'car',
-            // 'event',
+            'event',
             // 'tour',
             // 'flight',
             'boat',
@@ -1309,7 +1310,7 @@ if (!function_exists('menu_admin')) {
             'hotel',
             'space',
             // 'car',
-            // 'event',
+            'event',
             // 'tour',
             // 'flight',
             'boat',
@@ -1414,6 +1415,42 @@ if (!function_exists('setMenuPosition')) {
     }
 }
 
+if (!function_exists('setMenuAdminPosition')) {
+    function setMenuAdminPosition($model)
+    {
+        $position = 5;
+
+        switch ($model) {
+            case 'hotel':
+                $position = 5;
+                break;
+            case 'space':
+                $position = 6;
+                break;
+            case 'business':
+                $position = 7;
+                break;
+            case 'boat':
+                $position = 8;
+                break;
+            case 'event':
+                $position = 9;
+                break;
+            case 'natural':
+                $position = 10;
+                break;
+            case 'cultural':
+                $position = 11;
+                break;
+            case 'art':
+                $position = 12;
+                break;
+        }
+
+        return $position;
+    }
+}
+
 if (!function_exists('getThumbPanorama')) {
     function getThumbPanorama($data) {
         $result = '/uploads/ipanoramaBuilder/upload/default.png';
@@ -1466,6 +1503,11 @@ if (!function_exists('get_attr_listing')) {
             case 'boat' :
                 $data['route_as'] = 'boat';
                 $data['svg'] = 'icon/directions-boat.svg';
+                break;
+            case 'event':
+            case 'events':
+                $data['route_as'] = 'event';
+                $data['svg'] = 'icon/ticket.svg';
                 break;
             case 'natural':
             case 'naturals':
@@ -1537,7 +1579,7 @@ if (!function_exists('hide_submenu_setting')) {
         $data = [
             'flight',
             'car',
-            'event',
+            // 'event',
             'tour',
         ];
 

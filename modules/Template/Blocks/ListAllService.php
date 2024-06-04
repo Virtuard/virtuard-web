@@ -103,6 +103,16 @@ class ListAllService extends BaseBlock
                 'link' => route('boat.search'),
             ],
             [
+                'name' => 'Virtuard',
+                'image' => '/uploads/0000/11/2023/07/20/virtuard.png',
+                'link' => '/',
+            ],
+            [
+                'name' => 'Event',
+                'image' => '/uploads/demo/event/event-6.jpg',
+                'link' => route('event.search'),
+            ],
+            [
                 'name' => 'Cutural Heritage',
                 'image' => 'uploads/demo/service/cultural.jpg',
                 'link' => route('cultural.search'),
