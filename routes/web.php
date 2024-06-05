@@ -29,6 +29,8 @@ Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name(
 Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api');
 Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');
 Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
+Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
+Route::get('bulkEdit/{id}', 'VirtuardController@bulkEdit')->name('bulk_edit');
 
 Route::group([
     'middleware' => ['user_plan']

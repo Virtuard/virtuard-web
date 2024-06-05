@@ -138,10 +138,6 @@ class SpaceController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'space')->get();
-
         $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('space_create');
         $row = new $this->space();
@@ -166,8 +162,6 @@ class SpaceController extends AdminController
                 ],
             ],
             'page_title'     => __("Add new Space"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
 
         return view('Space::admin.detail', $data);
@@ -175,12 +169,6 @@ class SpaceController extends AdminController
 
     public function edit(Request $request, $id)
     {
-
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('space_update');
         $row = $this->space::find($id);
         if (empty($row)) {
@@ -212,8 +200,6 @@ class SpaceController extends AdminController
                 ],
             ],
             'page_title'=>__("Edit: :name",['name'=>$row->title]),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
 
         return view('Space::admin.detail', $data);

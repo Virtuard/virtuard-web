@@ -128,19 +128,12 @@ class CarController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'car')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('car_create');
         $row = new $this->car();
         $row->fill([
             'status' => 'publish'
         ]);
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'          => $row,
             'attributes'   => $this->attributes::where('service', 'car')->get(),
             'car_location' => $this->location::where('status', 'publish')->get()->toTree(),
@@ -162,10 +155,6 @@ class CarController extends AdminController
 
     public function edit(Request $request, $id)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('car_update');
         $row = $this->car::find($id);
         if (empty($row)) {
@@ -178,8 +167,6 @@ class CarController extends AdminController
             }
         }
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),

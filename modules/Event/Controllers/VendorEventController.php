@@ -110,16 +110,9 @@ class VendorEventController extends FrontendController
 
     public function createEvent(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('event_create');
         $row = new $this->eventClass();
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation' => new $this->eventTranslationClass(),
             'event_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -253,10 +246,6 @@ class VendorEventController extends FrontendController
     {
         $this->checkPermission('event_update');
         $user_id = Auth::id();
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
-        $user_id = Auth::id();
         $row = $this->eventClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
@@ -264,8 +253,6 @@ class VendorEventController extends FrontendController
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'translation'    => $translation,
             'row'           => $row,
             'event_location' => $this->locationClass::where("status","publish")->get()->toTree(),

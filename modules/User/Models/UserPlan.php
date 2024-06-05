@@ -37,4 +37,11 @@ class UserPlan extends BaseModel
         }
         return 0;
     }
+
+    public function getUsedIpanoramaAttribute(){
+        if(!empty($this->user)){
+            return $this->user->ipanorama()->where('status','publish')->count('id');
+        }
+        return 0;
+    }
 }

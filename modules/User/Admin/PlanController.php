@@ -94,6 +94,7 @@ class PlanController extends AdminController
             'duration',
             'duration_type',
             'max_service',
+            'max_ipanorama',
             'status',
             'role_id',
             'annual_price'

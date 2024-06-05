@@ -35,8 +35,8 @@
                             <th width="60px">#</th>
                             <th> {{ __('Title')}}</th>
                             <th width="130px"> {{ __('Author')}}</th>
-                            {{-- <th width="100px"> {{ __('Status')}}</th> --}}
-                            {{-- <th width="100px"> {{ __('Date')}}</th> --}}
+                            <th width="100px"> {{ __('Status')}}</th>
+                            <th width="100px"> {{ __('Date')}}</th>
                             <th width="100px"></th>
                         </tr>
                         </thead>
@@ -55,8 +55,8 @@
                                             {{__("[Author Deleted]")}}
                                         @endif
                                     </td>
-                                    {{-- <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td> --}}
-                                    {{-- <td>{{ display_date($row->updated_at)}}</td> --}}
+                                    <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
+                                    <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         @if(empty($recovery))
                                             <a href="{{route('admin.virtuard360.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>

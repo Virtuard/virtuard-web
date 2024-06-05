@@ -113,15 +113,6 @@ class VendorController extends FrontendController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'accomodation')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-        $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)
-            ->where('status', 'SUCCESS')
-            ->first();
-
         $this->checkPermission('hotel_create');
         $row = new $this->hotelClass();
         $data = [
@@ -145,10 +136,6 @@ class VendorController extends FrontendController
                 ],
             ],
             'page_title' => __('Create Hotels'),
-            'virtuard360' => $virtuard360,
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
-            'categories' => $categories,
         ];
 
         return view('Hotel::frontend.vendorHotel.detail', $data);
@@ -263,14 +250,6 @@ class VendorController extends FrontendController
 
     public function edit(Request $request, $id)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
-        $categories = ProductCategory::where('type', 'accomodation')->get();
-        $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)
-            ->where('status', 'SUCCESS')
-            ->first();
-
         $this->checkPermission('hotel_update');
         $user_id = Auth::id();
         $row = $this->hotelClass::where('author_id', $user_id);
@@ -301,10 +280,6 @@ class VendorController extends FrontendController
                 ],
             ],
             'page_title' => __('Edit Hotels'),
-            'virtuard360' => $virtuard360,
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
-            'categories' => $categories,
         ];
 
         return view('Hotel::frontend.vendorHotel.detail', $data);

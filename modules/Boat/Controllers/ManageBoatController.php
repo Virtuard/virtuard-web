@@ -114,13 +114,6 @@ class ManageBoatController extends FrontendController
     public function createBoat(Request $request)
     {
         $this->checkPermission('boat_create');
-
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'boat')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $row = new $this->boatClass();
         $data = [
             'row'           => $row,
@@ -139,8 +132,6 @@ class ManageBoatController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Boats"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Boat::frontend.manageBoat.detail', $data);
     }
@@ -264,10 +255,6 @@ class ManageBoatController extends FrontendController
     {
         $this->checkPermission('boat_update');
         $user_id = Auth::id();
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
-        $user_id = Auth::id();
         $row = $this->boatClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
@@ -292,8 +279,6 @@ class ManageBoatController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Boats"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Boat::frontend.manageBoat.detail', $data);
     }

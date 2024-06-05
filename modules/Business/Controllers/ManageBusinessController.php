@@ -116,11 +116,6 @@ class ManageBusinessController extends FrontendController
 
     public function createBusiness(Request $request)
     {
-        $idUser = Auth::id();
-        $isVirtuard360 = $this->checkVirtuard360();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'business')->get();
-
         $this->checkPermission('business_create');
         $row = new $this->businessClass();
         $data = [
@@ -141,9 +136,6 @@ class ManageBusinessController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Business"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
-            'categories'     => $categories,
         ];
         return view('Business::frontend.manageBusiness.detail', $data);
     }
@@ -265,10 +257,6 @@ class ManageBusinessController extends FrontendController
     {
         $this->checkPermission('business_update');
         $user_id = Auth::id();
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $row = $this->businessClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
@@ -294,8 +282,6 @@ class ManageBusinessController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Business"),
-            'isVirtuard360' => $isVirtuard360, 
-            'dataIpanorama' => $dataIpanorama, 
         ];
         return view('Business::frontend.manageBusiness.detail', $data);
     }

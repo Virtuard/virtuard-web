@@ -44,9 +44,7 @@ class MemberController extends Controller
             }
         }
 
-        $data['memberCount'] = $this->user->where([
-            ['role_id', '!=', 1]
-        ])->count();
+        $data['memberCount'] = $this->user->count();
 
         if (auth()->check()) {
             $data['followerCount'] = auth()->user()->followers->count();

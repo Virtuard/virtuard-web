@@ -130,19 +130,12 @@ class EventController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'event')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('event_create');
         $row = new $this->event();
         $row->fill([
             'status' => 'publish'
         ]);
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'attributes'        => $this->attributes::where('service', 'event')->get(),
             'event_location'    => $this->location::where('status', 'publish')->get()->toTree(),
@@ -165,10 +158,6 @@ class EventController extends AdminController
 
     public function edit(Request $request, $id)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('event_update');
         $row = $this->event::find($id);
         if (empty($row)) {
@@ -181,8 +170,6 @@ class EventController extends AdminController
             }
         }
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->terms->pluck('term_id'),

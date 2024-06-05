@@ -113,11 +113,6 @@ class VendorArtController extends FrontendController
 
     public function createArt(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('art_create');
         $row = new $this->artClass();
         $data = [
@@ -138,8 +133,6 @@ class VendorArtController extends FrontendController
                 ],
             ],
             'page_title'         => __("Create Arts"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Art::frontend.vendorArt.detail', $data);
     }
@@ -258,10 +251,6 @@ class VendorArtController extends FrontendController
     {
         $this->checkPermission('art_update');
         $user_id = Auth::id();
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
-        $user_id = Auth::id();
         $row = $this->artClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
@@ -287,8 +276,6 @@ class VendorArtController extends FrontendController
                 ],
             ],
             'page_title'         => __("Edit Arts"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Art::frontend.vendorArt.detail', $data);
     }

@@ -132,14 +132,6 @@ class HotelController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'accomodation')->get();
-        $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)
-            ->where('status', 'SUCCESS')
-            ->first();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('hotel_create');
         $row = new $this->hotelClass();
         $row->fill([
@@ -163,9 +155,6 @@ class HotelController extends AdminController
                 ],
             ],
             'page_title'     => __("Add new Hotel"),
-            'categories'     => $categories,
-            'virtuard360' => $virtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
 
         return view('Hotel::admin.detail', $data);
@@ -173,11 +162,6 @@ class HotelController extends AdminController
 
     public function edit(Request $request, $id)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('hotel_update');
         $row = $this->hotelClass::find($id);
         if (empty($row)) {
@@ -209,8 +193,6 @@ class HotelController extends AdminController
                 ],
             ],
             'page_title' => __("Edit: :name", ['name' => $row->title]),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
 
         return view('Hotel::admin.detail', $data);

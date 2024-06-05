@@ -112,16 +112,8 @@ class ManageCulturalController extends FrontendController
 
     public function createCultural(Request $request)
     {
-        $idUser = Auth::id();
-        $this->checkPermission('cultural_create');
-        $isVirtuard360 = $this->checkVirtuard360();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'property')->get();
-
         $row = new $this->culturalClass();
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation'   => new $this->culturalTranslationClass(),
             'cultural_category' => $this->culturalCategoryClass::get()->toTree(),

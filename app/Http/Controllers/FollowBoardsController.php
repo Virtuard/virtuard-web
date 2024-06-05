@@ -63,9 +63,12 @@ class FollowBoardsController extends Controller
         ->paginate(20)
         ->withQueryString();
         
-        $memberCount = User::where('role_id', '!=', '1')->count();
+        $memberCount = User::count();
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where([
+            ['id_user', $idUser],
+            ['status', 'publish'],
+        ])->get();
         $myFeeds = Story::where('user_id', $idUser)
             ->orderByDesc('id')
             ->paginate(50)

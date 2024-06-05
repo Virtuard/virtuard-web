@@ -45,7 +45,7 @@
                 </div>
                 <div class="panel">
                     <div class="panel-body">
-                        <form class="bravo-form-item">
+                        <form class="bravo-form-item table-responsive">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
@@ -57,6 +57,7 @@
                                     <th width="60px">{{__("Annual Price")}}</th>
                                     <th width="60px">{{__("Duration")}}</th>
                                     <th width="60px">{{__("Max Services")}}</th>
+                                    <th width="60px">{{__("Max Ipanorama")}}</th>
                                     <th width="60px">{{__("Status")}}</th>
                                     <th width="60px">{{__("Date")}}</th>
                                     <th width="100px"></th>
@@ -75,6 +76,7 @@
                                         <td class="">{{$row->annual_price ? format_money($row->annual_price) : ''}}</td>
                                         <td class="">{{$row->duration_text}}</td>
                                         <td class="">{{$row->max_service ? $row->max_service : __('Unlimited')}}</td>
+                                        <td class="">{{$row->max_ipanorama ? $row->max_ipanorama : __('Unlimited')}}</td>
                                         <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
                                         <td class="">{{ display_date($row->updated_at)}}</td>
                                         <td class="title">

@@ -20,6 +20,7 @@ use Illuminate\Support\Str;
 
 class VirtuardController extends Controller
 {
+    protected $refIpanorama;
     /**
      * Create a new controller instance.
      *
@@ -27,6 +28,7 @@ class VirtuardController extends Controller
      */
     public function __construct()
     {
+        $this->refIpanorama = new RefIpanorama();
     }
 
     /**
@@ -38,12 +40,8 @@ class VirtuardController extends Controller
     {
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $user_plan = auth()->user()->userPlans()->where('status',1)->where('end_date','>',now())->first();
-        if (!$user_plan) {
-            $user_plan = auth()->user()->userPlans()->latest('end_date')->first();
-        }
 
-        return view('vendor.virtuard360.index', compact('dataIpanorama', 'user_plan'));
+        return view('vendor.virtuard360.index', compact('dataIpanorama'));
     }
 
     public function vendorVirtuardAdd(Request $request)
@@ -113,11 +111,16 @@ class VirtuardController extends Controller
 
     public function addNewVirtuard360(Request $request)
     {
+        if (!auth()->user()->checkUserIpanoramaPlan()) {
+            return redirect(route('user.plan'));
+        }
+
         $idUser = Auth::id();
 
         $ipanorama = new RefIpanorama();
         $ipanorama->id_user = $idUser;
         $ipanorama->title = $request->input('title');
+        $ipanorama->status = 'draft';
         $ipanorama->save();
 
         $urlWithId = route('user.virtuard-360.add', ['id' => $ipanorama->id]);
@@ -269,5 +272,34 @@ class VirtuardController extends Controller
         } else {
             return response()->json(['error' => 'User model not found or not using the expected Eloquent model']);
         }
+    }
+
+    public function bulkEdit($id , Request $request){
+        $action = $request->input('action');
+        $user_id = Auth::id();
+        $query = $this->refIpanorama::where("id_user", $user_id)->where("id", $id)->first();
+        if (empty($id)) {
+            return redirect()->back()->with('error', __('No item!'));
+        }
+        if (empty($action)) {
+            return redirect()->back()->with('error', __('Please select an action!'));
+        }
+        if(empty($query)){
+            return redirect()->back()->with('error', __('Not Found'));
+        }
+        switch ($action){
+            case "make-hide":
+                $query->status = "draft";
+                break;
+            case "make-publish":
+                if(!auth()->user()->checkUserIpanoramaPlan()) {
+                    return redirect(route('user.plan'));
+                }
+                $query->status = "publish";
+                break;
+        }
+        $query->save();
+
+        return redirect()->back()->with('success', __('Update success!'));
     }
 }

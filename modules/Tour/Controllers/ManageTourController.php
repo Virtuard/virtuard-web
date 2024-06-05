@@ -112,16 +112,9 @@ class ManageTourController extends FrontendController
 
     public function createTour(Request $request)
     {
-        $idUser = Auth::id();
         $this->checkPermission('tour_create');
-        $isVirtuard360 = $this->checkVirtuard360();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'property')->get();
-
         $row = new $this->tourClass();
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation'   => new $this->tourTranslationClass(),
             'tour_category' => $this->tourCategoryClass::get()->toTree(),

@@ -111,17 +111,9 @@ class ManageCarController extends FrontendController
 
     public function createCar(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'car')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('car_create');
         $row = new $this->carClass();
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation' => new $this->carTranslationClass(),
             'car_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -258,10 +250,6 @@ class ManageCarController extends FrontendController
     {
         $this->checkPermission('car_update');
         $user_id = Auth::id();
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
-        $user_id = Auth::id();
         $row = $this->carClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
@@ -269,8 +257,6 @@ class ManageCarController extends FrontendController
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'translation'    => $translation,
             'row'           => $row,
             'car_location' => $this->locationClass::where("status","publish")->get()->toTree(),

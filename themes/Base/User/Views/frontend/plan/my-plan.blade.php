@@ -21,7 +21,8 @@
                                 <th>{{__("Plan ID")}}</th>
                                 <th>{{__("Plan Name")}}</th>
                                 <th>{{__("Expiry")}}</th>
-                                <th>{{__("Total")}}</th>
+                                <th>{{__("Total Service")}}</th>
+                                <th>{{__("Total Ipanorama")}}</th>
                                 <th>{{__("Price")}}</th>
                                 <th>{{__("Status")}}</th>
                             </tr>
@@ -35,6 +36,7 @@
                                         <td class="trans-id">{{$user_plan->plan->title ?? ''}}</td>
                                         <td class="total-jobs">{{display_datetime($user_plan->end_date)}}</td>
                                         <td class="used">@if(!$user_plan->max_service) {{__("Unlimited")}} @else {{$user_plan->used}}/{{$user_plan->max_service}} @endif</td>
+                                        <td class="used">@if(!$user_plan->max_ipanorama) {{__("Unlimited")}} @else {{$user_plan->used_ipanorama}}/{{$user_plan->max_ipanorama}} @endif</td>
                                         <td class="remaining">{{format_money($user_plan->price)}}</td>
                                         <td >
                                             @if($user_plan->status==0)

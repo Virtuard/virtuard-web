@@ -153,3 +153,5 @@
         @endif
     </div>
 </div>
+
+@include('partials.listing.form-ipanorama')

@@ -4,6 +4,7 @@
 
     use App\Models\ChMessage as Message;
 use App\Models\FollowUser;
+use App\Models\RefIpanorama;
 use Illuminate\Notifications\Notifiable;
     use Illuminate\Contracts\Auth\MustVerifyEmail;
     use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -470,6 +471,10 @@ use Illuminate\Notifications\Notifiable;
             return $this->hasMany(UserPlan::class,'user_id');
         }
 
+        public function userIpanoramaPlans(){
+            return $this->hasMany(RefIpanorama::class, 'id_user');
+        }
+
         public function applyPlan(Plan $plan,$price,$is_annual = false,$active=true){
             $max_service = $plan->max_service;
             if($active){
@@ -530,8 +535,46 @@ use Illuminate\Notifications\Notifiable;
             return true;
         }
 
+        public function checkUserIpanoramaPlan(){
+
+            if(!is_enable_plan()) return true;
+
+            $user_plans = $this->userPlans()->where('status',1)->where('end_date','>',now())->get();
+
+            if(!$user_plans) return false;
+            $end_date = $user_plans->max('end_date');
+
+            if($end_date <= now()) return false;
+
+            $maxService = $user_plans->sum('max_ipanorama');
+            $count_service = $this->userIpanoramaPlans()->where('status','publish')->count('id');
+
+            if($maxService and $count_service >= $maxService){
+                return false;
+            }
+            return true;
+        }
+
+        public function checkUserPlanStatus(){
+
+            if(!is_enable_plan()) return true;
+
+            $user_plans = $this->userPlans()->where('status',1)->where('end_date','>',now())->get();
+
+            if(!$user_plans) return false;
+            $end_date = $user_plans->max('end_date');
+
+            if($end_date <= now()) return false;
+
+            return true;
+        }
+
         public function service(){
             return $this->hasMany(Service::class,'author_id');
+        }
+
+        public function ipanorama(){
+            return $this->hasMany(RefIpanorama::class,'id_user');
         }
 
         public function isAdmin(){

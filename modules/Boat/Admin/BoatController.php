@@ -130,11 +130,7 @@ class BoatController extends AdminController
 
     public function create(Request $request)
     {
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('boat_create');
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'boat')->get();
         $row = new $this->boat();
         $row->fill([
             'status' => 'publish'
@@ -156,18 +152,13 @@ class BoatController extends AdminController
                 ],
             ],
             'page_title'   => __("Add new Boat"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Boat::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
     {
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('boat_update');
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
         $row = $this->boat::find($id);
         if (empty($row)) {
             return redirect(route('boat.admin.index'));
@@ -197,8 +188,6 @@ class BoatController extends AdminController
                 ],
             ],
             'page_title'        => __("Edit: :name", ['name' => $row->title]),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Boat::admin.detail', $data);
     }

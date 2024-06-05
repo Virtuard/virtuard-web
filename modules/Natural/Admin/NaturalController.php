@@ -138,20 +138,12 @@ class NaturalController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'property')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('natural_create');
         $row = new Natural();
         $row->fill([
             'status' => 'publish'
         ]);
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'attributes'        => $this->attributesClass::where('service', 'natural')->get(),
             'natural_category'     => $this->naturalCategoryClass::where('status', 'publish')->get()->toTree(),
@@ -175,11 +167,6 @@ class NaturalController extends AdminController
 
     public function edit(Request $request, $id)
     {
-
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('natural_update');
         $row = $this->naturalClass::find($id);
         if (empty($row)) {
@@ -192,8 +179,6 @@ class NaturalController extends AdminController
             }
         }
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'               => $row,
             'translation'       => $translation,
             "selected_terms"    => $row->natural_term->pluck('term_id'),

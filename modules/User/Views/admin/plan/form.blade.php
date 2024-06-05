@@ -42,6 +42,11 @@
     <input type="number" min="0" value="{{old('max_service',$row->max_service)}}" name="max_service" placeholder="{{__("Unlimited")}}" class="form-control">
     <p><i>{{__("How many publish services user can post")}}</i></p>
 </div>
+<div class="form-group">
+    <label class="control-label">{{__("Max Ipanorama")}} </label>
+    <input type="number" min="0" value="{{old('max_ipanorama',$row->max_ipanorama)}}" name="max_ipanorama" placeholder="{{__("Unlimited")}}" class="form-control">
+    <p><i>{{__("How many publish ipanorama (360 image) user can post")}}</i></p>
+</div>
 
 <div class="form-group">
     <label class="control-label">{{__("Status")}}</label>

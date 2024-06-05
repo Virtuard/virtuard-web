@@ -138,11 +138,6 @@ class BusinessController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'business')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('business_create');
         $row = new $this->business();
         $row->fill([
@@ -166,8 +161,6 @@ class BusinessController extends AdminController
                 ],
             ],
             'page_title'     => __("Add new Business"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
 
         return view('Business::admin.detail', $data);
@@ -175,12 +168,6 @@ class BusinessController extends AdminController
 
     public function edit(Request $request, $id)
     {
-
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('business_update');
         $row = $this->business::find($id);
         if (empty($row)) {
@@ -212,8 +199,6 @@ class BusinessController extends AdminController
                 ],
             ],
             'page_title'=>__("Edit: :name",['name'=>$row->title]),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
 
         return view('Business::admin.detail', $data);

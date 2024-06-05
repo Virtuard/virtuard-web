@@ -133,11 +133,6 @@ class ArtController extends AdminController
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-        $categories = ProductCategory::where('type', 'art')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('art_create');
         $row = new $this->art();
         $row->fill([
@@ -161,18 +156,12 @@ class ArtController extends AdminController
                 ],
             ],
             'page_title'        => __("Add new Art"),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Art::admin.detail', $data);
     }
 
     public function edit(Request $request, $id)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('art_update');
         $row = $this->art::find($id);
         if (empty($row)) {
@@ -204,8 +193,6 @@ class ArtController extends AdminController
                 ],
             ],
             'page_title'        => __("Edit: :name", ['name' => $row->title]),
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
         ];
         return view('Art::admin.detail', $data);
     }
