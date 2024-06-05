@@ -114,21 +114,7 @@ class HotelController extends Controller
             $hotel_related = $this->hotelClass::where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$row->id])->with(['location', 'translation', 'hasWishList'])->get();
         }
         $review_list = $row->getReviewList();
-
-        $dataVirtuard360 = SubscribeVirtuard::join('users', 'subscribe_virtuard.id_user', '=', 'users.id')
-            ->select('subscribe_virtuard.*', 'users.name', 'users.email')
-            ->get();
-
-        $dataIpanorama = RefRelationIpanorama::where('slug', $slug)
-            ->join('ref_add_ipanorama', 'ref_relation_ipanorama.id_ipanorama', '=', 'ref_add_ipanorama.id')
-            ->first();
-
-        if ($dataIpanorama) {
-            $dataIpanorama = $dataIpanorama->code;
-        } else {
-            $dataIpanorama = null;
-        }
-
+        
         $dataCategoryProduct = CategoryProduct::where('slug', $slug)->first();
 
         if ($dataCategoryProduct) {
@@ -141,8 +127,6 @@ class HotelController extends Controller
             'row'          => $row,
             'translation'       => $translation,
             'hotel_related' => $hotel_related,
-            'ipanorama' => $dataIpanorama,
-            'virtuard360' => $dataVirtuard360,
             'category_product' => $dataCategoryProduct,
             'location_category' => $this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
             'booking_data' => $row->getBookingData(),

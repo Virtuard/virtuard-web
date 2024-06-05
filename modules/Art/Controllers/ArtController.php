@@ -111,20 +111,9 @@ class ArtController extends Controller
         }
         $review_list = $row->getReviewList();
 
-        $dataIpanorama = RefRelationIpanorama::where('slug', $slug)
-        ->join('ref_add_ipanorama', 'ref_relation_ipanorama.id_ipanorama', '=', 'ref_add_ipanorama.id')
-        ->first();
-
-        if($dataIpanorama) {
-            $dataIpanorama = $dataIpanorama->code;
-        }else{
-            $dataIpanorama = null;
-        }
-
         $data = [
             'row'          => $row,
             'translation'       => $translation,
-            'ipanorama' => $dataIpanorama,
             'art_related' => $art_related,
             'location_category'=>$this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
             'booking_data' => $row->getBookingData(),

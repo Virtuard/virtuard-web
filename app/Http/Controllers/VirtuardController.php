@@ -177,47 +177,55 @@ class VirtuardController extends Controller
 
     public function vendorVirtuardAddApi(Request $request)
     {
-        $data = json_decode($request->getContent());
-        $id = $data->id;
+        $attr = json_decode($request->getContent());
 
-        $virtuard = RefIpanorama::where('id', $id)->first();
-        $virtuard->json_data = $data->data;
-        $virtuard->save();
-
-        if ($data === null) {
+        if ($attr == null) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal mendekode data JSON',
+                'message' => 'Data gagal diproses',
             ], 400);
         }
+        
+        $id = $attr->id;
+
+        $jsonData = json_decode($attr->data);
+        $jsonData->config->autoLoad = true;
+        $jsonData = json_encode($jsonData);
+
+        $panorama = RefIpanorama::where('id', $id)->first();
+        $panorama->json_data = $jsonData;
+        $panorama->save();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data berhasil diproses',
-            'data' => $data,
+            'data' => $attr,
             'id' => $id,
         ]);
     }
 
     public function vendorVirtuardAddApiSecond(Request $request)
     {
-        $data = $request->except('id');
-        $id = $request->id;
+        $attr = $request->except('id');
+        $attr['code']['autoLoad'] = true;
+        // dd($attr);
 
-        $virtuard = RefIpanorama::find($id);
-        $virtuard->update($data);
-
-        if ($data === null) {
+        if ($attr == null) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Gagal mendekode data JSON',
+                'message' => 'Data gagal diproses',
             ], 400);
         }
+
+        $id = $request->id;
+
+        $panorama = RefIpanorama::find($id);
+        $panorama->update($attr);
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data berhasil diproses',
-            'data' => $data,
+            'data' => $attr,
             'id' => $id,
         ]);
     }
