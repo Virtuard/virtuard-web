@@ -110,22 +110,11 @@ class SpaceController extends Controller
             $space_related = $this->spaceClass::where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$row->id])->with(['location','translation','hasWishList'])->get();
         }
         $review_list = $row->getReviewList();
-        
-        $dataIpanorama = RefRelationIpanorama::where('slug', $slug)
-        ->join('ref_add_ipanorama', 'ref_relation_ipanorama.id_ipanorama', '=', 'ref_add_ipanorama.id')
-        ->first();
-
-        if($dataIpanorama) {
-            $dataIpanorama = $dataIpanorama->code;
-        }else{
-            $dataIpanorama = null;
-        }
 
         $data = [
             'row'          => $row,
             'translation'       => $translation,
             'space_related' => $space_related,
-            'ipanorama' => $dataIpanorama,
             'location_category'=>$this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
             'booking_data' => $row->getBookingData(),
             'review_list'  => $review_list,

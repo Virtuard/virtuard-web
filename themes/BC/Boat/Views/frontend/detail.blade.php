@@ -16,7 +16,6 @@
     <div class="bravo_detail_boat">
         @include('Layout::parts.bc')
         @include('Boat::frontend.layouts.details.banner')
-        <input type="hidden" id="panId" value="{{$ipanorama}}">
         <div class="bravo_content">
             <div class="container">
                 <div class="row">
@@ -24,8 +23,8 @@
                         @include('partials.listing.share-action')
                     </div>
                     <div class="col-md-12 col-lg-9">
-                        @php $review_score = $row->review_data @endphp
-                        @if($ipanorama)
+                        <input type="hidden" id="panId" value="{{$row->ipanorama->code ?? ''}}">
+                        @if($row->ipanorama)
                         <div id="panorama"></div>
                         @endif
                         @include('Boat::frontend.layouts.details.detail')

@@ -20,9 +20,6 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        @if($ipanorama)
-                        <div id="panorama"></div>
-                        @endif
                         @include('Flight::frontend.layouts.details.space-detail')
                         @include('Flight::frontend.layouts.details.space-review')
                     </div>

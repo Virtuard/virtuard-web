@@ -108,21 +108,10 @@
                 $natural_related = $this->naturalClass::where('location_id', $location_id)->where("status","publish")->take(4)->whereNotIn('id', [$row->id])->with(['location','translation','hasWishList'])->get();
             }
             $review_list = $row->getReviewList();
-
-            $dataIpanorama = RefRelationIpanorama::where('slug', $slug)
-            ->join('ref_add_ipanorama', 'ref_relation_ipanorama.id_ipanorama', '=', 'ref_add_ipanorama.id')
-            ->first();
-
-            if($dataIpanorama) {
-                $dataIpanorama = $dataIpanorama->code;
-            }else{
-                $dataIpanorama = null;
-            }
             
             $data = [
                 'row' => $row,
                 'translation' => $translation,
-                'ipanorama' => $dataIpanorama,
                 'natural_related' => $natural_related,
                 'booking_data' => $row->getBookingData(),
                 'review_list' => $review_list,

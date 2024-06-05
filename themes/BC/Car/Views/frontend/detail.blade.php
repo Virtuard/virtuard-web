@@ -21,9 +21,6 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        @if($ipanorama)
-                        <div id="panorama"></div>
-                        @endif
                         @include('Car::frontend.layouts.details.detail')
                         @include('Car::frontend.layouts.details.review')
                     </div>
