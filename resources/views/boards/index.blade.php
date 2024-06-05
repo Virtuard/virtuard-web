@@ -303,7 +303,17 @@
                                             <a class="dropdown-item"
                                                 href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
                                                 target="_blank">
-                                                <i class="fa fa-facebook"></i> Share on Facebook
+                                                <i class="fa fa-facebook"></i> Facebook
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="https://www.instagram.com/sharer/sharer.php?u={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
+                                                target="_blank">
+                                                <i class="fa fa-instagram"></i> Instagram
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="https://www.x.com/intent/post?url={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
+                                                target="_blank">
+                                                <i class="fa fa-times"></i> X
                                             </a>
                                         </div>
                                     </div>
