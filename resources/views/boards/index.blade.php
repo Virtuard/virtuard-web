@@ -301,17 +301,22 @@
                                         </button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item"
-                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
+                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url(route('user.board.index').'#Post-'.$post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-facebook"></i> Facebook
                                             </a>
                                             <a class="dropdown-item"
-                                                href="https://www.instagram.com/sharer/sharer.php?u={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
+                                                href="https://api.whatsapp.com/send?text={{ urlencode(route('user.board.index') . '#Post-' . $post->id)}}"
+                                                target="_blank">
+                                                <i class="fa fa-whatsapp"></i> Whatsapp
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="https://www.instagram.com/sharer/sharer.php?u={{ urlencode(url(route('user.board.index').'#Post-'.$post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-instagram"></i> Instagram
                                             </a>
                                             <a class="dropdown-item"
-                                                href="https://www.x.com/intent/post?url={{ urlencode(url('/user/follow-boards#Post-' . $post->id)) }}"
+                                                href="https://www.x.com/intent/post?url={{ urlencode(url(route('user.board.index').'#Post-'.$post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-times"></i> X
                                             </a>
@@ -616,12 +621,12 @@
 
             switch (val) {
                 case 'public' :
-                    window.location.href = `/user/follow-boards`;
+                    window.location.href = "{!! route('user.board.index') !!}";
                 case 'me' :
-                    window.location.href = `/user/follow-boards?filter=me`;
+                    window.location.href = "{!! route('user.board.index', ['filter' => 'me']) !!}";
                     break;
                 case 'friend' :
-                    window.location.href = `/user/follow-boards?filter=friend`;
+                    window.location.href = "{!! route('user.board.index', ['filter' => 'friend']) !!}";
                     break;
                 default :
                     $('#login').modal('show');

@@ -98,12 +98,12 @@
                                 </a>
                             </li>
                             <li>
+                                <span id="share-copy-text" class="d-none">{{ $row->getDetailUrl() }}</span>
                                 <a id="share-copy-btn" data-toggle="tooltip" data-placement="top"
-                                    title="Copy to clipboard" onclick="copyToClipboard('#share-copy-text')"
+                                    title="Copy to clipboard" onclick="copyToClipboard('share-copy-text')"
                                     onmouseout="outCopyFunc()" href="javascript:void(0)">
                                     <i class="fa fa-copy fa-lg"></i>
                                 </a>
-                                <span id="share-copy-text" class="d-none">{{ $row->getDetailUrl() }}</span>
                                 <span>{{ __('Copy link') }}</span>
                             </li>
                         </ul>

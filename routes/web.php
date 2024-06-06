@@ -58,7 +58,7 @@ Route::put('/admin/edit/category/product', 'CategoryController@update')->name('e
 Route::post('/admin/delete/category/product', 'CategoryController@delete')->name('delete.new.category');
 
 // Follow Boards
-Route::get('/user/follow-boards', 'FollowBoardsController@index')->name('user-follow.index');
+Route::get('/user/follow-boards', 'FollowBoardsController@index')->name('user.board.index');
 Route::post('/user/add/follow-boards', 'FollowBoardsController@store')->name('user.post.status');
 Route::get('/user/like/{id}', 'FollowBoardsController@likePost')->name('user.post.like');
 Route::post('/user/comment/{id}', 'FollowBoardsController@commentPost')->name('user.post.comment');
