@@ -183,7 +183,7 @@
                                             class="thumb-panorama preview-panorama cursor-pointer"
                                             data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}"
                                             >
-                                            <div class="icon-panorama"></div>
+                                            {{-- <div class="icon-panorama"></div> --}}
                                         </div>
                                     @endif
 
