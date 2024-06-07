@@ -38,6 +38,7 @@ class CreateController extends Controller
 
         // check menu listing
         foreach ($menus as $key => $menu) {
+            $menus[$key]['title'] = str_replace('Manage', 'Create', $menus[$key]['title']);
             $menus[$key]['id'] = $key;
             unset($menus[$key]['children']);
 

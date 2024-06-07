@@ -3,19 +3,19 @@
     <div class="boards" style="background: #f5f5f5; padding: 120px 60px;">
         <div class="row my-5">
             <div class="col-12">
-                <h1 class="text-center">What do you want to listing?</h1>
+                <h1 class="text-center">{{ __('What do you want to listing?') }}</h1>
             </div>
         </div>
         <div class="row">
             @forelse ($menus as $key => $menu)
-                <div class="col-md-4 mb-3">
+                <div class="col-md-3 mb-3">
                     <a href="{{ $menu['url'] }}" class="card h-100 text-decoration-none" @guest
                     data-toggle="modal"
                     data-target="#login"
                     @endguest>
                         <div class="card-body d-flex align-items-center">
                             <i class="fa fa-lg mr-2 {{ $menu['icon'] }}"></i>
-                            {{ $menu['title'] }}
+                            {{ __($menu['title']) }}
                         </div>
                     </a>
                 </div>
