@@ -20,6 +20,7 @@ use App\Models\PostComment;
 use App\Models\Story;
 use App\Models\RefIpanorama;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
@@ -91,16 +92,18 @@ class FollowBoardsController extends Controller
 
     public function store(Request $request)
     {
-        $idUser = Auth::id();
+        DB::beginTransaction();
+        try {
 
-        $post = new UserPost();
-        $post->user_id = $idUser;
-        $post->ipanorama_id = $request->input('ipanorama_id');
-        $post->message = $request->input('message');
-        $post->type_status = 'Status';
-        $post->type_post = $request->input('type_post');
-        $post->tag = '-';
-        $post->save();
+        $dataPost = [
+            'user_id' =>  auth()->user()->id,
+            'ipanorama_id' =>  $request->input('ipanorama_id'),
+            'message' =>  $request->input('message'),
+            'type_status' =>  'Status',
+            'type_post' =>  $request->input('type_post'),
+            'tag' =>  '-',
+        ];
+        $post = UserPost::create($dataPost);
 
         if ($request->hasFile('media_user')) {
             $files = $request->file('media_user');
@@ -110,15 +113,21 @@ class FollowBoardsController extends Controller
                 $type = getMimeTypeFromExtension($extension);
                 $path = $file->storeAs('/media', $filename);
 
-                $mediaItem = new PostMedia();
-                $mediaItem->post_id = $post->id;
-                $mediaItem->media = $path;
-                $mediaItem->type = $type;
-                $mediaItem->save();
+                $dataMedia = [
+                    'post_id' => $post->id,
+                    'media' => $path,
+                    'type' => $type,
+                ];
+                $mediaItem = PostMedia::create($dataMedia);
             }
         }
 
+        DB::commit();
         return back()->with('success', 'Updated status');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Something wrong!');
+        }
     }
 
     public function likePost($id)

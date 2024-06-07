@@ -1,6 +1,6 @@
 @extends ('layouts.app')
 @section ('content')
-        <div class="container-fluid" style="background: #f5f5f5;">
+        <div class="container">
             <div class="row p-3">
                 <div class="col-md-12 text-center">
                     @if (session('status'))
@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12" style="background: #f5f5f5; padding: 0 20px;">
+                <div class="col-md-12" style="background: #f5f5f5;">
                     <div class="member-box">
                         <div class="label-member">
                             <a class="m-0" href="{{ route('member.index')}}">
@@ -114,6 +114,9 @@
 @endsection
 @push('css')
 <style>
+    body {
+        background-color: #f5f5f5;
+    }
     .member-box {
         display: flex;
         background: #FFF;

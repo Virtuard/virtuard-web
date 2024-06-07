@@ -6,7 +6,8 @@
 <link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
 <link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
 @section('content')
-    <div style="padding: 40px 0; background: #f5f5f5;">
+<div class="container">
+    <div class="row" style="padding: 40px 0; background: #f5f5f5;">
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-9" style="background: #f5f5f5; padding: 0 20px;">
@@ -172,39 +173,44 @@
                                 <hr>
 
                                 <div class="card-file">
-                                    <div class="g-ipanorama">
-                                        @if ($post->ipanorama)
-                                            <a data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}" class="preview-panorama cursor-pointer">
-                                                <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" class="thumb-panorama">
-                                            </a>
-                                        @endif
-                                    </div>
+                                    @php
+                                        $galleries = $post->medias->where('type', 'image');
+                                        $videos = $post->medias->where('type', 'video');
+                                    @endphp
+                                    @if ($post->ipanorama)
+                                        <div class="g-ipanorama">
+                                            <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
+                                            class="thumb-panorama preview-panorama cursor-pointer"
+                                            data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}"
+                                            >
+                                            <div class="icon-panorama"></div>
+                                        </div>
+                                    @endif
 
+                                    @if(count($galleries) > 0)
                                     <div class="g-gallery">
                                         <div class="fotorama" data-width="100%" data-thumbwidth="135" data-thumbheight="135" data-thumbmargin="15" data-nav="thumbs" data-allowfullscreen="true">
-                                            @foreach($post->medias->where('type', 'image') as $img)
+                                            @foreach($galleries as $img)
                                                 <a href="{{url('uploads/'.$img['media'])}}" data-thumb="{{url('uploads/'.$img['media'])}}" data-alt="{{ __("Media") }}"></a>
                                             @endforeach
                                         </div>
                                     </div>
+                                    @endif
 
+                                    @if(count($videos) > 0)
                                     <div class="g-video">
-                                        @foreach ($post->medias->where('type', 'video') as $vid)
-                                            <div class="mt-2">
-                                                <video>
-                                                    <source src="{{ url('uploads/' . $vid->media) }}">
-                                                </video>
-                                            </div>
+                                        @foreach ($videos as $vid)
+                                            <video controls>
+                                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/mp4">
+                                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/ogg">
+                                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/mkv">
+                                            </video>
                                         @endforeach
                                     </div>
+                                    @endif
                                 </div>
 
-                                <p class="mt-3"
-                                    style="
-                                            font-size: 0.9rem;
-                                            font-weight: 500;
-                                            color: #9b9b9b;
-                                        ">
+                                <p class="mt-3" style="font-size: 0.9rem; font-weight: 500; color: #9b9b9b;">
                                     {{ $post->message }}
                                 </p>
                                 <hr>
@@ -426,12 +432,22 @@
     <div class="section-modal">
         @include('vendor.ipanorama.demo.includes.ipanorama-modal')
     </div>
+</div>
 @endsection
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{asset('libs/fotorama/fotorama.css')}}"/>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .card-file {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
         .g-gallery .fotorama .fotorama__fullscreen-icon {
             background: none;
             bottom: 30px;
@@ -490,24 +506,66 @@
             background: url(/images/ico_next.svg);
             content: "";
         }
+        .fotorama__wrap {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
         .g-gallery .fotorama .fotorama__stage {
-            width: 100%;
-            height: auto;
-            max-height: 420px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px !important;
+            height: 450px !important;
+            overflow: hidden;
+            border-radius: 5px;
         }
         .g-gallery .fotorama .fotorama__stage .fotorama__img {
-            top: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+        }
+        .g-video {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px !important;
+            height: 450px !important;
+            overflow: hidden;
+            border-radius: 5px;
         }
         .g-video video {
             width: 100%;
-            height: auto;
-            max-height: 450px;
+            height: 100%;
         }
-        .thumb-panorama {
+        .g-ipanorama {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 500px !important;
+            height: 450px !important;
+            overflow: hidden;
+            border-radius: 5px;
+            position: relative;
+        }
+        .g-ipanorama .thumb-panorama {
             width: 100%;
-            height: auto;
-            max-height: 450px;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
+
+        .g-ipanorama .icon-panorama {
+            background-image: url({{ asset('images/360-logo.png') }});
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background-size: cover;
+            background-position: center;
+        }
+
         #search-tag span.select2.select2-container {
             width: 100% !important;
         }
@@ -547,6 +605,17 @@
 
             .btn-submit {
                 padding: 5px 10px;
+            }
+
+            .g-gallery .fotorama .fotorama__stage,
+            .g-ipanorama {
+                width: 100% !important;
+                height: 300px !important;
+            }
+
+            .g-video {
+                width: 100% !important;
+                height: 300px !important;
             }
         }
     </style>
