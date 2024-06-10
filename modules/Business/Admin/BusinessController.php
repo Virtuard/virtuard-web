@@ -252,6 +252,9 @@ class BusinessController extends AdminController
             'min_day_before_booking',
             'min_day_stays',
             'surrounding',
+            'franchising',
+            'phone',
+            'website',
 
         ];
         if($this->hasPermission('business_manage_others')){

@@ -162,7 +162,41 @@ class VendorController extends FrontendController
             }
             $row->author_id = Auth::id();
         }
-        $dataKeys = ['title', 'content', 'slug', 'video', 'image_id', 'banner_image_id', 'gallery', 'is_featured', 'policy', 'location_id', 'address', 'map_lat', 'map_lng', 'map_zoom', 'star_rate', 'price', 'sale_price', 'check_in_time', 'check_out_time', 'allow_full_day', 'enable_extra_price', 'extra_price', 'min_day_before_booking', 'min_day_stays', 'enable_service_fee', 'service_fee', 'surrounding', 'ipanorama_id', 'category_id'];
+        $dataKeys = [
+            'title',
+            'content',
+            'slug',
+            'video',
+            'image_id',
+            'banner_image_id',
+            'gallery',
+            'is_featured',
+            'policy',
+            'location_id',
+            'address',
+            'map_lat',
+            'map_lng',
+            'map_zoom',
+            'star_rate',
+            'price',
+            'sale_price',
+            'check_in_time',
+            'check_out_time',
+            'allow_full_day',
+            'enable_extra_price',
+            'extra_price',
+            'min_day_before_booking',
+            'min_day_stays',
+            'enable_service_fee',
+            'service_fee',
+            'surrounding',
+            'ipanorama_id',
+            'category_id',
+            'room',
+            'hotel_chain',
+            'phone',
+            'website',
+        ];
 
         $row->fillByAttr($dataKeys, $request->input());
         // if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
@@ -255,7 +289,7 @@ class VendorController extends FrontendController
         $row = $this->hotelClass::where('author_id', $user_id);
         $row = $row->find($id);
         if (empty($row)) {
-            return redirect(route('hotel.vendor.index'))->with('warning', __('Space not found!'));
+            return redirect(route('hotel.vendor.index'))->with('warning', __('Hotel not found!'));
         }
         $translation = $row->translate($request->query('lang'));
         $data = [

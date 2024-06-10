@@ -30,7 +30,11 @@ return new class extends Migration
     public function down()
     {
         Schema::table('bravo_plans', function (Blueprint $table) {
-            //
+            $table->dropColumn('max_ipanorama');
+        });
+
+        Schema::table('bravo_user_plan', function (Blueprint $table) {
+            $table->dropColumn('max_ipanorama');
         });
     }
 };

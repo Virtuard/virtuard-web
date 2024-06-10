@@ -147,3 +147,4 @@
 </div>
 
 @include('partials.listing.form-ipanorama')
+@include('Art::admin.art.extra-info')

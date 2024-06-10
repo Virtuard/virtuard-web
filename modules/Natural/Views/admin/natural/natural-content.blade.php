@@ -155,3 +155,4 @@
 </div>
 
 @include('partials.listing.form-ipanorama')
+@include('Natural::admin.natural.extra-info')

@@ -155,3 +155,4 @@
 </div>
 
 @include('partials.listing.form-ipanorama')
+@include('Cultural::admin.cultural.extra-info')

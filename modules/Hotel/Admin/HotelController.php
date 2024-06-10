@@ -247,6 +247,10 @@ class HotelController extends AdminController
             'enable_service_fee',
             'service_fee',
             'surrounding',
+            'room',
+            'hotel_chain',
+            'phone',
+            'website',
         ];
         if ($this->hasPermission('hotel_manage_others')) {
             $dataKeys[] = 'author_id';

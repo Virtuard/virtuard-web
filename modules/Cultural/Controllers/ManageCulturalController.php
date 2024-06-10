@@ -222,6 +222,8 @@ class ManageCulturalController extends FrontendController
             'start_date',
             'end_date',
             'last_booking_date',
+            'phone',
+            'website',
 
         ], $request->input());
 

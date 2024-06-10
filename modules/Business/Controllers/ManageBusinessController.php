@@ -195,6 +195,9 @@ class ManageBusinessController extends FrontendController
             'enable_service_fee',
             'service_fee',
             'surrounding',
+            'franchising',
+            'phone',
+            'website',
 
         ];
         $row->fillByAttr($dataKeys,$request->input());

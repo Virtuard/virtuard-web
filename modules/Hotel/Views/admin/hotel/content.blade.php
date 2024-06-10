@@ -56,6 +56,7 @@
 </div>
 
 @include('partials.listing.form-ipanorama')
+@include('Hotel::admin.hotel.extra-info')
 
 <div class="panel">
     <div class="panel-title"><strong>{{ __('Accomodation Policy') }}</strong></div>

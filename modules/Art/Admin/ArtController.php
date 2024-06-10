@@ -245,6 +245,14 @@ class ArtController extends AdminController
             'surrounding',
             'end_time',
             'duration_unit',
+            'room',
+            'bed',
+            'bathroom',
+            'square',
+            'architecture',
+            'software',
+            'phone',
+            'website',
         ];
         if ($this->hasPermission('art_manage_others')) {
             $dataKeys[] = 'author_id';

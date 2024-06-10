@@ -202,6 +202,13 @@ class ManageSpaceController extends FrontendController
             'enable_service_fee',
             'service_fee',
             'surrounding',
+            'room',
+            'flooring',
+            'square_land',
+            'land_registry_category',
+            'real_estate_agency',
+            'phone',
+            'website',
 
         ];
         $row->fillByAttr($dataKeys,$request->input());

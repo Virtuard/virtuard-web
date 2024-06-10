@@ -253,6 +253,13 @@ class SpaceController extends AdminController
             'min_day_before_booking',
             'min_day_stays',
             'surrounding',
+            'room',
+            'flooring',
+            'square_land',
+            'land_registry_category',
+            'real_estate_agency',
+            'phone',
+            'website',
 
         ];
         if($this->hasPermission('space_manage_others')){

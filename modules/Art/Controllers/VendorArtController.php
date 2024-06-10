@@ -187,6 +187,14 @@ class VendorArtController extends FrontendController
             'enable_service_fee',
             'service_fee',
             'surrounding',
+            'room',
+            'bed',
+            'bathroom',
+            'square',
+            'architecture',
+            'software',
+            'phone',
+            'website',
         ];
 
         $row->fillByAttr($dataKeys,$request->input());
