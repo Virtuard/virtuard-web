@@ -70,6 +70,7 @@
             </div>
         </div>
 
+        <input type="hidden" id="url_panorama" value="{{ url('/uploads/ipanoramaBuilder?id=' . request('id') . '&user_id=' . auth()->user()->id) }}">
         @if(config('app.env') == 'local')
             <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?id={{ request()->id }}&user_id={{ auth()->user()->id}}"></iframe>
         @else
@@ -113,6 +114,9 @@
             /* Adjust the position based on your design */
             transform: translate(-50%, -50%);
             /* Add any other styles for highlighting the element */
+        }
+        #frame-panorama {
+            height: 100vh;
         }
     </style>
 @endpush
@@ -261,20 +265,25 @@
             @endif
         </script>
         <script>
-            // $(function() {
-            //     var iframe = $('<iframe>').attr({
-            //         src: "{{ url('/uploads/ipanoramaBuilder/?id=' . request('id')) }}",
-            //         id: "ipanorama-frame",
-            //         width: '100%',
-            //         height: '100vh'
-            //     });
-            //     $('#ipanorama-frame').append(iframe);
-            //     $('#ipanorama-frame').on('load', function(){
-            //         var iframeContent = $('#ipanorama-frame').contents();
-            //         iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-            //         iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
-            //         iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
-            //     });
-            // });
+            function initPanorama() {
+                let urlPan = $('#url_panorama').val();
+                var iframe = $('<iframe>').attr({
+                    src: urlPan,
+                    id: "frame-panorama",
+                    width: '100%',
+                    height: '100vh'
+                });
+                $('#ipanorama-frame').append(iframe);
+                $('#frame-panorama').on('load', function(){
+                    var iframeContent = $('#frame-panorama').contents();
+                    iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+                    iframeContent.find('.ipnrm-ui-cmd-load').trigger('click');
+                    iframeContent.find('#frame-load').find('.ipnrm-ui-toggle').trigger('click');
+                });
+            }
+
+            document.addEventListener("DOMContentLoaded", function(event) { 
+                initPanorama();
+            });
         </script>
     @endpush

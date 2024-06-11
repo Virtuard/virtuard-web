@@ -41,17 +41,17 @@ class VirtuardController extends Controller
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
 
-        return view('vendor.virtuard360.index', compact('dataIpanorama'));
+        return view('user.virtuard360.index', compact('dataIpanorama'));
     }
 
     public function vendorVirtuardAdd(Request $request)
     {
-        return view('vendor.virtuard360.add');
+        return view('user.virtuard360.add');
     }
 
     public function vendorVirtuardEdit(Request $request)
     {
-        return view('vendor.virtuard360.edit');
+        return view('user.virtuard360.edit');
     }
 
     public function vendorVirtuardDelete($id)
@@ -123,7 +123,10 @@ class VirtuardController extends Controller
         $ipanorama->status = 'draft';
         $ipanorama->save();
 
-        $urlWithId = route('user.virtuard-360.edit', ['id' => $ipanorama->id]);
+        $urlWithId = route('user.virtuard-360.edit', [
+            'id' => $ipanorama->id,
+            'user_iid' => auth()->user_id,
+        ]);
         return redirect($urlWithId)->with('success', 'Insert successfully');
     }
 
