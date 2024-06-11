@@ -92,72 +92,7 @@
                         <div>
                             <h4 class="card-title mt-0 mb-0"><a class="text-white"
                                     herf="https://creativemanner.com">Hotels</a></h4>
-                            <small class="text-white">1.344 listings</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mb-4">
-                <div class="card card-custom card-has-bg click-col"
-                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                    <div class="card-img-overlay d-flex flex-column justify-content-between">
-                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                        <div>
-                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                    herf="https://creativemanner.com">Hotels</a></h4>
-                            <small class="text-white">1.344 listings</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mb-4">
-                <div class="card card-custom card-has-bg click-col"
-                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                    <div class="card-img-overlay d-flex flex-column justify-content-between">
-                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                        <div>
-                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                    herf="https://creativemanner.com">Hotels</a></h4>
-                            <small class="text-white">1.344 listings</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mb-4">
-                <div class="card card-custom card-has-bg click-col"
-                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                    <div class="card-img-overlay d-flex flex-column justify-content-between">
-                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                        <div>
-                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                    herf="https://creativemanner.com">Hotels</a></h4>
-                            <small class="text-white">1.344 listings</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mb-4">
-                <div class="card card-custom card-has-bg click-col"
-                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                    <div class="card-img-overlay d-flex flex-column justify-content-between">
-                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                        <div>
-                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                    herf="https://creativemanner.com">Hotels</a></h4>
-                            <small class="text-white">1.344 listings</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 mb-4">
-                <div class="card card-custom card-has-bg click-col"
-                    style="background-image:url('https://source.unsplash.com/600x900/?tech');">
-                    <div class="card-img-overlay d-flex flex-column justify-content-between">
-                        <i class="fa fa-lg fa-shopping-bag text-white"></i>
-                        <div>
-                            <h4 class="card-title mt-0 mb-0"><a class="text-white"
-                                    herf="https://creativemanner.com">Hotels</a></h4>
-                            <small class="text-white">1.344 listings</small>
+                            {{-- <small class="text-white">1.344 listings</small> --}}
                         </div>
                     </div>
                 </div>

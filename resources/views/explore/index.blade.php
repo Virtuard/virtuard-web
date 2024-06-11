@@ -81,47 +81,47 @@
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize active" id="all-tab" data-toggle="tab" data-target="#all"
                             type="button" role="tab" aria-controls="all" aria-selected="true">
-                            <i class="fa fa-sm mr-2 fa-globe"></i> All
+                            <i class="fa fa-sm mr-2 fa-globe"></i> {{ __('All') }}
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="accomodations-tab" data-toggle="tab"
-                            data-target="#accomodations" type="button" role="tab" aria-controls="accomodations"
+                        <button class="nav-link nav-category text-capitalize" id="hotel-tab" data-toggle="tab"
+                            data-target="#hotel" type="button" role="tab" aria-controls="hotel"
                             aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> {{ __('Accomodation') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="properties-tab" data-toggle="tab"
-                            data-target="#properties" type="button" role="tab" aria-controls="properties"
+                        <button class="nav-link nav-category text-capitalize" id="space-tab" data-toggle="tab"
+                            data-target="#space" type="button" role="tab" aria-controls="space"
                             aria-selected="false"><i class="fa fa-sm mr-2 fa-home"></i> {{ __('Property') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="vehicles-tab" data-toggle="tab"
-                            data-target="#vehicles" type="button" role="tab" aria-controls="vehicles"
-                            aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> {{ __('Vehicle') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link nav-category text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
                             type="button" role="tab" aria-controls="business" aria-selected="false">
-                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>Business</button>
+                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>{{ ('Business') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="events-tab" data-toggle="tab"
-                            data-target="#events" type="button" role="tab" aria-controls="events"
+                        <button class="nav-link nav-category text-capitalize" id="boat-tab" data-toggle="tab"
+                            data-target="#boat" type="button" role="tab" aria-controls="vehicle"
+                            aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> {{ __('Vehicle') }}</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link nav-category text-capitalize" id="event-tab" data-toggle="tab"
+                            data-target="#event" type="button" role="tab" aria-controls="event"
                             aria-selected="false"><i class="icofont-ticket"></i> {{ __('Event') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="naturals-tab" data-toggle="tab"
-                            data-target="#naturals" type="button" role="tab" aria-controls="naturals"
+                        <button class="nav-link nav-category text-capitalize" id="natural-tab" data-toggle="tab"
+                            data-target="#natural" type="button" role="tab" aria-controls="natural"
                             aria-selected="false"><i class="material-icons">landscape</i> {{ __('Natural and Landscape') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="culturals-tab" data-toggle="tab"
-                            data-target="#culturals" type="button" role="tab" aria-controls="culturals"
+                        <button class="nav-link nav-category text-capitalize" id="cultural-tab" data-toggle="tab"
+                            data-target="#cultural" type="button" role="tab" aria-controls="cultural"
                             aria-selected="false"><i class="material-icons">church</i> {{ __('Cultural Heritage') }}</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="arts-tab" data-toggle="tab"
-                            data-target="#arts" type="button" role="tab" aria-controls="arts"
+                        <button class="nav-link nav-category text-capitalize" id="art-tab" data-toggle="tab"
+                            data-target="#art" type="button" role="tab" aria-controls="art"
                             aria-selected="false"><i class="material-icons font-size-inherit">design_services</i> {{ __('Rendering and Art') }}</button>
                     </li>
                 </ul>
@@ -288,4 +288,14 @@
         const listMaps = {{ Js::from($listMaps) }}
     </script>
     <script src="{{ asset('assets/js/listing-map.js') }}"></script>
+    <script>
+        function onFilterListing() {
+            
+        }
+
+        $('.nav-category').on('click', function(){
+            let target = $(this).data('target');
+            console.log('target', target)
+        });
+    </script>
 @endpush

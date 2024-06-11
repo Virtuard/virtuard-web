@@ -15,9 +15,9 @@ use Modules\Natural\Models\Natural;
 
 class ExploreController extends Controller
 {
-    protected $accomodation;
-    protected $property;
-    protected $vehicle;
+    protected $hotel;
+    protected $space;
+    protected $boat;
     protected $business;
     protected $natural;
     protected $cultural;
@@ -27,9 +27,9 @@ class ExploreController extends Controller
 
     public function __construct()
     {
-        $this->accomodation = new Hotel();
-        $this->property = new Space();
-        $this->vehicle = new Boat();
+        $this->hotel = new Hotel();
+        $this->space = new Space();
+        $this->boat = new Boat();
         $this->business = new Business();
         $this->cultural = new Cultural();
         $this->natural = new Natural();
@@ -48,18 +48,26 @@ class ExploreController extends Controller
             'map_lng' => $request->search_lng,
         ];
 
-        $topBusiness = $this->business->take(5)->get();
-        $businessCategories = $this->productCategory->where('type', 'business')->get();
+        $searchlistings = [
+            'business' => $this->business->search($search),
+            'space' => $this->space->search($search),
+            'hotel' => $this->hotel->search($search),
+            'boat' => $this->boat->search($search),
+            'event' => $this->event->search($search),
+            'natural' => $this->natural->search($search),
+            'cultural' => $this->cultural->search($search),
+            'art' => $this->art->search($search),
+        ];
 
         $listings = [
-            'business' => $this->getListing($this->business, $search),
-            'properties' => $this->getListing($this->property, $search),
-            'accomodations' => $this->getListing($this->accomodation, $search),
-            'vehicles' => $this->getListing($this->vehicle, $search),
-            'events' => $this->getListing($this->event, $search),
-            'naturals' => $this->getListing($this->natural, $search),
-            'culturals' => $this->getListing($this->cultural, $search),
-            'arts' => $this->getListing($this->art, $search),
+            'business' => $searchlistings['business']->get(),
+            'space' => $searchlistings['space']->get(),
+            'hotel' => $searchlistings['hotel']->get(),
+            'boat' => $searchlistings['boat']->get(),
+            'event' => $searchlistings['event']->get(),
+            'natural' => $searchlistings['natural']->get(),
+            'cultural' => $searchlistings['cultural']->get(),
+            'art' => $searchlistings['art']->get(),
         ];
 
         $listMaps = [];
@@ -72,8 +80,6 @@ class ExploreController extends Controller
         usort($listMaps, [$this, 'sortListing']);
 
         return view('explore.index', compact(
-            'topBusiness',
-            'businessCategories',
             'listings',
             'listMaps',
         ));
