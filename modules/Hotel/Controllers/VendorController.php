@@ -391,13 +391,12 @@ class VendorController extends FrontendController
                 break;
             case 'make-publish':
                 $query->status = 'publish';
-                if (
-                    !auth()
-                        ->user()
-                        ->checkUserPlan()
-                ) {
+                if (!auth()->user()->checkUserPlan()) {
                     return redirect(route('user.plan'));
                 }
+                break;
+            case 'make-private':
+                $query->status = 'private';
                 break;
         }
         $query->save();

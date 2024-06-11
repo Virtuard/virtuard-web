@@ -326,6 +326,9 @@ class ManageBoatController extends FrontendController
                 }
                 $query->status = "publish";
                 break;
+            case 'make-private':
+                $query->status = 'private';
+                break;
         }
         $query->save();
         event(new UpdatedServiceEvent($query));

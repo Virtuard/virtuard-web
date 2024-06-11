@@ -306,6 +306,9 @@ class ManageCulturalController extends FrontendController
                     return redirect(route('user.plan'));
                 }
                 break;
+            case 'make-private':
+                $query->status = 'private';
+                break;
         }
         $query->save();
         return redirect()->back()->with('success', __('Update success!'));

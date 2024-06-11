@@ -332,6 +332,9 @@ class ManageBusinessController extends FrontendController
                     return redirect(route('user.plan'));
                 }
                 break;
+            case 'make-private':
+                $query->status = 'private';
+                break;
         }
         $query->save();
         event(new UpdatedServiceEvent($query));

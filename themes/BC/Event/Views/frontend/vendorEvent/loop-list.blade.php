@@ -51,20 +51,15 @@
                         <a href="{{ route("event.vendor.delete",['id'=>$row->id,'permanently_delete'=>1]) }}" class="btn btn-danger" data-confirm="<?php echo e(__("Do you want to permanently delete?")); ?>">{{__("Del")}}</a>
                     @endif
                 @else
+                    @include('user.partials.listing.btn-copy-link')
                     <a href="{{$row->getDetailUrl()}}" target="_blank" class="btn btn-info">{{__("View")}}</a>
-
                     @if(Auth::user()->hasPermission('event_update'))
                         <a href="{{ route("event.vendor.edit",[$row->id]) }}" class="btn btn-warning">{{__("Edit")}}</a>
                     @endif
                     @if(Auth::user()->hasPermission('event_delete'))
                         <a href="{{ route("event.vendor.delete",[$row->id]) }}" class="btn btn-danger" data-confirm="<?php echo e(__("Do you want to delete?")); ?>">{{__("Del")}}</a>
                     @endif
-                    @if($row->status == 'publish')
-                        <a href="{{ route("event.vendor.bulk_edit",[$row->id,'action' => "make-hide"]) }}" class="btn btn-secondary">{{__("Make hide")}}</a>
-                    @endif
-                    @if($row->status == 'draft')
-                        <a href="{{ route("event.vendor.bulk_edit",[$row->id,'action' => "make-publish"]) }}" class="btn btn-success">{{__("Make publish")}}</a>
-                    @endif
+                    @include('user.partials.listing.btn-status-group')
                 @endif
             </div>
         </div>
