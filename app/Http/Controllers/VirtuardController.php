@@ -123,7 +123,7 @@ class VirtuardController extends Controller
         $ipanorama->status = 'draft';
         $ipanorama->save();
 
-        $urlWithId = route('user.virtuard-360.add', ['id' => $ipanorama->id]);
+        $urlWithId = route('user.virtuard-360.edit', ['id' => $ipanorama->id]);
         return redirect($urlWithId)->with('success', 'Insert successfully');
     }
 
@@ -133,12 +133,13 @@ class VirtuardController extends Controller
         $proofImage = $request->file('image');
         $title = $request->input('title');
 
+        $path = "/ipanoramaBuilder/upload/" . auth()->user()->id;
         if ($proofImage) {
             $extension = $proofImage->getClientOriginalExtension();
     
             $newFileName = Str::slug($title) . '.' . $extension;
     
-            $path = $proofImage->storeAs('/ipanoramaBuilder/upload', $newFileName);
+            $proofImage->storeAs($path, $newFileName);
         }
 
         return back()->with('success', 'Insert successfully');

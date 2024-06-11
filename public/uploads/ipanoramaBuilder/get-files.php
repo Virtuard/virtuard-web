@@ -9,6 +9,10 @@
 
 // settings
 $directory = 'upload';
+$user_id = $_GET['user_id'];
+if ($user_id) {
+    $directory = "upload/$user_id";
+}
 $result = array();
 
 // list all files in the directory
