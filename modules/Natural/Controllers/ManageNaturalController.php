@@ -231,6 +231,7 @@ class ManageNaturalController extends FrontendController
             'end_date',
             'last_booking_date',
             'phone',
+            'ipanorama_id',
 
         ], $request->input());
 

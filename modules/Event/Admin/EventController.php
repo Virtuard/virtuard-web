@@ -239,6 +239,7 @@ class EventController extends AdminController
             'surrounding',
             'end_time',
             'duration_unit',
+            'ipanorama_id',
         ];
         if ($this->hasPermission('event_manage_others')) {
             $dataKeys[] = 'author_id';

@@ -209,6 +209,7 @@ class ManageSpaceController extends FrontendController
             'real_estate_agency',
             'phone',
             'website',
+            'ipanorama_id',
 
         ];
         $row->fillByAttr($dataKeys,$request->input());

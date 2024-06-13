@@ -190,12 +190,12 @@ class VendorController extends FrontendController
             'enable_service_fee',
             'service_fee',
             'surrounding',
-            'ipanorama_id',
             'category_id',
             'room',
             'hotel_chain',
             'phone',
             'website',
+            'ipanorama_id',
         ];
 
         $row->fillByAttr($dataKeys, $request->input());

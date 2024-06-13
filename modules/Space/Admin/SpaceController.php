@@ -260,6 +260,7 @@ class SpaceController extends AdminController
             'real_estate_agency',
             'phone',
             'website',
+            'ipanorama_id',
 
         ];
         if($this->hasPermission('space_manage_others')){

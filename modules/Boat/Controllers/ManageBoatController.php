@@ -193,6 +193,7 @@ class ManageBoatController extends FrontendController
             'exclude',
             'start_time_booking',
             'end_time_booking',
+            'ipanorama_id',
         ];
         $row->fillByAttr($dataKeys,$request->input());
         if(!auth()->user()->checkUserPlan() and $row->status == "publish") {

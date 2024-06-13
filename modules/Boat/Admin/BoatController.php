@@ -245,6 +245,7 @@ class BoatController extends AdminController
             'exclude',
             'start_time_booking',
             'end_time_booking',
+            'ipanorama_id',
         ];
         if ($this->hasPermission('boat_manage_others')) {
             $dataKeys[] = 'author_id';

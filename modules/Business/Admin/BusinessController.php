@@ -255,6 +255,7 @@ class BusinessController extends AdminController
             'franchising',
             'phone',
             'website',
+            'ipanorama_id',
 
         ];
         if($this->hasPermission('business_manage_others')){

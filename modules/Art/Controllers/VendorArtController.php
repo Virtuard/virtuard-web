@@ -195,6 +195,7 @@ class VendorArtController extends FrontendController
             'software',
             'phone',
             'website',
+            'ipanorama_id',
         ];
 
         $row->fillByAttr($dataKeys,$request->input());

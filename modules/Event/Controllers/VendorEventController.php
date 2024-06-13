@@ -182,6 +182,7 @@ class VendorEventController extends FrontendController
             'enable_service_fee',
             'service_fee',
             'surrounding',
+            'ipanorama_id',
         ];
 
         $row->fillByAttr($dataKeys,$request->input());

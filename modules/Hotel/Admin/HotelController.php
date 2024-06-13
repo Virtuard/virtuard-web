@@ -251,6 +251,7 @@ class HotelController extends AdminController
             'hotel_chain',
             'phone',
             'website',
+            'ipanorama_id',
         ];
         if ($this->hasPermission('hotel_manage_others')) {
             $dataKeys[] = 'author_id';

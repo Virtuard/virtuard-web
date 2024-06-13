@@ -224,6 +224,7 @@ class ManageCulturalController extends FrontendController
             'last_booking_date',
             'phone',
             'website',
+            'ipanorama_id',
 
         ], $request->input());
 
