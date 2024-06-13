@@ -77,7 +77,13 @@ Route::get('social-callback/{provider}', 'Auth\LoginController@socialCallBack');
 Route::get('/create', 'CreateController@index')->name('create');
 
 // explore
-Route::get('/explore', 'ExploreController@index')->name('explore.index');
+Route::group([
+    'prefix' => 'explore',
+    'as' => 'explore.',
+], function(){
+    Route::get('/', 'ExploreController@index')->name('index');
+    Route::post('list', 'ExploreController@list')->name('list');
+});
 
 // Logs
 Route::get(config('admin.admin_route_prefix') . '/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware(['auth', 'dashboard', 'system_log_view'])->name('admin.logs');

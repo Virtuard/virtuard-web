@@ -40,78 +40,93 @@ class ExploreController extends Controller
 
     public function index(Request $request)
     {
-        $search = [
-            'location' => $request->search_location,
-            'keyword' => $request->search_keyword,
-            'radius' => $request->search_radius,
-            'map_lat' => $request->search_lat,
-            'map_lng' => $request->search_lng,
+        $req = $request->all();
+        $data = $this->formatSearch($req);
+
+        $view = [
+            'data' => $data,
         ];
 
-        $searchlistings = [
-            'business' => $this->business->search($search),
-            'space' => $this->space->search($search),
-            'hotel' => $this->hotel->search($search),
-            'boat' => $this->boat->search($search),
-            'event' => $this->event->search($search),
-            'natural' => $this->natural->search($search),
-            'cultural' => $this->cultural->search($search),
-            'art' => $this->art->search($search),
-        ];
-
-        $listings = [
-            'business' => $searchlistings['business']->get(),
-            'space' => $searchlistings['space']->get(),
-            'hotel' => $searchlistings['hotel']->get(),
-            'boat' => $searchlistings['boat']->get(),
-            'event' => $searchlistings['event']->get(),
-            'natural' => $searchlistings['natural']->get(),
-            'cultural' => $searchlistings['cultural']->get(),
-            'art' => $searchlistings['art']->get(),
-        ];
-
-        $listMaps = [];
-        foreach($listings as $i => $listing) {
-            foreach($listing as $j => $list) {
-                if ($list->map_lat == null || $list->map_lng == null) continue;
-                $listMaps[] = get_map_listing($i, $list);
-            }
-        }
-        usort($listMaps, [$this, 'sortListing']);
-
-        return view('explore.index', compact(
-            'listings',
-            'listMaps',
-        ));
+        return view('explore.index', $view);
     }
 
-    private function sortListing($a, $b) {
+    private function sortListing($a, $b)
+    {
         return $a['created_at'] < $b['created_at'];
     }
 
-    private function getListing($model, $search)
-    {   
-        $data = $model
-                ->with([
-                    'author' => function($query) {
-                        $query->select('id','name');
-                    },
-                ])
-                ->when(isset($search['location']), function ($query) use ($search) {
-                    $query->where('address', 'like', "%{$search['location']}%");
-                })
-                ->when(isset($search['keyword']), function ($query) use ($search) {
-                    $query->where('title', 'like', "%{$search['keyword']}%");
-                })
-                ->where([
-                    ['status', '=', 'publish'],
-                    ['map_lat', '!=', null],
-                    ['map_lng', '!=', null],
-                ])
-                ->select(['author_id','title','slug','image_id','banner_image_id','status','address','map_lat','map_lng'])
-                ->orderBy('id', 'DESC')
-                ->get();
+    public function list(Request $request)
+    {
+        $req = $request->all();
+        $data = $this->formatSearch($req);
+
+        $html = view('explore.partials.content', compact('data'))->render();
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'html' => $html,
+            'data' => $data,
+        ]);
+    }
+
+    private function formatSearch($req) {
+        $listings = [];
+        $searchs = $this->getSearch($req);
+
+        foreach ($searchs as $key => $search) {
+            $listings[$key] = $searchs[$key]->paginate(50);
+        }
+
+        $data = [];
+        foreach ($listings as $i => $listing) {
+            foreach ($listing as $j => $list) {
+                // if ($list->map_lat == null || $list->map_lng == null) continue;
+                $data[] = get_map_listing($i, $list);
+            }
+        }
+        usort($data, [$this, 'sortListing']);
 
         return $data;
+    }
+
+    private function getSearch($req) {
+        $type = $req['service_type'] ?? '';
+        
+        switch ($type) {
+            case 'hotel':
+                $searchs = ['hotel' => $this->hotel->search($req)];
+                break;
+            case 'space':
+                $searchs = ['space' => $this->space->search($req)];
+                break;
+            case 'business':
+                $searchs = ['business' => $this->business->search($req)];
+                break;
+            case 'event':
+                $searchs = ['event' => $this->event->search($req)];
+                break;
+            case 'natural':
+                $searchs = ['natural' => $this->natural->search($req)];
+                break;
+            case 'cultural':
+                $searchs = ['cultural' => $this->cultural->search($req)];
+                break;
+            case 'art':
+                $searchs = ['art' => $this->art->search($req)];
+                break;
+            default:
+                $searchs = [
+                    'business' => $this->business->search($req),
+                    'space' => $this->space->search($req),
+                    'hotel' => $this->hotel->search($req),
+                    'boat' => $this->boat->search($req),
+                    'event' => $this->event->search($req),
+                    'natural' => $this->natural->search($req),
+                    'cultural' => $this->cultural->search($req),
+                    'art' => $this->art->search($req),
+                ];
+        }
+
+        return $searchs;
     }
 }

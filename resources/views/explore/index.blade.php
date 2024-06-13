@@ -2,71 +2,53 @@
 @section('content')
     <div class="" style="background: #f5f5f5; padding: 20px 60px;">
         <div class="row">
-            <div class="card">
-                <div class="p-2">
-                    <i class="fa fa-globe" aria-hidden="true"></i>
-                    <span>All</span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
             <div class="col-12 card">
-                <form action="">
+                <form action="{{ route('explore.index') }}">
                     <div class="row py-3">
                         <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" aria-label='location' class='form-control' 
-                                            id='search_location'
-                                            name='search_location' 
-                                            placeholder="Location"
+                                        <input type="text" aria-label='location' class='form-control' id='map_place'
+                                            name='map_place' placeholder="Location"
                                             style="border-top: none;border-left:none;border-right:none;">
                                         <button class="btn btn-sm" id="get-location" type="button" onclick="getLocation()">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z" fill="#0F172A"></path>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M11.5397 22.351C11.57 22.3685 11.5937 22.3821 11.6105 22.3915L11.6384 22.4071C11.8613 22.5294 12.1378 22.5285 12.3608 22.4075L12.3895 22.3915C12.4063 22.3821 12.43 22.3685 12.4603 22.351C12.5207 22.316 12.607 22.265 12.7155 22.1982C12.9325 22.0646 13.2388 21.8676 13.6046 21.6091C14.3351 21.0931 15.3097 20.3274 16.2865 19.3273C18.2307 17.3368 20.25 14.3462 20.25 10.5C20.25 5.94365 16.5563 2.25 12 2.25C7.44365 2.25 3.75 5.94365 3.75 10.5C3.75 14.3462 5.76932 17.3368 7.71346 19.3273C8.69025 20.3274 9.66491 21.0931 10.3954 21.6091C10.7612 21.8676 11.0675 22.0646 11.2845 22.1982C11.393 22.265 11.4793 22.316 11.5397 22.351ZM12 13.5C13.6569 13.5 15 12.1569 15 10.5C15 8.84315 13.6569 7.5 12 7.5C10.3431 7.5 9 8.84315 9 10.5C9 12.1569 10.3431 13.5 12 13.5Z"
+                                                    fill="#0F172A"></path>
                                             </svg>
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="hidden" id="search_lat" name="search_lat">
-                                <input type="hidden" id="search_lng" name="search_lng">
+                                <input type="hidden" id="map_lat" name="map_lat">
+                                <input type="hidden" id="map_lgn" name="map_lgn">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2 font-weight-bold">Proximity <span id="proximity_text">0</span> km</label>
+                                    <label class="mb-2 font-weight-bold">Proximity <span id="proximity_text">0</span>
+                                        km</label>
                                     <div class="input-search">
-                                        <input type="range" 
-                                            id="search_radius" 
-                                            name="search_radius" 
-                                            min="0"
-                                            max="500" 
-                                            class="w-100 cursor-pointer" 
-                                            value="0"
-                                            />
+                                        <input type="range" id="search_radius" name="search_radius" min="0"
+                                            max="500" class="w-100 cursor-pointer" value="0" />
                                     </div>
-                                    {{-- <div class="d-flex justify-content-between" style="font-size: 12px!important">
-                                        <span>0</span>
-                                        <span>≥10km</span>
-                                    </div> --}}
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group mt-3">
-                                <input type="text" class="form-control" 
-                                    id="search_keyword"
-                                    name="search_keyword" 
+                                <input type="text" class="form-control" id="service_name" name="service_name"
                                     placeholder="keyword research"
                                     style="border-top: none;border-left:none;border-right:none;">
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button type="submit" class="btn btn-md btn-dark mt-3 w-100">
+                            <button id="submit-search" type="submit" class="btn btn-md btn-dark mt-3 w-100">
                                 <i class="fa fa-search"></i>
                                 Search
                             </button>
@@ -77,69 +59,48 @@
         </div>
         <div class="row my-2 nav-tab">
             <div class="col-12 px-0">
-                <ul class="nav nav-tabs d-flex justify-content-start" id="myTab" role="tablist" style="gap: 5px; padding: 5px 0;">
+                <ul class="nav nav-tabs d-flex justify-content-start" id="myTab" role="tablist"
+                    style="gap: 5px; padding: 5px 0;">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize active" id="all-tab" data-toggle="tab" data-target="#all"
-                            type="button" role="tab" aria-controls="all" aria-selected="true">
+                        <button class="nav-link nav-category text-capitalize {{ !request('service_type') ? 'active' : '' }}" id="all-tab" data-toggle="tab"
+                            data-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
                             <i class="fa fa-sm mr-2 fa-globe"></i> {{ __('All') }}
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="hotel-tab" data-toggle="tab"
-                            data-target="#hotel" type="button" role="tab" aria-controls="hotel"
-                            aria-selected="false"> <i class="fa fa-sm mr-2 fa-building"></i> {{ __('Accomodation') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="space-tab" data-toggle="tab"
-                            data-target="#space" type="button" role="tab" aria-controls="space"
-                            aria-selected="false"><i class="fa fa-sm mr-2 fa-home"></i> {{ __('Property') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="business-tab" data-toggle="tab" data-target="#business"
-                            type="button" role="tab" aria-controls="business" aria-selected="false">
-                            <i class="fa fa-sm mr-2 fa-shopping-bag"></i>{{ ('Business') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="boat-tab" data-toggle="tab"
-                            data-target="#boat" type="button" role="tab" aria-controls="vehicle"
-                            aria-selected="false"><i class="fa fa-sm mr-2 fa-ship"></i> {{ __('Vehicle') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="event-tab" data-toggle="tab"
-                            data-target="#event" type="button" role="tab" aria-controls="event"
-                            aria-selected="false"><i class="icofont-ticket"></i> {{ __('Event') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="natural-tab" data-toggle="tab"
-                            data-target="#natural" type="button" role="tab" aria-controls="natural"
-                            aria-selected="false"><i class="material-icons">landscape</i> {{ __('Natural and Landscape') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="cultural-tab" data-toggle="tab"
-                            data-target="#cultural" type="button" role="tab" aria-controls="cultural"
-                            aria-selected="false"><i class="material-icons">church</i> {{ __('Cultural Heritage') }}</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize" id="art-tab" data-toggle="tab"
-                            data-target="#art" type="button" role="tab" aria-controls="art"
-                            aria-selected="false"><i class="material-icons font-size-inherit">design_services</i> {{ __('Rendering and Art') }}</button>
-                    </li>
+                    @foreach (get_explore_service() as $menu)
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link nav-category text-capitalize {{ request('service_type') == $menu['id'] ? 'active' : '' }}" id="{{ $menu['id'] }}-tab"
+                                data-toggle="tab" data-target="#{{ $menu['id'] }}" type="button" role="tab"
+                                aria-controls="hotel" aria-selected="false"> {!! $menu['icon'] !!}
+                                {{ $menu['title'] }}</button>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-3">
                 <div class="tab-content" id="myTabContent">
-                    {{-- Tab content all --}}
-                    @include('explore.listing.all.content')
-                    
-                    {{-- Tab content listing category --}}
-                    @foreach ($listings as $key => $listing)
-                        @include('explore.listing.category.content')
+                    <div class="tab-pane fade show {{ !request('service_type') ? 'active' : '' }}" id="all" role="tabpanel" aria-labelledby="all-tab">
+                        @include('explore.partials.filter.all')
+                    </div>
+                    @foreach (get_explore_service() as $menu)
+                        <div class="tab-pane fade show {{ request('service_type') == $menu['id'] ? 'active' : '' }}" id="{{ $menu['id'] }}" role="tabpanel" aria-labelledby="{{ $menu['id'] }}-tab">
+                            @include('explore.partials.filter.' . $menu['id'])
+                        </div>
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-5 p-1">
+            <div class="col-md-3">
+                <div class="card card-explore">
+                    <div class="card-body">
+                        <div id="list-item">
+                            @include('explore.list')
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="card card-explore">
                     <div class="card-body">
                         <div id="gmap"></div>
@@ -163,6 +124,7 @@
             outline: none;
             box-shadow: none;
         }
+
         .card-custom {
             border: none;
             overflow: hidden;
@@ -258,17 +220,69 @@
             }
         }
 
-    </style>
-    <style>
         .cluster-marker {
-  background-color: red; /* Set your desired background color */
-  color: white; /* Set text color */
-  border-radius: 50%; /* Optional: round the marker */
-  text-align: center; /* Optional: center the text */
-  line-height: 50px; /* Optional: vertically center the text */
-  width: 50px; /* Set the width */
-  height: 50px; /* Set the height */
-}
+            background-color: red;
+            /* Set your desired background color */
+            color: white;
+            /* Set text color */
+            border-radius: 50%;
+            /* Optional: round the marker */
+            text-align: center;
+            /* Optional: center the text */
+            line-height: 50px;
+            /* Optional: vertically center the text */
+            width: 50px;
+            /* Set the width */
+            height: 50px;
+            /* Set the height */
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item {
+            border: none;
+            border-top-width: medium;
+            border-top-style: none;
+            border-top-color: currentcolor;
+            border-radius: 0;
+            border-top: 1px solid #d7dce3;
+            margin-bottom: 0;
+            padding: 20px;
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item .item-title {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item .item-title h3 {
+            font-size: 16px;
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item .item-title .fa {
+            color: #1a2b48;
+            font-size: 22px;
+            position: absolute;
+            right: 0;
+            top: 2px;
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item .item-content {
+            margin-top: 20px;
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item .item-content ul {
+            list-style: none;
+        }
+
+        .bravo_filter .g-filter-item .hide {
+            display: none;
+        }
+
+        .bravo_search_tour .bravo_filter .g-filter-item .item-content .btn-more-item {
+            color: #5191fa;
+            font-size: 14px;
+            padding: 0;
+            text-decoration: none;
+        }
     </style>
 @endpush
 
@@ -284,18 +298,129 @@
     </script>
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
-    <script>
-        const listMaps = {{ Js::from($listMaps) }}
-    </script>
     <script src="{{ asset('assets/js/listing-map.js') }}"></script>
     <script>
-        function onFilterListing() {
-            
+        listMaps = {{ Js::from($data) }}
+    </script>
+    <script>
+        function onFetchData(attr) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('explore.list') }}",
+                data: attr,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(data) {
+                    let maps = data.data;
+
+                    resetMarkers();
+                    addMarkersToMap(maps)
+                    listMaps = maps;
+                    listMapCount = maps.length;
+
+                    $("#list-item").html(data.html);
+                    $("#count-list").html(`Showing ${listMapCount} Result`);
+                },
+            });
         }
 
-        $('.nav-category').on('click', function(){
-            let target = $(this).data('target');
-            console.log('target', target)
+        function onSubmitSearch() {
+            $('#submit-search').on('click', function(e) {
+                e.preventDefault();
+                let attr = {
+                    service_name: $('#service_name').val(),
+                    map_place: $('#map_place').val(),
+                    map_lat: $('#map_lat').val(),
+                    map_lgn: $('#map_lgn').val(),
+                    search_radius: $('#search_radius').val(),
+                };
+
+                onFetchData(attr);
+            })
+        }
+
+        function initBusinessRadius() {
+            let businessRadiusSlider = document.getElementById("business_search_radius");
+            let businessRadiusText = document.getElementById("business_proximity_text");
+            businessRadiusText.innerHTML = businessRadiusSlider.value;
+
+            businessRadiusSlider.oninput = function() {
+                businessRadiusText.innerHTML = this.value;
+            }
+        }
+        function initBusinessAutocomplete() {
+            var businessMapAutoComplete;
+            let input = document.getElementById('business_map_place');
+            businessMapAutoComplete = new google.maps.places.Autocomplete(input);
+            businessMapAutoComplete.addListener('place_changed', onBusinessPlaceChanged);
+            
+            function onBusinessPlaceChanged() {
+                const place = businessMapAutoComplete.getPlace();
+                if (!place.geometry) {
+                    console.error("Place not found");
+                    return;
+                }
+
+                const lat = place.geometry.location.lat();
+                const lng = place.geometry.location.lng();
+                const name = place.name;
+    
+                $('#business_map_lat').val(lat);
+                $('#business_map_lgn').val(lng);
+                // $('#business_service_name').val(name);
+            }
+
+        }
+
+        $(document).ready(function() {
+            // onFetchData();
+            initBusinessAutocomplete();
+            initBusinessRadius();
+        });
+    </script>
+    <script>
+        jQuery(function($) {
+            $(".bravo_filter .g-filter-item").each(function() {
+                if ($(window).width() <= 990) {
+                    $(this).find(".item-title").toggleClass("e-close");
+                }
+                $(this).find(".item-title").click(function() {
+                    $(this).toggleClass("e-close");
+                    if ($(this).hasClass("e-close")) {
+                        $(this).closest(".g-filter-item").find(".item-content").slideUp();
+                    } else {
+                        $(this).closest(".g-filter-item").find(".item-content").slideDown();
+                    }
+                });
+                $(this).find(".btn-more-item").click(function() {
+                    $(this).closest(".g-filter-item").find(".hide").removeClass("hide");
+                    $(this).addClass("hide");
+                });
+                $(this).find(".bravo-filter-price").each(function() {
+                    var input_price = $(this).find(".filter-price");
+                    var min = input_price.data("min");
+                    var max = input_price.data("max");
+                    var from = input_price.data("from");
+                    var to = input_price.data("to");
+                    var symbol = input_price.data("symbol");
+                    input_price.ionRangeSlider({
+                        type: "double",
+                        grid: true,
+                        min: min,
+                        max: max,
+                        from: from,
+                        to: to,
+                        prefix: symbol
+                    });
+                });
+            });
+            $(".bravo_form_filter input[type=checkbox]").change(function() {
+                $(this).closest(".bravo_form_filter").submit();
+            });
+            $('.orderby').on('change', function() {
+                $(this).closest(".bravo_form_filter").submit();
+            });
         });
     </script>
 @endpush

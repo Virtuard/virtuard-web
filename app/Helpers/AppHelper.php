@@ -1230,12 +1230,12 @@ if (!function_exists('menu_listing')) {
         $data = [
             'hotel', //accomodation
             'space', //property
-            'boat', //vehicles
             'business',
+            'boat', //vehicles
+            'event',
             'natural',
             'cultural',
             'art',
-            'event',
         ];
 
         return $data;
@@ -1601,5 +1601,57 @@ if (!function_exists('getMimeTypeFromExtension')) {
             default:
                 return 'document';
         }
+    }
+}
+
+if (!function_exists('get_explore_service')) {
+    function get_explore_service() {
+        $lists = menu_listing();
+
+        $result  = [];
+        foreach($lists as $list) {
+            $data = [
+                'id' => $list,
+            ];
+
+            switch ($list) {
+                case 'hotel':
+                    $data['title'] = __('Accomodation');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-building"></i>';
+                    break;
+                case 'space':
+                    $data['title'] = __('Property');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-home"></i>';
+                    break;
+                case 'business':
+                    $data['title'] = __('Business');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-shopping-bag"></i>';
+                    break;
+                case 'boat':
+                    $data['title'] = __('Vehicle');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-ship"></i>';
+                    break;
+                case 'event':
+                     $data['title'] = __('Event');
+                     $data['icon'] = '<i class="icofont-ticket"></i>';
+                    break;
+                case 'natural':
+                     $data['title'] = __('Natural');
+                     $data['icon'] = '<i class="material-icons">landscape</i>';
+                    break;
+                case 'cultural':
+                     $data['title'] = __('Cultural');
+                     $data['icon'] = '<i class="material-icons">church</i>';
+                    break;
+                case 'art':
+                     $data['title'] = __('Rendering');
+                     $data['icon'] = '<i class="material-icons font-size-inherit">design_services</i>';
+                    break;
+            }
+
+            $result[] = $data;
+        }
+
+        return $result;
     }
 }
