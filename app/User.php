@@ -496,6 +496,7 @@ use Illuminate\Notifications\Notifiable;
                 'start_date'=>date('Y-m-d H:i:s'),
                 'end_date'=>date('Y-m-d H:i:s',$end_date),
                 'max_service'=>$max_service,
+                'max_ipanorama'=>$plan->max_ipanorama,
                 'plan_data'=>$plan_data,
                 'user_id'=>$this->id,
                 'status'=>0
@@ -505,6 +506,7 @@ use Illuminate\Notifications\Notifiable;
                     unset($data['end_date']);
                     unset($data['start_date']);
                     unset($data['max_service']);
+                    unset($data['max_ipanorama']);
                 }
                 $data['status']=1;
             }

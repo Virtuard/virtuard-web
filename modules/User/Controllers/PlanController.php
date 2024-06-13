@@ -175,6 +175,7 @@ class PlanController extends FrontendController
             $new_user_plan->start_date = date('Y-m-d H:i:s');
             $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
             $new_user_plan->max_service = $plan->max_service;
+            $new_user_plan->max_ipanorama = $plan->max_ipanorama;
             $new_user_plan->plan_data = $plan;
             $new_user_plan->user_id = \Auth::id();
             $new_user_plan->save();
