@@ -193,7 +193,7 @@ class VendorController extends FrontendController
             'ipanorama_id',
             'category_id',
             'room',
-            'hotel_chain',
+            'chain',
             'phone',
             'website',
         ];

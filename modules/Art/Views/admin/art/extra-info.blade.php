@@ -32,7 +32,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{ __('Engineering or Architecture') }}</label>
-                        <input type="number" value="{{ $row->architecture }}" placeholder="{{ __('Engineering or Architecture Study') }}" name="architecture" class="form-control">
+                        <input type="number" value="{{ $row->engineering }}" placeholder="{{ __('Engineering or Architecture Study') }}" name="engineering" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-6">

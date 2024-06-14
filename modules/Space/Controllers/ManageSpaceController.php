@@ -206,7 +206,7 @@ class ManageSpaceController extends FrontendController
             'flooring',
             'square_land',
             'land_registry_category',
-            'real_estate_agency',
+            'agency',
             'phone',
             'website',
 

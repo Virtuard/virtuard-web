@@ -23,9 +23,34 @@
                             </div>
                         </div>
                     </div>
+                    <div class="g-filter-item">
+                        <div class="item-title">
+                            <h3>{{ __('Franchising') }}</h3>
+                        </div>
+                        <div class="item-content">
+                            <div class="form-group">
+                                <select name="franchising" class="form-control">
+                                    @php
+                                        $business_ex = \Modules\Business\Models\Business::query()
+                                        ->select('franchising')
+                                        ->where([
+                                            ['franchising', '!=', ''],
+                                            ['status', 'publish'],
+                                        ])
+                                        ->groupBy('franchising')
+                                        ->get();
+                                    @endphp
+                                    <option value=""></option>
+                                    @foreach ($business_ex as $val)
+                                        <option value="{{ $val->franchising }}">{{ __($val->franchising) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Attributes -->
                     @php
-                        $attributes = \Modules\Core\Models\Attributes::where('service', 'natural')
+                        $attributes = \Modules\Core\Models\Attributes::where('service', 'business')
                             ->orderBy('position', 'desc')
                             ->with(['terms', 'translation'])
                             ->get();
@@ -71,11 +96,11 @@
                             <div class="form-group">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" aria-label='location' class='form-control'
-                                            id='business_map_place' name='map_place' placeholder="Place"
+                                        <input type="text" class="form-control filter_map_place"
+                                            id="business_map_place" name="map_place" placeholder="Place"
+                                            data-id="business"
                                             style="border-top: none;border-left:none;border-right:none;">
-                                        <button class="btn btn-sm" id="get-location" type="button"
-                                            onclick="getLocation()">
+                                        <button class="btn btn-sm" type="button" onclick="getLocation()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -86,17 +111,16 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="hidden" id="business_map_lat" name="map_lat">
-                                    <input type="hidden" id="business_map_lgn" name="map_lgn">
+                                    <input type="hidden" id="business_map_lat" name="map_lat" class="form-control filter_map_lat">
+                                    <input type="hidden" id="business_map_lgn" name="map_lgn" class="form-control filter_map_lgn">
                                 </div>
                             </div>
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2">{{ __('Proximity') }} <span
-                                            id="business_proximity_text">0</span> km</label>
+                                    <label class="mb-2">{{ __('Proximity') }} <span id="business_proximity_text">0</span> km</label>
                                     <div class="input-search">
-                                        <input type="range" id="business_search_radius" name="search_radius"
-                                            min="0" max="500" class="w-100 cursor-pointer" value="0" />
+                                        <input type="range" id="business_search_radius" class="filter-search-radius" name="search_radius"
+                                            min="0" max="500" class="w-100 cursor-pointer" value="0" data-id="business" />
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +137,7 @@
                             </div>
                             <div class="form-group">
                                 <input type="text" id="business_service_name" name="service_name"
-                                    placeholder="Keyword search" class="form-control">
+                                    placeholder="Keyword search" class="form-control filter_service_name">
                             </div>
                             <div class="form-group">
                                 <button type="submit"

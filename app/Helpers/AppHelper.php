@@ -6,6 +6,8 @@ use App\Models\SubscribeVirtuard;
 use App\Models\UserPost;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Modules\Core\Models\Attributes;
+use Modules\Core\Models\Terms;
 
 //include '../../custom/Helpers/CustomHelper.php';
 
@@ -1653,5 +1655,37 @@ if (!function_exists('get_explore_service')) {
         }
 
         return $result;
+    }
+}
+
+if (!function_exists('get_all_categories')) {
+    function get_all_categories()
+    {
+        $attrs = Attributes::query()
+            ->where([
+                ['slug', 'like', '%type%']
+            ])
+            ->pluck('id')
+            ->toArray();
+
+        $terms = Terms::query()->whereIn('attr_id', $attrs)->get();
+
+        return $terms;
+    }
+}
+
+if (!function_exists('get_all_typologies')) {
+    function get_all_typologies()
+    {
+        $attrs = Attributes::query()
+            ->where([
+                ['slug', 'like', '%typology%']
+            ])
+            ->pluck('id')
+            ->toArray();
+
+        $terms = Terms::query()->whereIn('attr_id', $attrs)->get();
+
+        return $terms;
     }
 }

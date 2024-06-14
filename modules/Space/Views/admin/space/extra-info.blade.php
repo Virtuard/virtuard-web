@@ -45,8 +45,8 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>{{ __('Real Estate Agency') }}</label>
-                        <input type="text" value="{{ $row->real_estate_agency }}" placeholder="{{ __('Real Estate Agency') }}" name="real_estate_agency" class="form-control">
+                        <label>{{ __('Agency') }}</label>
+                        <input type="text" value="{{ $row->agency }}" placeholder="{{ __('Agency') }}" name="agency" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-6">

@@ -62,16 +62,19 @@
                 <ul class="nav nav-tabs d-flex justify-content-start" id="myTab" role="tablist"
                     style="gap: 5px; padding: 5px 0;">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link nav-category text-capitalize {{ !request('service_type') ? 'active' : '' }}" id="all-tab" data-toggle="tab"
-                            data-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">
+                        <button class="nav-link nav-category text-capitalize {{ !request('service_type') ? 'active' : '' }}"
+                            id="all-tab" data-toggle="tab" data-target="#all" type="button" role="tab"
+                            aria-controls="all" aria-selected="true">
                             <i class="fa fa-sm mr-2 fa-globe"></i> {{ __('All') }}
                         </button>
                     </li>
                     @foreach (get_explore_service() as $menu)
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link nav-category text-capitalize {{ request('service_type') == $menu['id'] ? 'active' : '' }}" id="{{ $menu['id'] }}-tab"
-                                data-toggle="tab" data-target="#{{ $menu['id'] }}" type="button" role="tab"
-                                aria-controls="hotel" aria-selected="false"> {!! $menu['icon'] !!}
+                            <button
+                                class="nav-link nav-category text-capitalize {{ request('service_type') == $menu['id'] ? 'active' : '' }}"
+                                id="{{ $menu['id'] }}-tab" data-toggle="tab" data-target="#{{ $menu['id'] }}"
+                                type="button" role="tab" aria-controls="hotel" aria-selected="false">
+                                {!! $menu['icon'] !!}
                                 {{ $menu['title'] }}</button>
                         </li>
                     @endforeach
@@ -79,19 +82,21 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 px-0">
                 <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show {{ !request('service_type') ? 'active' : '' }}" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <div class="tab-pane fade show {{ !request('service_type') ? 'active' : '' }}" id="all"
+                        role="tabpanel" aria-labelledby="all-tab">
                         @include('explore.partials.filter.all')
                     </div>
                     @foreach (get_explore_service() as $menu)
-                        <div class="tab-pane fade show {{ request('service_type') == $menu['id'] ? 'active' : '' }}" id="{{ $menu['id'] }}" role="tabpanel" aria-labelledby="{{ $menu['id'] }}-tab">
+                        <div class="tab-pane fade show {{ request('service_type') == $menu['id'] ? 'active' : '' }}"
+                            id="{{ $menu['id'] }}" role="tabpanel" aria-labelledby="{{ $menu['id'] }}-tab">
                             @include('explore.partials.filter.' . $menu['id'])
                         </div>
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card card-explore">
                     <div class="card-body">
                         <div id="list-item">
@@ -100,7 +105,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-5 px-0">
                 <div class="card card-explore">
                     <div class="card-body">
                         <div id="gmap"></div>
@@ -340,43 +345,54 @@
             })
         }
 
-        function initBusinessRadius() {
-            let businessRadiusSlider = document.getElementById("business_search_radius");
-            let businessRadiusText = document.getElementById("business_proximity_text");
-            businessRadiusText.innerHTML = businessRadiusSlider.value;
+        function initFilterRadius() {
+            $('.filter-search-radius').on('input', function() {
+                let id = $(this).data('id');
 
-            businessRadiusSlider.oninput = function() {
-                businessRadiusText.innerHTML = this.value;
-            }
-        }
-        function initBusinessAutocomplete() {
-            var businessMapAutoComplete;
-            let input = document.getElementById('business_map_place');
-            businessMapAutoComplete = new google.maps.places.Autocomplete(input);
-            businessMapAutoComplete.addListener('place_changed', onBusinessPlaceChanged);
-            
-            function onBusinessPlaceChanged() {
-                const place = businessMapAutoComplete.getPlace();
-                if (!place.geometry) {
-                    console.error("Place not found");
-                    return;
+                let radiusSlider = document.getElementById(`${id}_search_radius`);
+                let radiusText = document.getElementById(`${id}_proximity_text`);
+
+                radiusSlider.oninput = function() {
+                    radiusText.innerHTML = this.value;
                 }
+            });
+        }
 
-                const lat = place.geometry.location.lat();
-                const lng = place.geometry.location.lng();
-                const name = place.name;
-    
-                $('#business_map_lat').val(lat);
-                $('#business_map_lgn').val(lng);
-                // $('#business_service_name').val(name);
-            }
+        function initBusinessAutocomplete() {
+            let arrPlaces = $('.filter_map_place');
+
+            arrPlaces.each(function() {
+                let elem = $(this);
+                let id = elem.attr('data-id');
+
+                var filterAutoComplete;
+                let input = document.getElementById(`${id}_map_place`);
+                filterAutoComplete = new google.maps.places.Autocomplete(input);
+                filterAutoComplete.addListener('place_changed', onFilterChangePlace);
+
+                function onFilterChangePlace() {
+                    const place = filterAutoComplete.getPlace();
+                    if (!place.geometry) {
+                        console.error("Place not found");
+                        return;
+                    }
+
+                    const lat = place.geometry.location.lat();
+                    const lng = place.geometry.location.lng();
+                    const name = place.name;
+
+                    $(`#${id}_map_lat`).val(lat);
+                    $(`#${id}_map_lgn`).val(lng);
+                    // $(`#${id}_service_name`).val(name);
+                }
+            });
 
         }
 
         $(document).ready(function() {
             // onFetchData();
             initBusinessAutocomplete();
-            initBusinessRadius();
+            initFilterRadius();
         });
     </script>
     <script>
@@ -422,5 +438,12 @@
                 $(this).closest(".bravo_form_filter").submit();
             });
         });
+    </script>
+    <script>
+        $('.btn-all-back').on('click', function(){
+            $('.panel-all-back').removeClass('active')
+            $('.sub-nav-link').removeClass('active')
+            $('#all-category').addClass('show active')
+        })
     </script>
 @endpush

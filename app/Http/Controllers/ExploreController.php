@@ -84,7 +84,6 @@ class ExploreController extends Controller
                 $data[] = get_map_listing($i, $list);
             }
         }
-        usort($data, [$this, 'sortListing']);
 
         return $data;
     }
