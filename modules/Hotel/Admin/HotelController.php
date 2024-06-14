@@ -248,7 +248,7 @@ class HotelController extends AdminController
             'service_fee',
             'surrounding',
             'room',
-            'hotel_chain',
+            'chain',
             'phone',
             'website',
             'ipanorama_id',

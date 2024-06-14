@@ -191,7 +191,7 @@ class VendorArtController extends FrontendController
             'bed',
             'bathroom',
             'square',
-            'architecture',
+            'engineering',
             'software',
             'phone',
             'website',

@@ -6,6 +6,8 @@ use App\Models\SubscribeVirtuard;
 use App\Models\UserPost;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Modules\Core\Models\Attributes;
+use Modules\Core\Models\Terms;
 
 //include '../../custom/Helpers/CustomHelper.php';
 
@@ -1230,12 +1232,12 @@ if (!function_exists('menu_listing')) {
         $data = [
             'hotel', //accomodation
             'space', //property
-            'boat', //vehicles
             'business',
+            'boat', //vehicles
+            'event',
             'natural',
             'cultural',
             'art',
-            'event',
         ];
 
         return $data;
@@ -1601,5 +1603,89 @@ if (!function_exists('getMimeTypeFromExtension')) {
             default:
                 return 'document';
         }
+    }
+}
+
+if (!function_exists('get_explore_service')) {
+    function get_explore_service() {
+        $lists = menu_listing();
+
+        $result  = [];
+        foreach($lists as $list) {
+            $data = [
+                'id' => $list,
+            ];
+
+            switch ($list) {
+                case 'hotel':
+                    $data['title'] = __('Accomodation');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-building"></i>';
+                    break;
+                case 'space':
+                    $data['title'] = __('Property');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-home"></i>';
+                    break;
+                case 'business':
+                    $data['title'] = __('Business');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-shopping-bag"></i>';
+                    break;
+                case 'boat':
+                    $data['title'] = __('Vehicle');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-ship"></i>';
+                    break;
+                case 'event':
+                     $data['title'] = __('Event');
+                     $data['icon'] = '<i class="icofont-ticket"></i>';
+                    break;
+                case 'natural':
+                     $data['title'] = __('Natural');
+                     $data['icon'] = '<i class="material-icons">landscape</i>';
+                    break;
+                case 'cultural':
+                     $data['title'] = __('Cultural');
+                     $data['icon'] = '<i class="material-icons">church</i>';
+                    break;
+                case 'art':
+                     $data['title'] = __('Rendering');
+                     $data['icon'] = '<i class="material-icons font-size-inherit">design_services</i>';
+                    break;
+            }
+
+            $result[] = $data;
+        }
+
+        return $result;
+    }
+}
+
+if (!function_exists('get_all_categories')) {
+    function get_all_categories()
+    {
+        $attrs = Attributes::query()
+            ->where([
+                ['slug', 'like', '%type%']
+            ])
+            ->pluck('id')
+            ->toArray();
+
+        $terms = Terms::query()->whereIn('attr_id', $attrs)->get();
+
+        return $terms;
+    }
+}
+
+if (!function_exists('get_all_typologies')) {
+    function get_all_typologies()
+    {
+        $attrs = Attributes::query()
+            ->where([
+                ['slug', 'like', '%typology%']
+            ])
+            ->pluck('id')
+            ->toArray();
+
+        $terms = Terms::query()->whereIn('attr_id', $attrs)->get();
+
+        return $terms;
     }
 }

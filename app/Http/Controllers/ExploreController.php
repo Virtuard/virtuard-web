@@ -15,9 +15,9 @@ use Modules\Natural\Models\Natural;
 
 class ExploreController extends Controller
 {
-    protected $accomodation;
-    protected $property;
-    protected $vehicle;
+    protected $hotel;
+    protected $space;
+    protected $boat;
     protected $business;
     protected $natural;
     protected $cultural;
@@ -27,9 +27,9 @@ class ExploreController extends Controller
 
     public function __construct()
     {
-        $this->accomodation = new Hotel();
-        $this->property = new Space();
-        $this->vehicle = new Boat();
+        $this->hotel = new Hotel();
+        $this->space = new Space();
+        $this->boat = new Boat();
         $this->business = new Business();
         $this->cultural = new Cultural();
         $this->natural = new Natural();
@@ -40,72 +40,92 @@ class ExploreController extends Controller
 
     public function index(Request $request)
     {
-        $search = [
-            'location' => $request->search_location,
-            'keyword' => $request->search_keyword,
-            'radius' => $request->search_radius,
-            'map_lat' => $request->search_lat,
-            'map_lng' => $request->search_lng,
+        $req = $request->all();
+        $data = $this->formatSearch($req);
+
+        $view = [
+            'data' => $data,
         ];
 
-        $topBusiness = $this->business->take(5)->get();
-        $businessCategories = $this->productCategory->where('type', 'business')->get();
-
-        $listings = [
-            'business' => $this->getListing($this->business, $search),
-            'properties' => $this->getListing($this->property, $search),
-            'accomodations' => $this->getListing($this->accomodation, $search),
-            'vehicles' => $this->getListing($this->vehicle, $search),
-            'events' => $this->getListing($this->event, $search),
-            'naturals' => $this->getListing($this->natural, $search),
-            'culturals' => $this->getListing($this->cultural, $search),
-            'arts' => $this->getListing($this->art, $search),
-        ];
-
-        $listMaps = [];
-        foreach($listings as $i => $listing) {
-            foreach($listing as $j => $list) {
-                if ($list->map_lat == null || $list->map_lng == null) continue;
-                $listMaps[] = get_map_listing($i, $list);
-            }
-        }
-        usort($listMaps, [$this, 'sortListing']);
-
-        return view('explore.index', compact(
-            'topBusiness',
-            'businessCategories',
-            'listings',
-            'listMaps',
-        ));
+        return view('explore.index', $view);
     }
 
-    private function sortListing($a, $b) {
+    private function sortListing($a, $b)
+    {
         return $a['created_at'] < $b['created_at'];
     }
 
-    private function getListing($model, $search)
-    {   
-        $data = $model
-                ->with([
-                    'author' => function($query) {
-                        $query->select('id','name');
-                    },
-                ])
-                ->when(isset($search['location']), function ($query) use ($search) {
-                    $query->where('address', 'like', "%{$search['location']}%");
-                })
-                ->when(isset($search['keyword']), function ($query) use ($search) {
-                    $query->where('title', 'like', "%{$search['keyword']}%");
-                })
-                ->where([
-                    ['status', '=', 'publish'],
-                    ['map_lat', '!=', null],
-                    ['map_lng', '!=', null],
-                ])
-                ->select(['author_id','title','slug','image_id','banner_image_id','status','address','map_lat','map_lng'])
-                ->orderBy('id', 'DESC')
-                ->get();
+    public function list(Request $request)
+    {
+        $req = $request->all();
+        $data = $this->formatSearch($req);
+
+        $html = view('explore.partials.content', compact('data'))->render();
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'html' => $html,
+            'data' => $data,
+        ]);
+    }
+
+    private function formatSearch($req) {
+        $listings = [];
+        $searchs = $this->getSearch($req);
+
+        foreach ($searchs as $key => $search) {
+            $listings[$key] = $searchs[$key]->paginate(50);
+        }
+
+        $data = [];
+        foreach ($listings as $i => $listing) {
+            foreach ($listing as $j => $list) {
+                // if ($list->map_lat == null || $list->map_lng == null) continue;
+                $data[] = get_map_listing($i, $list);
+            }
+        }
 
         return $data;
+    }
+
+    private function getSearch($req) {
+        $type = $req['service_type'] ?? '';
+        
+        switch ($type) {
+            case 'hotel':
+                $searchs = ['hotel' => $this->hotel->search($req)];
+                break;
+            case 'space':
+                $searchs = ['space' => $this->space->search($req)];
+                break;
+            case 'business':
+                $searchs = ['business' => $this->business->search($req)];
+                break;
+            case 'event':
+                $searchs = ['event' => $this->event->search($req)];
+                break;
+            case 'natural':
+                $searchs = ['natural' => $this->natural->search($req)];
+                break;
+            case 'cultural':
+                $searchs = ['cultural' => $this->cultural->search($req)];
+                break;
+            case 'art':
+                $searchs = ['art' => $this->art->search($req)];
+                break;
+            default:
+                $searchs = [
+                    'business' => $this->business->search($req),
+                    'space' => $this->space->search($req),
+                    'hotel' => $this->hotel->search($req),
+                    'boat' => $this->boat->search($req),
+                    'event' => $this->event->search($req),
+                    'natural' => $this->natural->search($req),
+                    'cultural' => $this->cultural->search($req),
+                    'art' => $this->art->search($req),
+                ];
+        }
+
+        return $searchs;
     }
 }

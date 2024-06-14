@@ -249,7 +249,7 @@ class ArtController extends AdminController
             'bed',
             'bathroom',
             'square',
-            'architecture',
+            'engineering',
             'software',
             'phone',
             'website',

@@ -11,8 +11,8 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>{{ __('Hotel chain') }}</label>
-                        <input type="text" value="{{ $row->hotel_chain }}" placeholder="{{ __('Hotel chain') }}" name="hotel_chain" class="form-control">
+                        <label>{{ __('Chain') }}</label>
+                        <input type="text" value="{{ $row->chain }}" placeholder="{{ __('Chain') }}" name="chain" class="form-control">
                     </div>
                 </div>
             </div>

@@ -1,3 +1,5 @@
+var listMaps = [];
+var listMapCount = null;
 let map, mapAutocomplete, markerCluster, currentInfoWindow;
 let mapMarkers = [];
 let clusterConfig = {
@@ -63,6 +65,8 @@ function addMarkersToMap(markerData) {
 
     // Create the MarkerClusterer
     markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
+
+    $("#count-list").html(`Showing ${markerData.length} Result`);
 }
 
 function getPopupMarker(data) {
@@ -106,7 +110,7 @@ function resetMarkers() {
 }
 
 function initAutocomplete() {
-    let input = document.getElementById('search_location');
+    let input = document.getElementById('map_place');
     mapAutocomplete = new google.maps.places.Autocomplete(input);
     mapAutocomplete.addListener('place_changed', onPlaceChanged);
 }
@@ -120,9 +124,11 @@ function onPlaceChanged() {
 
     const lat = place.geometry.location.lat();
     const lng = place.geometry.location.lng();
+    const name = place.name;
 
-    $('#search_lat').val(lat);
-    $('#search_lng').val(lng);
+    $('#map_lat').val(lat);
+    $('#map_lgn').val(lng);
+    $('#service_name').val(name);
 }
 
 function onChangeTab() {

@@ -967,6 +967,7 @@ class Business extends Bookable
 {
             //			3959 - Miles(dặm), 6371 - Kilometers
             $distance  = setting_item('business_location_radius_value',0);
+            $distance =1;
             if(!empty($distance) and setting_item('business_location_search_style')=='autocompletePlace'){
                 $distanceType = setting_item('business_location_radius_type',3959);
                 if(empty($distanceType)){

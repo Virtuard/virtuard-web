@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('bravo_hotels', function (Blueprint $table) {
             $table->integer('room')->nullable();
-            $table->string('hotel_chain')->nullable();
+            $table->string('chain')->nullable();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
         });
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('square_land')->nullable();
             $table->integer('flooring')->nullable();
             $table->string('land_registry_category')->nullable();
-            $table->string('real_estate_agency')->nullable();
+            $table->string('agency')->nullable();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
         });
@@ -51,7 +51,7 @@ return new class extends Migration
             $table->integer('bed')->nullable();
             $table->integer('bathroom')->nullable();
             $table->integer('square')->nullable();
-            $table->string('architecture')->nullable();
+            $table->string('engineering')->nullable();
             $table->string('software')->nullable();
             $table->string('phone')->nullable();
             $table->string('website')->nullable();
@@ -67,7 +67,7 @@ return new class extends Migration
     {
         Schema::table('bravo_hotels', function (Blueprint $table) {
             $table->dropColumn('room');
-            $table->dropColumn('hotel_chain');
+            $table->dropColumn('chain');
             $table->dropColumn('phone');
             $table->dropColumn('website');
         });
@@ -77,7 +77,7 @@ return new class extends Migration
             $table->dropColumn('square_land');
             $table->dropColumn('flooring');
             $table->dropColumn('land_registry_category');
-            $table->dropColumn('real_estate_agency');
+            $table->dropColumn('agency');
             $table->dropColumn('phone');
             $table->dropColumn('website');
         });
@@ -103,7 +103,7 @@ return new class extends Migration
             $table->dropColumn('bed');
             $table->dropColumn('bathroom');
             $table->dropColumn('square');
-            $table->dropColumn('architecture');
+            $table->dropColumn('engineering');
             $table->dropColumn('software');
             $table->dropColumn('phone');
             $table->dropColumn('website');
