@@ -98,11 +98,13 @@
                             </button>
                         @endauth
 
-                        {{-- <a href="{{ route('user.profile', $user->id) }}">
-                            <button class="btn btn-primary w-100">
-                                View Profile
-                            </button>
-                        </a> --}}
+                        <a href="@auth {{ route('user.chat', ['user_id' => $user->id]) }} @else javascript:void(0) @endauth" class="btn btn-primary w-100"
+                            @guest
+                            onclick="showModalLogin()"
+                            @endguest
+                            >
+                            Message
+                        </a>
                     </div>
                 </div>  
                 @endforeach

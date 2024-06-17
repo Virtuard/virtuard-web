@@ -338,7 +338,7 @@ body{
     display: inline-block;
 }
 .mc-sender{
-	
+	justify-content: end;
 }
 .mc-sender p{
 	direction: ltr;

@@ -60,8 +60,8 @@ class MessageController extends MessagesController
         if (!$error->status) {
             // send to database
             $messageID = mt_rand(9, 999999999) + time();
-            Chatify::newMessage([
-                'id' => $messageID,
+            $message = Chatify::newMessage([
+                // 'id' => $messageID,
                 'type' => $request['type'],
                 'from_id' => Auth::user()->id,
                 'to_id' => $request['id'],
@@ -73,7 +73,8 @@ class MessageController extends MessagesController
             ]);
 
             // fetch message to send it with the response
-            $messageData = Chatify::fetchMessage($messageID);
+            // $messageData = Chatify::fetchMessage($messageID);
+            $messageData = Chatify::parseMessage($message);
 
             // send to user using pusher
             Chatify::push('private-chatify', 'messaging', [

@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Chatify\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 
 class ChMessage extends Model
 {
-    public $incrementing = false;
-    protected $table = 'ch_messages';
+    use UUID;
 }

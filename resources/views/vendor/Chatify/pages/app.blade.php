@@ -1,3 +1,6 @@
+@php
+    $type = $type ?? 'user';
+@endphp
 @include('Chatify::layouts.headLinks')
 <div class="messenger">
     {{-- ----------------------Users/Groups lists side---------------------- --}}
@@ -18,7 +21,7 @@
             <div class="messenger-listView-tabs">
                 <a href="#" @if($type == 'user') class="active-tab" @endif data-view="users">
                     <span class="far fa-user"></span> People</a>
-                <a href="#" @if($type == 'group') class="active-tab" @endif data-view="groups">
+                <a href="#" @if($type == 'group') class="active-tab" @endif data-view="groups" style="display: none;">
                     <span class="fas fa-users"></span> Groups</a>
             </div>
         </div>
