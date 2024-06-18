@@ -28,7 +28,7 @@
         @endif
     </div>
 </div>
-<div class="g-space-feature">
+<div class="g-space-feature d-none">
     <div class="row">
         @if(!empty($row->bed))
             <div class="col-xs-6 col-lg-3 col-md-6">
@@ -133,6 +133,7 @@
     </div>
 @endif
 @include('Business::frontend.layouts.details.business-attributes')
+@include('app.details.extra-info')
 @if($translation->faqs)
 <div class="g-faq">
     <h3> {{__("FAQs")}} </h3>

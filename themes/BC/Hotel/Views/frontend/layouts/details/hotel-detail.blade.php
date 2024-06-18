@@ -80,6 +80,7 @@
 <div class="g-all-attribute is_mobile">
     @include('Hotel::frontend.layouts.details.hotel-attributes')
 </div>
+@include('app.details.extra-info')
 <div class="g-rules">
     <h3>{{__("Rules")}}</h3>
     <div class="description">

@@ -36,7 +36,7 @@
 </div>
 
 @if(!empty($row->duration)  or !empty($row->location->name))
-    <div class="g-event-feature">
+    <div class="g-event-feature d-none">
         <div class="row">
             <div class="col-xs-6 col-lg-3 col-md-6">
                 <div class="item">

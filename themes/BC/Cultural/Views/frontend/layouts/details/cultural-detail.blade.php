@@ -27,7 +27,7 @@
     </div>
 </div>
 @if(!empty($row->duration) or !empty($row->category_cultural->name) or !empty($row->max_people) or !empty($row->location->name))
-    <div class="g-tour-feature">
+    <div class="g-tour-feature d-none">
     <div class="row">
         @if($row->duration)
             <div class="col-xs-6 col-lg-3 col-md-6">

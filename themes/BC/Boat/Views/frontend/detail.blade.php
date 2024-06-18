@@ -27,6 +27,7 @@
                         @if($row->ipanorama)
                         <div id="panorama"></div>
                         @endif
+                        @php $review_score = $row->review_data @endphp
                         @include('Boat::frontend.layouts.details.detail')
                         @include('Boat::frontend.layouts.details.review')
                     </div>
