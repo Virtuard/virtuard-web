@@ -88,7 +88,7 @@
         <div class="internet-connection">
             <span class="ic-connected">{{__('Connected')}}</span>
             <span class="ic-connecting">{{__('Connecting...')}}</span>
-            <span class="ic-noInternet">{{__('No internet access')}}</span>
+            <span class="ic-noInternet">{{__('Live chat disconnected')}}</span>
         </div>
         {{-- Messaging area --}}
         <div class="m-body messages-container app-scroll">
