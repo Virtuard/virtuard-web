@@ -6,7 +6,7 @@
                     <input type="hidden" name="service_type" value="boat">
                     <div class="g-filter-item">
                         <div class="item-title">
-                            <h3>{{ __('Sort by') }}</h3>
+                            <label>{{ __('Sort by') }}</label>
                         </div>
                         <div class="item-content">
                             <div class="form-group">
@@ -25,30 +25,30 @@
                     </div>
                     <!-- Attributes -->
                     @php
-                        $attributes = \Modules\Core\Models\Attributes::where('service', 'boat')
+                        $boat_attributes = \Modules\Core\Models\Attributes::where('service', 'boat')
                             ->orderBy('position', 'desc')
                             ->with(['terms', 'translation'])
                             ->get();
-                        $selected = (array) Request::query('terms');
+                        $boat_attributes_selected = (array) Request::query('terms');
                     @endphp
-                    @foreach ($attributes as $item)
+                    @foreach ($boat_attributes as $item)
                         @if (empty($item['hide_in_filter_search']))
                             @php
                                 $translate = $item->translate();
                             @endphp
                             <div class="g-filter-item">
                                 <div class="item-title">
-                                    <h3> {{ $translate->name }} </h3>
+                                    <label> {{ $translate->name }} </label>
                                     <i class="fa fa-angle-up" aria-hidden="true"></i>
                                 </div>
                                 <div class="item-content">
                                     <ul>
                                         @foreach ($item->terms as $key => $term)
                                             @php $translate = $term->translate(); @endphp
-                                            <li @if ($key > 2 and empty($selected)) class="hide" @endif>
+                                            <li @if ($key > 2 and empty($boat_attributes_selected)) class="hide" @endif>
                                                 <div class="bravo-checkbox">
                                                     <label>
-                                                        <input @if (in_array($term->id, $selected)) checked @endif
+                                                        <input @if (in_array($term->id, $boat_attributes_selected)) checked @endif
                                                             type="checkbox" name="terms[]" value="{{ $term->id }}">
                                                         {!! $translate->name !!}
                                                         <span class="checkmark"></span>
@@ -57,7 +57,7 @@
                                             </li>
                                         @endforeach
                                     </ul>
-                                    @if (count($item->terms) > 3 and empty($selected))
+                                    @if (count($item->terms) > 3 and empty($boat_attributes_selected))
                                         <button type="button" class="btn btn-link btn-more-item">{{ __('More') }} <i
                                                 class="fa fa-caret-down"></i></button>
                                     @endif
@@ -71,9 +71,8 @@
                             <div class="form-group">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" class="form-control filter_map_place"
-                                            id="boat_map_place" name="map_place" placeholder="Place"
-                                            data-id="boat"
+                                        <input type="text" class="form-control filter_map_place" id="boat_map_place"
+                                            name="map_place" placeholder="Place" data-id="boat"
                                             style="border-top: none;border-left:none;border-right:none;">
                                         <button class="btn btn-sm" type="button" onclick="getLocation()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -86,35 +85,41 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="hidden" id="boat_map_lat" name="map_lat" class="form-control filter_map_lat">
-                                    <input type="hidden" id="boat_map_lgn" name="map_lgn" class="form-control filter_map_lgn">
+                                    <input type="hidden" id="boat_map_lat" name="map_lat"
+                                        class="form-control filter_map_lat">
+                                    <input type="hidden" id="boat_map_lgn" name="map_lgn"
+                                        class="form-control filter_map_lgn">
                                 </div>
                             </div>
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2">{{ __('Proximity') }} <span id="boat_proximity_text">0</span> km</label>
+                                    <label class="mb-2">{{ __('Proximity') }} <span id="boat_proximity_text">0</span>
+                                        km</label>
                                     <div class="input-search">
-                                        <input type="range" id="boat_search_radius" class="filter-search-radius" name="search_radius"
-                                            min="0" max="500" class="w-100 cursor-pointer" value="0" data-id="boat" />
+                                        <input type="range" id="boat_search_radius" name="search_radius"
+                                            min="0" max="500"
+                                            class="filter-search-radius w-100 cursor-pointer" value="0"
+                                            data-id="boat" />
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>{{ __('Open Now') }}</label>
-                                <select name="opennow" class="form-control opennow">
-                                    <option value="created_at" {{ request('opennow') == 'all' ? 'selected' : '' }}>
+                            <div class="form-group mt-3">
+                                <label>{{ __('Open') }}</label>
+                                <select name="open" class="form-control opennow">
+                                    <option value="all" {{ request('open') == 'all' ? 'selected' : '' }}>
                                         {{ __('All') }}
                                     </option>
-                                    <option value="rate_high_low" {{ request('opennow') == 'now' ? 'selected' : '' }}>
+                                    <option value="now" {{ request('open') == 'now' ? 'selected' : '' }}>
                                         {{ __('Now') }}
                                     </option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                                <label>{{ __('Keyword search') }}</label>
                                 <input type="text" id="boat_service_name" name="service_name"
                                     placeholder="Keyword search" class="form-control filter_service_name">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <button type="submit"
                                     class="btn btn-dark form-control p-0">{{ __('Search') }}</button>
                                 <a class="btn btn-secondary form-control p-0"
@@ -123,7 +128,6 @@
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>

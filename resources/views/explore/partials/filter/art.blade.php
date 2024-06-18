@@ -5,11 +5,9 @@
                 <form class="bravo_form_filter" action="{{ route('explore.index') }}">
                     <input type="hidden" name="service_type" value="art">
                     <div class="g-filter-item">
-                        <div class="item-title">
-                            <h3>{{ __('Sort by') }}</h3>
-                        </div>
                         <div class="item-content">
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                                <label>{{ __('Sort by') }}</label>
                                 <select name="orderby" class="form-control orderby">
                                     <option value="created_at"
                                         {{ request('orderby') == 'created_at' ? 'selected' : '' }}>{{ __('Last') }}
@@ -23,82 +21,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="g-filter-item">
-                        <div class="item-title">
-                            <h3>{{ __('Engineering') }}</h3>
-                        </div>
-                        <div class="item-content">
-                            <div class="form-group">
-                                <select name="engineering" class="form-control">
-                                    @php
-                                        $art_en = \Modules\Art\Models\Art::query()
-                                        ->select('engineering')
-                                        ->where([
-                                            ['engineering', '!=', ''],
-                                            ['status', 'publish'],
-                                        ])
-                                        ->groupBy('engineering')
-                                        ->get();
-                                    @endphp
-                                    <option value=""></option>
-                                    @foreach ($art_en as $val)
-                                        <option value="{{ $val->engineering }}">{{ __($val->engineering) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="g-filter-item">
-                        <div class="item-title">
-                            <h3>{{ __('Software') }}</h3>
-                        </div>
-                        <div class="item-content">
-                            <div class="form-group">
-                                <select name="software" class="form-control">
-                                    @php
-                                        $art_soft = \Modules\Art\Models\Art::query()
-                                        ->select('software')
-                                        ->where([
-                                            ['software', '!=', ''],
-                                            ['status', 'publish'],
-                                        ])
-                                        ->groupBy('software')
-                                        ->get();
-                                    @endphp
-                                    <option value=""></option>
-                                    @foreach ($art_soft as $val)
-                                        <option value="{{ $val->software }}">{{ __($val->software) }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     <!-- Attributes -->
                     @php
-                        $attributes = \Modules\Core\Models\Attributes::where('service', 'art')
+                        $art_attributes = \Modules\Core\Models\Attributes::where('service', 'art')
                             ->orderBy('position', 'desc')
                             ->with(['terms', 'translation'])
                             ->get();
-                        $selected = (array) Request::query('terms');
+                        $art_attributes_selected = (array) Request::query('terms');
                     @endphp
-                    @foreach ($attributes as $item)
+                    @foreach ($art_attributes as $item)
                         @if (empty($item['hide_in_filter_search']))
                             @php
                                 $translate = $item->translate();
                             @endphp
                             <div class="g-filter-item">
                                 <div class="item-title">
-                                    <h3> {{ $translate->name }} </h3>
+                                    <label> {{ $translate->name }} </label>
                                     <i class="fa fa-angle-up" aria-hidden="true"></i>
                                 </div>
                                 <div class="item-content">
                                     <ul>
                                         @foreach ($item->terms as $key => $term)
                                             @php $translate = $term->translate(); @endphp
-                                            <li @if ($key > 2 and empty($selected)) class="hide" @endif>
+                                            <li @if ($key > 2 and empty($art_attributes_selected)) class="hide" @endif>
                                                 <div class="bravo-checkbox">
                                                     <label>
-                                                        <input @if (in_array($term->id, $selected)) checked @endif
+                                                        <input @if (in_array($term->id, $art_attributes_selected)) checked @endif
                                                             type="checkbox" name="terms[]" value="{{ $term->id }}">
                                                         {!! $translate->name !!}
                                                         <span class="checkmark"></span>
@@ -107,7 +55,7 @@
                                             </li>
                                         @endforeach
                                     </ul>
-                                    @if (count($item->terms) > 3 and empty($selected))
+                                    @if (count($item->terms) > 3 and empty($art_attributes_selected))
                                         <button type="button" class="btn btn-link btn-more-item">{{ __('More') }} <i
                                                 class="fa fa-caret-down"></i></button>
                                     @endif
@@ -118,12 +66,111 @@
                     <!-- #Attributes -->
                     <div class="g-filter-item">
                         <div class="item-content">
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                                @php
+                                    $art_en = \Modules\Art\Models\Art::query()
+                                        ->select('engineering')
+                                        ->where([['engineering', '!=', ''], ['status', 'publish']])
+                                        ->groupBy('engineering')
+                                        ->get();
+                                @endphp
+                                <label>{{ __('Engineering') }}</label>
+                                <select name="engineering" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($art_en as $val)
+                                        <option value="{{ $val->engineering }}">{{ __($val->engineering) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                @php
+                                    $art_soft = \Modules\Art\Models\Art::query()
+                                        ->select('software')
+                                        ->where([['software', '!=', ''], ['status', 'publish']])
+                                        ->groupBy('software')
+                                        ->get();
+                                @endphp
+                                <label>{{ __('Software') }}</label>
+                                <select name="software" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($art_soft as $val)
+                                        <option value="{{ $val->software }}">{{ __($val->software) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                @php
+                                    $art_squares = \Modules\Art\Models\Art::query()
+                                        ->select('square')
+                                        ->where([['square', '!=', ''], ['status', 'publish']])
+                                        ->groupBy('square')
+                                        ->orderBy('square')
+                                        ->get();
+                                @endphp
+                                <label>{{ __('Square Meters') }}</label>
+                                <select name="square" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($art_squares as $val)
+                                        <option value="{{ $val->square }}">{{ __($val->square) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                @php
+                                    $art_rooms = \Modules\Art\Models\Art::query()
+                                        ->select('room')
+                                        ->where([['room', '!=', ''], ['status', 'publish']])
+                                        ->groupBy('room')
+                                        ->orderBy('room')
+                                        ->get();
+                                @endphp
+                                <label>{{ __('Rooms') }}</label>
+                                <select name="room" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($art_rooms as $val)
+                                        <option value="{{ $val->room }}">{{ __($val->room) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                @php
+                                    $art_beds = \Modules\Art\Models\Art::query()
+                                        ->select('bed')
+                                        ->where([['bed', '!=', ''], ['status', 'publish']])
+                                        ->groupBy('bed')
+                                        ->orderBy('bed')
+                                        ->get();
+                                @endphp
+                                <label>{{ __('Bedrooms') }}</label>
+                                <select name="bed" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($art_beds as $val)
+                                        <option value="{{ $val->bed }}">{{ __($val->bed) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
+                                @php
+                                    $art_bathrooms = \Modules\Art\Models\Art::query()
+                                        ->select('bathroom')
+                                        ->where([['bathroom', '!=', ''], ['status', 'publish']])
+                                        ->groupBy('bathroom')
+                                        ->orderBy('bathroom')
+                                        ->get();
+                                @endphp
+                                <label>{{ __('Bathrooms') }}</label>
+                                <select name="bathroom" class="form-control">
+                                    <option value=""></option>
+                                    @foreach ($art_bathrooms as $val)
+                                        <option value="{{ $val->bathroom }}">{{ __($val->bathroom) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mt-3">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" class="form-control filter_map_place"
-                                            id="art_map_place" name="map_place" placeholder="Place"
-                                            data-id="art"
+                                        <input type="text" class="form-control filter_map_place" id="art_map_place"
+                                            name="map_place" placeholder="Place" data-id="art"
                                             style="border-top: none;border-left:none;border-right:none;">
                                         <button class="btn btn-sm" type="button" onclick="getLocation()">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -135,36 +182,42 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <input type="hidden" id="art_map_lat" name="map_lat" class="form-control filter_map_lat">
-                                    <input type="hidden" id="art_map_lgn" name="map_lgn" class="form-control filter_map_lgn">
+                                <div class="form-group mt-3">
+                                    <input type="hidden" id="art_map_lat" name="map_lat"
+                                        class="form-control filter_map_lat">
+                                    <input type="hidden" id="art_map_lgn" name="map_lgn"
+                                        class="form-control filter_map_lgn">
                                 </div>
                             </div>
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2">{{ __('Proximity') }} <span id="art_proximity_text">0</span> km</label>
+                                    <label class="mb-2">{{ __('Proximity') }} <span id="art_proximity_text">0</span>
+                                        km</label>
                                     <div class="input-search">
-                                        <input type="range" id="art_search_radius" class="filter-search-radius" name="search_radius"
-                                            min="0" max="500" class="w-100 cursor-pointer" value="0" data-id="art" />
+                                        <input type="range" id="art_search_radius" name="search_radius"
+                                            min="0" max="500"
+                                            class="filter-search-radius w-100 cursor-pointer" value="0"
+                                            data-id="art" />
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <label>{{ __('Open Now') }}</label>
-                                <select name="opennow" class="form-control opennow">
-                                    <option value="created_at" {{ request('opennow') == 'all' ? 'selected' : '' }}>
+                                <select name="open" class="form-control opennow">
+                                    <option value="all" {{ request('open') == 'all' ? 'selected' : '' }}>
                                         {{ __('All') }}
                                     </option>
-                                    <option value="rate_high_low" {{ request('opennow') == 'now' ? 'selected' : '' }}>
+                                    <option value="now" {{ request('open') == 'now' ? 'selected' : '' }}>
                                         {{ __('Now') }}
                                     </option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                                <label>{{ __('Keyword search') }}</label>
                                 <input type="text" id="art_service_name" name="service_name"
                                     placeholder="Keyword search" class="form-control filter_service_name">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <button type="submit"
                                     class="btn btn-dark form-control p-0">{{ __('Search') }}</button>
                                 <a class="btn btn-secondary form-control p-0"
@@ -173,7 +226,6 @@
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>

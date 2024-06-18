@@ -989,10 +989,28 @@ class Space extends Bookable
         }
         if(!empty($request['is_featured']))
         {
-            $model_space->where('bravo_cars.is_featured',1);
+            $model_space->where('bravo_spaces.is_featured',1);
         }
         if (!empty($request['custom_ids'])) {
-            $model_space->whereIn("bravo_cars.id", $request['custom_ids']);
+            $model_space->whereIn("bravo_spaces.id", $request['custom_ids']);
+        }
+        if (!empty($request['flooring'])) {
+            $model_space->where("bravo_spaces.flooring", $request['flooring']);
+        }
+        if (!empty($request['agency'])) {
+            $model_space->where("bravo_spaces.agency", $request['agency']);
+        }
+        if (!empty($request['square'])) {
+            $model_space->where("bravo_spaces.square", $request['square']);
+        }
+        if (!empty($request['room'])) {
+            $model_space->where("bravo_spaces.room", $request['room']);
+        }
+        if (!empty($request['bed'])) {
+            $model_space->where("bravo_spaces.bed", $request['bed']);
+        }
+        if (!empty($request['bathroom'])) {
+            $model_space->where("bravo_spaces.bathroom", $request['bathroom']);
         }
         $orderby = $request['orderby'] ?? "";
         switch ($orderby){

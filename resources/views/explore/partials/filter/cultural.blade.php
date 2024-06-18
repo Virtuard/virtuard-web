@@ -6,7 +6,7 @@
                     <input type="hidden" name="service_type" value="cultural">
                     <div class="g-filter-item">
                         <div class="item-title">
-                            <h3>{{ __('Sort by') }}</h3>
+                            <label>{{ __('Sort by') }}</label>
                         </div>
                         <div class="item-content">
                             <div class="form-group">
@@ -25,30 +25,30 @@
                     </div>
                     <!-- Attributes -->
                     @php
-                        $attributes = \Modules\Core\Models\Attributes::where('service', 'cultural')
+                        $cultural_attributes = \Modules\Core\Models\Attributes::where('service', 'cultural')
                             ->orderBy('position', 'desc')
                             ->with(['terms', 'translation'])
                             ->get();
-                        $selected = (array) Request::query('terms');
+                        $cultural_attributes_selected = (array) Request::query('terms');
                     @endphp
-                    @foreach ($attributes as $item)
+                    @foreach ($cultural_attributes as $item)
                         @if (empty($item['hide_in_filter_search']))
                             @php
                                 $translate = $item->translate();
                             @endphp
                             <div class="g-filter-item">
                                 <div class="item-title">
-                                    <h3> {{ $translate->name }} </h3>
+                                    <label> {{ $translate->name }} </label>
                                     <i class="fa fa-angle-up" aria-hidden="true"></i>
                                 </div>
                                 <div class="item-content">
                                     <ul>
                                         @foreach ($item->terms as $key => $term)
                                             @php $translate = $term->translate(); @endphp
-                                            <li @if ($key > 2 and empty($selected)) class="hide" @endif>
+                                            <li @if ($key > 2 and empty($cultural_attributes_selected)) class="hide" @endif>
                                                 <div class="bravo-checkbox">
                                                     <label>
-                                                        <input @if (in_array($term->id, $selected)) checked @endif
+                                                        <input @if (in_array($term->id, $cultural_attributes_selected)) checked @endif
                                                             type="checkbox" name="terms[]" value="{{ $term->id }}">
                                                         {!! $translate->name !!}
                                                         <span class="checkmark"></span>
@@ -57,7 +57,7 @@
                                             </li>
                                         @endforeach
                                     </ul>
-                                    @if (count($item->terms) > 3 and empty($selected))
+                                    @if (count($item->terms) > 3 and empty($cultural_attributes_selected))
                                         <button type="button" class="btn btn-link btn-more-item">{{ __('More') }} <i
                                                 class="fa fa-caret-down"></i></button>
                                     @endif
@@ -94,27 +94,28 @@
                                 <div class="form-content">
                                     <label class="mb-2">{{ __('Proximity') }} <span id="cultural_proximity_text">0</span> km</label>
                                     <div class="input-search">
-                                        <input type="range" id="cultural_search_radius" class="filter-search-radius" name="search_radius"
-                                            min="0" max="500" class="w-100 cursor-pointer" value="0" data-id="cultural" />
+                                        <input type="range" id="cultural_search_radius" name="search_radius"
+                                            min="0" max="500" class="filter-search-radius w-100 cursor-pointer" value="0" data-id="cultural" />
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label>{{ __('Open Now') }}</label>
-                                <select name="opennow" class="form-control opennow">
-                                    <option value="created_at" {{ request('opennow') == 'all' ? 'selected' : '' }}>
+                            <div class="form-group mt-3">
+                                <label>{{ __('Open') }}</label>
+                                <select name="open" class="form-control opennow">
+                                    <option value="all" {{ request('open') == 'all' ? 'selected' : '' }}>
                                         {{ __('All') }}
                                     </option>
-                                    <option value="rate_high_low" {{ request('opennow') == 'now' ? 'selected' : '' }}>
+                                    <option value="now" {{ request('open') == 'now' ? 'selected' : '' }}>
                                         {{ __('Now') }}
                                     </option>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
+                                <label>{{ __('Keyword search') }}</label>
                                 <input type="text" id="cultural_service_name" name="service_name"
                                     placeholder="Keyword search" class="form-control filter_service_name">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group mt-3">
                                 <button type="submit"
                                     class="btn btn-dark form-control p-0">{{ __('Search') }}</button>
                                 <a class="btn btn-secondary form-control p-0"

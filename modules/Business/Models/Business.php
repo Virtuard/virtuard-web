@@ -990,10 +990,13 @@ class Business extends Bookable
         }
         if(!empty($request['is_featured']))
         {
-            $model_business->where('bravo_cars.is_featured',1);
+            $model_business->where('bravo_businesses.is_featured',1);
         }
         if (!empty($request['custom_ids'])) {
-            $model_business->whereIn("bravo_cars.id", $request['custom_ids']);
+            $model_business->whereIn("bravo_businesses.id", $request['custom_ids']);
+        }
+        if (!empty($request['franchising'])) {
+            $model_business->where("bravo_businesses.franchising", $request['franchising']);
         }
         $orderby = $request['orderby'] ?? "";
         switch ($orderby){

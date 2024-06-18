@@ -1073,6 +1073,12 @@ class Hotel extends Bookable
         if (!empty($request['custom_ids'])) {
             $model_hotel->whereIn("bravo_hotels.id", $request['custom_ids']);
         }
+        if (!empty($request['chain'])) {
+            $model_hotel->where("bravo_hotels.chain", $request['chain']);
+        }
+        if (!empty($request['room'])) {
+            $model_hotel->where("bravo_hotels.room", $request['room']);
+        }
 
         $orderby = $request["orderby"] ?? "";
         switch ($orderby){
