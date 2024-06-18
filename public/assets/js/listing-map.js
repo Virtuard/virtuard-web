@@ -65,8 +65,6 @@ function addMarkersToMap(markerData) {
 
     // Create the MarkerClusterer
     markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
-
-    $("#count-list").html(`Showing ${markerData.length} Result`);
 }
 
 function getPopupMarker(data) {
@@ -95,12 +93,16 @@ function filterMarkers(condition) {
     const filteredMarkers = listMaps.filter(condition);
 
     addMarkersToMap(filteredMarkers);
+
+    filterContent(filteredMarkers)
 }
 
 function defaultMarkers() {
     resetMarkers();
 
     addMarkersToMap(listMaps);
+
+    resetContent()
 }
 
 function resetMarkers() {
@@ -139,6 +141,43 @@ function onChangeTab() {
         if (id == 'all') return defaultMarkers();
 
         filterMarkers(marker => marker.category == id);
+    });
+}
+
+function resetContent(attr) {
+    $.ajax({
+        url: "/explore/list",
+        type: "POST",
+        data: attr,
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            let maps = data.data;
+
+            resetMarkers();
+            addMarkersToMap(maps)
+            listMaps = maps;
+            listMapCount = maps.length;
+
+            $("#list-item").html(data.html);
+            $("#count-list").html(`Showing ${listMapCount} Result`);
+        },
+    });
+}
+
+function filterContent(filtered) {
+    $.ajax({
+        url: '/explore/filter',
+        type: 'POST',
+        data: { filter: filtered },
+        success: function(data) {
+            $('#list-item').html(data.html);
+            $("#count-list").html(`Showing ${data.data.length} Result`);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
     });
 }
 

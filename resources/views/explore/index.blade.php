@@ -100,7 +100,7 @@
                 <div class="card card-explore">
                     <div class="card-body">
                         <div id="list-item">
-                            @include('explore.list')
+                            @include('explore.partials.content')
                         </div>
                     </div>
                 </div>
@@ -358,7 +358,7 @@
             });
         }
 
-        function initBusinessAutocomplete() {
+        function initAutocomplete() {
             let arrPlaces = $('.filter_map_place');
 
             arrPlaces.each(function() {
@@ -391,7 +391,7 @@
 
         $(document).ready(function() {
             // onFetchData();
-            initBusinessAutocomplete();
+            initAutocomplete();
             initFilterRadius();
         });
     </script>

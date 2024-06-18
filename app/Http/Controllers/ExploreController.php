@@ -128,4 +128,17 @@ class ExploreController extends Controller
 
         return $searchs;
     }
+
+    public function filter(Request $request)
+    {
+        $data = $request->filter;
+
+        $html = view('explore.partials.content', compact('data'))->render();
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'html' => $html,
+            'data' => $data,
+        ]);
+    }
 }

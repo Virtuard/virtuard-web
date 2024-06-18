@@ -83,6 +83,7 @@ Route::group([
 ], function(){
     Route::get('/', 'ExploreController@index')->name('index');
     Route::post('list', 'ExploreController@list')->name('list');
+    Route::post('filter', 'ExploreController@filter')->name('filter');
 });
 
 // Logs
