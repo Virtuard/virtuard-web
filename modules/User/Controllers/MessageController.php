@@ -102,7 +102,7 @@ class MessageController extends MessagesController
         if(!$toUser) return;
 
         $message_content = __(':name send you message: :message', ['name' =>$currentUser->display_name, 'message' => Str::words($message['message'],6)]);
-        if(empty($message['message']) and !empty($message['attachment'][0])){
+        if(empty($message['message']) and !empty($message['attachment']->file)){
             $message_content = __(':name send you file',['name' =>$currentUser->display_name]);
         }
 
