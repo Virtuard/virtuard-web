@@ -18,7 +18,8 @@ const messagesContainer = $(".messenger-messagingView .m-body"),
     auth_id = $("meta[name=url]").attr("data-user"),
     url = $("meta[name=url]").attr("content"),
     defaultMessengerColor = $("meta[name=messenger-color]").attr("content"),
-    access_token = $('meta[name="csrf-token"]').attr("content");
+    access_token = $('meta[name="csrf-token"]').attr("content"),
+    csrfToken = $('meta[name="csrf-token"]').attr("content");
 
 const getMessengerId = () => $("meta[name=id]").attr("content");
 const getMessengerType = () => $("meta[name=type]").attr("content");
@@ -595,7 +596,18 @@ function cancelUpdatingAvatar() {
  */
 
 // subscribe to the channel
-var channel = pusher.subscribe("private-chatify");
+const channelName = "private-chatify";
+var channel = pusher.subscribe(`${channelName}.${auth_id}`);
+var clientSendChannel;
+var clientListenChannel;
+
+function initClientChannel() {
+    if (getMessengerId()) {
+      clientSendChannel = pusher.subscribe(`${channelName}.${getMessengerId()}`);
+      clientListenChannel = pusher.subscribe(`${channelName}.${auth_id}`);
+    }
+  }
+  initClientChannel();
 
 // Listen to messages, and append if data received
 channel.bind("messaging", function (data) {
@@ -1109,6 +1121,76 @@ function setActiveStatus(status, user_id) {
         },
     });
 }
+  
+  /**
+   *-------------------------------------------------------------
+   * Delete Message By ID
+   *-------------------------------------------------------------
+   */
+  function deleteMessage(id) {
+    $.ajax({
+      url: url + "/deleteMessage",
+      method: "POST",
+      data: { _token: csrfToken, id: id },
+      dataType: "JSON",
+      beforeSend: () => {
+        // hide delete modal
+        app_modal({
+          show: false,
+          name: "delete",
+        });
+        // Show waiting alert modal
+        app_modal({
+          show: true,
+          name: "alert",
+          buttons: false,
+          body: loadingSVG("32px", null, "margin:auto"),
+        });
+      },
+      success: (data) => {
+        $(".messages").find(`.message-card[data-id=${id}]`).remove();
+        if (!data.deleted)
+          console.error("Error occurred, message can not be deleted!");
+  
+        sendMessageDeleteEvent(id);
+  
+        // Hide waiting alert modal
+        app_modal({
+          show: false,
+          name: "alert",
+          buttons: true,
+          body: "",
+        });
+      },
+      error: () => {
+        console.error("Server error, check your response");
+      },
+    });
+  }
+
+  /**
+ *-------------------------------------------------------------
+ * Trigger message delete
+ *-------------------------------------------------------------
+ */
+function sendMessageDeleteEvent(messageId) {
+    return clientSendChannel.trigger("client-messageDelete", {
+      id: messageId,
+    });
+  }
+  /**
+   *-------------------------------------------------------------
+   * Trigger delete conversation
+   *-------------------------------------------------------------
+   */
+  function sendDeleteConversationEvent() {
+    return clientSendChannel.trigger("client-deleteConversation", {
+      from: auth_id,
+      to: getMessengerId(),
+    });
+  }
+  
+  
 
 /**
  *-------------------------------------------------------------
@@ -1185,6 +1267,7 @@ $(document).ready(function () {
 
     // click action for list item [user/group]
     $("body").on("click", ".messenger-list-item", function () {
+        console.log('e')
         if ($(this).find("tr[data-action]").attr("data-action") == "1") {
             $(".messenger-listView").hide();
         }
@@ -1279,6 +1362,8 @@ $(document).ready(function () {
             "zip",
             "rar",
             "txt",
+            "mp4",
+            "mkv",
         ];
         const sizeLimit = 5000000; // 5 megabyte
         const { name: fileName, size: fileSize } = file;
@@ -1353,32 +1438,6 @@ $(document).ready(function () {
             : $(".messenger-tab").hide() +
             $('.messenger-listView-tabs a[data-view="users"]').trigger("click");
     });
-
-    // Delete Conversation button
-    $(".messenger-infoView-btns .delete-conversation").on("click", function () {
-        app_modal({
-            name: "delete",
-        });
-    });
-    // delete modal [delete button]
-    $(".app-modal[data-name=delete]")
-        .find(".app-modal-footer .delete")
-        .on("click", function () {
-            deleteConversation(getMessengerId());
-            app_modal({
-                show: false,
-                name: "delete",
-            });
-        });
-    // delete modal [cancel button]
-    $(".app-modal[data-name=delete]")
-        .find(".app-modal-footer .cancel")
-        .on("click", function () {
-            app_modal({
-                show: false,
-                name: "delete",
-            });
-        });
 
     // Settings button action to show settings modal
     $("body").on("click", ".settings-btn", function (e) {
@@ -1471,5 +1530,48 @@ $(document).ready(function () {
     //Search pagination
     actionOnScroll(".messenger-tab.search-tab", function () {
         messengerSearch($(".messenger-search").val());
+    });
+
+    // Delete Conversation button
+  $(".messenger-infoView-btns .delete-conversation").on("click", function () {
+    app_modal({
+      name: "delete",
+    });
+  });
+  // Delete Message Button
+  $("body").on("click", ".message-card .actions .delete-btn", function () {
+    console.log('id', $(this).data("id"))
+    app_modal({
+      name: "delete",
+      data: $(this).data("id"),
+    });
+  });
+  // Delete modal [on delete button click]
+  $(".app-modal[data-name=delete]")
+    .find(".app-modal-footer .delete")
+    .on("click", function () {
+      const id = $("body")
+        .find(".app-modal[data-name=delete]")
+        .find(".app-modal-card")
+        .attr("data-modal");
+        console.log('id1',id)
+      if (id == 0) {
+        deleteConversation(getMessengerId());
+      } else {
+        deleteMessage(id);
+      }
+      app_modal({
+        show: false,
+        name: "delete",
+      });
+    });
+  // delete modal [cancel button]
+  $(".app-modal[data-name=delete]")
+    .find(".app-modal-footer .cancel")
+    .on("click", function () {
+      app_modal({
+        show: false,
+        name: "delete",
+      });
     });
 });
