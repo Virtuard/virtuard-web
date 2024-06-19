@@ -125,7 +125,7 @@ class VirtuardController extends Controller
 
         $urlWithId = route('user.virtuard-360.edit', [
             'id' => $ipanorama->id,
-            'user_iid' => auth()->user_id,
+            'user_id' => $idUser,
         ]);
         return redirect($urlWithId)->with('success', 'Insert successfully');
     }
