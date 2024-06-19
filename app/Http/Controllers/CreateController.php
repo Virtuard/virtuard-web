@@ -63,6 +63,6 @@ class CreateController extends Controller
             'menus' => $menus,
         ];
 
-        return view('create.index', $dataView);
+        return view('app.create.index', $dataView);
     }
 }

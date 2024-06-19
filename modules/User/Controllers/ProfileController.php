@@ -21,6 +21,9 @@ class ProfileController extends FrontendController
         if(empty($user)){
             abort(404);
         }
+        if($user->role_id == 1) {
+            return redirect('/');
+        }
         if(!$user->hasPermission('dashboard_vendor_access'))
         {
             return redirect('/');

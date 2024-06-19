@@ -47,7 +47,7 @@ class ExploreController extends Controller
             'data' => $data,
         ];
 
-        return view('explore.index', $view);
+        return view('app.explore.index', $view);
     }
 
     private function sortListing($a, $b)
@@ -133,7 +133,7 @@ class ExploreController extends Controller
     {
         $data = $request->filter;
 
-        $html = view('explore.partials.content', compact('data'))->render();
+        $html = view('app.explore.partials.content', compact('data'))->render();
         return response()->json([
             'status' => true,
             'message' => 'success',

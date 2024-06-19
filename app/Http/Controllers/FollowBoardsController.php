@@ -87,7 +87,7 @@ class FollowBoardsController extends Controller
             $data['followingCount'] = auth()->user()->followings->count();
         }
 
-        return view('boards.index', $data);
+        return view('app.boards.index', $data);
     }
 
     public function store(Request $request)

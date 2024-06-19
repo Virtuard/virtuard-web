@@ -86,12 +86,12 @@
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show {{ !request('service_type') ? 'active' : '' }}" id="all"
                         role="tabpanel" aria-labelledby="all-tab">
-                        @include('explore.partials.filter.all')
+                        @include('app.explore.partials.filter.all')
                     </div>
                     @foreach (get_explore_service() as $menu)
                         <div class="tab-pane fade show {{ request('service_type') == $menu['id'] ? 'active' : '' }}"
                             id="{{ $menu['id'] }}" role="tabpanel" aria-labelledby="{{ $menu['id'] }}-tab">
-                            @include('explore.partials.filter.' . $menu['id'])
+                            @include('app.explore.partials.filter.' . $menu['id'])
                         </div>
                     @endforeach
                 </div>
@@ -100,7 +100,7 @@
                 <div class="card card-explore">
                     <div class="card-body">
                         <div id="list-item">
-                            @include('explore.partials.content')
+                            @include('app.explore.partials.content')
                         </div>
                     </div>
                 </div>

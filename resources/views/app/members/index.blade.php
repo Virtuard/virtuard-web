@@ -73,25 +73,14 @@
 
                         <hr>
                         @auth
-                            @if(!is_following($user->id))
                                 <form action="{{ route('member.store') }}" class="mb-4" method="POST">
                                 @csrf
-                                    <input type="hidden" name="param" value="Follow">
-                                    <input type="hidden" name="id_follow" value="<?=$user->id?>">
-                                    <button class="btn btn-primary w-100 mb-2">
-                                        Follow
+                                    <input type="hidden" name="param" value="{{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}">
+                                    <input type="hidden" name="id_follow" value="{{ $user->id }}">
+                                    <button class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} w-100 mb-2">
+                                        {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}
                                     </button>
                                 </form>
-                            @else
-                                <form action="{{ route('member.store') }}" class="mb-4" method="POST">
-                                @csrf
-                                    <input type="hidden" name="param" value="Unfollow">
-                                    <input type="hidden" name="id_follow" value="<?=$user->id?>">
-                                    <button class="btn btn-secondary w-100 mb-2">
-                                        Unfollow
-                                    </button>
-                                </form>
-                            @endif
                         @else
                             <button class="btn btn-primary w-100 mb-2" onclick="showModalLogin()">
                                 Follow
