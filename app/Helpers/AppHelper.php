@@ -1296,6 +1296,7 @@ if (!function_exists('menu_vendor')) {
             'art',
             'business',
             'natural',
+            'chat',
         ];
 
         return $data;
