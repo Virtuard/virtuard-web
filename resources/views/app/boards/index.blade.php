@@ -172,12 +172,13 @@
                                 </div>
                                 <hr>
 
+                                @php
+                                    $galleries = $post->medias->where('type', 'image');
+                                    $videos = $post->medias->where('type', 'video');
+                                @endphp
+
+                            @if ($post->ipanorama)
                                 <div class="card-file">
-                                    @php
-                                        $galleries = $post->medias->where('type', 'image');
-                                        $videos = $post->medias->where('type', 'video');
-                                    @endphp
-                                    @if ($post->ipanorama)
                                         <div class="g-ipanorama">
                                             <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
                                             class="thumb-panorama preview-panorama cursor-pointer"
@@ -185,19 +186,22 @@
                                             >
                                             {{-- <div class="icon-panorama"></div> --}}
                                         </div>
-                                    @endif
-
-                                    @if(count($galleries) > 0)
-                                    <div class="g-gallery">
-                                        <div class="fotorama" data-width="100%" data-thumbwidth="135" data-thumbheight="135" data-thumbmargin="15" data-nav="thumbs" data-allowfullscreen="true">
-                                            @foreach($galleries as $img)
-                                                <a href="{{url('uploads/'.$img['media'])}}" data-thumb="{{url('uploads/'.$img['media'])}}" data-alt="{{ __("Media") }}"></a>
-                                            @endforeach
-                                        </div>
                                     </div>
-                                    @endif
+                            @endif      
 
-                                    @if(count($videos) > 0)
+                                @if(count($galleries) > 0)
+                                <div class="g-gallery">
+                                    <div class="fotorama" data-width="100%" data-thumbwidth="135" data-thumbheight="135" data-thumbmargin="15" data-nav="thumbs" data-allowfullscreen="true">
+                                        @foreach($galleries as $img)
+                                            <a href="{{url('uploads/'.$img['media'])}}" data-thumb="{{url('uploads/'.$img['media'])}}" data-alt="{{ __("Media") }}"></a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
+                                                              
+
+                                @if(count($videos) > 0)
+                                <div class="card-file">
                                     <div class="g-video">
                                         @foreach ($videos as $vid)
                                             <video controls>
@@ -207,8 +211,8 @@
                                             </video>
                                         @endforeach
                                     </div>
-                                    @endif
                                 </div>
+                                @endif
 
                                 <p class="mt-3" style="font-size: 0.9rem; font-weight: 500; color: #9b9b9b;">
                                     {{ $post->message }}
@@ -448,6 +452,12 @@
             align-items: center;
             flex-wrap: wrap;
         }
+
+        .g-gallery {
+            margin: 10px 0;
+            min-height: 75px;
+            position: relative;
+        }
         .g-gallery .fotorama .fotorama__fullscreen-icon {
             background: none;
             bottom: 30px;
@@ -595,6 +605,12 @@
             width: 100%;
             height: 20vw;
             object-fit: cover;
+        }
+
+        .fotorama__nav::after, .fotorama__stage::after {
+            background-image: unset;
+            background-position: 100% 0,100% 0;
+            right: -10px;
         }
     
         @media(max-width: 768px) {
