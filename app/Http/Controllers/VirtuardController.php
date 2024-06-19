@@ -196,7 +196,7 @@ class VirtuardController extends Controller
         $jsonData->config->autoLoad = true;
         $jsonData = json_encode($jsonData);
 
-        $panorama = RefIpanorama::where('id', $id)->first();
+        $panorama = RefIpanorama::find($id);
         $panorama->json_data = $jsonData;
         $panorama->save();
 
