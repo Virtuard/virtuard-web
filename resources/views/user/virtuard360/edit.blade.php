@@ -72,7 +72,7 @@
 
         <input type="hidden" id="url_panorama" value="{{ url('/uploads/ipanoramaBuilder?id=' . request('id') . '&user_id=' . auth()->user()->id) }}">
         @if(config('app.env') == 'local')
-            <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?id={{ request()->id }}&user_id={{ auth()->user()->id}}"></iframe>
+            <iframe id="ipanorama-frame" src="/uploads/ipanoramaBuilder/?id={{ request('id') }}&user_id={{ auth()->user()->id}}"></iframe>
         @else
             <div id="ipanorama-frame"></div>
         @endif
