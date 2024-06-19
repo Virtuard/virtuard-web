@@ -23,6 +23,7 @@
                 <?php $header_right_menu = true ?>
                 @if(!empty($header_right_menu))
                     <ul class="topbar-items">
+                        @if(Auth::check())
                         @if(setting_item('inbox_enable'))
                             <li class="p-0">
                                 <a href="{{route('user.chat')}}">
@@ -30,6 +31,7 @@
                                     <sup class="badge badge-danger">{{ auth()->user()->unseen_message_count }}</sup>
                                 </a>
                             </li>
+                        @endif
                         @endif
                         @include('Core::frontend.currency-switcher')
                         @include('Language::frontend.switcher')
