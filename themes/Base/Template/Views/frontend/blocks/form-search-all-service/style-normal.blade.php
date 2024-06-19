@@ -45,7 +45,7 @@
                                     if(empty($allServices[$service_type])) continue;
                                     $module = new $allServices[$service_type];
                                 @endphp
-                                <div role="tabpanel" class="tab-pane @if($number == 0) active @endif" id="bravo_{{$service_type}}">
+                                <div role="tabpanel" class="tab-pane @if($number == 0) active @endif" id="bravo_{{$service_type}}" style="max-width: 100%;">
                                     @include(ucfirst($service_type).'::frontend.layouts.search.form-search')
                                 </div>
                                 @php $number++; @endphp

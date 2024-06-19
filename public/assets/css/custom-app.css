@@ -83,8 +83,18 @@ li.create-item a:before{
     color: white;
 }
 
-.nav {
+.bravo-form-search-all .nav {
     justify-content: space-between;
+}
+
+@media (max-width: 767px) {
+    .bravo-form-search-all .nav {
+        justify-content: flex-start;
+    }
+    
+    .bravo-form-search-all .nav li{
+        margin: 2px;
+    }
 }
 
 .bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a {
