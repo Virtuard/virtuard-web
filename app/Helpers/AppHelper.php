@@ -1669,7 +1669,11 @@ if (!function_exists('get_all_categories')) {
             ->pluck('id')
             ->toArray();
 
-        $terms = Terms::query()->whereIn('attr_id', $attrs)->get();
+        $terms = Terms::query()
+            ->whereIn('attr_id', $attrs)
+            ->groupBy('name')
+            ->orderBy('name')
+            ->get();
 
         return $terms;
     }
@@ -1685,7 +1689,11 @@ if (!function_exists('get_all_typologies')) {
             ->pluck('id')
             ->toArray();
 
-        $terms = Terms::query()->whereIn('attr_id', $attrs)->get();
+        $terms = Terms::query()
+            ->whereIn('attr_id', $attrs)
+            ->groupBy('name')
+            ->orderBy('name')
+            ->get();
 
         return $terms;
     }

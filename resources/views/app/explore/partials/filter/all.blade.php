@@ -6,19 +6,19 @@
                 <div class="all-tabs">
                     <ul class="nav nav-tabs justify-content-start" id="filterAllTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link @if (request('term_type') == '' || request('term_type') == 'category' ) active @endif" id="all-category-tab" data-toggle="tab"
-                                data-target="#all-category" type="button" role="tab" aria-controls="all-category"
-                                aria-selected="true">Category</button>
+                            <button class="nav-link @if (request('term_type') == '' || request('term_type') == 'category') active @endif"
+                                id="all-category-tab" data-toggle="tab" data-target="#all-category" type="button"
+                                role="tab" aria-controls="all-category" aria-selected="true">Category</button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link @if (request('term_type') == 'typology' ) active @endif" id="all-typology-tab" data-toggle="tab" data-target="#all-typology"
-                                type="button" role="tab" aria-controls="all-typology"
-                                aria-selected="false">Typology</button>
+                            <button class="nav-link @if (request('term_type') == 'typology') active @endif"
+                                id="all-typology-tab" data-toggle="tab" data-target="#all-typology" type="button"
+                                role="tab" aria-controls="all-typology" aria-selected="false">Typology</button>
                         </li>
                     </ul>
                     <div class="tab-content" id="filterAllTabContent">
-                        <div class="tab-pane fade @if (request('term_type') == '' || request('term_type') == 'category' ) show active @endif" id="all-category" role="tabpanel"
-                            aria-labelledby="all-category-tab">
+                        <div class="tab-pane fade @if (request('term_type') == '' || request('term_type') == 'category') show active @endif"
+                            id="all-category" role="tabpanel" aria-labelledby="all-category-tab">
                             <form class="bravo_form_filter" action="{{ route('explore.index') }}">
                                 <input type="hidden" name="term_type" value="category">
                                 <div class="g-filter-item">
@@ -51,22 +51,13 @@
 
                                 <!-- Attributes -->
                                 @php
-                                    $attributesType = \Modules\Core\Models\Attributes::where('slug', 'like', '%type%')
-                                        ->whereIn('service', menu_listing())
-                                        ->orderBy('position', 'desc')
-                                        ->with(['terms', 'translation'])
-                                        ->get();
+                                    $attributesType = get_all_categories();
                                     $attributes_selected = (array) Request::query('terms');
                                 @endphp
-                                @foreach ($attributesType as $item)
-                                    @if (empty($item['hide_in_filter_search']))
-                                        @php
-                                            $translate = $item->translate();
-                                        @endphp
                                         <div class="g-filter-item" style="border: unset; padding: 0 20px;">
                                             <div class="item-content">
                                                 <ul>
-                                                    @foreach ($item->terms as $key => $term)
+                                                    @foreach ($attributesType as $key => $term)
                                                         @php $translate = $term->translate(); @endphp
                                                         <li>
                                                             <div class="bravo-checkbox">
@@ -84,8 +75,6 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
                                 <!-- #Attributes -->
 
                                 <div class="form-group">
@@ -94,7 +83,8 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="tab-pane fade @if (request('term_type') == 'typology' ) show active @endif" id="all-typology" role="tabpanel" aria-labelledby="all-typology-tab">
+                        <div class="tab-pane fade @if (request('term_type') == 'typology') show active @endif"
+                            id="all-typology" role="tabpanel" aria-labelledby="all-typology-tab">
                             <form class="bravo_form_filter" action="{{ route('explore.index') }}">
                                 <input type="hidden" name="term_type" value="typology">
                                 <div class="g-filter-item">
@@ -127,26 +117,13 @@
                                 </div>
                                 <!-- Attributes -->
                                 @php
-                                    $attributesTypology = \Modules\Core\Models\Attributes::where(
-                                        'slug',
-                                        'like',
-                                        '%typology%',
-                                    )
-                                        ->whereIn('service', menu_listing())
-                                        ->orderBy('position', 'desc')
-                                        ->with(['terms', 'translation'])
-                                        ->get();
+                                    $attributesTypology = get_all_typologies();
                                     $attributes_selected = (array) Request::query('terms');
                                 @endphp
-                                @foreach ($attributesTypology as $item)
-                                    @if (empty($item['hide_in_filter_search']))
-                                        @php
-                                            $translate = $item->translate();
-                                        @endphp
                                         <div class="g-filter-item" style="border: unset; padding: 0 20px;">
                                             <div class="item-content">
                                                 <ul>
-                                                    @foreach ($item->terms as $key => $term)
+                                                    @foreach ($attributesTypology as $key => $term)
                                                         @php $translate = $term->translate(); @endphp
                                                         <li>
                                                             <div class="bravo-checkbox">
@@ -164,8 +141,6 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                    @endif
-                                @endforeach
                                 <!-- #Attributes -->
 
                                 <div class="form-group">
