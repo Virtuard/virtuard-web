@@ -25,10 +25,7 @@
                     </div>
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        <input type="hidden" id="panId" value="{{$row->ipanorama->code ?? ''}}">
-                        @if($row->ipanorama)
-                        <div id="panorama"></div>
-                        @endif
+                        @include('user.partials.listing.ipanorama')
                         @include('Hotel::frontend.layouts.details.hotel-detail')
                         @include('Hotel::frontend.layouts.details.hotel-review')
                     </div>
