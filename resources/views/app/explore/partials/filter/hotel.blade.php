@@ -113,10 +113,7 @@
                                         ->where([['room', '!=', ''], ['status', 'publish']])
                                         ->groupBy('room')
                                         ->orderBy('room')
-                                        ->get()
-                                        ->toArray();
-                                    $hotel_rooms_first = reset($hotel_rooms)['room'] ?? 1;
-                                    $hotel_rooms_last = end($hotel_rooms)['room'] ?? 100;
+                                        ->get();
                                 @endphp
                                 <label>{{ __('Rooms') }}</label>
                                 <option value=""></option>
