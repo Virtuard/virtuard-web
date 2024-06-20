@@ -1248,17 +1248,16 @@ if (!function_exists('menu_listing_as')) {
     function menu_listing_as($str) {
         switch($str) {
             case 'hotel':
-                return 'accomodation';
+                $str = 'accomodation';
                 break;
             case 'space':
-                return 'property';
+                $str = 'property';
                 break;
             case 'boat':
-                return 'vehicle';
+                $str = 'vehicle';
                 break;
-            default:
-                return $str;
         }
+        return $str;
     }
 }
 
