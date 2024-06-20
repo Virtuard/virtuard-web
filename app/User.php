@@ -539,19 +539,19 @@ use Illuminate\Notifications\Notifiable;
 
         public function checkUserIpanoramaPlan(){
 
-            if(!is_enable_plan()) return true;
+            // if(!is_enable_plan()) return true;
 
-            $user_plans = $this->userPlans()->where('status',1)->where('end_date','>',now())->get();
+            $user_plans = $this->userPlans()->where('status',1)->get();
 
-            if(!$user_plans) return false;
-            $end_date = $user_plans->max('end_date');
+            // if(!$user_plans) return false;
+            // $end_date = $user_plans->max('end_date');
 
-            if($end_date <= now()) return false;
+            // if($end_date <= now()) return false;
 
-            $maxService = $user_plans->sum('max_ipanorama');
-            $count_service = $this->userIpanoramaPlans()->where('status','publish')->count('id');
+            $maxPanorama = $user_plans->sum('max_ipanorama');
+            $count_panorama = $this->userIpanoramaPlans()->where('status','publish')->count('id');
 
-            if($maxService and $count_service >= $maxService){
+            if($maxPanorama and $count_panorama >= $maxPanorama){
                 return false;
             }
             return true;

@@ -34,7 +34,13 @@
                                     <tr>
                                         <td>#{{$user_plan->plan_id}}</td>
                                         <td class="trans-id">{{$user_plan->plan->title ?? ''}}</td>
-                                        <td class="total-jobs">{{display_datetime($user_plan->end_date)}}</td>
+                                        <td class="total-jobs">
+                                            @if($user_plan->end_date)
+                                            {{display_datetime($user_plan->end_date)}}
+                                            @else
+                                            -
+                                            @endif
+                                        </td>
                                         <td class="used">@if(!$user_plan->max_service) {{__("Unlimited")}} @else {{$user_plan->used}}/{{$user_plan->max_service}} @endif</td>
                                         <td class="used">@if(!$user_plan->max_ipanorama) {{__("Unlimited")}} @else {{$user_plan->used_ipanorama}}/{{$user_plan->max_ipanorama}} @endif</td>
                                         <td class="remaining">{{format_money($user_plan->price)}}</td>
@@ -44,10 +50,14 @@
                                             @elseif($user_plan->is_valid)
                                                 <span class="text-success">{{__('Active')}}</span>
                                             @else
+                                                @if(!$user_plan->end_date)
+                                                <div class="text-success mb-3">{{__('Active')}}</div>
+                                                @else
                                                 <div class="text-danger mb-3">{{__('Expired')}}</div>
                                                 <div>
                                                     <a href="{{route('plan')}}" class="btn btn-warning">{{__('Renew')}}</a>
                                                 </div>
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>
