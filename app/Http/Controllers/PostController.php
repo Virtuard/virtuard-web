@@ -24,7 +24,7 @@ use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
-class FollowBoardsController extends Controller
+class PostController extends Controller
 {
     protected $userPost;
 
@@ -70,7 +70,20 @@ class FollowBoardsController extends Controller
             ['id_user', $idUser],
             ['status', 'publish'],
         ])->get();
-        $myFeeds = Story::where('user_id', $idUser)
+        $feeds = Story::query()
+            ->when(isset($request->filter), function($q) use ($request){
+                if (auth()->check()) {
+                    if ($request->filter == 'me') {
+                        $q->where('user_id', auth()->user()->id);
+                    }
+                    elseif ($request->filter == 'friend') {
+                        $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
+                        $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
+                        $ids = array_merge($following_ids, $follwer_ids);
+                        $q->whereIn('user_id', $ids);
+                    }
+                }
+            })
             ->orderByDesc('id')
             ->paginate(50)
             ->withQueryString();
@@ -79,7 +92,7 @@ class FollowBoardsController extends Controller
             'posts' => $posts,
             'memberCount' => $memberCount,
             'dataIpanorama' => $dataIpanorama,
-            'myFeeds' => $myFeeds,
+            'feeds' => $feeds,
         ];
 
         if (auth()->check()) {
@@ -87,7 +100,7 @@ class FollowBoardsController extends Controller
             $data['followingCount'] = auth()->user()->followings->count();
         }
 
-        return view('app.boards.index', $data);
+        return view('app.post.index', $data);
     }
 
     public function store(Request $request)
@@ -151,7 +164,7 @@ class FollowBoardsController extends Controller
         }
     }
 
-    public function commentPost(Request $request, $id)
+    public function storeComment(Request $request, $id)
     {
         $idUser = Auth::id();
 
@@ -166,5 +179,19 @@ class FollowBoardsController extends Controller
         $comment->save();
 
         return redirect()->to(url()->previous() . '#Post-' . $id);
+    }
+
+    public function destroy($id)
+    {
+        UserPost::destroy($id);
+
+        return back()->with('success', 'Deleted status');
+    }
+
+    public function destroyComment($id)
+    {
+        PostComment::destroy($id);
+
+        return back()->with('success', 'Deleted status');
     }
 }

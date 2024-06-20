@@ -75,7 +75,7 @@
                         @auth
                                 <form action="{{ route('member.store') }}" class="mb-4" method="POST">
                                 @csrf
-                                    <input type="hidden" name="param" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
+                                    <input type="hidden" name="action" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
                                     <input type="hidden" name="follower_id" value="{{ $user->id }}">
                                     <button class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} w-100 mb-2">
                                         {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}

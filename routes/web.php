@@ -44,11 +44,8 @@ Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('des
 });
 
 // Story
-Route::get('/user/get/story/api', 'StoryController@getStory')->name('get-story');
-Route::post('/user/add/story/api', 'StoryController@addStory')->name('add-story');
-
-// Route::get('/admin/virtuard-360', 'VirtuardController@adminVirtuardIndex')->name('admin-virtuard');
-// Route::post('/admin/submission-virtuard-360', 'VirtuardController@validateService')->name('validate-service');
+Route::get('/story', 'StoryController@list')->name('story.list');
+Route::post('/story', 'StoryController@addStory')->name('story.store');
 
 // Category
 Route::get('/admin/add/category/product/{type}', 'CategoryController@index');
@@ -56,17 +53,29 @@ Route::post('/admin/add/category/product', 'CategoryController@store')->name('ad
 Route::put('/admin/edit/category/product', 'CategoryController@update')->name('edit.category');
 Route::post('/admin/delete/category/product', 'CategoryController@delete')->name('delete.new.category');
 
-// Follow Boards
-Route::get('/user/follow-boards', 'FollowBoardsController@index')->name('user.board.index');
-Route::post('/user/add/follow-boards', 'FollowBoardsController@store')->name('user.post.status');
-Route::get('/user/like/{id}', 'FollowBoardsController@likePost')->name('user.post.like');
-Route::post('/user/comment/{id}', 'FollowBoardsController@commentPost')->name('user.post.comment');
+// post
+Route::group([
+    'prefix' => 'post',
+    'as' => 'post.',
+], function(){
+Route::get('/', 'PostController@index')->name('index');
+Route::post('/', 'PostController@store')->name('store');
+Route::get('{id}/like', 'PostController@likePost')->name('like');
+Route::post('{id}/comment', 'PostController@storeComment')->name('comment.store');
+Route::delete('{id}', 'PostController@destroy')->name('destroy');
+Route::delete('{id}/comment', 'PostController@destroyComment')->name('comment.destroy');
+});
 
-// Follow Members
-Route::get('/user/member', 'MemberController@index')->name('member.index');
-Route::post('/user/member', 'MemberController@store')->name('member.store');
-Route::post('/user/followers', 'MemberController@follower')->name('member.follower');
-Route::post('/user/following', 'MemberController@following')->name('member.following');
+// member
+Route::group([
+    'prefix' => 'member',
+    'as' => 'member.',
+], function(){
+Route::get('/', 'MemberController@index')->name('index');
+Route::post('/', 'MemberController@store')->name('store');
+Route::post('followers', 'MemberController@follower')->name('follower');
+Route::post('following', 'MemberController@following')->name('following');
+});
 
 // Social Login
 Route::get('social-login/{provider}', 'Auth\LoginController@socialLogin');

@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserPost extends Model
 {
-    public $incrementing = true;
+    use SoftDeletes;
+    
     protected $table = 'user_post_status';
 
     protected $fillable = ['user_id', 'ipanorama_id', 'message', 'type_status', 'media', 'type_post', 'tag'];

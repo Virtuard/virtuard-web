@@ -11,7 +11,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-9" style="background: #f5f5f5; padding: 0 20px;">
-                    <form action="{{ route('user.post.status') }}" class="mb-4" method="POST"
+                    <form action="{{ route('post.store') }}" class="mb-4" method="POST"
                         enctype="multipart/form-data">
                         @csrf
                         <div class="w-100" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
@@ -89,7 +89,7 @@
                                         font-weight: 600;
                                         outline: none;
                                     ">
-                                        <option value="public">{{ __('Public') }}</option>
+                                        <option value="">{{ __('Public') }}</option>
                                         <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
                                         <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
                                     </select>
@@ -279,12 +279,12 @@
 
                                     @auth
                                         @if ($liked->count() > 0)
-                                            <a href="{{ route('user.post.like', ['id' => $post->id]) }}"
+                                            <a href="{{ route('post.like', ['id' => $post->id]) }}"
                                                 class="cursor-pointer" style="color: pink;">
                                                 <i class="fa fa-heart"></i> Liked
                                             </a>
                                         @else
-                                            <a href="{{ route('user.post.like', ['id' => $post->id]) }}"
+                                            <a href="{{ route('post.like', ['id' => $post->id]) }}"
                                                 class="cursor-pointer" style="color: #9b9b9b;">
                                                 <i class="fa fa-heart-o"></i> Like
                                             </a>
@@ -311,32 +311,42 @@
                                         </button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item"
-                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url(route('user.board.index').'#Post-'.$post->id)) }}"
+                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url(route('post.index').'#Post-'.$post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-facebook"></i> Facebook
                                             </a>
                                             <a class="dropdown-item"
-                                                href="https://api.whatsapp.com/send?text={{ urlencode(route('user.board.index') . '#Post-' . $post->id)}}"
+                                                href="https://api.whatsapp.com/send?text={{ urlencode(route('post.index') . '#Post-' . $post->id)}}"
                                                 target="_blank">
                                                 <i class="fa fa-whatsapp"></i> Whatsapp
                                             </a>
                                             <a class="dropdown-item"
-                                                href="https://www.instagram.com/sharer/sharer.php?u={{ urlencode(url(route('user.board.index').'#Post-'.$post->id)) }}"
+                                                href="https://www.instagram.com/sharer/sharer.php?u={{ urlencode(url(route('post.index').'#Post-'.$post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-instagram"></i> Instagram
                                             </a>
                                             <a class="dropdown-item"
-                                                href="https://www.x.com/intent/post?url={{ urlencode(url(route('user.board.index').'#Post-'.$post->id)) }}"
+                                                href="https://www.x.com/intent/post?url={{ urlencode(url(route('post.index').'#Post-'.$post->id)) }}"
                                                 target="_blank">
                                                 <i class="fa fa-times"></i> X
                                             </a>
                                         </div>
                                     </div>
 
+                                    @if(auth()->user()->id == $post->user_id)
+                                        <form action="{{ route('post.destroy', $post->id) }}" class="mb-0" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                                <button type="submit" class="cursor-pointer" style="color: red; border: 0; background: unset;">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </button>
+                                        </form>
+                                    @endif
+
                                 </div>
                                 @auth
                                     <div id="commentInput_{{ $post->id }}" style="display:none;" class="mt-2">
-                                        <form action="{{ route('user.post.comment', ['id' => $post->id]) }}" method="POST">
+                                        <form action="{{ route('post.comment.store', ['id' => $post->id]) }}" method="POST">
                                             @csrf
                                             <div class="form-group" style="display: flex;">
                                                 <textarea class="form-control" name="comment" placeholder="Write your comment here" rows="3"
@@ -367,14 +377,14 @@
                     <div id="content_feed_post" class="w-100 mt-3"
                         style="background: #FFF; border-radius: 8px; display: none; padding: 23px 35px;">
                         <div class="grid-container">
-                            @foreach ($myFeeds as $feedMe)
+                            @foreach ($feeds as $feed)
                                 <div class="grid-item">
-                                    <img src="{{ asset('uploads/' . $feedMe->media) }}" alt="">
+                                    <img src="{{ asset('uploads/' . $feed->media) }}" alt="">
                                 </div>
                             @endforeach
                         </div>
-                        <div>
-                            {{ $myFeeds->links() }}
+                        <div class="d-none">
+                            {{ $feeds->links() }}
                         </div>
                     </div>
                 </div>
@@ -383,7 +393,7 @@
                         <div>
                             <a class="m-0" href="{{ route('member.index')}}">
                                 <i class="fa fa-globe mr-2"></i>
-                                All Members
+                                {{ _('All Members') }}
                                 <span class="badge badge-primary">{{ $memberCount }}</span>
                             </a>
                         </div>
@@ -393,7 +403,7 @@
                         <div>
                             <a class="m-0" href="{{ route('member.index', ['type' => 'follower'])}}">
                                 <i class="fa fa-users mr-2"></i>
-                                Followers
+                                {{ __('Followers') }}
                                 <span class="badge badge-primary">{{ $followerCount }}</span>
                             </a>
                         </div>
@@ -403,7 +413,7 @@
                         <div>
                             <a class="m-0" href="{{ route('member.index', ['type' => 'following'])}}">
                                 <i class="fa fa-user-plus mr-2"></i>
-                                Following
+                                {{ __('Following') }}
                                 <span class="badge badge-primary">{{ $followingCount }}</span>
                             </a>
                         </div>
@@ -414,7 +424,7 @@
                         <div>
                             <p class="m-0">
                                 <i class="fa fa-picture-o mr-2"></i>
-                                My Feed
+                                {{ __('Feeds') }}
                             </p>
                         </div>
                     </div>
@@ -423,7 +433,7 @@
                         <div>
                             <p class="m-0">
                                 <i class="fa fa-comments mr-2"></i>
-                                My Post
+                                {{ __('Posts') }}
                             </p>
                         </div>
                     </div>
@@ -706,15 +716,18 @@
 
             switch (val) {
                 case 'public' :
-                    window.location.href = "{!! route('user.board.index') !!}";
+                    window.location.href = "{!! route('post.index') !!}";
                 case 'me' :
-                    window.location.href = "{!! route('user.board.index', ['filter' => 'me']) !!}";
+                    window.location.href = "{!! route('post.index', ['filter' => 'me']) !!}";
                     break;
                 case 'friend' :
-                    window.location.href = "{!! route('user.board.index', ['filter' => 'friend']) !!}";
+                    window.location.href = "{!! route('post.index', ['filter' => 'friend']) !!}";
                     break;
-                default :
+                case 'login' :
                     $('#login').modal('show');
+                    break;
+                default:
+                    window.location.href = "{!! route('post.index') !!}";
             }
         })
     </script>

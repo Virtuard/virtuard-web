@@ -203,7 +203,7 @@
                 body: formData,
             };
 
-            fetch('/user/add/story/api', requestOptions)
+            fetch('/story', requestOptions)
                 .then(function(response) {
                     if (!response.ok) {
                         throw new Error('Gagal melakukan add');
@@ -239,7 +239,7 @@
                 method: 'GET',
             };
 
-            fetch('/user/get/story/api', requestOptions)
+            fetch('/story/list', requestOptions)
                 .then(function(response) {
                     if (!response.ok) {
                         throw new Error('Gagal melakukan add');

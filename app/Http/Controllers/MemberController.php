@@ -78,15 +78,10 @@ class MemberController extends Controller
     }
 
     public function store(Request $request) {
-        $idUser = Auth::id();
-        $follower_id = $request->input('folower_id');
-        $indicator = $request->input('param');
+        $data = $request->all();
+        $data['user_id'] = auth()->user()->id;
 
-        if($indicator === 'follow'){
-            $data = [
-                'user_id' => $idUser,
-                'follower_id' => $follower_id,
-            ];
+        if($data['action'] === 'follow'){
             FollowUser::create($data);
 
             return back()->with([
@@ -95,8 +90,8 @@ class MemberController extends Controller
             ]);
         }else{
             FollowUser::where([
-                ['user_id', $idUser],
-                ['follower_id', $follower_id],
+                ['user_id', $data['user_id']],
+                ['follower_id', $data['follower_id']],
             ])->delete();
 
             return back()->with([

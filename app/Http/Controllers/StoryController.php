@@ -39,7 +39,7 @@ class StoryController extends Controller
 
         // Periksa apakah file media telah diunggah
         if ($request->hasFile('media')) {
-            $mediaPath = $request->file('media')->store('public/images/story');
+            $mediaPath = $request->file('media')->store('/story');
         } else {
             $mediaPath = null;
         }
