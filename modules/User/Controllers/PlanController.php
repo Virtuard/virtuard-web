@@ -173,7 +173,9 @@ class PlanController extends FrontendController
             $new_user_plan->plan_id = $id;
             $new_user_plan->price = $plan->price;
             $new_user_plan->start_date = date('Y-m-d H:i:s');
-            $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
+            if ($plan->duration) {
+                $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
+            }
             $new_user_plan->max_service = $plan->max_service;
             $new_user_plan->max_ipanorama = $plan->max_ipanorama;
             $new_user_plan->plan_data = $plan;

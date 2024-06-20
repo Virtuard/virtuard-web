@@ -494,13 +494,16 @@ use Illuminate\Notifications\Notifiable;
                 'plan_id'=>$plan->id,
                 'price'=>$price,
                 'start_date'=>date('Y-m-d H:i:s'),
-                'end_date'=>date('Y-m-d H:i:s',$end_date),
+                // 'end_date'=>date('Y-m-d H:i:s',$end_date),
                 'max_service'=>$max_service,
                 'max_ipanorama'=>$plan->max_ipanorama,
                 'plan_data'=>$plan_data,
                 'user_id'=>$this->id,
                 'status'=>0
             ];
+            if ($plan->duration) {
+                $data['end_date']=date('Y-m-d H:i:s',$end_date);
+            }
             if($active){
                 if(!empty($user_plan->end_date)){
                     unset($data['end_date']);
