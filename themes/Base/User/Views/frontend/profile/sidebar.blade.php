@@ -49,10 +49,10 @@
     <p class="profile-since">{{ __('Member Since :time', ['time' => date('M Y', strtotime($user->created_at))]) }}</p>
     <ul class="meta-info style2">
         @auth
-            <form action="{{ route('member.store') }}" class="mb-4" method="POST">
+            <form action="{{ route('member.store') }}" method="POST">
             @csrf
-                <input type="hidden" name="param" value="{{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}">
-                <input type="hidden" name="id_follow" value="{{ $user->id }}">
+                <input type="hidden" name="param" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
+                <input type="hidden" name="follower_id" value="{{ $user->id }}">
                 <button class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} w-100 mb-2">
                     {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}
                 </button>
@@ -62,6 +62,13 @@
                 Follow
             </button>
         @endauth
+        <a href="@auth {{ route('user.chat', ['user_id' => $user->id]) }} @else javascript:void(0) @endauth" class="btn btn-primary w-100"
+            @guest
+            onclick="showModalLogin()"
+            @endguest
+            >
+            Message
+        </a>
     </ul>
 
     @if ($user->hasPermission('dashboard_vendor_access'))

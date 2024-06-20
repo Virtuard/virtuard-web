@@ -114,20 +114,11 @@ class HotelController extends Controller
             $hotel_related = $this->hotelClass::where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$row->id])->with(['location', 'translation', 'hasWishList'])->get();
         }
         $review_list = $row->getReviewList();
-        
-        $dataCategoryProduct = CategoryProduct::where('slug', $slug)->first();
-
-        if ($dataCategoryProduct) {
-            $dataCategoryProduct = $dataCategoryProduct->category;
-        } else {
-            $dataCategoryProduct = null;
-        }
 
         $data = [
             'row'          => $row,
             'translation'       => $translation,
             'hotel_related' => $hotel_related,
-            'category_product' => $dataCategoryProduct,
             'location_category' => $this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
             'booking_data' => $row->getBookingData(),
             'review_list'  => $review_list,

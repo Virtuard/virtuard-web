@@ -228,18 +228,6 @@ class VendorController extends FrontendController
                     $ipanoramaInpNew->save();
                 }
 
-                $categoryProduct = CategoryProduct::where('slug', '=', $row->slug)->first();
-
-                if ($categoryProduct) {
-                    $categoryProduct->category = $inpCategoryProduct;
-                    $categoryProduct->save();
-                } else {
-                    $categoryProductNew = new CategoryProduct();
-                    $categoryProductNew->slug = $row->slug;
-                    $categoryProductNew->category = $inpCategoryProduct;
-                    $categoryProductNew->save();
-                }
-
                 return back()->with('success', __('Hotel updated'));
             } else {
                 event(new CreatedServicesEvent($row));
