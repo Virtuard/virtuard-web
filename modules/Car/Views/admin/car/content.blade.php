@@ -84,22 +84,6 @@
     </div>
 </div>
 
-@if ($categories)
-    <div class="panel">
-        <div class="panel-title"><strong>{{ __('Accomodation Category') }}</strong></div>
-        <div class="panel-body">
-            <fieldset class="form-group">
-                @foreach ($categories as $category)
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="categoryProd" id="{{ $category->id }}" value="{{ $category->id }}" required>
-                        <label class="form-check-label" for="{{ $category->id }}">{{ $category->title }}</label>
-                    </div>
-                @endforeach
-            </fieldset>
-        </div>
-    </div>
-@endif
-
 @if (is_default_lang())
     <div class="panel">
         <div class="panel-title"><strong>{{ __('Extra Info') }}</strong></div>
