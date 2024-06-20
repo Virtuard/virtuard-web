@@ -25,7 +25,7 @@
                                 @endif
                                 <div class="title">{{$translate->title}}</div>
                                 <div class="price">{{$plan->price ? format_money($plan->price) : __('Free')}}
-                                    @if($plan->price)
+                                    @if($plan->price && $plan->duration)
                                     <span class="duration">/ {{$plan->duration > 1 ? $plan->duration : ''}} {{$plan->duration_type_text}}</span>
                                     @endif
                                 </div>
