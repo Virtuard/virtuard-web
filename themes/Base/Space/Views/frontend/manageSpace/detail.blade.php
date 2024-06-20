@@ -48,11 +48,13 @@
                                                 <option value="0" @if(old('default_state',$row->default_state ?? 0) == 0) selected @endif>{{__("Only available on specific dates")}}</option>
                                             </select>
                                         </div>
-                                        @if(str_contains(url()->current(), 'edit'))
                                         <div class="form-group">
-                                            <a href="{{ route('space.vendor.availability.index', ['id' => $row->id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-calendar"></i> {{  __('Availability Properties') }}</a>
+                                            @if(str_contains(url()->current(), 'edit'))
+                                                <a href="{{ route('space.vendor.availability.index', ['id' => $row->id]) }}" class="btn btn-warning btn-sm"><i class="fa fa-calendar"></i> {{  __('Availability Properties') }}</a>
+                                            @else
+                                                <span class="badge badge-warning"><i>{{ __('To select dates, first save the project') }}</i></span>
+                                            @endif
                                         </div>
-                                        @endif
                                     </div>
                                 </div>
                             </div>

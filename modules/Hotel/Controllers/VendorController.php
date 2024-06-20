@@ -241,11 +241,6 @@ class VendorController extends FrontendController
                     $ipanoramaInp->save();
                 }
 
-                $categoryProductNew = new CategoryProduct();
-                $categoryProductNew->slug = $row->slug;
-                $categoryProductNew->category = $inpCategoryProduct;
-                $categoryProductNew->save();
-
                 return redirect(route('hotel.vendor.edit', ['id' => $row->id]))->with('success', __('Hotel created'));
             }
         }
