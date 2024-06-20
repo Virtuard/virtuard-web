@@ -48,22 +48,41 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Attributes -->
                                 @php
-                                    $attributesType = get_all_categories();
-                                    $attributes_selected = (array) Request::query('terms');
+                                    $category = \Modules\Core\Models\Attributes::query()
+                                        ->whereIn('service', menu_listing())
+                                        ->where('slug', 'like', '%type%')
+                                        ->orderBy('name', 'asc')
+                                        ->with([
+                                            'terms' => function($q) {
+                                                $q->orderBy('name');
+                                            }, 
+                                            'translation'
+                                        ])
+                                        ->get();
+                                    $category_selected = (array) Request::query('terms');
                                 @endphp
-                                        <div class="g-filter-item" style="border: unset; padding: 0 20px;">
+                                @foreach ($category as $item)
+                                    @if (empty($item['hide_in_filter_search']))
+                                        @php
+                                            $translate = $item->translate();
+                                        @endphp
+                                        <div class="g-filter-item">
+                                            <div class="item-title">
+                                                <h3 class="text-capitalize"> {{ menu_listing_as($item->service) }} </h3>
+                                                <label class="text-capitalize">{{ $translate->name }} </label>
+                                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                            </div>
                                             <div class="item-content">
                                                 <ul>
-                                                    @foreach ($attributesType as $key => $term)
+                                                    @foreach ($item->terms as $key => $term)
                                                         @php $translate = $term->translate(); @endphp
-                                                        <li>
+                                                        <li @if ($key > 2 and empty($category_selected)) class="hide" @endif>
                                                             <div class="bravo-checkbox">
                                                                 <label>
                                                                     <input
-                                                                        @if (in_array($term->id, $attributes_selected)) checked @endif
+                                                                        @if (in_array($term->id, $category_selected)) checked @endif
                                                                         type="checkbox" name="terms[]"
                                                                         value="{{ $term->id }}">
                                                                     {!! $translate->name !!}
@@ -73,8 +92,15 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
+                                                @if (count($item->terms) > 3 and empty($category_selected))
+                                                    <button type="button"
+                                                        class="btn btn-link btn-more-item">{{ __('More') }} <i
+                                                            class="fa fa-caret-down"></i></button>
+                                                @endif
                                             </div>
                                         </div>
+                                    @endif
+                                @endforeach
                                 <!-- #Attributes -->
 
                                 <div class="form-group">
@@ -115,21 +141,42 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <!-- Attributes -->
                                 @php
-                                    $attributesTypology = get_all_typologies();
-                                    $attributes_selected = (array) Request::query('terms');
+                                    $typology = \Modules\Core\Models\Attributes::query()
+                                        ->whereIn('service', menu_listing())
+                                        ->where('slug', 'like', '%typology%')
+                                        ->orderBy('name', 'asc')
+                                        ->with([
+                                            'terms' => function($q) {
+                                                $q->orderBy('name');
+                                            }, 
+                                            'translation'
+                                        ])
+                                        ->get();
+                                    $typology_selected = (array) Request::query('terms');
                                 @endphp
-                                        <div class="g-filter-item" style="border: unset; padding: 0 20px;">
+                                @foreach ($typology as $item)
+                                    @if (empty($item['hide_in_filter_search']))
+                                        @php
+                                            $translate = $item->translate();
+                                        @endphp
+                                        <div class="g-filter-item">
+                                            <div class="item-title">
+                                                <h3 class="text-capitalize"> {{ menu_listing_as($item->service) }} </h3>
+                                                <label class="text-capitalize">{{ $translate->name }} </label>
+                                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                            </div>
                                             <div class="item-content">
                                                 <ul>
-                                                    @foreach ($attributesTypology as $key => $term)
+                                                    @foreach ($item->terms as $key => $term)
                                                         @php $translate = $term->translate(); @endphp
-                                                        <li>
+                                                        <li @if ($key > 2 and empty($typology_selected)) class="hide" @endif>
                                                             <div class="bravo-checkbox">
                                                                 <label>
                                                                     <input
-                                                                        @if (in_array($term->id, $attributes_selected)) checked @endif
+                                                                        @if (in_array($term->id, $typology_selected)) checked @endif
                                                                         type="checkbox" name="terms[]"
                                                                         value="{{ $term->id }}">
                                                                     {!! $translate->name !!}
@@ -139,8 +186,15 @@
                                                         </li>
                                                     @endforeach
                                                 </ul>
+                                                @if (count($item->terms) > 3 and empty($typology_selected))
+                                                    <button type="button"
+                                                        class="btn btn-link btn-more-item">{{ __('More') }} <i
+                                                            class="fa fa-caret-down"></i></button>
+                                                @endif
                                             </div>
                                         </div>
+                                    @endif
+                                @endforeach
                                 <!-- #Attributes -->
 
                                 <div class="form-group">

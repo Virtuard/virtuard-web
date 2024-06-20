@@ -1244,6 +1244,24 @@ if (!function_exists('menu_listing')) {
     }
 }
 
+if (!function_exists('menu_listing_as')) {
+    function menu_listing_as($str) {
+        switch($str) {
+            case 'hotel':
+                return 'accomodation';
+                break;
+            case 'space':
+                return 'property';
+                break;
+            case 'boat':
+                return 'vehicle';
+                break;
+            default:
+                return $str;
+        }
+    }
+}
+
 if (!function_exists('get_attribute_listing')) {
     function get_attribute_listing($key) {
         $data = [
