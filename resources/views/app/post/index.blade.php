@@ -333,7 +333,7 @@
                                         </div>
                                     </div>
 
-                                    @if(auth()->user()->id == $post->user_id)
+                                    @if(auth()->check() && auth()->user()->id == $post->user_id)
                                         <form action="{{ route('post.destroy', $post->id) }}" class="mb-0" method="POST">
                                             @csrf
                                             @method('delete')
