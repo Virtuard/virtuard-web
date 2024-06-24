@@ -68,7 +68,7 @@
                         </a>
                     </div>
                 @else
-                    <span class="badge badge-warning"><i>{{ __('To manage room, first save the project') }}</i></span>
+                    <span class="badge badge-warning"><i>{{ __('To manage room or calendar, first save the project') }}</i></span>
                 @endif
             </div>
             <div class="d-flex justify-content-between">
