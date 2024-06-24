@@ -39,7 +39,7 @@ class VirtuardController extends Controller
     public function vendorVirtuardIndex()
     {
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
 
         return view('user.virtuard360.index', compact('dataIpanorama'));
     }

@@ -472,7 +472,7 @@ use Illuminate\Notifications\Notifiable;
         }
 
         public function userIpanoramaPlans(){
-            return $this->hasMany(RefIpanorama::class, 'id_user');
+            return $this->hasMany(UserPlan::class, 'user_id')->where('end_date', '=', null);
         }
 
         public function applyPlan(Plan $plan,$price,$is_annual = false,$active=true){
@@ -544,15 +544,15 @@ use Illuminate\Notifications\Notifiable;
 
             // if(!is_enable_plan()) return true;
 
-            $user_plans = $this->userPlans()->where('status',1)->get();
+            $user_plans = $this->userIpanoramaPlans()->where('status',1)->get();
 
-            // if(!$user_plans) return false;
+            if(!$user_plans) return false;
             // $end_date = $user_plans->max('end_date');
 
             // if($end_date <= now()) return false;
 
             $maxPanorama = $user_plans->sum('max_ipanorama');
-            $count_panorama = $this->userIpanoramaPlans()->where('status','publish')->count('id');
+            $count_panorama = $this->ipanorama()->where('status','publish')->count('id');
 
             if($maxPanorama and $count_panorama >= $maxPanorama){
                 return false;
@@ -579,7 +579,7 @@ use Illuminate\Notifications\Notifiable;
         }
 
         public function ipanorama(){
-            return $this->hasMany(RefIpanorama::class,'id_user');
+            return $this->hasMany(RefIpanorama::class,'user_id');
         }
 
         public function isAdmin(){

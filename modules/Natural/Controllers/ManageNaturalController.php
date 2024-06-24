@@ -115,7 +115,7 @@ class ManageNaturalController extends FrontendController
         $idUser = Auth::id();
         $this->checkPermission('natural_create');
         $isVirtuard360 = $this->checkVirtuard360();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
         $categories = ProductCategory::where('type', 'property')->get();
 
         $row = new $this->naturalClass();

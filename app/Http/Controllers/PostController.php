@@ -67,7 +67,7 @@ class PostController extends Controller
         $memberCount = User::count();
         $idUser = Auth::id();
         $dataIpanorama = RefIpanorama::where([
-            ['id_user', $idUser],
+            ['user_id', $idUser],
             ['status', 'publish'],
         ])->get();
         $feeds = Story::query()

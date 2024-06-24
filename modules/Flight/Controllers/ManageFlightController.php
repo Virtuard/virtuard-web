@@ -112,7 +112,7 @@ class ManageFlightController extends FrontendController
     public function createFlight(Request $request)
     {
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
         $categories = ProductCategory::where('type', 'car')->get();
 
         $isVirtuard360 = $this->checkVirtuard360();
@@ -252,7 +252,7 @@ class ManageFlightController extends FrontendController
         $this->checkPermission('flight_update');
         $user_id = Auth::id();
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
         $isVirtuard360 = $this->checkVirtuard360();
         $row = $this->flightClass::where("author_id", $user_id);
         $row = $row->find($id);

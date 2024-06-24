@@ -134,7 +134,7 @@
     public function create(Request $request)
     {
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
         $categories = ProductCategory::where('type', 'flight')->get();
 
         $isVirtuard360 = $this->checkVirtuard360();
@@ -167,7 +167,7 @@
         public function edit(Request $request, $id)
         {
             $idUser = Auth::id();
-            $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+            $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
 
             $isVirtuard360 = $this->checkVirtuard360();
             $this->checkPermission('flight_update');

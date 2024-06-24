@@ -57,6 +57,20 @@
                     @endif
                 </div>
             </div>
+            <div class="d-flex justify-content-end">
+                @if($row->id)
+                    <div class="title-action">
+                        <a class="btn btn-info" href="{{route('hotel.vendor.room.index',['hotel_id'=>$row->id])}}">
+                            <i class="fa fa-hand-o-right"></i> {{__("Manage Rooms")}}
+                        </a>
+                        <a href="{{route('hotel.vendor.room.availability.index',['hotel_id'=>$row->id])}}" class="btn btn-warning">
+                            <i class="fa fa-calendar"></i> {{__("Availability Rooms")}}
+                        </a>
+                    </div>
+                @else
+                    <span class="badge badge-warning"><i>{{ __('To manage room, first save the project') }}</i></span>
+                @endif
+            </div>
             <div class="d-flex justify-content-between">
                 <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i> {{__('Save Changes')}}</button>
             </div>

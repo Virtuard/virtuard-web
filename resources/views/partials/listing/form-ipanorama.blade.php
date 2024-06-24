@@ -13,7 +13,7 @@
                         @php
                             $dataIpanorama = \App\Models\RefIpanorama::query()
                                 ->where([
-                                    ['id_user', $row->author_id],
+                                    ['user_id', $row->author_id],
                                     ['status', 'publish'],
                                 ])
                                 ->get();

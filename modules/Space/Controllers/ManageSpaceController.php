@@ -118,7 +118,7 @@ class ManageSpaceController extends FrontendController
     {
         $idUser = Auth::id();
         $isVirtuard360 = $this->checkVirtuard360();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
         $categories = ProductCategory::where('type', 'space')->get();
 
         $this->checkPermission('space_create');
@@ -273,7 +273,7 @@ class ManageSpaceController extends FrontendController
         $this->checkPermission('space_update');
         $user_id = Auth::id();
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('id_user', $idUser)->get();
+        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
         $isVirtuard360 = $this->checkVirtuard360();
 
         $row = $this->spaceClass::where("author_id", $user_id);

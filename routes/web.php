@@ -32,7 +32,7 @@ Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->
 Route::get('bulkEdit/{id}', 'VirtuardController@bulkEdit')->name('bulk_edit');
 
 Route::group([
-    'middleware' => ['user_plan']
+    'middleware' => ['user_ipanorama_plan']
 ], function (){
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
 Route::post('/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');

@@ -46,7 +46,7 @@
                                 <tr class="{{$row->status}}">
                                     <td>{{ $key + 1}}</td>
                                     <td class="title">
-                                        <a href="{{route('admin.virtuard360.edit',['id'=>$row->id])}}">{{$row->title}}</a>
+                                        {{$row->title}}
                                     </td>
                                     <td>
                                         @if(!empty($row->author))
@@ -59,7 +59,7 @@
                                     <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         @if(empty($recovery))
-                                            <a href="{{route('admin.virtuard360.edit',['id'=>$row->id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
+                                            <a href="{{route('admin.virtuard360.edit',['id'=>$row->id,'user_id'=>$row->create_user])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
                                         @endif
                                     </td>
                                 </tr>
