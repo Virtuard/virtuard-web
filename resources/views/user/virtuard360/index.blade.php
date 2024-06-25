@@ -31,6 +31,8 @@
                                         <span class="badge badge-{{ $pan->status }}">{{ $pan->status }}</span>
                                     </td>
                                     <td>
+                                        <a href="{{ route('user.virtuard-360.show', $pan->id) }}"
+                                            class="virtuard-edit btn btn-primary btn-sm">Preview</a>
                                         <a href="{{ route('user.virtuard-360.edit', ['id' => $pan->id, 'user_id' => auth()->user()->id]) }}"
                                             class="virtuard-edit btn btn-warning btn-sm">Edit</a>
                                         <a href="{{ route('user.virtuard-360.destroy', $pan->id) }}"

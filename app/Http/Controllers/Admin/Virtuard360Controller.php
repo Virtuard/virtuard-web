@@ -40,6 +40,15 @@ class Virtuard360Controller extends Controller
         return view('admin.virtuard360.index', $data);
     }
 
+    public function show($id)
+    {
+        $data = [
+            'panorama' => RefIpanorama::find($id),
+        ];
+
+        return view('admin.virtuard360.show', $data);
+    }
+
     public function create(Request $request)
     {
         $id = $request->id;

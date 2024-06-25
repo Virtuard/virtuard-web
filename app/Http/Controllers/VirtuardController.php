@@ -49,6 +49,17 @@ class VirtuardController extends Controller
         return view('user.virtuard360.add');
     }
 
+    public function show($id)
+    {
+        $panorama = RefIpanorama::find($id);
+
+        $data = [
+            'panorama' => $panorama,
+        ];
+
+        return view('user.virtuard360.show', $data);
+    }
+
     public function vendorVirtuardEdit(Request $request)
     {
         if($request->id){

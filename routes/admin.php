@@ -42,6 +42,7 @@ Route::group([
         'as' => 'virtuard360.'
     ], function() {
         Route::get('/', 'Admin\Virtuard360Controller@index')->name('index');
+        Route::get('show/{id}', 'Admin\Virtuard360Controller@show')->name('show');
         Route::get('create', 'Admin\Virtuard360Controller@create')->name('create');
         Route::get('edit', 'Admin\Virtuard360Controller@edit')->name('edit');
         Route::post('store', 'Admin\Virtuard360Controller@store')->name('store');

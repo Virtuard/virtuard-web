@@ -25,6 +25,7 @@ Route::group([
     'middleware' => ['auth'],
 ], function (){
 Route::get('/', 'VirtuardController@vendorVirtuardIndex')->name('index');
+Route::get('show/{id}', 'VirtuardController@show')->name('show');
 Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
 Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api-edit');
 Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');

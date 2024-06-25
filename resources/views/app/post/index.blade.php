@@ -1,10 +1,4 @@
 @extends ('layouts.app')
-<link href="{{ asset('libs/ipanorama/src/ipanorama.css') }}" rel="stylesheet">
-<link href="{{ asset('libs/ipanorama/src/ipanorama.theme.default.css') }}" rel="stylesheet">
-<link href="{{ asset('libs/ipanorama/src/ipanorama.theme.modern.css') }}" rel="stylesheet">
-<link href="{{ asset('libs/ipanorama/src/ipanorama.theme.dark.css') }}" rel="stylesheet">
-<link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
-<link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
 @section('content')
 <div class="container">
     <div class="row" style="padding: 40px 0; background: #f5f5f5;">
@@ -450,6 +444,7 @@
 @endsection
 
 @push('css')
+    @include('partials.ipanorama.ipanorama-css')
     <link rel="stylesheet" type="text/css" href="{{asset('libs/fotorama/fotorama.css')}}"/>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
@@ -648,10 +643,8 @@
 @endpush
 
 @push('js')
+    @include('partials.ipanorama.ipanorama-js')
     <script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
-    <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
-    <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
     <script type="text/javascript" src="{{asset('libs/fotorama/fotorama.js')}}"></script>
     <script>
         function feedShow() {
