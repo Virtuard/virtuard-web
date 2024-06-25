@@ -66,6 +66,11 @@ class FortifyServiceProvider extends ServiceProvider
 
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
+
+            if ($user && $user->status == "publish" && $user->need_update_pw) {
+                abort(403);
+            }
+
             if ($user && Hash::check($request->password, $user->password) and $user->status == "publish") {
                 return $user;
             }

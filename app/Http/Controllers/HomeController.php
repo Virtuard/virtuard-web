@@ -91,4 +91,13 @@ class HomeController extends Controller
             return $this->sendError( $e->getMessage() );
         }
     }
+
+    public function needResetPassword()
+    {
+        return redirect()
+            ->route('password.request')
+            ->with([
+                'status' => 'Password expired. Please reset your password.'
+            ]);
+    }
 }

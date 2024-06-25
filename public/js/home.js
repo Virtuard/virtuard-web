@@ -564,6 +564,10 @@ jQuery(function ($) {
 
             },
             error:function (e){
+                if (e.status == 403) {
+                    window.location.href="/need-reset-password";
+                }
+
                 form.find('.icon-loading').hide();
                 var html = ajax_error_to_string(e);
                 if (typeof BravoReCaptcha !== 'undefined') {
