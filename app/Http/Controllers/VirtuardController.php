@@ -51,7 +51,15 @@ class VirtuardController extends Controller
 
     public function vendorVirtuardEdit(Request $request)
     {
-        return view('user.virtuard360.edit');
+        if($request->id){
+            $panorama = RefIpanorama::find($request->id);
+        }
+
+        $data = [
+            'panorama' => $panorama,
+        ];
+
+        return view('user.virtuard360.edit', $data);
     }
 
     public function vendorVirtuardDelete($id)
@@ -212,7 +220,6 @@ class VirtuardController extends Controller
     {
         $attr = $request->except('id');
         $attr['code']['autoLoad'] = true;
-        // dd($attr);
 
         if ($attr == null) {
             return response()->json([
@@ -289,7 +296,7 @@ class VirtuardController extends Controller
     public function bulkEdit($id , Request $request){
         $action = $request->input('action');
         $user_id = Auth::id();
-        $query = $this->refIpanorama::where("id_user", $user_id)->where("id", $id)->first();
+        $query = $this->refIpanorama::where("user_id", $user_id)->where("id", $id)->first();
         if (empty($id)) {
             return redirect()->back()->with('error', __('No item!'));
         }

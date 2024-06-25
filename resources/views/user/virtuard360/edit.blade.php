@@ -28,11 +28,17 @@
             </div>
 
         </form>
-    @endif
+    @else
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="text" id="title" name="title" class="form-control" value="{{ $panorama->title }}" placeholder="Title..">
+                </div>
+            </div>
+        </div>
 
-    @if (request()->has('id'))
-        <div class="col-md-12 p-0 mb-4">
-            <button class="btn btn-primary w-100 add-image" data-toggle="modal" data-target="#modalAddImage" id="btn-image">
+        <div class="mb-4 d-flex justify-content-end">
+            <button class="btn btn-primary add-image " data-toggle="modal" data-target="#modalAddImage" id="btn-image">
                 + Add New Image
             </button>
         </div>

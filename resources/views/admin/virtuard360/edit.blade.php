@@ -30,6 +30,11 @@
             </div>
         @else
             <div class="row">
+                <div class="col-md-12">
+                    <input type="text" id="title" name="title" class="form-control" value="{{ $row->title }}" placeholder="Title..">
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-md-9">
                     <div class="d-flex justify-content-between mb20">
                         <div class="title-bar"></div>
