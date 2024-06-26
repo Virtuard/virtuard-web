@@ -4,7 +4,7 @@
 
     use App\Models\ChMessage as Message;
 use App\Models\FollowUser;
-use App\Models\RefIpanorama;
+use App\Models\Ipanorama;
 use Illuminate\Notifications\Notifiable;
     use Illuminate\Contracts\Auth\MustVerifyEmail;
     use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -579,7 +579,7 @@ use Illuminate\Notifications\Notifiable;
         }
 
         public function ipanorama(){
-            return $this->hasMany(RefIpanorama::class,'user_id');
+            return $this->hasMany(Ipanorama::class,'user_id');
         }
 
         public function isAdmin(){

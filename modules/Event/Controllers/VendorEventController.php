@@ -16,8 +16,7 @@ use Modules\Core\Models\Attributes;
 use Modules\Booking\Models\Booking;
 use Modules\Location\Models\LocationCategory;
 use Modules\User\Models\Plan;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
+
 
 class VendorEventController extends FrontendController
 {
@@ -200,28 +199,9 @@ class VendorEventController extends FrontendController
 
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Event updated') );
             }else{
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('event.vendor.edit',['id'=>$row->id]))->with('success', __('Event created') );
             }
         }

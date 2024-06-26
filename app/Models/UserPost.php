@@ -15,7 +15,7 @@ class UserPost extends Model
     public $timestamps = true;
 
     public function ipanorama(){
-        return $this->belongsTo(RefIpanorama::class, 'ipanorama_id');
+        return $this->belongsTo(Ipanorama::class, 'ipanorama_id');
     }
 
     public function user(){

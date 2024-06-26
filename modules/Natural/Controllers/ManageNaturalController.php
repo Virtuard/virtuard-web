@@ -12,8 +12,6 @@ use Modules\Natural\Hook;
 use Modules\Natural\Models\Natural;
 use Modules\Natural\Models\NaturalCategory;
 use Modules\Natural\Models\NaturalTranslation;
-use App\Models\RefIpanorama;
-use App\Models\ProductCategory;
 use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
 use Modules\Natural\Models\NaturalTerm;
@@ -114,14 +112,9 @@ class ManageNaturalController extends FrontendController
     {
         $idUser = Auth::id();
         $this->checkPermission('natural_create');
-        $isVirtuard360 = $this->checkVirtuard360();
-        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
-        $categories = ProductCategory::where('type', 'property')->get();
 
         $row = new $this->naturalClass();
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation'   => new $this->naturalTranslationClass(),
             'natural_category' => $this->naturalCategoryClass::get()->toTree(),

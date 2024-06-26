@@ -11,7 +11,7 @@
                     <label>360 Image </label>
                     @if (auth()->user()->checkUserPlanStatus() || auth()->user()->isAdmin())
                         @php
-                            $dataIpanorama = \App\Models\RefIpanorama::query()
+                            $dataIpanorama = \App\Models\Ipanorama::query()
                                 ->where([
                                     ['user_id', $row->author_id],
                                     ['status', 'publish'],

@@ -37,7 +37,6 @@ Route::group([
     'middleware' => ['user_ipanorama_plan']
 ], function (){
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
-Route::post('/submission-virtuard-360', 'VirtuardController@submissionService')->name('submission-service');
 Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
 Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
 Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');

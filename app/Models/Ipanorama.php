@@ -6,11 +6,11 @@ use App\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\User\Models\User;
 
-class RefIpanorama extends BaseModel
+class Ipanorama extends BaseModel
 {
     use SoftDeletes;
 
-    protected $table = 'ref_ipanorama';
+    protected $table = 'ipanoramas';
 
     protected $fillable = [
         'user_id', 

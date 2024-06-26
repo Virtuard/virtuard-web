@@ -12,9 +12,6 @@ use Modules\Location\Models\LocationCategory;
 use Modules\Business\Models\Business;
 use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
-use App\Models\RefRelationIpanorama;
-use App\Models\RefIpanorama;
-use App\Models\ProductCategory;
 use Modules\Booking\Models\Booking;
 use Modules\Business\Models\BusinessCategory;
 use Modules\Business\Models\BusinessTerm;
@@ -202,9 +199,9 @@ class ManageBusinessController extends FrontendController
 
         ];
         $row->fillByAttr($dataKeys,$request->input());
-        // if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
-        //     return redirect(route('user.plan'));
-        // }
+        if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
+            return redirect(route('user.plan'));
+        }
 	    $row->ical_import_url  = $request->ical_import_url;
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
         if ($res) {
@@ -214,27 +211,8 @@ class ManageBusinessController extends FrontendController
 
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Business updated') );
             }else{
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 event(new CreatedServicesEvent($row));
                 return redirect(route('business.vendor.edit',['id'=>$row->id]))->with('success', __('Business created') );
             }

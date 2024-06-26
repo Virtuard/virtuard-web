@@ -8,9 +8,6 @@ use Modules\Flight\Models\Flight;
 use Illuminate\Http\Request;
 use Modules\Location\Models\Location;
 use Modules\Review\Models\Review;
-use App\Models\Ipanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\RefIpanorama;
 use Modules\Core\Models\Attributes;
 use DB;
 

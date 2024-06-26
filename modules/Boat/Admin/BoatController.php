@@ -17,12 +17,6 @@ use Modules\Core\Events\CreatedServicesEvent;
 use Modules\Core\Events\UpdatedServiceEvent;
 use Modules\Core\Models\Attributes;
 use Modules\Location\Models\Location;
-use App\Models\Ipanorama;
-use App\Models\CategoryProduct;
-use App\Models\ProductCategory;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\SubscribeVirtuard;
 use Modules\Boat\Models\BoatCategory;
 
 class BoatController extends AdminController
@@ -265,28 +259,9 @@ class BoatController extends AdminController
             }
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Boat updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('boat.admin.edit', $row->id))->with('success', __('Boat created'));
             }
         }

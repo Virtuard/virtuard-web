@@ -14,13 +14,6 @@ use Modules\Cultural\Models\Cultural;
 use Modules\Cultural\Models\CulturalCategory;
 use Modules\Cultural\Models\CulturalTranslation;
 use Modules\Location\Models\Location;
-use App\Models\Ipanorama;
-use App\Models\CategoryProduct;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProductCategory;
-
 
 class CulturalController extends AdminController
 {
@@ -250,28 +243,9 @@ class CulturalController extends AdminController
 
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Cultural updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('cultural.admin.edit', $row->id))->with('success', __('Cultural created'));
             }
         }

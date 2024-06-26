@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 use Modules\Location\Models\Location;
 use Modules\Review\Models\Review;
 use Modules\Core\Models\Attributes;
-use App\Models\Ipanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\RefIpanorama;
 use DB;
 
 class CarController extends Controller
@@ -104,21 +101,10 @@ class CarController extends Controller
             $car_related = $this->carClass::where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$row->id])->with(['location','translation','hasWishList'])->get();
         }
         $review_list = $row->getReviewList();
-        
-        $dataIpanorama = RefRelationIpanorama::where('slug', $slug)
-        ->join('ref_add_ipanorama', 'ref_relation_ipanorama.id_ipanorama', '=', 'ref_add_ipanorama.id')
-        ->first();
-
-        if($dataIpanorama) {
-            $dataIpanorama = $dataIpanorama->code;
-        }else{
-            $dataIpanorama = null;
-        }
 
         $data = [
             'row'          => $row,
             'translation'       => $translation,
-            'ipanorama' => $dataIpanorama,
             'car_related' => $car_related,
             'booking_data' => $row->getBookingData(),
             'review_list'  => $review_list,

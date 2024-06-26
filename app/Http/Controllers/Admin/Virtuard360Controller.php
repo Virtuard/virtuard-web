@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\RefIpanorama;
+use App\Models\Ipanorama;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -12,7 +12,7 @@ class Virtuard360Controller extends Controller
 
     public function __construct()
     {
-        $this->model = new RefIpanorama();  
+        $this->model = new Ipanorama();  
     }
 
     public function index(Request $request)
@@ -43,7 +43,7 @@ class Virtuard360Controller extends Controller
     public function show($id)
     {
         $data = [
-            'panorama' => RefIpanorama::find($id),
+            'panorama' => Ipanorama::find($id),
         ];
 
         return view('admin.virtuard360.show', $data);

@@ -10,12 +10,6 @@ use Modules\Core\Events\CreatedServicesEvent;
 use Modules\Core\Events\UpdatedServiceEvent;
 use Modules\FrontendController;
 use Illuminate\Http\Request;
-use App\Models\SubscribeVirtuard;
-use App\Models\CategoryProduct;
-use App\Models\Ipanorama;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\ProductCategory;
 use Illuminate\Support\Facades\Auth;
 use Modules\Hotel\Hook;
 use Modules\Hotel\Models\Hotel;
@@ -199,11 +193,6 @@ class VendorController extends FrontendController
         ];
 
         $row->fillByAttr($dataKeys, $request->input());
-        // if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
-        //     return redirect(route('user.plan'));
-        // }
-
-        $inpCategoryProduct = $request->input('category_id');
 
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
 
@@ -215,32 +204,9 @@ class VendorController extends FrontendController
 
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('ipanorama_id');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('ipanorama_id');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Hotel updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInput = $request->input('ipanorama_id');
-
-                if ($ipanoramaInput) {
-                    $ipanoramaInp = new RefRelationIpanorama();
-                    $ipanoramaInp->id_ipanorama = $request->input('ipanorama_id');
-                    $ipanoramaInp->slug = $row->slug;
-                    $ipanoramaInp->save();
-                }
-
                 return redirect(route('hotel.vendor.edit', ['id' => $row->id]))->with('success', __('Hotel created'));
             }
         }

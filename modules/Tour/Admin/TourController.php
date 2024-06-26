@@ -14,13 +14,6 @@ use Modules\Tour\Models\Tour;
 use Modules\Tour\Models\TourCategory;
 use Modules\Tour\Models\TourTranslation;
 use Modules\Location\Models\Location;
-use App\Models\Ipanorama;
-use App\Models\CategoryProduct;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProductCategory;
-
 
 class TourController extends AdminController
 {
@@ -250,28 +243,9 @@ class TourController extends AdminController
 
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Tour updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('tour.admin.edit', $row->id))->with('success', __('Tour created'));
             }
         }

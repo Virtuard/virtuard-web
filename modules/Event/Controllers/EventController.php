@@ -8,9 +8,6 @@ use Modules\Location\Models\Location;
 use Modules\Location\Models\LocationCategory;
 use Modules\Review\Models\Review;
 use Modules\Core\Models\Attributes;
-use App\Models\Ipanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\RefIpanorama;
 use DB;
 
 class EventController extends Controller

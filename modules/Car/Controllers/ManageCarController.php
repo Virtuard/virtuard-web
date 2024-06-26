@@ -17,9 +17,6 @@ use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
 use Modules\Booking\Models\Booking;
 use Modules\User\Models\Plan;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\ProductCategory;
 
 class ManageCarController extends FrontendController
 {
@@ -203,28 +200,9 @@ class ManageCarController extends FrontendController
             do_action(Hook::AFTER_SAVING,$row,$request);
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Car updated') );
             }else{
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('car.vendor.edit',['id'=>$row->id]))->with('success', __('Car created') );
             }
         }

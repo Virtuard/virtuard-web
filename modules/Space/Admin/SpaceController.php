@@ -18,12 +18,6 @@ use Modules\Location\Models\LocationCategory;
 use Modules\Space\Models\Space;
 use Modules\Space\Models\SpaceTerm;
 use Modules\Space\Models\SpaceTranslation;
-use App\Models\Ipanorama;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\SubscribeVirtuard;
-use App\Models\CategoryProduct;
-use App\Models\ProductCategory;
 use Modules\Space\Models\SpaceCategory;
 
 class SpaceController extends AdminController
@@ -138,7 +132,6 @@ class SpaceController extends AdminController
 
     public function create(Request $request)
     {
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('space_create');
         $row = new $this->space();
         $row->fill([
@@ -284,28 +277,9 @@ class SpaceController extends AdminController
 
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Space updated') );
             }else{
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('space.admin.edit',$row->id))->with('success', __('Space created') );
             }
         }

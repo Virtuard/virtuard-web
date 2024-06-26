@@ -12,8 +12,6 @@ use Modules\Cultural\Hook;
 use Modules\Cultural\Models\Cultural;
 use Modules\Cultural\Models\CulturalCategory;
 use Modules\Cultural\Models\CulturalTranslation;
-use App\Models\RefIpanorama;
-use App\Models\ProductCategory;
 use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
 use Modules\Cultural\Models\CulturalTerm;

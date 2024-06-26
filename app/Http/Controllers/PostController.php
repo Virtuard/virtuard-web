@@ -18,7 +18,7 @@ use App\Models\PostMedia;
 use App\Models\PostLike;
 use App\Models\PostComment;
 use App\Models\Story;
-use App\Models\RefIpanorama;
+use App\Models\Ipanorama;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
@@ -66,7 +66,7 @@ class PostController extends Controller
         
         $memberCount = User::count();
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where([
+        $dataIpanorama = Ipanorama::where([
             ['user_id', $idUser],
             ['status', 'publish'],
         ])->get();

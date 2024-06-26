@@ -9,12 +9,6 @@ use Modules\Core\Events\CreatedServicesEvent;
 use Modules\Core\Events\UpdatedServiceEvent;
 use Modules\Core\Models\Attributes;
 use Modules\Hotel\Hook;
-use App\Models\Ipanorama;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\CategoryProduct;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProductCategory;
 use Modules\Location\Models\Location;
 use Modules\Hotel\Models\Hotel;
 use Modules\Hotel\Models\HotelCategory;
@@ -261,9 +255,7 @@ class HotelController extends AdminController
         if ($request->input('slug')) {
             $row->slug = $request->input('slug');
         }
-
-        $inpCategoryProduct = $request->input('categoryProd');
-
+        
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
 
         if ($res) {
@@ -274,28 +266,9 @@ class HotelController extends AdminController
 
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Hotel updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('hotel.admin.edit', $row->id))->with('success', __('Hotel created'));
             }
         }

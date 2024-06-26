@@ -16,9 +16,6 @@ use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
 use Modules\Booking\Models\Booking;
 use Modules\User\Models\Plan;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\ProductCategory;
 use Modules\Boat\Models\BoatCategory;
 
 class ManageBoatController extends FrontendController
@@ -209,28 +206,9 @@ class ManageBoatController extends FrontendController
 
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Boat updated') );
             }else{
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('boat.vendor.edit',['id'=>$row->id]))->with('success', __('Boat created') );
             }
         }

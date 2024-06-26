@@ -12,8 +12,6 @@ use Modules\Tour\Hook;
 use Modules\Tour\Models\Tour;
 use Modules\Tour\Models\TourCategory;
 use Modules\Tour\Models\TourTranslation;
-use App\Models\RefIpanorama;
-use App\Models\ProductCategory;
 use Modules\Location\Models\Location;
 use Modules\Core\Models\Attributes;
 use Modules\Tour\Models\TourTerm;

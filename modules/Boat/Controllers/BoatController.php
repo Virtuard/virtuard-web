@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 use Modules\Location\Models\Location;
 use Modules\Review\Models\Review;
 use Modules\Core\Models\Attributes;
-use App\Models\Ipanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\RefIpanorama;
 use DB;
 
 class BoatController extends Controller
@@ -105,20 +102,9 @@ class BoatController extends Controller
         }
         $review_list = $row->getReviewList();
 
-        $dataIpanorama = RefRelationIpanorama::where('slug', $slug)
-        ->join('ref_add_ipanorama', 'ref_relation_ipanorama.id_ipanorama', '=', 'ref_add_ipanorama.id')
-        ->first();
-
-        if($dataIpanorama) {
-            $dataIpanorama = $dataIpanorama->code;
-        }else{
-            $dataIpanorama = null;
-        }
-
         $data = [
             'row'          => $row,
             'translation'       => $translation,
-            'ipanorama' => $dataIpanorama,
             'boat_related' => $boat_related,
             'booking_data' => $row->getBookingData(),
             'review_list'  => $review_list,

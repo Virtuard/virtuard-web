@@ -1,7 +1,7 @@
 <?php
 namespace App;
 
-use App\Models\RefIpanorama;
+use App\Models\Ipanorama;
 use App\Traits\HasStatus;
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
@@ -300,6 +300,6 @@ class BaseModel extends Model
     }
 
     public function ipanorama(){
-        return $this->belongsTo(RefIpanorama::class,'ipanorama_id');
+        return $this->belongsTo(Ipanorama::class,'ipanorama_id');
     }
 }

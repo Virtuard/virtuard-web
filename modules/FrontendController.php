@@ -2,7 +2,7 @@
 namespace Modules;
 
 use App\Http\Controllers\Controller;
-use App\Models\SubscribeVirtuard;
+
 use Illuminate\Support\Facades\Auth;
 
 class FrontendController extends Controller
@@ -19,19 +19,6 @@ class FrontendController extends Controller
                 abort(403);
             }
         }
-    }
-
-    public function checkVirtuard360()
-    {
-        $idUser = Auth::id();
-
-        $virtuard360 = SubscribeVirtuard::where('id_user', $idUser)->get();
-
-        $isVirtuard360 = false;
-
-        if(!empty($virtuard360) && isset($virtuard360[0])) $isVirtuard360 = true;
-
-        return $isVirtuard360;
     }
 
     public function hasPermission($permission)

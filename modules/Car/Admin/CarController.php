@@ -18,12 +18,6 @@ use Modules\Core\Events\CreatedServicesEvent;
 use Modules\Core\Events\UpdatedServiceEvent;
 use Modules\Core\Models\Attributes;
 use Modules\Location\Models\Location;
-use App\Models\Ipanorama;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\CategoryProduct;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProductCategory;
 
 class CarController extends AdminController
 {
@@ -254,28 +248,9 @@ class CarController extends AdminController
             do_action(Hook::AFTER_SAVING,$row,$request);
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Car updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('car.admin.edit', $row->id))->with('success', __('Car created'));
             }
         }

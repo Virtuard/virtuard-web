@@ -14,13 +14,6 @@ use Modules\Natural\Models\Natural;
 use Modules\Natural\Models\NaturalCategory;
 use Modules\Natural\Models\NaturalTranslation;
 use Modules\Location\Models\Location;
-use App\Models\Ipanorama;
-use App\Models\CategoryProduct;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProductCategory;
-
 
 class NaturalController extends AdminController
 {
@@ -250,28 +243,9 @@ class NaturalController extends AdminController
 
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Natural updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('natural.admin.edit', $row->id))->with('success', __('Natural created'));
             }
         }

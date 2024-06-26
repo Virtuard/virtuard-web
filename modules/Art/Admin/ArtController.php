@@ -18,12 +18,7 @@ use Modules\Art\Models\ArtTranslation;
 use Modules\Core\Models\Attributes;
 use Modules\Location\Models\Location;
 use Modules\Location\Models\LocationCategory;
-use App\Models\Ipanorama;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\CategoryProduct;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProductCategory;
+
 use Modules\Art\Models\ArtCategory;
 
 class ArtController extends AdminController
@@ -290,28 +285,9 @@ class ArtController extends AdminController
             }
             if ($id > 0) {
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success', __('Art updated'));
             } else {
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('art.admin.edit', $row->id))->with('success', __('Art created'));
             }
         }

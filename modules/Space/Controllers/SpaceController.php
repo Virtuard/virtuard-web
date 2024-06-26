@@ -8,9 +8,6 @@ use Illuminate\Http\Request;
 use Modules\Location\Models\Location;
 use Modules\Review\Models\Review;
 use Modules\Core\Models\Attributes;
-use App\Models\Ipanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\RefIpanorama;
 use DB;
 
 class SpaceController extends Controller

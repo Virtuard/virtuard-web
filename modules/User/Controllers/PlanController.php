@@ -11,7 +11,7 @@ use Modules\User\Events\UpdatePlanRequest;
 use Modules\User\Models\Plan;
 use Modules\User\Models\PlanPayment;
 use Modules\User\Models\UserPlan;
-use App\Models\SubscribeVirtuard;
+
 
 class PlanController extends FrontendController
 {
@@ -95,7 +95,6 @@ class PlanController extends FrontendController
     public function buyProcess(Request $request, $id)
     {
         $plan = Plan::find($id);
-        $subscribe = SubscribeVirtuard::where('id_user', \Auth::id())->first();
         if (!$plan) {
             return;
         }
@@ -199,14 +198,6 @@ class PlanController extends FrontendController
             $payment->user_id = auth()->id();
 
             $payment->save();
-
-            if (!$subscribe) {
-                $requestService = new SubscribeVirtuard();
-                $requestService->id_user = \Auth::id();
-                $requestService->status = 'PENDING';
-                $requestService->save();
-            }
-
             $payment->addMeta('user_request', $user->id);
             $payment->addMeta('annual', $is_annual);
 

@@ -16,9 +16,6 @@ use Modules\Core\Models\Attributes;
 use Modules\Booking\Models\Booking;
 use Modules\Flight\Models\FlightTerm;
 use Modules\User\Models\Plan;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\ProductCategory;
 
 class ManageFlightController extends FrontendController
 {
@@ -112,16 +109,9 @@ class ManageFlightController extends FrontendController
     public function createFlight(Request $request)
     {
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
-        $categories = ProductCategory::where('type', 'car')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
-
         $this->checkPermission('flight_create');
         $row = new $this->flightClass();
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'           => $row,
             'translation' => $row,
             'flight_location' => $this->locationClass::where("status","publish")->get()->toTree(),
@@ -204,28 +194,9 @@ class ManageFlightController extends FrontendController
 
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Flight updated') );
             }else{
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('flight.vendor.edit',['id'=>$row->id]))->with('success', __('Flight created') );
             }
         }
@@ -251,17 +222,12 @@ class ManageFlightController extends FrontendController
     {
         $this->checkPermission('flight_update');
         $user_id = Auth::id();
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
-        $isVirtuard360 = $this->checkVirtuard360();
         $row = $this->flightClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
             return redirect(route('flight.vendor.index'))->with('warning', __('Flight not found!'));
         }
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'translation'    => $row,
             'row'           => $row,
             'attributes'    => $this->attributesClass::where('service', 'flight')->get(),

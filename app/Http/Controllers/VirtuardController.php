@@ -2,25 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use Modules\Hotel\Models\Hotel;
-use Modules\Location\Models\LocationCategory;
-use Modules\Page\Models\Page;
-use Modules\News\Models\NewsCategory;
-use Modules\News\Models\Tag;
-use Modules\News\Models\News;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\SubscribeVirtuard;
-use App\Models\ProofSubscribeVirtuard;
-use App\Models\RefIpanorama;
-use Carbon\Carbon;
+use App\Models\Ipanorama;
 use Illuminate\Support\Str;
 
 class VirtuardController extends Controller
 {
-    protected $refIpanorama;
+    protected $panorama;
     /**
      * Create a new controller instance.
      *
@@ -28,7 +17,7 @@ class VirtuardController extends Controller
      */
     public function __construct()
     {
-        $this->refIpanorama = new RefIpanorama();
+        $this->panorama = new Ipanorama();
     }
 
     /**
@@ -39,7 +28,7 @@ class VirtuardController extends Controller
     public function vendorVirtuardIndex()
     {
         $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
+        $dataIpanorama = Ipanorama::where('user_id', $idUser)->get();
 
         return view('user.virtuard360.index', compact('dataIpanorama'));
     }
@@ -51,7 +40,7 @@ class VirtuardController extends Controller
 
     public function show($id)
     {
-        $panorama = RefIpanorama::find($id);
+        $panorama = Ipanorama::find($id);
 
         $data = [
             'panorama' => $panorama,
@@ -63,7 +52,7 @@ class VirtuardController extends Controller
     public function vendorVirtuardEdit(Request $request)
     {
         if($request->id){
-            $panorama = RefIpanorama::find($request->id);
+            $panorama = Ipanorama::find($request->id);
         }
 
         $data = [
@@ -75,56 +64,13 @@ class VirtuardController extends Controller
 
     public function vendorVirtuardDelete($id)
     {
-        $ipanorama = RefIpanorama::find($id);
+        $ipanorama = Ipanorama::find($id);
 
         if ($ipanorama) {
             $ipanorama->delete();
             return redirect()->back()->with('success', 'Delete successful');
         } else {
             return redirect()->back()->with('error', 'Record not found or you do not have permission to delete');
-        }
-    }
-
-    public function adminVirtuardIndex()
-    {
-        $data = SubscribeVirtuard::join('users', 'subscribe_virtuard.id_user', '=', 'users.id')
-            ->select('subscribe_virtuard.*', 'users.name', 'users.email')
-            ->get();
-
-        return view('admin.virtuard360.index', compact('data'));
-    }
-
-    public function submissionService(Request $request)
-    {
-
-        try {
-            // Validasi request, pastikan file yang diunggah adalah gambar
-            $request->validate([
-                'proof' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            $dateNow = Carbon::now();
-
-            $proofImage = $request->file('proof');
-
-            $path = $proofImage->store('public/images/proof');
-
-            $idUser = Auth::id();
-            $requestService = new SubscribeVirtuard();
-            $requestService->id_user = $idUser;
-            $requestService->status = "PENDING";
-            $requestService->save();
-
-            $subscription = new ProofSubscribeVirtuard();
-            $subscription->id_subscribe = $requestService->id;
-            $subscription->date = $dateNow;
-            $subscription->proof_url = $path;
-            $subscription->save();
-
-            return back()->with('success', 'Insert successfully');
-        } catch (\Exception $e) {
-            // Menangani eksepsi yang mungkin terjadi
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -136,7 +82,7 @@ class VirtuardController extends Controller
 
         $idUser = Auth::id();
 
-        $ipanorama = new RefIpanorama();
+        $ipanorama = new Ipanorama();
         $ipanorama->id_user = $idUser;
         $ipanorama->title = $request->input('title');
         $ipanorama->status = 'draft';
@@ -167,37 +113,6 @@ class VirtuardController extends Controller
         return back()->with('success', 'Insert successfully');
     }
 
-    public function validateService(Request $request)
-    {
-        try {
-            $param = $request->input('param');
-            $id = $request->input('id');
-
-            $dateNow = Carbon::now();
-            $dateOneMonthLater = $dateNow->copy()->addMonth(1);
-
-            $subscription = SubscribeVirtuard::where('id', $id)->first();
-
-            if ($subscription) {
-                if ($param === 'SUCCESS') {
-                    $subscription->status = $param;
-                    $subscription->start_date = $dateNow;
-                    $subscription->expired_date = $dateOneMonthLater;
-                    $subscription->save();
-                } else {
-                    $subscription->status = $param;
-                    $subscription->save();
-                }
-
-                return back()->with('success', 'Update successfully');
-            } else {
-                return back()->with('error', 'Record not found');
-            }
-        } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
-    }
-
     public function vendorVirtuardAddApi(Request $request)
     {
         $attr = json_decode($request->getContent());
@@ -215,7 +130,7 @@ class VirtuardController extends Controller
         $jsonData->config->autoLoad = true;
         $jsonData = json_encode($jsonData);
 
-        $panorama = RefIpanorama::find($id);
+        $panorama = Ipanorama::find($id);
         $panorama->json_data = $jsonData;
         $panorama->save();
 
@@ -241,7 +156,7 @@ class VirtuardController extends Controller
 
         $id = $request->id;
 
-        $panorama = RefIpanorama::find($id);
+        $panorama = Ipanorama::find($id);
         $panorama->update($attr);
 
         return response()->json([
@@ -254,29 +169,10 @@ class VirtuardController extends Controller
 
     public function vendorVirtuardAjaxGetApi(Request $request)
     {
-        // $data = json_decode($request->getContent());
-        // $id = $data->id;
-
-        // $virtuard = RefIpanorama::where('id', $id)->first();
-
-        // if ($data === null) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'Gagal mendekode data JSON',
-        //     ], 400);
-        // 
-
-        // return response()->json([
-        //     'status' => 'success',
-        //     'message' => 'Data berhasil diproses',
-        //     'data' => $virtuard,
-        //     'id' => $id,
-        // ]);
-
         $idItem = $request->query('id'); // Mendapatkan nilai 'id' dari parameter query
 
         // Mencari data berdasarkan 'id'
-        $virtuard = RefIpanorama::find($idItem);
+        $virtuard = Ipanorama::find($idItem);
 
         if (!$virtuard) {
             return response()->json([
@@ -307,7 +203,7 @@ class VirtuardController extends Controller
     public function bulkEdit($id , Request $request){
         $action = $request->input('action');
         $user_id = Auth::id();
-        $query = $this->refIpanorama::where("user_id", $user_id)->where("id", $id)->first();
+        $query = $this->panorama::where("user_id", $user_id)->where("id", $id)->first();
         if (empty($id)) {
             return redirect()->back()->with('error', __('No item!'));
         }

@@ -19,13 +19,7 @@
     use Modules\Location\Models\LocationCategory;
     use Modules\Flight\Models\Flight;
     use Modules\Flight\Models\FlightTerm;
-    use App\Models\Ipanorama;
-    use App\Models\RefIpanorama;
-    use App\Models\RefRelationIpanorama;
-    use App\Models\CategoryProduct;
-    use App\Models\SubscribeVirtuard;
-    use App\Models\ProductCategory;
-
+    
     class FlightController extends AdminController
     {
         protected $space;
@@ -133,19 +127,12 @@
 
     public function create(Request $request)
     {
-        $idUser = Auth::id();
-        $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
-        $categories = ProductCategory::where('type', 'flight')->get();
-
-        $isVirtuard360 = $this->checkVirtuard360();
         $this->checkPermission('flight_create');
         $row = new $this->flight();
         $row->fill([
             'status' => 'publish'
         ]);
         $data = [
-            'isVirtuard360' => $isVirtuard360,
-            'dataIpanorama' => $dataIpanorama,
             'row'            => $row,
             'attributes'     => $this->attributes::where('service', 'flight')->get(),
             'translation'    => $row,
@@ -166,10 +153,6 @@
 
         public function edit(Request $request, $id)
         {
-            $idUser = Auth::id();
-            $dataIpanorama = RefIpanorama::where('user_id', $idUser)->get();
-
-            $isVirtuard360 = $this->checkVirtuard360();
             $this->checkPermission('flight_update');
             $row = $this->flight::with(['airline','airportTo','airportFrom'])->find($id);
             if (empty($row)) {
@@ -181,8 +164,6 @@
                 }
             }
             $data = [
-                'isVirtuard360' => $isVirtuard360,
-                'dataIpanorama' => $dataIpanorama,
                 'row'               => $row,
                 "selected_terms"    => $row->terms->pluck('term_id'),
                 'attributes'        => $this->attributes::where('service', 'flight')->get(),

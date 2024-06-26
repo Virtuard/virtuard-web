@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ProductCategory;
 use Modules\Art\Models\Art;
 use Modules\Space\Models\Space;
 use Modules\Boat\Models\Boat;
@@ -23,7 +22,6 @@ class ExploreController extends Controller
     protected $cultural;
     protected $art;
     protected $event;
-    protected $productCategory;
 
     public function __construct()
     {
@@ -35,7 +33,6 @@ class ExploreController extends Controller
         $this->natural = new Natural();
         $this->art = new Art();
         $this->event = new Event();
-        $this->productCategory = new ProductCategory();
     }
 
     public function index(Request $request)

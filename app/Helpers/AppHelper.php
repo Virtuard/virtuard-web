@@ -2,7 +2,6 @@
 use Modules\Core\Models\Settings;
 use App\Currency;
 use App\Models\FollowUser;
-use App\Models\SubscribeVirtuard;
 use App\Models\UserPost;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -1381,20 +1380,6 @@ if (!function_exists('checkMenuVendor')) {
     {
         $status = false;
         if (isset($menu['id']) && in_array($menu['id'], getMenuVendorPlan())) $status = true;
-        return $status;
-    }
-}
-
-if (!function_exists('checkUserSubscriber')) {
-    function checkUserSubscriber()
-    {
-        $status = false;
-
-        $userId = auth()->user()->id;
-        $subscribe = SubscribeVirtuard::where('id_user', $userId)->first();
-
-        if(!empty($subscribe)) $status = true;
-
         return $status;
     }
 }

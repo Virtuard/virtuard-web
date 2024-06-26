@@ -18,12 +18,6 @@ use Modules\Location\Models\LocationCategory;
 use Modules\Business\Models\Business;
 use Modules\Business\Models\BusinessTerm;
 use Modules\Business\Models\BusinessTranslation;
-use App\Models\Ipanorama;
-use App\Models\RefIpanorama;
-use App\Models\RefRelationIpanorama;
-use App\Models\SubscribeVirtuard;
-use App\Models\CategoryProduct;
-use App\Models\ProductCategory;
 use Modules\Business\Models\BusinessCategory;
 
 class BusinessController extends AdminController
@@ -279,28 +273,9 @@ class BusinessController extends AdminController
 
             if($id > 0 ){
                 event(new UpdatedServiceEvent($row));
-
-                $ipanoramaInp = RefRelationIpanorama::where('slug', '=', $row->slug)->first();
-
-                if ($ipanoramaInp) {
-                    $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInp->save();
-                } else {
-                    $ipanoramaInpNew = new RefRelationIpanorama();
-                    $ipanoramaInpNew->id_ipanorama = $request->input('div-ipanorama');
-                    $ipanoramaInpNew->slug = $row->slug;
-                    $ipanoramaInpNew->save();
-                }
-
                 return back()->with('success',  __('Business updated') );
             }else{
                 event(new CreatedServicesEvent($row));
-
-                $ipanoramaInp = new RefRelationIpanorama();
-                $ipanoramaInp->id_ipanorama = $request->input('div-ipanorama');
-                $ipanoramaInp->slug = $row->slug;
-                $ipanoramaInp->save();
-
                 return redirect(route('business.admin.edit',$row->id))->with('success', __('Business created') );
             }
         }

@@ -2,7 +2,7 @@
 
 namespace Modules\Booking\Gateways;
 
-use App\Models\SubscribeVirtuard;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Mockery\Exception;
@@ -10,9 +10,6 @@ use Modules\Booking\Events\BookingCreatedEvent;
 use Modules\Booking\Gateways\BaseGateway;
 use Modules\Booking\Models\Booking;
 use Modules\Booking\Models\Payment;
-use Modules\User\Models\Subscriber;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class StripeCheckoutGateway extends BaseGateway
 {
@@ -85,7 +82,6 @@ class StripeCheckoutGateway extends BaseGateway
     public function process(Request $request, $booking, $service)
     {
         $this->setupStripe();
-        $idUser = Auth::id();
 
         if (in_array($booking->status, [$booking::PAID, $booking::COMPLETED, $booking::CANCELLED])) {
             throw new Exception(__('Booking status does need to be paid'));
@@ -315,9 +311,6 @@ class StripeCheckoutGateway extends BaseGateway
                 $payment->status = 'completed';
                 $payment->logs = \GuzzleHttp\json_encode($paymentIntent);
                 $payment->save();
-
-                $subscribe = SubscribeVirtuard::where('id_user', \Auth::id())->first();
-                $subscribe->update('status', 'SUCCESS');
                 break;
             default:
                 return response()->json(['message' => __('Received unknown event type')], 400);
@@ -359,9 +352,6 @@ class StripeCheckoutGateway extends BaseGateway
         $request = \request();
         $c = $request->query('pid');
         $payment = Payment::where('code', $c)->first();
-        $subscribe = SubscribeVirtuard::where('id_user', \Auth::id())->first();
-        $dateNow = Carbon::now();
-        $dateOneMonthLater = $dateNow->copy()->addMonth(1);
 
         if (!empty($payment) and in_array($payment->status, ['draft'])) {
             $this->setupStripe();
@@ -374,11 +364,6 @@ class StripeCheckoutGateway extends BaseGateway
                 return [false];
             }
             if ($session->payment_status == 'paid') {
-                $subscribe->update([
-                    'status' => 'SUCCESS',
-                    'start_date' => $dateNow,
-                    'expired_date' => $dateOneMonthLater,
-                ]);
                 return $payment->markAsCompleted($session);
             } else {
                 return $payment->markAsFailed($session);
