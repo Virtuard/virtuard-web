@@ -84,17 +84,17 @@ class ListAllService extends BaseBlock
         $list = [
             [
                 'name' => 'Accomodation',
-                'image' => 'uploads/demo/service/accomodation.jpg',
+                'image' => 'uploads/images/accomodation.jpg',
                 'link' => route('hotel.search'),
             ],
             [
                 'name' => 'Property',
-                'image' => 'uploads/demo/service/property.jpg',
+                'image' => 'uploads/images/property.jpg',
                 'link' => route('space.search'),
             ],
             [
                 'name' => 'Business',
-                'image' => 'uploads/demo/service/business.jpg',
+                'image' => 'uploads/images/business.jpg',
                 'link' => route('business.search'),
             ],
             [
@@ -104,7 +104,7 @@ class ListAllService extends BaseBlock
             ],
             [
                 'name' => 'hide',
-                'image' => '/uploads/0000/11/2023/07/20/virtuard.png',
+                'image' => '/uploads/images/virtuard.png',
                 'link' => '/',
             ],
             [
@@ -114,17 +114,17 @@ class ListAllService extends BaseBlock
             ],
             [
                 'name' => 'Cutural Heritage',
-                'image' => 'uploads/demo/service/cultural.jpg',
+                'image' => 'uploads/images/cultural.jpg',
                 'link' => route('cultural.search'),
             ],
             [
                 'name' => 'Natural and Landscape',
-                'image' => 'uploads/demo/service/natural.jpg',
+                'image' => 'uploads/images/natural.jpg',
                 'link' => route('natural.search'),
             ],
             [
                 'name' => 'Rendering and Art',
-                'image' => 'uploads/demo/service/art.jpg',
+                'image' => 'uploads/images/art.jpg',
                 'link' => route('art.search'),
             ],
         ];
