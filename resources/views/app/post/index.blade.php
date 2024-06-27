@@ -643,8 +643,9 @@
 @endpush
 
 @push('js')
-    @include('partials.ipanorama.ipanorama-js')
     <script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
+    <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
     <script type="text/javascript" src="{{asset('libs/fotorama/fotorama.js')}}"></script>
     <script>
         function feedShow() {
