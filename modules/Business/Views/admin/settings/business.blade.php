@@ -102,7 +102,7 @@
                         {!! \Modules\Media\Helpers\FileHelper::fieldUpload('business_icon_marker_map',$settings['business_icon_marker_map'] ?? "") !!}
                     </div>
                 </div>
-                @php do_action(\Modules\Business\Hook::SPACE_SETTING_AFTER_MAP) @endphp
+                @php do_action(\Modules\Business\Hook::BUSINESS_SETTING_AFTER_MAP) @endphp
                 @endif
             </div>
         </div>
