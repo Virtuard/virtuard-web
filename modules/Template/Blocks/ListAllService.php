@@ -104,7 +104,7 @@ class ListAllService extends BaseBlock
             ],
             [
                 'name' => 'hide',
-                'image' => '/uploads/0000/11/2023/07/20/virtuard.png',
+                'image' => '/uploads/images/virtuard.png',
                 'link' => '/',
             ],
             [
