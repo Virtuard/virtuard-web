@@ -2,7 +2,7 @@
 $translation = $service->translate();
 $lang_local = app()->getLocale();
 ?>
-<div class="b-panel-title">{{__('Event information')}}</div>
+<div class="b-panel-title">{{__('Art information')}}</div>
 <div class="b-table-wrap">
     <table class="b-table" cellspacing="0" cellpadding="0">
         <tr>
@@ -26,7 +26,7 @@ $lang_local = app()->getLocale();
             </tr>
         @endif
         <tr>
-            <td class="label">{{__('Event name')}}</td>
+            <td class="label">{{__('Art name')}}</td>
             <td class="val">
                 <a href="{{$service->getDetailUrl()}}">{!! clean($translation->title) !!}</a>
             </td>

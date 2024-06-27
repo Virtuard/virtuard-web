@@ -16,7 +16,7 @@
                         </div>
                         <div class="g-items">
                             @php
-                            $event_map_search_fields = setting_item_array('event_map_search_fields');
+                            $art_map_search_fields = setting_item_array('art_map_search_fields');
                             $types = [
                                 'location'=>__("Location"),
                                 'attr'=>__("Attribute"),
@@ -24,20 +24,20 @@
                                 'price'=>__("Price"),
                                 'advance'=>__("Advance"),
                             ];
-                            $attrs = \Modules\Core\Models\Attributes::where('service', 'event')->get();
+                            $attrs = \Modules\Core\Models\Attributes::where('service', 'art')->get();
                             @endphp
-                            @foreach($event_map_search_fields as $key=>$item)
+                            @foreach($art_map_search_fields as $key=>$item)
                                 <div class="item" data-number="{{$key}}">
                                     <div class="row">
                                         <div class="col-md-7">
-                                            <select name="event_map_search_fields[{{$key}}][field]" class="custom-select">
+                                            <select name="art_map_search_fields[{{$key}}][field]" class="custom-select">
                                                 <option value="">{{__("-- Select field type --")}}</option>
                                                 @foreach($types as $type=>$name)
                                                     <option @if($item['field'] == $type) selected @endif value="{{$type}}">{{$name}}</option>
                                                 @endforeach
                                             </select>
                                             <br>
-                                            <select name="event_map_search_fields[{{$key}}][attr]" class="mt-2 custom-select">
+                                            <select name="art_map_search_fields[{{$key}}][attr]" class="mt-2 custom-select">
                                                 <option value="">{{__("-- Select Attribute --")}}</option>
                                                 @foreach($attrs as $attr)
                                                     <option @if($item['attr'] == $attr->id) selected @endif value="{{$attr->id}}">{{$attr->name}}</option>
@@ -47,7 +47,7 @@
 
                                         </div>
                                         <div class="col-md-4">
-                                            <input type="number" name="event_map_search_fields[{{$key}}][position]" min="0" value="{{$item['position'] ?? 0}}" class="form-control">
+                                            <input type="number" name="art_map_search_fields[{{$key}}][position]" min="0" value="{{$item['position'] ?? 0}}" class="form-control">
                                         </div>
                                         <div class="col-md-1">
                                             <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
@@ -63,13 +63,13 @@
                             <div class="item" data-number="__number__">
                                 <div class="row">
                                     <div class="col-md-7">
-                                        <select __name__="event_map_search_fields[__number__][field]" class="custom-select">
+                                        <select __name__="art_map_search_fields[__number__][field]" class="custom-select">
                                             <option value="">{{__("-- Select field type --")}}</option>
                                             @foreach($types as $type=>$name)
                                                 <option value="{{$type}}">{{$name}}</option>
                                             @endforeach
                                         </select>
-                                        <select __name__="event_map_search_fields[__number__][attr]" class=" mt-2  custom-select">
+                                        <select __name__="art_map_search_fields[__number__][attr]" class=" mt-2  custom-select">
                                             <option value="">{{__("-- Select Attribute --")}}</option>
                                             @foreach($attrs as $attr)
                                                 <option value="{{$attr->id}}">{{$attr->name}}</option>
@@ -77,7 +77,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-4">
-                                        <input type="number" __name__="event_map_search_fields[__number__][position]" min="0"  class="form-control">
+                                        <input type="number" __name__="art_map_search_fields[__number__][position]" min="0"  class="form-control">
                                     </div>
                                     <div class="col-md-1">
                                         <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>

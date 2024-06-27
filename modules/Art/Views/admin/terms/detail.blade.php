@@ -20,7 +20,7 @@
                         <div class="panel">
                             <div class="panel-title"><strong>{{__("Term Content")}}</strong></div>
                             <div class="panel-body">
-                                @include('Event::admin.terms.form')
+                                @include('Art::admin.terms.form')
                             </div>
                         </div>
                     </div>
