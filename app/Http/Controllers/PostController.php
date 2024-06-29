@@ -105,8 +105,16 @@ class PostController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'media_user.*' => 'nullable|mimes:jpeg,png,mp4|max:5000',
+        ], [
+            'media_user.*.mimes' => 'File extention denied',
+            'media_user.*.max' => 'Maximum upload file 5MB'
+        ]);
+
         DB::beginTransaction();
         try {
+        
 
         $dataPost = [
             'user_id' =>  auth()->user()->id,

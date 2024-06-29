@@ -35,6 +35,11 @@ class StoryController extends Controller
      */
     public function addStory(Request $request)
     {
+        try{
+        $this->validate($request, [
+            'media' => 'required|mimes:jpeg,png,mp4|max:5000',
+        ]);
+
         $idUser = Auth::id();
 
         // Periksa apakah file media telah diunggah
@@ -54,9 +59,15 @@ class StoryController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Data berhasil diproses',
+            'message' => 'Add story successfully',
             'data' => $request->all(),
         ]);
+        }catch(\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Someting wrong. Add story error!',
+            ]);
+        }
     }
 
     public function getStory()

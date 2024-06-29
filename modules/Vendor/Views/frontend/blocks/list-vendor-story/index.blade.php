@@ -74,7 +74,7 @@
                             <label for="media">Story Media</label>
                             <input type="file" class="form-control" name="media" id="media"
                                 aria-describedby="mediaHelp">
-                            <small id="mediaHelp" class="form-text text-muted">Recommended sizes: 1080x1920 px.</small>
+                            <small id="mediaHelp" class="form-text text-muted">Recommended size: 1080x1920px and max 5MB.</small>
                         </div>
                     </form>
                 </div>
@@ -211,6 +211,7 @@
                     return response.json();
                 })
                 .then(function(data) {
+                    if (data.status == 'success') {
                     // Tampilkan SweetAlert ketika berhasil
                     Swal.fire({
                         icon: 'success',
@@ -227,6 +228,13 @@
 
                     // Reload the page
                     location.reload();
+                    }else {
+                        Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Somtehing wrong. Add story error!',
+                    });
+                    }
                 })
 
                 .catch(function(error) {
