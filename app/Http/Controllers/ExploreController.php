@@ -71,7 +71,8 @@ class ExploreController extends Controller
         $searchs = $this->getSearch($req);
 
         foreach ($searchs as $key => $search) {
-            $listings[$key] = $searchs[$key]->paginate(50);
+            // $listings[$key] = $searchs[$key]->paginate(50);
+            $listings[$key] = $searchs[$key]->get();
         }
 
         $data = [];
