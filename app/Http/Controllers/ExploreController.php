@@ -57,7 +57,7 @@ class ExploreController extends Controller
         $req = $request->all();
         $data = $this->formatSearch($req);
 
-        $html = view('explore.partials.content', compact('data'))->render();
+        $html = view('app.explore.partials.content', compact('data'))->render();
         return response()->json([
             'status' => true,
             'message' => 'success',
