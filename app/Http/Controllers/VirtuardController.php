@@ -83,7 +83,7 @@ class VirtuardController extends Controller
         $idUser = Auth::id();
 
         $ipanorama = new Ipanorama();
-        $ipanorama->id_user = $idUser;
+        $ipanorama->user_id = $idUser;
         $ipanorama->title = $request->input('title');
         $ipanorama->status = 'draft';
         $ipanorama->save();
