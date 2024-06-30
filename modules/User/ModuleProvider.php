@@ -144,7 +144,7 @@ class ModuleProvider extends ModuleServiceProvider
         }
 
         if(setting_item('inbox_enable')) {
-            $count = auth()->user()->unseen_message_count;
+            $count = auth()->user()->unseen_message_count ?? 0;
             $res['chat'] = [
                 'position' => 90,
                 'icon' => 'fa fa-comments',
