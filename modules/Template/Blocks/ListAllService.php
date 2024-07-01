@@ -83,47 +83,47 @@ class ListAllService extends BaseBlock
     {
         $list = [
             [
-                'name' => 'Accomodation',
+                'name' => __('Accomodation'),
                 'image' => 'uploads/images/accomodation.jpg',
                 'link' => route('hotel.search'),
             ],
             [
-                'name' => 'Property',
+                'name' => __('Property'),
                 'image' => 'uploads/images/property.jpg',
                 'link' => route('space.search'),
             ],
             [
-                'name' => 'Business',
+                'name' => __('Business'),
                 'image' => 'uploads/images/business.jpg',
                 'link' => route('business.search'),
             ],
             [
-                'name' => 'Vehicle',
+                'name' => __('Vehicle'),
                 'image' => '/uploads/demo/boat/boat-5.jpg',
                 'link' => route('boat.search'),
             ],
             [
-                'name' => 'hide',
+                'name' => __('hide'),
                 'image' => '/uploads/images/virtuard.png',
                 'link' => '/',
             ],
             [
-                'name' => 'Event',
+                'name' => __('Event'),
                 'image' => '/uploads/demo/event/event-6.jpg',
                 'link' => route('event.search'),
             ],
             [
-                'name' => 'Cutural Heritage',
+                'name' => __('Cutural'),
                 'image' => 'uploads/images/cultural.jpg',
                 'link' => route('cultural.search'),
             ],
             [
-                'name' => 'Natural and Landscape',
+                'name' => __('Natural'),
                 'image' => 'uploads/images/natural.jpg',
                 'link' => route('natural.search'),
             ],
             [
-                'name' => 'Rendering and Art',
+                'name' => __('Rendering'),
                 'image' => 'uploads/images/art.jpg',
                 'link' => route('art.search'),
             ],
