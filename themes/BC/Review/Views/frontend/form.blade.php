@@ -53,13 +53,19 @@
                             <div class="media">
                                 <div class="media-left">
                                     @if($avatar_url = $userInfo->getAvatarUrl())
+                                    <a href="{{ $userInfo->id ? route('user.profile', $userInfo->id) : '' }}">
                                         <img class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
+                                    </a>
                                     @else
+                                    <a href="{{ $userInfo->id ? route('user.profile', $userInfo->id) : '' }}">
                                         <span class="avatar-text">{{ucfirst($userInfo->getDisplayName()[0])}}</span>
+                                    </a>
                                     @endif
                                 </div>
                                 <div class="media-body">
+                                    <a href="{{ $userInfo->id ? route('user.profile', $userInfo->id) : '' }}">
                                     <h4 class="media-heading">{{$userInfo->getDisplayName()}}</h4>
+                                    </a>
                                     <div class="date">{{display_datetime($item->created_at)}}</div>
                                 </div>
                             </div>

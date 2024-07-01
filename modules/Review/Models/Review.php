@@ -20,7 +20,10 @@ class Review extends BaseModel
         'rate_number',
         'author_ip',
         'status',
-        'vendor_id'
+        'vendor_id',
+        'author_id',
+        'create_user',
+        'update_user',
     ];
 
     /**

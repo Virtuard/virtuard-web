@@ -125,7 +125,9 @@ class ReviewController extends Controller
             "rate_number"  => $rate ?? 0,
             "author_ip"    => $request->ip(),
             "status"       => !$module->getReviewApproved() ? "approved" : "pending",
-            'vendor_id'     =>$module->author_id
+            'vendor_id'     =>$module->author_id,
+            'author_id' => auth()->user()->id,
+            'create_user' => auth()->user()->id,
         ]);
         if ($review->save()) {
             if (!empty($metaReview)) {
