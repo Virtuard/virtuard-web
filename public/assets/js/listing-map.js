@@ -26,7 +26,7 @@ function initMap() {
 
     map = new google.maps.Map(document.getElementById('gmap'), {
         center: { lat: 0, lng: 0 },
-        zoom: 1,
+        zoom: 3,
     });
 
     // add merker to map
