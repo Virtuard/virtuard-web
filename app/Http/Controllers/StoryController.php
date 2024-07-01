@@ -37,7 +37,7 @@ class StoryController extends Controller
     {
         try{
         $this->validate($request, [
-            'media' => 'required|mimes:jpeg,png,mp4|max:5000',
+            'media' => 'required|mimes:jpeg,png,mp4|max:20000',
         ]);
 
         $idUser = Auth::id();
