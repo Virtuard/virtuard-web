@@ -17,6 +17,7 @@
                 @endif
             @endif
         </a>
+        @if ($row->display_price == 0)
         <div class="price-wrapper">
             <div class="price">
                 <span class="onsale">{{ $row->display_sale_price }}</span>
@@ -30,6 +31,7 @@
                 </span>
             </div>
         </div>
+        @endif
         <div class="service-wishlist {{$row->isWishList()}}" data-id="{{$row->id}}" data-type="{{$row->type}}">
             <i class="fa fa-heart"></i>
         </div>

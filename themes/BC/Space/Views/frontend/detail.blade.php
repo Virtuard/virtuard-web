@@ -40,7 +40,9 @@
                 </div>
             </div>
         </div>
+        @if($row->author->checkUserPlan())
         @include('Space::frontend.layouts.details.space-form-book-mobile')
+        @endif
     </div>
 @endsection
 

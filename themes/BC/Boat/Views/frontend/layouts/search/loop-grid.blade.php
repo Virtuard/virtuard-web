@@ -87,6 +87,7 @@
             </span>
         @endif
     </div>
+    @if ($row->display_price == 0)
     <div class="info">
         <div class="g-price">
             <div class="prefix">
@@ -97,4 +98,5 @@
             </div>
         </div>
     </div>
+    @endif
 </div>

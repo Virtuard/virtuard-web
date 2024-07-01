@@ -61,6 +61,7 @@
             {{ __("Start Time: :time",['time'=>$time]) }}
         </div>
     @endif
+    @if ($row->display_price == 0)
     <div class="info">
         <div class="duration">
             {{duration_format($row->duration)}}
@@ -75,4 +76,5 @@
             </div>
         </div>
     </div>
+    @endif
 </div>

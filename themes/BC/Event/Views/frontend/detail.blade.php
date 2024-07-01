@@ -40,7 +40,9 @@
                 </div>
             </div>
         </div>
+        @if($row->author->checkUserPlan())
         @include('Event::frontend.layouts.details.form-book-mobile')
+        @endif
     </div>
 @endsection
 
