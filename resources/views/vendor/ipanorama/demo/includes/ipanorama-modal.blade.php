@@ -10,9 +10,13 @@
                  </button>
              </div>
              <div class="modal-body">
+                @if ($post->ipanorama && $post->ipanorama->status == 'publish' and $post->ipanorama->author->checkUserPlanStatus())
                  <div id="mypanorama" class="load-panorama"
                      style=" position: relative; width: 100%; height: 450px; z-index: 1;">
                  </div>
+                 @else
+                 <p class="text-center">{{ __("If you don't preview the 360 tour. The uploader does not have a subscription plan or the subscription has expired.") }}</p>
+                 @endif
              </div>
              <div class="modal-footer">
                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -22,20 +26,21 @@
  </div>
 
  @push('js')
-     <script>
-         $(document).ready(function() {
-             previewPanorama();
-         });
+    <script>
+        $(document).ready(function() {
+            previewPanorama();
+        });
 
-         function previewPanorama() {
-             $('.preview-panorama').click(function() {
-                 let panoramaCode = $(this).data('code');
-                 panoramaCode = JSON.stringify(panoramaCode);
-                 panoramaCode = panoramaCode.replaceAll(`upload/`, '/uploads/ipanoramaBuilder/upload/');
-                 panoramaCode = JSON.parse(panoramaCode)
-                 $(`#mypanorama`).ipanorama(panoramaCode);
-                 $('#panoramaModal').modal('toggle');
-             })
-         }
-     </script>
+        function previewPanorama() {
+            $('.preview-panorama').click(function() {
+                let panoramaCode = $(this).data('code');
+                let userId = $(this).data('user_id');
+                panoramaCode = JSON.stringify(panoramaCode);
+                panoramaCode = panoramaCode.replaceAll(`upload/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);
+                panoramaCode = JSON.parse(panoramaCode)
+                $(`#mypanorama`).ipanorama(panoramaCode);
+                $('#panoramaModal').modal('toggle');
+            })
+        }
+    </script>
  @endpush

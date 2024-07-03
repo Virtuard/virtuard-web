@@ -196,8 +196,8 @@
                                             <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
                                             class="thumb-panorama preview-panorama cursor-pointer"
                                             data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}"
+                                            data-user_id="{{ $post->ipanorama->user_id }}"
                                             >
-                                            {{-- <div class="icon-panorama"></div> --}}
                                         </div>
                                     </div>
                             @endif      

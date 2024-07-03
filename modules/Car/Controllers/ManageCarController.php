@@ -186,11 +186,6 @@ class ManageCarController extends FrontendController
         ];
 
         $row->fillByAttr($dataKeys,$request->input());
-
-        if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
-            return redirect(route('user.plan'));
-        }
-
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
 
         if ($res) {
@@ -293,9 +288,7 @@ class ManageCarController extends FrontendController
                 $query->status = "draft";
                 break;
             case "make-publish":
-                if(!auth()->user()->checkUserPlan()) {
-                    return redirect(route('user.plan'));
-                }
+                
                 $query->status = "publish";
                 break;
         }

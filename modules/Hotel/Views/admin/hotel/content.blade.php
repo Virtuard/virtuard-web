@@ -2,9 +2,9 @@
     <div class="panel-title"><strong>{{ __('Accomodation Content') }}</strong></div>
     <div class="panel-body">
         <div class="form-group">
-            <label>{{ __('Title') }}</label>
+            <label>{{ __('Title') }} <span class="text-danger">*</span></label>
             <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Name of the accomodation') }}"
-                name="title" class="form-control">
+                name="title" class="form-control" required>
         </div>
         <div class="form-group">
             <label class="control-label">{{ __('Content') }}</label>

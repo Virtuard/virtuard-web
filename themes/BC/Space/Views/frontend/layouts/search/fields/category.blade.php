@@ -7,11 +7,13 @@
                 ->whereHas('attribute', function($q){
                     $q->where('slug', 'space-type');
                 })
+                ->groupBy('name')
+                ->orderBy('name')
                 ->get();
         @endphp
         <div class="smart-search smart-search-category">
             <select name="terms[]" class="form-control" style="width: 100%;">
-                <option value="">-- Select Categoty --</option>
+                <option value="">-- {{ __('Select Category') }} --</option>
                 @foreach ($spaceCategories as $category)
                     <option value="{{$category->id}}">{{$category->name}}</option>
                 @endforeach

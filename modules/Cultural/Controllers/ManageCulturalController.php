@@ -226,9 +226,6 @@ class ManageCulturalController extends FrontendController
 
         ], $request->input());
 
-        if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
-            return redirect(route('user.plan'));
-        }
         $row->ical_import_url = $request->ical_import_url;
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
         if ($res) {
@@ -301,9 +298,6 @@ class ManageCulturalController extends FrontendController
                 break;
             case "make-publish":
                 $query->status = "publish";
-                if(!auth()->user()->checkUserPlan() ) {
-                    return redirect(route('user.plan'));
-                }
                 break;
             case 'make-private':
                 $query->status = 'private';

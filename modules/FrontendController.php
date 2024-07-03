@@ -26,4 +26,11 @@ class FrontendController extends Controller
         if(!Auth::check()) return false;
         return Auth::user()->hasPermission($permission);
     }
+
+    public function checkUserPlanStatus()
+    {
+         if(!auth()->user()->checkUserPlanStatus() and $row->status == "publish") {
+            return redirect(route('user.plan'));
+        }
+    }
 }

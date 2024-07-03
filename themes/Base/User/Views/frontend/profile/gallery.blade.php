@@ -7,8 +7,12 @@
                     <div class="col-lg-4 col-md-6">
                         <div class="item-loop" style="padding-bottom: 0;">
                             <div class="thumb-image">
-                                <a data-id="{{ $post->ipanorama->id }}" data-code="{{ $post->ipanorama->code }}"
-                                    class="preview-panorama cursor-pointer">
+                                <a 
+                                    class="preview-panorama cursor-pointer"
+                                    data-id="{{ $post->ipanorama->id }}" 
+                                    data-code="{{ $post->ipanorama->code }}"
+                                    data-user_id="{{ $post->ipanorama->user_id }}"
+                                    >
                                     <img id="thumb-panorama-{{ $post->ipanorama->id }}" src="{{ getThumbPanorama($post->ipanorama) }}"
                                         class="gallery-image thumb-panorama" alt="image">
                                 </a>

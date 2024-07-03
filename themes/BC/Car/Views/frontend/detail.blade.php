@@ -3,14 +3,6 @@
     <link href="{{ asset('dist/frontend/module/car/css/car.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/ion_rangeslider/css/ion.rangeSlider.min.css") }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/fotorama/fotorama.css") }}"/>
-    
-    <!-- iPanorama -->
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.default.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.modern.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/ipanorama.theme.dark.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/effect.css') }}" rel="stylesheet">
-    <link href="{{ asset('libs/ipanorama/src/style.css') }}" rel="stylesheet">
 @endpush
 @section('content')
     <div class="bravo_detail_car">
@@ -75,9 +67,4 @@
     <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
     <script type="text/javascript" src="{{ asset('module/car/js/single-car.js?_ver='.config('app.asset_version')) }}"></script>
-
-    {{-- <script src="{{ asset('libs/ipanorama/src/lib/jquery.min.js') }}"></script> --}}
-    <script src="{{ asset('libs/ipanorama/src/jquery.ipanorama.js') }}"></script>
-    <script src="{{ asset('libs/ipanorama/src/lib/three.min.js') }}"></script>
-    <script src="{{ asset('libs/ipanorama/src/main.js') }}"></script>
 @endpush

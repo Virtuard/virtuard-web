@@ -193,9 +193,6 @@ class ManageBoatController extends FrontendController
             'ipanorama_id',
         ];
         $row->fillByAttr($dataKeys,$request->input());
-        if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
-            return redirect(route('user.plan'));
-        }
         $row->min_price = $row->price_per_day < $row->price_per_hour ? $row->price_per_day : $row->price_per_hour;
         $row->number = 1;
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
@@ -300,9 +297,7 @@ class ManageBoatController extends FrontendController
                 $query->status = "draft";
                 break;
             case "make-publish":
-                if(!auth()->user()->checkUserPlan()) {
-                    return redirect(route('user.plan'));
-                }
+                
                 $query->status = "publish";
                 break;
             case 'make-private':

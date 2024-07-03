@@ -198,10 +198,6 @@ class VendorArtController extends FrontendController
 
         $row->fillByAttr($dataKeys,$request->input());
 
-        if(!auth()->user()->checkUserPlan() and $row->status == "publish") {
-            return redirect(route('user.plan'));
-        }
-
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
 
         if ($res) {
@@ -307,9 +303,6 @@ class VendorArtController extends FrontendController
                 break;
             case "make-publish":
                 $query->status = "publish";
-                if(!auth()->user()->checkUserPlan()) {
-                    return redirect(route('user.plan'));
-                }
                 break;
             case 'make-private':
                 $query->status = 'private';

@@ -193,7 +193,7 @@ class VendorController extends FrontendController
         ];
 
         $row->fillByAttr($dataKeys, $request->input());
-
+        
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
 
         if ($res) {

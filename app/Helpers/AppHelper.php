@@ -1459,8 +1459,11 @@ if (!function_exists('setMenuAdminPosition')) {
 if (!function_exists('getThumbPanorama')) {
     function getThumbPanorama($data) {
         $result = '/uploads/ipanoramaBuilder/upload/default.png';
-        if (isset($data->thumb)) {
-            $result = "/uploads/ipanoramaBuilder/$data->thumb";
+
+        $json_data = json_decode($data->json_data);
+        $filename = $json_data->config->scenes[0]->config->imageFront->url ?? '';
+        if($filename != '') {
+            $result = "/uploads/ipanoramaBuilder/upload/$data->user_id/$filename";
         }
         return $result;
     }

@@ -27,6 +27,11 @@
     }
 </style>
 <div class="profile-summary mb-2">
+    @if(auth()->user()->id == $user->id)
+    <div class="text-center mb-1">
+        <a href="{{ route('user.profile.setting') }}" class="badge badge-warning">Edit Profile</a>
+    </div>
+    @endif
     <div class="profile-avatar">
         @if ($avatar = $user->getAvatarUrl())
             <div class="avatar-img avatar-cover" style="background-image: url('{{ $user->getAvatarUrl() }}')">
