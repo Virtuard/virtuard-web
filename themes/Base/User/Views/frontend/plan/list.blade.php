@@ -38,11 +38,17 @@
                                             <div class="d-flex text-center">
                                                 <a href="{{ route('user.plan') }}" class="theme-btn btn-style-one mr-2">{{__("Current Plan")}}</a>
                                                 @if(setting_item_with_lang('enable_multi_user_plans'))
+                                                @if(!is_plan_free($plan))
                                                     <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                                @endif
                                                 @endif
                                             </div>
                                         @else
+                                            @if(!is_plan_free($plan))
                                             <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                            @else
+                                            <a href="{{ route('user.plan') }}" class="btn btn-danger">{{__("Expired")}}</a>
+                                            @endif
                                         @endif
                                     @else
                                         <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-primary">{{__('Select')}}</a>

@@ -54,9 +54,11 @@
                                                 <div class="text-success mb-3">{{__('Active')}}</div>
                                                 @else
                                                 <div class="text-danger mb-3">{{__('Expired')}}</div>
+                                                @if(!is_plan_free($user_plan->plan))
                                                 <div>
                                                     <a href="{{route('plan')}}" class="btn btn-warning">{{__('Renew')}}</a>
                                                 </div>
+                                                @endif
                                                 @endif
                                             @endif
                                         </td>

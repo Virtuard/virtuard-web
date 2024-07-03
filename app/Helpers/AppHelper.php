@@ -1703,3 +1703,14 @@ if (!function_exists('get_all_typologies')) {
         return $terms;
     }
 }
+
+if (!function_exists('is_plan_free')) {
+    function is_plan_free($plan)
+    {
+        $result = true;
+
+        if($plan->price != '0') $result = false;
+
+        return $result;
+    }
+}
