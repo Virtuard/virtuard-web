@@ -117,3 +117,22 @@ li.create-item a:before{
     padding-left: 15px;
     padding-right: 15px;
   }
+
+/* Google Translate Start */
+  #google_translate_element{
+      position: relative;
+      top: 20px;
+    }
+
+    .goog-te-combo{
+        width: 130px;
+        height: 25px;
+        border-radius: 5px;
+    }
+/* Google Translate End*/
+
+@media (min-width: 1200px) {
+    .bravo_header .container {
+        max-width: 90%;
+    }
+}
