@@ -75,17 +75,27 @@
         {!! setting_item('footer_scripts') !!}
         {!! setting_item_with_lang_raw('footer_scripts') !!}
     @endif
+    <script src= "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="{{ asset('assets/js/custom-app.js') }}"></script>
     @if(setting_item('google_translate_enable'))
-    <script>
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                {pageLanguage: 'en'},
-                'google_translate_element'
-            );
-        }
-    </script>
-    <script src= "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+        <script>
+            function googleTranslateElementInit() {
+                if (window.innerWidth >= 768) {
+                    var webTarget = document.getElementById('gtranslate-web');
+                    webTarget.innerHTML = '<div id="google_translate_element"></div>';
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'en'
+                    }, 'google_translate_element');
+                } else {
+                    var mobileTarget = document.getElementById('gtranslate-mobile');
+                    mobileTarget.innerHTML = '<div id="google_translate_element"></div>';
+                    new google.translate.TranslateElement({
+                        pageLanguage: 'en'
+                    }, 'google_translate_element');
+                }
+            }
+            window.addEventListener('resize', googleTranslateElementInit);
+        </script>
     @endif
 </body>
 

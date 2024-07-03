@@ -119,13 +119,13 @@ li.create-item a:before{
   }
 
 /* Google Translate Start */
-  #google_translate_element{
+  .topbar-items #google_translate_element{
       position: relative;
       top: 20px;
     }
 
-    .goog-te-combo{
-        width: 130px;
+    .topbar-items #google_translate_element .goog-te-combo{
+        max-width: 130px;
         height: 25px;
         border-radius: 5px;
     }

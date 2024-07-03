@@ -26,7 +26,7 @@
                         {{-- @include('Core::frontend.currency-switcher') --}}
                         @if(setting_item('google_translate_enable'))
                         <li class="menu-hr">
-                            <div id="google_translate_element" class="google_translate_element-dweb"></div>
+                            <div id="gtranslate-web"></div>
                         </li>
                         @else
                         @include('Language::frontend.switcher')
@@ -148,6 +148,7 @@
             </ul>
             <ul class="multi-lang">
                 @if(setting_item('google_translate_enable'))
+                    <div id="gtranslate-mobile" style="margin-left: 20px;"></div>
                 @else
                     @include('Language::frontend.switcher')
                 @endif

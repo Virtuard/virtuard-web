@@ -15,9 +15,6 @@
             <div class="content">
                 <div class="row">
                     @foreach($plans as $plan)
-                        @if($user and $user_plan = $user->user_plan and $user_plan->plan_id == $plan->id and $plan->price == 0)
-                            @continue;
-                        @endif
                         @php
                             $translate = $plan->translate();
                         @endphp
