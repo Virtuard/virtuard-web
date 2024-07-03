@@ -27,7 +27,7 @@
     }
 </style>
 <div class="profile-summary mb-2">
-    @if(auth()->user()->id == $user->id)
+    @if(auth()->check() && auth()->user()->id == $user->id)
     <div class="text-center mb-1">
         <a href="{{ route('user.profile.setting') }}" class="badge badge-warning">Edit Profile</a>
     </div>
