@@ -10,7 +10,7 @@
                  </button>
              </div>
              <div class="modal-body">
-                @if ($post->ipanorama && $post->ipanorama->status and $post->ipanorama->author->checkUserPlanStatus())
+                @if ($post->ipanorama && $post->ipanorama->status == 'publish' and $post->ipanorama->author->checkUserPlanStatus())
                  <div id="mypanorama" class="load-panorama"
                      style=" position: relative; width: 100%; height: 450px; z-index: 1;">
                  </div>

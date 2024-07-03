@@ -190,7 +190,7 @@
                                     $videos = $post->medias->where('type', 'video');
                                 @endphp
 
-                            @if ($post->ipanorama)
+                            @if ($post->ipanorama && $post->ipanorama->status == 'publish')
                                 <div class="card-file">
                                         <div class="g-ipanorama">
                                             <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
@@ -199,7 +199,11 @@
                                             data-user_id="{{ $post->ipanorama->user_id }}"
                                             >
                                         </div>
-                                    </div>
+                                </div>
+
+                                <div class="section-modal">
+                                    @include('vendor.ipanorama.demo.includes.ipanorama-modal')
+                                </div>
                             @endif      
 
                                 @if(count($galleries) > 0)
@@ -453,10 +457,6 @@
                     @endauth
                 </div>
             </div>
-    </div>
-
-    <div class="section-modal">
-        @include('vendor.ipanorama.demo.includes.ipanorama-modal')
     </div>
 </div>
 @endsection
