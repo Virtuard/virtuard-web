@@ -8,20 +8,54 @@
                         <b>You must first create a title for your Virtuard 360!</b>
                     </div>
 
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('admin.virtuard360.store') }}" method="POST">
                         @csrf
                         <div class="card p-4">
                             <div class="row">
                                 <div class="col-md-10">
-                                    <div class="form-group">
-                                        <input placeholder="Your title..." type="text" name="title"
-                                            class="form-control">
+                                    <div class="panel">
+                                        <div class="panel-title"><strong>{{ __('Create') }}</strong></div>
+                                        <div class="panel-body">
+                                            <div class="form-group">
+                                                <label>{{ __('Title') }}</label>
+                                                <input placeholder="Your title..." type="text" name="title"
+                                                    class="form-control" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>{{ __('Auhtor') }}</label>
+                                                <?php
+                                                $user = $row->author;
+                                                \App\Helpers\AdminForm::select2(
+                                                    'id_user',
+                                                    [
+                                                        'configs' => [
+                                                            'ajax' => [
+                                                                'url' => route('user.admin.getForSelect2'),
+                                                                'dataType' => 'json',
+                                                            ],
+                                                            'allowClear' => true,
+                                                            'placeholder' => __('-- Select User --'),
+                                                        ],
+                                                    ],
+                                                    !empty($user->id) ? [$user->id, $user->getDisplayName() . ' (#' . $user->id . ')'] : false,
+                                                );
+                                                ?>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-2 p-0">
-                                    <button class="btn btn-primary w-100">
-                                        Submit
-                                    </button>
+                                    <div class="form-group">
+                                    <button class="btn btn-primary">Submit</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

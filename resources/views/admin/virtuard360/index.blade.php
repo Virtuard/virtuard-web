@@ -59,8 +59,13 @@
                                     <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         @if(empty($recovery))
-                                            <a href="{{ route('admin.virtuard360.show', $row->id) }}" class="virtuard-edit btn btn-info btn-sm">Preview</a>
-                                            <a href="{{route('admin.virtuard360.edit',['id'=>$row->id,'user_id'=>$row->create_user])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
+                                        <a href="{{ route('admin.virtuard360.show', $row->id) }}" class="virtuard-edit btn btn-info btn-sm d-block mb-1">Preview</a>
+                                        @if($row->status == 'publish')
+                                        <a href="{{ route('admin.virtuard360.setstatus', ['id' =>  $row->id, 'status' => 'draft']) }}" class="virtuard-edit btn btn-warning btn-sm d-block mb-1">Draft</a>
+                                        @else
+                                        <a href="{{ route('admin.virtuard360.setstatus', ['id' =>  $row->id, 'status' => 'publish']) }}" class="virtuard-edit btn btn-success btn-sm d-block mb-1">Publish</a>
+                                        @endif
+                                            <a href="{{route('admin.virtuard360.edit',['id'=>$row->id,'user_id'=>$row->user_id])}}" class="btn btn-primary btn-sm d-block mb-1"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
                                         @endif
                                     </td>
                                 </tr>

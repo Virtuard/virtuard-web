@@ -32,11 +32,14 @@
         @else
             <div class="row">
                 <div class="col-md-12">
-                    <input type="text" id="title" name="title" class="form-control" value="{{ $row->title }}" placeholder="Title..">
+                    <div class="form-group">
+                        <labe>Title</labe>
+                        <input type="text" id="title" name="title" class="form-control" value="{{ $row->title }}" placeholder="Title..">
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-12">
                     <div class="d-flex justify-content-between mb20">
                         <div class="title-bar"></div>
                         <div class="title-actions">
@@ -57,42 +60,6 @@
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-3">
-                    <form action="{{ route('admin.virtuard360.store') }}" method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="hidden" name="id" value="{{ request()->input('id') }}">
-                        </div>
-                        <div class="panel">
-                            <div class="panel-title"><strong>{{ __('Author Setting') }}</strong></div>
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <?php
-                                    $user = $row->author;
-                                    \App\Helpers\AdminForm::select2(
-                                        'id_user',
-                                        [
-                                            'configs' => [
-                                                'ajax' => [
-                                                    'url' => route('user.admin.getForSelect2'),
-                                                    'dataType' => 'json',
-                                                ],
-                                                'allowClear' => true,
-                                                'placeholder' => __('-- Select User --'),
-                                            ],
-                                        ],
-                                        !empty($user->id) ? [$user->id, $user->getDisplayName() . ' (#' . $user->id . ')'] : false,
-                                    );
-                                    ?>
-                                </div>
-                                <div class="text-right">
-                                    <button class="btn btn-primary" type="submit"><i class="fa fa-save"></i>
-                                        {{ __('Save Changes') }}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         @endif
 
@@ -110,6 +77,7 @@
                         enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
+                            <input type="hidden" name="user_id" value="{{ $row->user_id }}">
                             <div class="form-group title-image">
                                 <label for="exampleFormControlFile1">Title Image</label>
                                 <input type="text" name="title" class="form-control">

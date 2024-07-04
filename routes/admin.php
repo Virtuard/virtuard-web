@@ -46,5 +46,7 @@ Route::group([
         Route::get('create', 'Admin\Virtuard360Controller@create')->name('create');
         Route::get('edit', 'Admin\Virtuard360Controller@edit')->name('edit');
         Route::post('store', 'Admin\Virtuard360Controller@store')->name('store');
+        Route::get('/{id}/setstatus', 'Admin\Virtuard360Controller@setstatus')->name('setstatus');
+        Route::put('/{id}', 'Admin\Virtuard360Controller@update')->name('update');
     });
 });

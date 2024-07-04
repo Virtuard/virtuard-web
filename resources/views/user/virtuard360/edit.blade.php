@@ -56,6 +56,7 @@
                     <form action="{{ route('user.virtuard-360.add-new-image-service') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="modal-body">
+                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <div class="form-group title-image">
                                 <label for="exampleFormControlFile1">Title Image</label>
                                 <input type="text" name="title" class="form-control">

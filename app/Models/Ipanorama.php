@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\BaseModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\User\Models\User;
 
-class Ipanorama extends BaseModel
+class Ipanorama extends Model
 {
     use SoftDeletes;
 
@@ -19,6 +19,8 @@ class Ipanorama extends BaseModel
         'json_data',
         'thumb',
         'status',
+        'create_user',
+        'update_user',
     ];
 
     public function author()

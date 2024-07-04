@@ -84,6 +84,7 @@ class VirtuardController extends Controller
 
         $ipanorama = new Ipanorama();
         $ipanorama->user_id = $idUser;
+        $ipanorama->create_user = $idUser;
         $ipanorama->title = $request->input('title');
         $ipanorama->status = 'draft';
         $ipanorama->save();
@@ -101,7 +102,7 @@ class VirtuardController extends Controller
         $proofImage = $request->file('image');
         $title = $request->input('title');
 
-        $path = "/ipanoramaBuilder/upload/" . auth()->user()->id;
+        $path = "/ipanoramaBuilder/upload/" . $request['user_id'];
         if ($proofImage) {
             $extension = $proofImage->getClientOriginalExtension();
     

@@ -57,7 +57,7 @@ class Virtuard360Controller extends Controller
         } else {
             $row = new $this->model();
             $row->fill([
-                'status' => 'publish'
+                'status' => 'draft'
             ]);
         }
 
@@ -101,23 +101,42 @@ class Virtuard360Controller extends Controller
 
     public function store(Request $request)
     {
-        $attr = $request->all();
+        $request->validate([
+            'title' => 'required',
+            'id_user' => 'required',
+        ],[
+            'id_user.required' => 'Author required',
+        ]);
 
-        $id = $attr['id'];
+        $attr = $request->all();
         $attr['user_id'] = $attr['id_user'];
         $attr['create_user'] = $attr['id_user'];
-        $attr['update_user'] = auth()->user()->id;
-
-        if ($id) {
-            $row = $this->model->find($id);
-            if (empty($row)) {
-                return redirect(route('admin.virtuard360.index'));
-            }
-            $row->update($attr);
-        } else {
-            $row = $this->model->create($attr);
-        }
+        $attr['status'] = 'draft';
+        
+        $row = $this->model->create($attr);
+        
+        $row->update([
+            
+        ]);
 
         return redirect(route('admin.virtuard360.edit', ['id' => $row->id,'user_id' => $row->create_user]))->with('success', __('Virtuard 360 updated'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $attr = $request->all();
+
+        $attr['update_user'] = auth()->user()->id;
+
+        $row = $this->model->find($id)->update($attr);
+
+        return redirect(route('admin.virtuard360.edit', ['id' => $row->id,'user_id' => $row->user_id]))->with('success', __('Virtuard 360 updated'));
+    }
+
+    public function setstatus(Request $request, $id)
+    {
+        $attr = $request->all();
+        $this->model->find($id)->update($attr);
+        return back()->with('success', __('Virtuard 360 updated'));;
     }
 }
