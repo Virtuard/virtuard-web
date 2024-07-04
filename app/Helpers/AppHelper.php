@@ -1714,3 +1714,17 @@ if (!function_exists('is_plan_free')) {
         return $result;
     }
 }
+
+
+if (!function_exists('is_display_panorama_listing')) {
+    function is_display_panorama_listing($data)
+    {
+        $result = false;
+
+        if ($data->ipanorama && $data->ipanorama->status == 'publish' and $data->author->checkUserPlanStatus()) {
+            $result = true;
+        }
+
+        return $result;
+    }
+}

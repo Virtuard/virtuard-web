@@ -18,7 +18,7 @@
                         <table class="table table-bordered table-striped  mb-5">
                             <thead>
                             <tr>
-                                <th>{{__("Plan ID")}}</th>
+                                <th>{{__("#")}}</th>
                                 <th>{{__("Plan Name")}}</th>
                                 <th>{{__("Expiry")}}</th>
                                 <th>{{__("Total Service")}}</th>
@@ -30,9 +30,9 @@
 
                             <tbody>
                             @if($user_plans && count($user_plans) > 0)
-                                @foreach($user_plans as $user_plan)
+                                @foreach($user_plans as $key => $user_plan)
                                     <tr>
-                                        <td>#{{$user_plan->plan_id}}</td>
+                                        <td>{{$key + 1}}</td>
                                         <td class="trans-id">{{$user_plan->plan->title ?? ''}}</td>
                                         <td class="total-jobs">
                                             @if($user_plan->end_date)

@@ -79,5 +79,7 @@
     <script type="text/javascript" src="{{ asset('module/boat/js/single-boat.js?_ver='.config('app.asset_version')) }}"></script>
 
     @include('partials.ipanorama.ipanorama-js-no-jquery')
+    @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
+    @enif
 @endpush

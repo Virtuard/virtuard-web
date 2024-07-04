@@ -78,5 +78,7 @@
     <script type="text/javascript" src="{{ asset('module/space/js/single-space.js?_ver='.config('app.asset_version')) }}"></script>
 
     @include('partials.ipanorama.ipanorama-js-no-jquery')
+    @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
+    @endif
 @endpush
