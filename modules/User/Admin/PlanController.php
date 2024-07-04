@@ -74,8 +74,8 @@ class PlanController extends AdminController
         $this->validate($request, [
             'title' => 'required',
             'role_id' => 'required',
-            'duration' => 'required',
-            'duration_type' => 'required',
+            // 'duration' => 'required',
+            // 'duration_type' => 'required',
         ]);
 
         if($id>0){
