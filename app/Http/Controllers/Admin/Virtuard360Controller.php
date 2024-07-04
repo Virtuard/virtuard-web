@@ -104,6 +104,10 @@ class Virtuard360Controller extends Controller
         $attr = $request->all();
 
         $id = $attr['id'];
+        $attr['user_id'] = $attr['id_user'];
+        $attr['create_user'] = $attr['id_user'];
+        $attr['update_user'] = auth()->user()->id;
+
         if ($id) {
             $row = $this->model->find($id);
             if (empty($row)) {
