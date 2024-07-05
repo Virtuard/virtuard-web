@@ -406,7 +406,7 @@
                     </div>
                 </div>
                 <div class="col-md-3" style="background: #f5f5f5; padding: 0 20px;">
-                    <div class="w-100" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                    {{-- <div class="w-100" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
                             <a class="m-0" href="{{ route('member.index')}}">
                                 <i class="fa fa-globe mr-2"></i>
@@ -414,9 +414,9 @@
                                 <span class="badge badge-primary">{{ $memberCount }}</span>
                             </a>
                         </div>
-                    </div>
+                    </div> --}}
                     @auth
-                    <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                    {{-- <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
                             <a class="m-0" href="{{ route('member.index', ['type' => 'follower'])}}">
                                 <i class="fa fa-users mr-2"></i>
@@ -435,7 +435,7 @@
                             </a>
                         </div>
                     </div>
-                    <hr class="mx-4">
+                    <hr class="mx-4"> --}}
                     <div class="w-100" onclick="feedShow()" id="feed_post"
                         style="cursor: pointer; background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
