@@ -6,6 +6,7 @@
                     <span class="sale_class box_sale sale_small">{{$row->discount_percent}}</span>
                 </div>
             @endif
+            @if($row->price)
             <div class="form-head">
                 <div class="price">
                     <span class="label">
@@ -17,6 +18,7 @@
                     </span>
                 </div>
             </div>
+            @endif
             <div class="nav-enquiry" v-if="is_form_enquiry_and_book">
                 @if($row->author->checkUserPlan())
                 <div class="enquiry-item active" >

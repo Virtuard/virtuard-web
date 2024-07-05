@@ -80,12 +80,14 @@
             </div>
         @endif
         <div class="g-price">
+            @if($row->price)
             <div class="prefix">
                 <span class="fr_text">{{__("from")}}</span>
             </div>
             <div class="price">
                 <span class="text-price">{{ $row->display_price }} <span class="unit">{{__("/night")}}</span></span>
             </div>
+            @endif
             @if(!empty($reviewData['total_review']))
                 <div class="text-review">
                     {{__(":number reviews",['number'=>$reviewData['total_review']])}}

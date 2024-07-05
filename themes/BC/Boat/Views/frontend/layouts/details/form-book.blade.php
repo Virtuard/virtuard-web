@@ -1,6 +1,7 @@
 <div class="bravo_single_book_wrap">
     <div class="bravo_single_book">
         <div id="bravo_boat_book_app" v-cloak>
+            @if($row->price)
             <div class="form-head">
                 <div class="price flex-wrap">
                     <span class="value">
@@ -9,6 +10,7 @@
                     </span>
                 </div>
             </div>
+            @endif
             <div class="nav-enquiry" v-if="is_form_enquiry_and_book">
                 @if($row->author->checkUserPlan())
                 <div class="enquiry-item active" >
