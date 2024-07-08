@@ -92,6 +92,9 @@ Route::group([
 ], function(){
     Route::get('/', 'ExploreController@index')->name('index');
     Route::post('list', 'ExploreController@list')->name('list');
+    Route::get('service/search', 'ExploreController@searchService')->name('service.search');
+    // Route::post('service/search', 'ExploreController@searchService')->name('service.search');
+    Route::post('map/search', 'ExploreController@searchMap')->name('map.search');
     Route::post('filter', 'ExploreController@filter')->name('filter');
 });
 

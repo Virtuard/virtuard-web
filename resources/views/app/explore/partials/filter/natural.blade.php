@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="bravo_search_tour">
             <div class="bravo_filter">
-                <form class="bravo_form_filter" action="{{ route('explore.index') }}">
+                <form id="form_explore_natural" class="bravo_form_filter" action="{{ route('explore.index') }}">
                     <input type="hidden" name="service_type" value="natural">
                     <div class="g-filter-item">
                         <div class="item-title">
@@ -11,11 +11,9 @@
                         <div class="item-content">
                             <div class="form-group">
                                 <select name="orderby" class="form-control orderby">
-                                    <option value="created_at"
-                                        {{ request('orderby') == 'created_at' ? 'selected' : '' }}>{{ __('Last') }}
+                                    <option value="created_at">{{ __('Last') }}
                                     </option>
-                                    <option value="rate_high_low"
-                                        {{ request('orderby') == 'rate_high_low' ? 'selected' : '' }}>
+                                    <option value="rate_high_low">
                                         {{ __('Top Rated') }}
                                     </option>
                                     <option value="">{{ __('Random') }}</option>

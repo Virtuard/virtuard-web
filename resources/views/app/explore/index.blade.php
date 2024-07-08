@@ -96,12 +96,23 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card card-explore">
+            <div  class="col-md-4">
+                <div id="list-scroll" class="card card-explore">
                     <div class="card-body">
-                        <div id="list-item">
-                            @include('app.explore.partials.content')
+                        <div class="d-flex justify-content-center align-items-center mb-4">
+                            <i class="fa fa-lg fa-arrow-left cursor-pointer d-none"></i>
+                            <span id="count-list"></span>
+                            <i class="fa fa-lg fa-arrow-right cursor-pointer d-none"></i>
                         </div>
+                        <div class="list-item-container">
+                            <div id="list-item"></div>
+                            <div id="service-loading" class="text-center" style="display: none;">
+                                <div class="spinner-border" role="status">
+                                  <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -292,158 +303,7 @@
 @endpush
 
 @push('js')
-    <script>
-        let radiusSlider = document.getElementById("search_radius");
-        let radiusText = document.getElementById("proximity_text");
-        radiusText.innerHTML = radiusSlider.value;
-
-        radiusSlider.oninput = function() {
-            radiusText.innerHTML = this.value;
-        }
-    </script>
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
     <script src="{{ asset('assets/js/listing-map.js') }}"></script>
-    <script>
-        listMaps = {{ Js::from($data) }}
-    </script>
-    <script>
-        function onFetchData(attr) {
-            $.ajax({
-                type: "POST",
-                url: "{{ route('explore.list') }}",
-                data: attr,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(data) {
-                    let maps = data.data;
-
-                    resetMarkers();
-                    addMarkersToMap(maps)
-                    listMaps = maps;
-                    listMapCount = maps.length;
-
-                    $("#list-item").html(data.html);
-                    $("#count-list").html(`Showing ${listMapCount} Result`);
-                },
-            });
-        }
-
-        function onSubmitSearch() {
-            $('#submit-search').on('click', function(e) {
-                e.preventDefault();
-                let attr = {
-                    service_name: $('#service_name').val(),
-                    map_place: $('#map_place').val(),
-                    map_lat: $('#map_lat').val(),
-                    map_lgn: $('#map_lgn').val(),
-                    search_radius: $('#search_radius').val(),
-                };
-
-                onFetchData(attr);
-            })
-        }
-
-        function initFilterRadius() {
-            $('.filter-search-radius').on('input', function() {
-                let id = $(this).data('id');
-
-                let radiusSlider = document.getElementById(`${id}_search_radius`);
-                let radiusText = document.getElementById(`${id}_proximity_text`);
-
-                radiusSlider.oninput = function() {
-                    radiusText.innerHTML = this.value;
-                }
-            });
-        }
-
-        function initAutocomplete() {
-            let arrPlaces = $('.filter_map_place');
-
-            arrPlaces.each(function() {
-                let elem = $(this);
-                let id = elem.attr('data-id');
-
-                var filterAutoComplete;
-                let input = document.getElementById(`${id}_map_place`);
-                filterAutoComplete = new google.maps.places.Autocomplete(input);
-                filterAutoComplete.addListener('place_changed', onFilterChangePlace);
-
-                function onFilterChangePlace() {
-                    const place = filterAutoComplete.getPlace();
-                    if (!place.geometry) {
-                        console.error("Place not found");
-                        return;
-                    }
-
-                    const lat = place.geometry.location.lat();
-                    const lng = place.geometry.location.lng();
-                    const name = place.name;
-
-                    $(`#${id}_map_lat`).val(lat);
-                    $(`#${id}_map_lgn`).val(lng);
-                    // $(`#${id}_service_name`).val(name);
-                }
-            });
-
-        }
-
-        $(document).ready(function() {
-            // onFetchData();
-            initAutocomplete();
-            initFilterRadius();
-        });
-    </script>
-    <script>
-        jQuery(function($) {
-            $(".bravo_filter .g-filter-item").each(function() {
-                if ($(window).width() <= 990) {
-                    $(this).find(".item-title").toggleClass("e-close");
-                }
-                $(this).find(".item-title").click(function() {
-                    $(this).toggleClass("e-close");
-                    if ($(this).hasClass("e-close")) {
-                        $(this).closest(".g-filter-item").find(".item-content").slideUp();
-                    } else {
-                        $(this).closest(".g-filter-item").find(".item-content").slideDown();
-                    }
-                });
-                $(this).find(".btn-more-item").click(function() {
-                    $(this).closest(".g-filter-item").find(".hide").removeClass("hide");
-                    $(this).addClass("hide");
-                });
-                $(this).find(".bravo-filter-price").each(function() {
-                    var input_price = $(this).find(".filter-price");
-                    var min = input_price.data("min");
-                    var max = input_price.data("max");
-                    var from = input_price.data("from");
-                    var to = input_price.data("to");
-                    var symbol = input_price.data("symbol");
-                    input_price.ionRangeSlider({
-                        type: "double",
-                        grid: true,
-                        min: min,
-                        max: max,
-                        from: from,
-                        to: to,
-                        prefix: symbol
-                    });
-                });
-            });
-            $(".bravo_form_filter input[type=checkbox]").change(function() {
-                $(this).closest(".bravo_form_filter").submit();
-            });
-            $('.orderby').on('change', function() {
-                $(this).closest(".bravo_form_filter").submit();
-            });
-        });
-    </script>
-    <script>
-        $('.btn-all-back').on('click', function(){
-            $('.panel-all-back').removeClass('active')
-            $('.sub-nav-link').removeClass('active')
-            $('#all-category').addClass('show active')
-        })
-    </script>
 @endpush

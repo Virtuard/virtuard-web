@@ -3,17 +3,16 @@
         <div class="bravo_search_tour">
             <div class="bravo_filter">
                 <form class="bravo_form_filter" action="{{ route('explore.index') }}">
-                    <input type="hidden" name="service_type" value="hotel">
+                    <input id="form_explore_hotel" type="hidden" name="service_type" value="hotel">
                     <div class="g-filter-item">
                         <div class="item-content">
                             <div class="form-group">
                                 <label>{{ __('Sort by') }}</label>
                                 <select name="orderby" class="form-control orderby">
-                                    <option value="created_at"
-                                        {{ request('orderby') == 'created_at' ? 'selected' : '' }}>{{ __('Last') }}
+                                    <option value="created_at">
+                                        {{ __('Last') }}
                                     </option>
-                                    <option value="rate_high_low"
-                                        {{ request('orderby') == 'rate_high_low' ? 'selected' : '' }}>
+                                    <option value="rate_high_low">
                                         {{ __('Top Rated') }}
                                     </option>
                                     <option value="">{{ __('Random') }}</option>
@@ -100,7 +99,7 @@
                                 @endphp
                                 <label>{{ __('Chain') }}</label>
                                 <select name="chain" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Chain--') }}</option>
                                     @foreach ($hotel_ex as $val)
                                         <option value="{{ $val->chain }}">{{ __($val->chain) }}</option>
                                     @endforeach
@@ -116,10 +115,12 @@
                                         ->get();
                                 @endphp
                                 <label>{{ __('Rooms') }}</label>
-                                <option value=""></option>
+                                <select name="room" class="form-control">
+                                <option value="">{{ __('--Select Rooms--') }}</option>
                                 @foreach ($hotel_rooms as $val)
                                     <option value="{{ $val->room }}">{{ __($val->room) }}</option>
                                 @endforeach
+                                </select>
                             </div>
                             <div class="form-group mt-3">
                                 <div class="form-content">

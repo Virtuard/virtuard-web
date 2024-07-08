@@ -2,6 +2,14 @@ document.addEventListener("DOMContentLoaded", function (event) {
     //
 });
 
+$(function () {
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $("meta[name='csrf-token']").attr("content"),
+        },
+    });
+});
+
 /* ------------------------------Copy Clipboard-------------------------------- */
 function copyToClipboard(str) {
     let text = document.getElementById(str).innerText;

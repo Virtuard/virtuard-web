@@ -2,18 +2,16 @@
     <div class="card-body">
         <div class="bravo_search_tour">
             <div class="bravo_filter">
-                <form class="bravo_form_filter" action="{{ route('explore.index') }}">
+                <form id="form_explore_business" class="bravo_form_filter" action="{{ route('explore.index') }}">
                     <input type="hidden" name="service_type" value="business">
                     <div class="g-filter-item">
                         <div class="item-content">
                             <div class="form-group mt-3">
                                 <label>{{ __('Sort by') }}</label>
                                 <select name="orderby" class="form-control orderby">
-                                    <option value="created_at"
-                                        {{ request('orderby') == 'created_at' ? 'selected' : '' }}>{{ __('Last') }}
+                                    <option value="created_at">{{ __('Last') }}
                                     </option>
-                                    <option value="rate_high_low"
-                                        {{ request('orderby') == 'rate_high_low' ? 'selected' : '' }}>
+                                    <option value="rate_high_low">
                                         {{ __('Top Rated') }}
                                     </option>
                                     <option value="">{{ __('Random') }}</option>
@@ -76,7 +74,7 @@
                                 @endphp
                                 <label>{{ __('Franchising') }}</label>
                                 <select name="franchising" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Franchising--') }}</option>
                                     @foreach ($business_ex as $val)
                                         <option value="{{ $val->franchising }}">{{ __($val->franchising) }}</option>
                                     @endforeach

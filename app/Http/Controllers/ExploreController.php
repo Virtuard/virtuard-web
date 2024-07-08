@@ -37,19 +37,47 @@ class ExploreController extends Controller
 
     public function index(Request $request)
     {
+        return view('app.explore.index');
+    }
+
+    public function searchService(Request $request)
+    {
         $req = $request->all();
         $data = $this->formatSearch($req);
 
-        $view = [
+        $html = view('app.explore.partials.content', compact('data'))->render();
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'html' => $html,
             'data' => $data,
-        ];
-
-        return view('app.explore.index', $view);
+        ]);
     }
 
-    private function sortListing($a, $b)
+    public function searchMap(Request $request)
     {
-        return $a['created_at'] < $b['created_at'];
+        $req = $request->all();
+
+        $listings = [];
+        $searchs = $this->getSearch($req);
+
+        foreach ($searchs as $key => $search) {
+            $listings[$key] = $searchs[$key]->get();
+        }
+
+        $data = [];
+        foreach ($listings as $i => $listing) {
+            foreach ($listing as $j => $list) {
+                if ($list->map_lat == null || $list->map_lng == null) continue;
+                $data[] = get_map_listing($i, $list);
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'success',
+            'data' => $data,
+        ]);
     }
 
     public function list(Request $request)
@@ -67,20 +95,33 @@ class ExploreController extends Controller
     }
 
     private function formatSearch($req) {
+        
+        $paginate = 1;
+        if(isset($req['service_type']) && $req['service_type'] != 'all') {
+            $paginate = 4;
+        }
         $listings = [];
         $searchs = $this->getSearch($req);
 
         foreach ($searchs as $key => $search) {
-            $listings[$key] = $searchs[$key]->paginate(5000);
+            $listings[$key] = $searchs[$key]->paginate($paginate);
         }
 
         $data = [];
         foreach ($listings as $i => $listing) {
             foreach ($listing as $j => $list) {
-                // if ($list->map_lat == null || $list->map_lng == null) continue;
                 $data[] = get_map_listing($i, $list);
             }
         }
+
+        // Convert the array into a Laravel collection
+        $collection = collect($data);
+
+        // Sort the collection by 'created_at' in descending order
+        $sorted = $collection->sortByDesc('created_at');
+
+        // If you need the result as an array
+        $data = $sorted->values()->all();
 
         return $data;
     }
@@ -97,6 +138,9 @@ class ExploreController extends Controller
                 break;
             case 'business':
                 $searchs = ['business' => $this->business->search($req)];
+                break;
+            case 'boat':
+                $searchs = ['boat' => $this->boat->search($req)];
                 break;
             case 'event':
                 $searchs = ['event' => $this->event->search($req)];

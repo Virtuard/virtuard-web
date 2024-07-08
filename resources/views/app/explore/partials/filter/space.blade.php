@@ -2,18 +2,16 @@
     <div class="card-body">
         <div class="bravo_search_tour">
             <div class="bravo_filter">
-                <form class="bravo_form_filter" action="{{ route('explore.index') }}">
+                <form id="form_explore_space" class="bravo_form_filter" action="{{ route('explore.index') }}">
                     <input type="hidden" name="service_type" value="space">
                     <div class="g-filter-item">
                         <div class="item-content">
                             <label>{{ __('Sort by') }}</label>
                             <div class="form-group">
                                 <select name="orderby" class="form-control orderby">
-                                    <option value="created_at"
-                                        {{ request('orderby') == 'created_at' ? 'selected' : '' }}>{{ __('Last') }}
+                                    <option value="created_at">{{ __('Last') }}
                                     </option>
-                                    <option value="rate_high_low"
-                                        {{ request('orderby') == 'rate_high_low' ? 'selected' : '' }}>
+                                    <option value="rate_high_low">
                                         {{ __('Top Rated') }}
                                     </option>
                                     <option value="">{{ __('Random') }}</option>
@@ -77,7 +75,7 @@
                                 <label>{{ __('Agency') }}</label>
                                 <div class="form-group">
                                     <select name="agency" class="form-control">
-                                        <option value=""></option>
+                                        <option value="">{{ __('--Select Agency--') }}</option>
                                         @foreach ($space_ex as $val)
                                             <option value="{{ $val->agency }}">{{ __($val->agency) }}</option>
                                         @endforeach
@@ -94,7 +92,7 @@
                                 @endphp
                                 <label>{{ __('Flooring') }}</label>
                                 <select name="flooring" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Flooring--') }}</option>
                                     @foreach ($space_floorings as $val)
                                         <option value="{{ $val->flooring }}">{{ __($val->flooring) }}</option>
                                     @endforeach
@@ -111,7 +109,7 @@
                                 @endphp
                                 <label>{{ __('Square Meters') }}</label>
                                 <select name="square" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Square Meters--') }}</option>
                                     @foreach ($space_squares as $val)
                                         <option value="{{ $val->square }}">{{ __($val->square) }}</option>
                                     @endforeach
@@ -128,7 +126,7 @@
                                 @endphp
                                 <label>{{ __('Rooms') }}</label>
                                 <select name="room" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Rooms--') }}</option>
                                     @foreach ($space_rooms as $val)
                                         <option value="{{ $val->room }}">{{ __($val->room) }}</option>
                                     @endforeach
@@ -145,7 +143,7 @@
                                 @endphp
                                 <label>{{ __('Bedrooms') }}</label>
                                 <select name="bed" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Bedrooms--') }}</option>
                                     @foreach ($space_beds as $val)
                                         <option value="{{ $val->bed }}">{{ __($val->bed) }}</option>
                                     @endforeach
@@ -162,7 +160,7 @@
                                 @endphp
                                 <label>{{ __('Bathrooms') }}</label>
                                 <select name="bathroom" class="form-control">
-                                    <option value=""></option>
+                                    <option value="">{{ __('--Select Bathrooms--') }}</option>
                                     @foreach ($space_bathrooms as $val)
                                         <option value="{{ $val->bathroom }}">{{ __($val->bathroom) }}</option>
                                     @endforeach

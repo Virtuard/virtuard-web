@@ -1030,6 +1030,12 @@ class Art extends Bookable
         if (!empty($request['bathroom'])) {
             $model_art->where("bravo_arts.bathroom", $request['bathroom']);
         }
+        if (!empty($request['engineering'])) {
+            $model_art->where("bravo_arts.engineering", $request['engineering']);
+        }
+        if (!empty($request['software'])) {
+            $model_art->where("bravo_arts.software", $request['software']);
+        }
 
         $orderby = $request["orderby"] ?? "";
         switch ($orderby) {

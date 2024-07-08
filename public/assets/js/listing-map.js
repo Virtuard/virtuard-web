@@ -1,3 +1,7 @@
+var isLoadingScroll = false;
+var countService = 0;
+var pagePaginate = 1;
+var tabActive = 'all';
 var listMaps = [];
 var listMapCount = null;
 let map, mapAutocomplete, markerCluster, currentInfoWindow;
@@ -20,6 +24,60 @@ let clusterConfig = {
     ]
 };
 
+function initFilterRadiusMain() {
+    let radiusSlider = document.getElementById("search_radius");
+    let radiusText = document.getElementById("proximity_text");
+    radiusText.innerHTML = radiusSlider.value;
+
+    radiusSlider.oninput = function() {
+        radiusText.innerHTML = this.value;
+    }
+}
+
+function initFilterRadius() {
+    $('.filter-search-radius').on('input', function() {
+        let id = $(this).data('id');
+
+        let radiusSlider = document.getElementById(`${id}_search_radius`);
+        let radiusText = document.getElementById(`${id}_proximity_text`);
+
+        radiusSlider.oninput = function() {
+            radiusText.innerHTML = this.value;
+        }
+    });
+}
+
+function initAutocomplete() {
+    let arrPlaces = $('.filter_map_place');
+
+    arrPlaces.each(function() {
+        let elem = $(this);
+        let id = elem.attr('data-id');
+
+        var filterAutoComplete;
+        let input = document.getElementById(`${id}_map_place`);
+        filterAutoComplete = new google.maps.places.Autocomplete(input);
+        filterAutoComplete.addListener('place_changed', onFilterChangePlace);
+
+        function onFilterChangePlace() {
+            const place = filterAutoComplete.getPlace();
+            if (!place.geometry) {
+                console.error("Place not found");
+                return;
+            }
+
+            const lat = place.geometry.location.lat();
+            const lng = place.geometry.location.lng();
+            const name = place.name;
+
+            $(`#${id}_map_lat`).val(lat);
+            $(`#${id}_map_lgn`).val(lng);
+            // $(`#${id}_service_name`).val(name);
+        }
+    });
+
+}
+
 function initMap() {
     // Initialize the autocomplete
     initAutocomplete();
@@ -30,7 +88,7 @@ function initMap() {
     });
 
     // add merker to map
-    addMarkersToMap(listMaps);
+    // addMarkersToMap(listMaps);
 }
 
 function addMarkersToMap(markerData) {
@@ -106,9 +164,11 @@ function defaultMarkers() {
 }
 
 function resetMarkers() {
-    markerCluster.clearMarkers();
-    mapMarkers.forEach(marker => marker.setMap(null));
-    mapMarkers = [];
+    if(markerCluster){
+        markerCluster.clearMarkers();
+        mapMarkers.forEach(marker => marker.setMap(null));
+        mapMarkers = [];
+    }
 }
 
 function initAutocomplete() {
@@ -138,10 +198,30 @@ function onChangeTab() {
         let id = $(this).attr('id');
         id = id.replace('-tab', '');
 
-        if (id == 'all') return defaultMarkers();
+        const attr = {
+            service_type: id,
+        };
 
-        filterMarkers(marker => marker.category == id);
+        tabActive = id;
+        resetServiceList();
+        
+
+        setTimeout(() => {
+            onFetchData(attr)
+        }, 500);
+
+        // if (id == 'all') return defaultMarkers();
+
+        // filterMarkers(marker => marker.category == id);
     });
+}
+
+function resetServiceList() {
+    countService = 0;
+    pagePaginate = 1;
+
+    $("#list-item").html('');
+    $("#count-list").html('');
 }
 
 function resetContent(attr) {
@@ -181,7 +261,175 @@ function filterContent(filtered) {
     });
 }
 
+$scrollableDiv = $('#list-scroll');
+$scrollableDiv.scroll(function (e) {
+    e.preventDefault();
+    
+    if (!isLoadingScroll && $scrollableDiv.scrollTop() + $scrollableDiv.height() >= ($scrollableDiv[0].scrollHeight - 20)) {
+        pagePaginate++;
+        isLoadingScroll = true;
+        
+        console.log('page', pagePaginate)
+
+        setTimeout(() => {
+            infinteLoadMore();
+        }, 500);
+    }
+});
+
+function infinteLoadMore() {
+    const formData = $(`#form_explore_${tabActive}`).serializeArray();
+    const attr = {};
+    $(formData).each(function(index, obj) {
+        attr[obj.name] = obj.value;
+    });
+
+    fetchService(attr);
+}
+
+function onSubmitForm() {
+    $('.bravo_form_filter').on('submit', function(e) {
+        e.preventDefault();
+
+        const formData = $(this).serializeArray();
+        const attr = {};
+        $(formData).each(function(index, obj) {
+            attr[obj.name] = obj.value;
+        });
+
+        fetchMap(attr);
+        fetchService(attr);
+    });
+}
+
+function onFetchData(attr) {
+    $("#list-item").html('');
+    $("#count-list").html('');
+
+    fetchMap(attr);
+    fetchService(attr);
+}
+
+function fetchMap(attr) {
+    $.ajax({
+        type: "POST",
+        url: "/explore/map/search",
+        data: attr,
+        success: function(data) {
+            let maps = data.data;
+
+            resetMarkers();
+            addMarkersToMap(maps);
+        },
+    });
+}
+
+function fetchService(attr = {}) {
+    isLoadingScroll = true;
+    $('#service-loading').show();
+
+    $.ajax({
+        url: `/explore/service/search?page=${pagePaginate}`,
+        data: attr,
+        success: function(data) {
+            countService += data.data.length;
+
+            if (data.data) {
+                $("#list-item").append(data.html);
+                $("#count-list").html(`Showing ${countService} Result`);
+            }
+
+            isLoadingScroll = false;
+            $('#service-loading').hide();
+        },
+        error: function(xhr) {
+            isLoadingScroll = false;
+            $('#service-loading').hide();
+        }
+    });
+}
+
+function onSubmitSearch() {
+    $('#submit-search').on('click', function(e) {
+        e.preventDefault();
+        
+        let attr = {
+            service_name: $('#service_name').val(),
+            map_place: $('#map_place').val(),
+            map_lat: $('#map_lat').val(),
+            map_lgn: $('#map_lgn').val(),
+            search_radius: $('#search_radius').val(),
+        };
+
+        onFetchData(attr);
+    })
+}
+
+jQuery(function($) {
+    $(".bravo_filter .g-filter-item").each(function() {
+        if ($(window).width() <= 990) {
+            $(this).find(".item-title").toggleClass("e-close");
+        }
+        $(this).find(".item-title").click(function() {
+            $(this).toggleClass("e-close");
+            if ($(this).hasClass("e-close")) {
+                $(this).closest(".g-filter-item").find(".item-content").slideUp();
+            } else {
+                $(this).closest(".g-filter-item").find(".item-content").slideDown();
+            }
+        });
+        $(this).find(".btn-more-item").click(function() {
+            $(this).closest(".g-filter-item").find(".hide").removeClass("hide");
+            $(this).addClass("hide");
+        });
+        $(this).find(".bravo-filter-price").each(function() {
+            var input_price = $(this).find(".filter-price");
+            var min = input_price.data("min");
+            var max = input_price.data("max");
+            var from = input_price.data("from");
+            var to = input_price.data("to");
+            var symbol = input_price.data("symbol");
+            input_price.ionRangeSlider({
+                type: "double",
+                grid: true,
+                min: min,
+                max: max,
+                from: from,
+                to: to,
+                prefix: symbol
+            });
+        });
+    });
+
+    $(".bravo_form_filter input[type=checkbox]").change(function(e) {
+        e.preventDefault();
+
+        resetServiceList();
+
+        $(this).closest("form").submit();
+    });
+    
+    $(".bravo_form_filter select").change(function(e) {
+        e.preventDefault();
+
+        resetServiceList();
+
+        $(this).closest("form").submit();
+    });
+    
+    $('.btn-all-back').on('click', function(){
+        $('.panel-all-back').removeClass('active')
+        $('.sub-nav-link').removeClass('active')
+        $('#all-category').addClass('show active')
+    })
+});
+
 $(document).ready(function () {
     initMap();
+    initAutocomplete();
+    initFilterRadius();
+    initFilterRadiusMain();
+    onFetchData();
     onChangeTab();
+    onSubmitForm();
 });

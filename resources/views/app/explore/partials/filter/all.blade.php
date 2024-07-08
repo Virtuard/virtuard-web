@@ -19,7 +19,7 @@
                     <div class="tab-content" id="filterAllTabContent">
                         <div class="tab-pane fade @if (request('term_type') == '' || request('term_type') == 'category') show active @endif"
                             id="all-category" role="tabpanel" aria-labelledby="all-category-tab">
-                            <form class="bravo_form_filter" action="{{ route('explore.index') }}">
+                            <form id="form_explore_all" class="bravo_form_filter" action="{{ route('explore.index') }}">
                                 <input type="hidden" name="term_type" value="category">
                                 <div class="g-filter-item">
                                     <div class="item-title">
@@ -28,9 +28,8 @@
                                     <div class="item-content">
                                         <div class="form-group">
                                             <select name="orderby" class="form-control orderby">
-                                                <option value="created_at"
-                                                    {{ request('orderby') == 'created_at' ? 'selected' : '' }}>
-                                                    {{ __('Last') }}{{ request('orderby') == 'rate_high_low' ? 'selected' : '' }}
+                                                <option value="created_at">
+                                                    {{ __('Last') }}
                                                 </option>
                                                 <option value="rate_high_low">
                                                     {{ __('Top Rated') }}

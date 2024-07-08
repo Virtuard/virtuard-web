@@ -1,8 +1,3 @@
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <i class="fa fa-lg fa-arrow-left cursor-pointer"></i>
-    <span id="count-list"></span>
-    <i class="fa fa-lg fa-arrow-right cursor-pointer"></i>
-</div>
 @foreach ($data as $list)
     <div class="col-12 mb-4">
         <div class="card" style="overflow: hidden;">
