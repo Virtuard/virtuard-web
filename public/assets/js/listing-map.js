@@ -297,8 +297,8 @@ function onSubmitForm() {
             attr[obj.name] = obj.value;
         });
 
-        fetchMap(attr);
         fetchService(attr);
+        fetchMap(attr);
     });
 }
 
@@ -306,8 +306,8 @@ function onFetchData(attr) {
     $("#list-item").html('');
     $("#count-list").html('');
 
-    fetchMap(attr);
     fetchService(attr);
+    fetchMap(attr);
 }
 
 function fetchMap(attr) {
