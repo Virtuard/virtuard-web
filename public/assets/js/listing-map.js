@@ -336,7 +336,7 @@ function fetchService(attr = {}) {
 
             if (data.data) {
                 $("#list-item").append(data.html);
-                $("#count-list").html(`Showing ${countService} Result`);
+                // $("#count-list").html(`Showing ${countService} Result`);
             }
 
             isLoadingScroll = false;
