@@ -4,6 +4,18 @@
         Edit Virtuard 360
     </h2>
 
+    <div class="col-md-12">
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+    </div>
+
     @if (!request()->has('id'))
         <div class="alert alert-primary" role="alert">
             <b>You must first create a title for your Virtuard 360!</b>
@@ -59,12 +71,12 @@
                             <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                             <div class="form-group title-image">
                                 <label for="exampleFormControlFile1">Title Image</label>
-                                <input type="text" name="title" class="form-control">
+                                <input type="text" name="title" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlFile1">Image 360</label>
                                 <input type="file" name="image" id="image" class="form-control-file"
-                                    id="exampleFormControlFile1">
+                                    id="exampleFormControlFile1" required>
                             </div>
                         </div>
                         <div class="modal-footer">

@@ -2,6 +2,19 @@
 @section('content')
     <div class="container-fluid">
         @include('admin.message')
+        
+        <div class="col-md-12">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
+
         @if (!request()->has('id'))
             <div class="row">
                 <div class="col-md-12">
@@ -80,11 +93,11 @@
                             <input type="hidden" name="user_id" value="{{ $row->user_id }}">
                             <div class="form-group title-image">
                                 <label for="exampleFormControlFile1">Title Image</label>
-                                <input type="text" name="title" class="form-control">
+                                <input type="text" name="title" class="form-control" required>
                             </div>
                             <div class="form-group">
                                 <label for="exampleFormControlFile1">Image 360</label>
-                                <input type="file" name="image" class="form-control-file" id="image">
+                                <input type="file" name="image" class="form-control-file" id="image" required>
                             </div>
                         </div>
                         <div class="modal-footer">

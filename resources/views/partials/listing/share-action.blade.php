@@ -7,7 +7,7 @@
         </li>
         <li>
             <a href="https://maps.google.com/maps?daddr={{ $translation->address }}" target="_blank">
-                <i class="fa fa-map-marker"></i> <span>{{ __('Get Direction') }}</span>
+                <i class="fa fa-map-marker"></i> <span>{{ __('Direction') }}</span>
             </a>
         </li>
         <li>

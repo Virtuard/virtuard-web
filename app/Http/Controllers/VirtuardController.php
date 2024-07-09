@@ -99,6 +99,10 @@ class VirtuardController extends Controller
 
     public function addNewImageVirtuard360(Request $request)
     {
+        $this->validate($request, [
+            'image' => 'required|mimes:jpeg,png|max:5000',
+        ]);
+
         $proofImage = $request->file('image');
         $title = $request->input('title');
 
