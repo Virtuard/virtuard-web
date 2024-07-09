@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="form-group">
                                         <input type="hidden" id="explore_map_lat" name="map_lat">
-                                        <input type="hidden" id="exlpore_map_lgn" name="map_lgn">
+                                        <input type="hidden" id="explore_map_lgn" name="map_lgn">
                                     </div>
                                 </div>
                             </div>

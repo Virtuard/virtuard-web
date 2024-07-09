@@ -907,6 +907,9 @@ class Boat extends Bookable
             $distance  = setting_item('boat_location_radius_value',0);
             if(!empty($distance) and setting_item('boat_location_search_style')=='autocompletePlace'){
                 $distanceType = setting_item('boat_location_radius_type',3959);
+                if(!empty($request['search_radius'])) {
+                    $distanceType = (int) $request['search_radius'];
+                }
                 if(empty($distanceType)){
                     $distanceType = 3959;
                 }

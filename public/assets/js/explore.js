@@ -269,8 +269,6 @@ $scrollableDiv.scroll(function (e) {
         pagePaginate++;
         isLoadingScroll = true;
         
-        console.log('page', pagePaginate)
-
         setTimeout(() => {
             infinteLoadMore();
         }, 500);

@@ -106,13 +106,14 @@ async function getLocationOsm() {
 }
 
 function getLocation(id) {
-    const target = document.getElementById(`${id}_get_location`);
     const storedGeoLocation = localStorage.getItem("geolocation");
 
     if (storedGeoLocation) {
         const geolocation = JSON.parse(storedGeoLocation);
-        console.log('storegeo', geolocation)
+        
         document.getElementById(`${id}_map_place`).value = geolocation.address;
+        document.getElementById(`${id}_map_lat`).value = geolocation.lat;
+        document.getElementById(`${id}_map_lgn`).value = geolocation.lng;
     } else {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
