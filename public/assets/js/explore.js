@@ -25,8 +25,8 @@ let clusterConfig = {
 };
 
 function initFilterRadiusMain() {
-    let radiusSlider = document.getElementById("search_radius");
-    let radiusText = document.getElementById("proximity_text");
+    let radiusSlider = document.getElementById("explore_search_radius");
+    let radiusText = document.getElementById("explore_proximity_text");
     radiusText.innerHTML = radiusSlider.value;
 
     radiusSlider.oninput = function() {
@@ -172,7 +172,7 @@ function resetMarkers() {
 }
 
 function initAutocomplete() {
-    let input = document.getElementById('map_place');
+    let input = document.getElementById('explore_map_place');
     mapAutocomplete = new google.maps.places.Autocomplete(input);
     mapAutocomplete.addListener('place_changed', onPlaceChanged);
 }
@@ -350,15 +350,16 @@ function fetchService(attr = {}) {
 }
 
 function onSubmitSearch() {
-    $('#submit-search').on('click', function(e) {
+    $('#explore-form').on('submit', function(e) {
         e.preventDefault();
         
         let attr = {
-            service_name: $('#service_name').val(),
-            map_place: $('#map_place').val(),
-            map_lat: $('#map_lat').val(),
-            map_lgn: $('#map_lgn').val(),
-            search_radius: $('#search_radius').val(),
+            service_name: $('#explore_service_name').val(),
+            map_place: $('#explore_map_place').val(),
+            map_lat: $('#explore_map_lat').val(),
+            map_lgn: $('#explore_map_lgn').val(),
+            search_radius: $('#explore_search_radius').val(),
+            service_type: tabActive,
         };
 
         onFetchData(attr);
@@ -432,4 +433,5 @@ $(document).ready(function () {
     onFetchData();
     onChangeTab();
     onSubmitForm();
+    onSubmitSearch();
 });

@@ -3,16 +3,16 @@
     <div id="explore" class="container">
         <div class="row">
             <div class="col-12 card">
-                <form action="{{ route('explore.index') }}">
+                <form id="explore-form" action="{{ route('explore.index') }}">
                     <div class="row py-2">
                         <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" aria-label='location' class='form-control' id='map_place'
+                                        <input type="text" aria-label='location' class='form-control' id='explore_map_place'
                                             name='map_place' placeholder="Location"
                                             style="border-top: none;border-left:none;border-right:none;">
-                                        <button class="btn btn-sm" id="get-location" type="button" onclick="getLocation()">
+                                        <button class="btn btn-sm" id="explore_get_location" type="button" onclick="getLocation('explore')">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                 viewBox="0 0 24 24" fill="none">
                                                 <path fill-rule="evenodd" clip-rule="evenodd"
@@ -21,20 +21,20 @@
                                             </svg>
                                         </button>
                                     </div>
+                                    <div class="form-group">
+                                        <input type="hidden" id="explore_map_lat" name="map_lat">
+                                        <input type="hidden" id="exlpore_map_lgn" name="map_lgn">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <input type="hidden" id="map_lat" name="map_lat">
-                                <input type="hidden" id="map_lgn" name="map_lgn">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2 font-weight-bold">Proximity <span id="proximity_text">0</span>
+                                    <label class="mb-2 font-weight-bold">Proximity <span id="explore_proximity_text">0</span>
                                         km</label>
                                     <div class="input-search">
-                                        <input type="range" id="search_radius" name="search_radius" min="0"
+                                        <input type="range" id="explore_search_radius" name="search_radius" min="0"
                                             max="500" class="w-100 cursor-pointer" value="0" />
                                     </div>
                                 </div>
@@ -42,13 +42,13 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group mt-3">
-                                <input type="text" class="form-control" id="service_name" name="service_name"
+                                <input type="text" class="form-control" id="explore_service_name" name="service_name"
                                     placeholder="keyword research"
                                     style="border-top: none;border-left:none;border-right:none;">
                             </div>
                         </div>
                         <div class="col-md-3">
-                            <button id="submit-search" type="submit" class="btn btn-md btn-dark mt-3 w-100">
+                            <button id="explore_submit_search" type="submit" class="btn btn-md btn-dark mt-3 w-100">
                                 <i class="fa fa-search"></i>
                                 Search
                             </button>
@@ -314,5 +314,5 @@
 @push('js')
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
-    <script src="{{ asset('assets/js/listing-map.js') }}"></script>
+    <script src="{{ asset('assets/js/explore.js') }}"></script>
 @endpush

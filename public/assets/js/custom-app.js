@@ -106,18 +106,26 @@ async function getLocationOsm() {
 }
 
 function getLocation(id) {
-    const target = document.getElementById(id);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(showPositionGeo, showErrorGeo);
+    const target = document.getElementById(`${id}_get_location`);
+    const storedGeoLocation = localStorage.getItem("geolocation");
+
+    if (storedGeoLocation) {
+        const geolocation = JSON.parse(storedGeoLocation);
+        console.log('storegeo', geolocation)
+        document.getElementById(`${id}_map_place`).value = geolocation.address;
     } else {
-      target.innerHTML = "Geolocation is not supported by this browser.";
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                position => showPositionGeo(position, id), 
+                showErrorGeo
+            );
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
     }
   }
   
-function showPositionGeo(position) {
-    // console.log(position)
-    // x.innerHTML = "Latitude: " + position.coords.latitude +
-    // "<br>Longitude: " + position.coords.longitude;
+function showPositionGeo(position, id) {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
     const latlng = { lat: lat, lng: lng };
@@ -126,14 +134,20 @@ function showPositionGeo(position) {
     geocoder.geocode({ location: latlng }, (results, status) => {
       if (status === "OK") {
         if (results[0]) {
-        const address = results[0].formatted_address
-        console.log(address)
-        //   document.getElementById("location").innerHTML = address;
+            const address = results[0].formatted_address
+            const geolocation = { address, lat, lng}
+            const geolocationText = JSON.stringify(geolocation)
+            
+            localStorage.setItem("geolocation", geolocationText);
+
+            document.getElementById(`${id}_map_place`).value = geolocation.address;
+            document.getElementById(`${id}_map_lat`).value = geolocation.lat;
+            document.getElementById(`${id}_map_lgn`).value = geolocation.lng;
         } else {
-        //   document.getElementById("location").innerHTML = "No results found";
+            console.log("No results found");
         }
       } else {
-        // document.getElementById("location").innerHTML = "Geocoder failed due to: " + status;
+        console.log("Geocoder failed due to: " + status);
       }
     });
 }
@@ -141,16 +155,16 @@ function showPositionGeo(position) {
 function showErrorGeo(error) {
     switch(error.code) {
       case error.PERMISSION_DENIED:
-        // document.getElementById("location").innerHTML = "User denied the request for Geolocation."
+        console.log("User denied the request for Geolocation.");
         break;
       case error.POSITION_UNAVAILABLE:
-        // document.getElementById("location").innerHTML = "Location information is unavailable."
+        console.log("Location information is unavailable.");
         break;
       case error.TIMEOUT:
-        // document.getElementById("location").innerHTML = "The request to get user location timed out."
+        console.log("The request to get user location timed out.");
         break;
       case error.UNKNOWN_ERROR:
-        // document.getElementById("location").innerHTML = "An unknown error occurred."
+        console.log("An unknown error occurred.");
         break;
     }
   }
