@@ -200,6 +200,9 @@ function onChangeTab() {
 
         const attr = {
             service_type: id,
+            map_place: $('#explore_map_place').val(),
+            map_lat: $('#explore_map_lat').val(),
+            map_lgn: $('#explore_map_lgn').val(),
         };
 
         tabActive = id;
