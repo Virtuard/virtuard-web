@@ -47,7 +47,7 @@ function initFilterRadius() {
     });
 }
 
-function initAutocomplete() {
+function initAutocomplete1() {
     let arrPlaces = $('.filter_map_place');
 
     arrPlaces.each(function() {
@@ -80,7 +80,7 @@ function initAutocomplete() {
 
 function initMap() {
     // Initialize the autocomplete
-    initAutocomplete();
+    // initAutocomplete();
 
     map = new google.maps.Map(document.getElementById('gmap'), {
         center: { lat: 0, lng: 0 },
@@ -188,9 +188,9 @@ function onPlaceChanged() {
     const lng = place.geometry.location.lng();
     const name = place.name;
 
-    $('#map_lat').val(lat);
-    $('#map_lgn').val(lng);
-    $('#service_name').val(name);
+    $('#explore_map_lat').val(lat);
+    $('#explore_map_lgn').val(lng);
+    // $('#explore_service_name').val(name);
 }
 
 function onChangeTab() {
