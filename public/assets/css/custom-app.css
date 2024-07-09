@@ -131,8 +131,24 @@ li.create-item a:before{
     }
 /* Google Translate End*/
 
+
 @media (min-width: 1200px) {
     .bravo_header .container {
         max-width: 90%;
+    }
+}
+
+#explore {
+    padding: 10px;
+    max-width: 90%;
+}
+
+#explore .card-explore .card-body {
+    padding: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .col-list-service {
+        margin: 10px 0;
     }
 }

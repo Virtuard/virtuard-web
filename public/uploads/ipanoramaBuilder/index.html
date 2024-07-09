@@ -28,6 +28,34 @@
 	<!-- Sweetalert -->
 	<link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <style>
+        @media(max-width: 768px) {
+            #iprm-ui-tabs-separator {
+                position: relative;
+                display: block;
+                margin: 5px 0;
+            }
+
+            .ipnrm-ui-cmd-preview,
+            .ipnrm-ui-cmd-getcode,
+            .ipnrm-ui-cmd-load {
+                position: relative !important;
+                display: inline-block;
+                top: 0 !important;
+                right: 0 !important;
+            }
+
+            .ipnrm-ui-item-list-wrap {
+                /* display: table-cell; */
+                display: block;
+                width:100%;
+            }
+            .ipnrm-ui-config {
+                display: block;
+                width:100%;   
+            }
+    </style>
 </head>
 <body>
 <!-- ipnrm-ui-app -->
@@ -48,6 +76,7 @@
 			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.general.isActive}" x-tab-panel-item x-id="general" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-cog"></i>General</div>
 			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.scenes.isActive}" x-tab-panel-item x-id="scenes" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-picture-o"></i>Scenes<div class="ipnrm-ui-label">{{appData.config.scenes.length}}</div></div>
 			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.hotspots.isActive, 'ipnrm-ui-hide': !appData.scene.selected}" x-tab-panel-item x-id="hotspots" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-dot-circle-o"></i>Hotspots<div class="ipnrm-ui-label">{{appData.scene.selected.config.hotspots.length}}</div></div>
+            <div id="iprm-ui-tabs-separator"></div>
 			<div class="ipnrm-ui-cmd-preview" x-ng-click="appData.fn.preview(appData);">Preview</div>
 			<div class="ipnrm-ui-cmd-getcode" x-ng-click="appData.fn.getCode(appData, appData.config, false);">Save</div>
 			<div class="ipnrm-ui-cmd-load" x-ng-click="appData.fn.storage.loadFromFile(appData);">Load File</div> 

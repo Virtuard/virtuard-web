@@ -1,10 +1,10 @@
 @extends ('layouts.app')
 @section('content')
-    <div class="" style="background: #f5f5f5; padding: 20px 60px;">
+    <div id="explore" class="container">
         <div class="row">
             <div class="col-12 card">
                 <form action="{{ route('explore.index') }}">
-                    <div class="row py-3">
+                    <div class="row py-2">
                         <div class="col-md-3">
                             <div class="form-group mt-3">
                                 <div class="form-content">
@@ -81,7 +81,7 @@
                 </ul>
             </div>
         </div>
-        <div class="row">
+        <div class="row my-2">
             <div class="col-md-3 px-0">
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show {{ !request('service_type') ? 'active' : '' }}" id="all"
@@ -96,10 +96,10 @@
                     @endforeach
                 </div>
             </div>
-            <div  class="col-md-4">
+            <div class="col-md-4 px-2 md-px-0 col-list-service">
                 <div id="list-scroll" class="card card-explore">
                     <div class="card-body">
-                        <div class="d-flex justify-content-center align-items-center mb-4">
+                        <div class="d-flex justify-content-center align-items-center mb-2">
                             <i class="fa fa-lg fa-arrow-left cursor-pointer d-none"></i>
                             <span id="count-list"></span>
                             <i class="fa fa-lg fa-arrow-right cursor-pointer d-none"></i>
@@ -116,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-5 px-0">
+            <div class="col-md-5 px-2 md-px-0">
                 <div class="card card-explore">
                     <div class="card-body">
                         <div id="gmap"></div>
@@ -145,7 +145,7 @@
             border: none;
             overflow: hidden;
             transition: all 500ms cubic-bezier(0.19, 1, 0.22, 1);
-            border-radius: 5px;
+            border-radius: unset;
             min-height: 150px;
             box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.2);
         }
@@ -214,7 +214,7 @@
         }
 
         .card-explore {
-            height: 600px;
+            height: 500px;
             position: relative;
             overflow: hidden;
             overflow-y: scroll;
@@ -226,7 +226,16 @@
             }
 
             .card-explore {
-                height: 550px;
+                height: 350px;
+            }
+
+            #myTab li {
+                font-size: 0.8rem;
+            }
+
+            .md-px-0 {
+                padding-left: 0 !important;
+                padding-right: 0 !important;
             }
         }
 

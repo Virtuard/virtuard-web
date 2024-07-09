@@ -1,5 +1,5 @@
 @foreach ($data as $list)
-    <div class="col-12 mb-4">
+    <div class="col-12 mb-4 md-px-0">
         <div class="card" style="overflow: hidden;">
             <div class="card card-custom card-has-bg click-col"
                 style="background-image: url({{ $list['banner_image_id'] }}); height: 250px;">
