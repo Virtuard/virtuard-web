@@ -91,7 +91,7 @@
                             </div>
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2">{{ __('Proximity') }} <span id="hotel_proximity_text">0</span> km</label>
+                                    <label class="mb-2">{{ __('Proximity') }} <span id="hotel_proximity_text">0</span> mil</label>
                                     <div class="input-search">
                                         <input type="range" id="hotel_search_radius" name="search_radius"
                                             min="0" max="500" class="filter-search-radius w-100 cursor-pointer" value="0" data-id="event" />

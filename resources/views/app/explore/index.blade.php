@@ -32,7 +32,7 @@
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <label class="mb-2 font-weight-bold">Proximity <span id="explore_proximity_text">0</span>
-                                        km</label>
+                                        mil</label>
                                     <div class="input-search">
                                         <input type="range" id="explore_search_radius" name="search_radius" min="0"
                                             max="500" class="w-100 cursor-pointer" value="0" />

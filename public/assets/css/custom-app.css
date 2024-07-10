@@ -42,6 +42,10 @@
     vertical-align: middle;
 }
 
+li.create-item {
+    list-style-type: none;
+}
+
 li.create-item a {
     color: #ffffff !important;
     background-color: #1e9bff !important;

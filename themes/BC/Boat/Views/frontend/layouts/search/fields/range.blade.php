@@ -1,6 +1,6 @@
 <div class="form-group">
     <div class="form-content" style="padding: 20px 0 10px 10px">
-        <label class="mb-2 font-weight-bold">Proximity <span id="boat_proximity_text">0</span> km</label>
+        <label class="mb-2 font-weight-bold">Proximity <span id="boat_proximity_text">0</span> mil</label>
         <div class="input-search">
             <input type="range" id="boat_search_radius" name="search_radius" min="0" max="500"
                 class="w-100 cursor-pointer" value="0" />

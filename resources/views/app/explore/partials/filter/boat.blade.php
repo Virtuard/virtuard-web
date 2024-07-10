@@ -92,7 +92,7 @@
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <label class="mb-2">{{ __('Proximity') }} <span id="boat_proximity_text">0</span>
-                                        km</label>
+                                        mil</label>
                                     <div class="input-search">
                                         <input type="range" id="boat_search_radius" name="search_radius"
                                             min="0" max="500"
