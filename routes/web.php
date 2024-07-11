@@ -18,6 +18,7 @@ Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 Route::get('/need-reset-password', 'HomeController@needResetPassword');
+Route::get('/need-confirm-email', 'HomeController@needConfirmEmail');
 
 // Virtuard 360
 Route::group([

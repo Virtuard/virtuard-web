@@ -5,6 +5,7 @@
 
 
 	use App\Helpers\ReCaptchaEngine;
+    use App\Models\User;
     use Illuminate\Auth\Events\Registered;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
@@ -86,14 +87,14 @@
                     'last_name'  => $request->input('last_name'),
                     'email'      => $request->input('email'),
                     'password'   => Hash::make($request->input('password')),
-                    'status'    => $request->input('publish','publish'),
+                    'status'    => 'verify',
                     'phone'    => $request->input('phone'),
                 ]);
 
                 $user->assignRole(setting_item('user_role'));
                 
                 event(new Registered($user));
-                Auth::loginUsingId($user->id);
+
                 try {
                     event(new SendMailUserRegistered($user));
                 } catch (Exception $exception) {
@@ -104,8 +105,32 @@
                 return response()->json([
                     'error'    => false,
                     'messages' => false,
-                    'redirect' => $request->input('redirect') ?? $request->headers->get('referer') ?? url(app_get_locale(false, '/'))
+                    // 'redirect' => $request->input('redirect') ?? $request->headers->get('referer') ?? url(app_get_locale(false, '/'))
+                    'redirect' => '/need-confirm-email',
                 ], 200);
+            }
+        }
+
+        public function emailConfirmed($str)
+        {
+            try {
+                $email = decrypt($str);
+                
+                $user = User::whereEmail($email)->first();
+                
+                if ($user && $user->status == 'verify') {
+                    $user->update([
+                        'status' => 'publish',
+                    ]);
+
+                    return redirect()
+                    ->route('login')
+                    ->with('success', 'Thank you for confirmation. Your account actived.');
+                }
+
+                return redirect()->route('login');
+            } catch (Exception $exception) {
+                return redirect()->route('login');
             }
         }
     }

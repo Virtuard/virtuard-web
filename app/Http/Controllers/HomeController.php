@@ -100,4 +100,13 @@ class HomeController extends Controller
                 'status' => 'Password expired. Please reset your password.'
             ]);
     }
+
+    public function needConfirmEmail()
+    {
+        return redirect()
+            ->route('login')
+            ->with([
+                'success' => 'Your account has been successfully created. Before login, you must verify email. Please check your email inbox or spam and click button verify',
+            ]);
+    }
 }

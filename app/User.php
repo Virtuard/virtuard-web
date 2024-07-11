@@ -407,6 +407,11 @@ use Illuminate\Notifications\Notifiable;
 	        $a  = Mail::to($this->email)->send(new EmailUserVerifyRegister($this, $actionUrl));
         }
 
+        public function sendEmailUserNeedConfirmNotification(){
+        	$actionUrl = route('auth.email.confirm', encrypt($this->email));
+	        Mail::to($this->email)->send(new EmailUserVerifyRegister($this, $actionUrl));
+        }
+
         public function sendEmailPermanentlyDelete(){
             if(!empty(setting_item('user_enable_permanently_delete_email'))){
 //                to admin
