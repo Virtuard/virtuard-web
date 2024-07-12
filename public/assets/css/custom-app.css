@@ -1,4 +1,3 @@
-        
 /*Top Bar*/
 .bravo_wrap .bravo_topbar {
     background: #172641;
@@ -19,13 +18,17 @@
 
 .img-adventages-header {
     height: 400px;
-    background-image: linear-gradient(0deg,rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.2)),url('http://localhost:8081/uploads/0000/9/2023/07/27/pexels-pixabay-219692.jpg') !important;
+    background-image: linear-gradient(
+            0deg,
+            rgba(0, 0, 0, 0.2),
+            rgba(0, 0, 0, 0.2)
+        ),
+        url("http://localhost:8081/uploads/0000/9/2023/07/27/pexels-pixabay-219692.jpg") !important;
     background-position: 50% !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
     padding: 120px 0;
 }
-
 
 .bravo-list-vendor.story-vendor .list-item.story-vendor .item {
     padding: 0 !important;
@@ -33,7 +36,7 @@
     margin-right: 1% !important;
 }
 
- /*=========  */
+/*=========  */
 .bravo_wrap .bravo_user_profile .sidebar-menu ul li .icon-lock i {
     font-size: 8px;
     opacity: 0.8;
@@ -64,7 +67,7 @@ li.create-item a:focus {
     outline: none;
 }
 
-li.create-item a:before{
+li.create-item a:before {
     content: "";
     position: absolute;
     top: 50%;
@@ -79,8 +82,14 @@ li.create-item a:before{
 }
 
 @keyframes pulse {
-    0% { transform: translateX(-50%) translateY(-50%) scale(1); opacity: 1; }
-    100% { transform: translateX(-50%) translateY(-50%) scale(1.4); opacity: 0; }
+    0% {
+        transform: translateX(-50%) translateY(-50%) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(-50%) translateY(-50%) scale(1.4);
+        opacity: 0;
+    }
 }
 
 .bravo_wrap .bravo_topbar .content .topbar-left a {
@@ -95,13 +104,19 @@ li.create-item a:before{
     .bravo-form-search-all .nav {
         justify-content: flex-start;
     }
-    
-    .bravo-form-search-all .nav li{
+
+    .bravo-form-search-all .nav li {
         margin: 2px;
     }
 }
 
-.bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a {
+.bravo_wrap
+    .page-template-content
+    .bravo-form-search-all
+    .g-form-control
+    .nav-tabs
+    li
+    a {
     padding: 7px 18px;
 }
 
@@ -109,32 +124,31 @@ li.create-item a:before{
     display: none;
 }
 
-.list-item-hide .effect{
+.list-item-hide .effect {
     background: unset !important;
 }
 
-.list-item-hide .content{
+.list-item-hide .content {
     display: none !important;
 }
 
 .bravo_wrap .bravo_footer .mailchimp .subcribe-form .btn-submit {
     padding-left: 15px;
     padding-right: 15px;
-  }
+}
 
 /* Google Translate Start */
-  .topbar-items #google_translate_element{
-      position: relative;
-      top: 20px;
-    }
+.topbar-items #google_translate_element {
+    position: relative;
+    top: 20px;
+}
 
-    .topbar-items #google_translate_element .goog-te-combo{
-        max-width: 130px;
-        height: 25px;
-        border-radius: 5px;
-    }
+.topbar-items #google_translate_element .goog-te-combo {
+    max-width: 130px;
+    height: 25px;
+    border-radius: 5px;
+}
 /* Google Translate End*/
-
 
 @media (min-width: 1200px) {
     .bravo_header .container {
@@ -156,3 +170,99 @@ li.create-item a:before{
         margin: 10px 0;
     }
 }
+
+/* ---------Story-------- */
+
+.user-status {
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.profile-pic {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 2px solid #dd3651;
+}
+
+.status-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.status-container {
+    position: relative;
+    width: 80%;
+    height: 80%;
+    max-width: 600px;
+    max-height: 600px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+.status-bar-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 2.5px;
+    overflow: hidden;
+}
+
+.status-bar {
+    width: 0;
+    height: 100%;
+    background-color: #fff;
+}
+
+.status-content {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.status-item {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status-item.active {
+    display: block;
+}
+.prev-btn,
+.next-btn {
+    position: absolute;
+    bottom: 20px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.prev-btn {
+    left: 20px;
+}
+
+.next-btn {
+    right: 20px;
+}
+
+.prev-btn:hover,
+.next-btn:hover {
+    background-color: #ddd;
+}
+/* ---------#Story-------- */

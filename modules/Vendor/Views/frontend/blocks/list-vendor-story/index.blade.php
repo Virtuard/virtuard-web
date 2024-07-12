@@ -73,7 +73,7 @@
                         <div class="form-group">
                             <label for="media">Story Media</label>
                             <input type="file" class="form-control" name="media" id="media"
-                                aria-describedby="mediaHelp">
+                                aria-describedby="mediaHelp" accept="image/*,.mp4">
                             <small id="mediaHelp" class="form-text text-muted">Recommended size: 1080x1920px and max 5MB.</small>
                         </div>
                     </form>
@@ -153,29 +153,140 @@
                     </div>
                 @endif
 
-                @foreach ($storyData as $story)
-                    @php
-                        $storyLink = $story->link ?? '';
-                        $storyLinkText = $story->link_text ?? '';
-                    @endphp
-                    <div class="item">
-                        <div class="image">
-                            @if ($story)
-                                <a href="{{ asset('uploads/' . $story->media) }}" data-lightbox="image-1"
-                                    data-title="{{ $story->link_text ?? '' }}" data-story="{{ $story->link ?? '' }}">
-                                    <div class="image-overlay">
-                                        <img src="{{ asset('uploads/' . $story->media) }}"
-                                            alt="{{ $story->link_text }}" class="w-100" style="object-fit: cover;">
-                                    </div>
-                                </a>
-                            @endif
-                        </div>
+                @php
+                    $today = \Carbon\Carbon::now(); 
+                    $stories = \App\Models\Story::query()
+                        ->whereDate('created_at', $today->toDateString())
+                        ->latest()
+                        ->get();
+                    $storyUsers = [];
+
+                    foreach ($stories as $key => $val) {
+                        $storyUsers[$val['user_id']][] = $val;
+                    }
+                @endphp
+
+                @foreach ($storyUsers as $ks => $stories)
+                    <div class="user-status" data-user="{{ $ks }}">
+                        @php
+                            $type = get_file_type($stories[0]->media);
+                            $thumb = asset('uploads/'.$stories[0]->media);
+                            if ($type != 'image') {
+                                $thumb = $stories[0]->user->getAvatarUrl();
+                            }
+                        @endphp
+                        <img src="{{ $thumb }}" alt="" class="profile-pic">
                     </div>
                 @endforeach
+
+                <div class="status-popup" id="status-popup">
+                    <div class="status-container">
+                        <div class="status-bar-container">
+                            <div class="status-bar" id="status-bar"></div>
+                        </div>
+                        <div class="status-content" id="status-content">
+                            @foreach ($storyUsers as $ks => $stories)
+                            @foreach ($stories as $story)
+                            @php
+                                $storyType = get_file_type($story->media);
+                            @endphp
+                                @if($storyType == 'image')
+                                    <img src="{{ asset('uploads/'.$story->media) }}" class="status-item" data-user="{{ $story->user_id }}" data-type="image" />
+                                @elseif($storyType == 'video')
+                                    <video src="{{ asset('uploads/'.$story->media) }}" class="status-item" data-user="{{ $story->user_id }}" data-type="video"></video>
+                                @endif
+                            @endforeach
+                            @endforeach
+                        </div>
+                        <button class="prev-btn" id="prev-btn">Prev</button>
+                        <button class="next-btn" id="next-btn">Next</button>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userStatuses = document.querySelectorAll('.user-status');
+        const statusPopup = document.getElementById('status-popup');
+        const statuses = document.querySelectorAll('.status-item');
+        const statusBar = document.getElementById('status-bar');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        let currentIndex = 0;
+        let interval;
+
+        function showStatus(index) {
+            const currentUser = statuses[index].getAttribute('data-user');
+            statuses.forEach((status, i) => {
+                status.classList.remove('active');
+                if (i === index) {
+                    status.classList.add('active');
+                    if (status.tagName === 'VIDEO') {
+                        status.play();
+                        status.onended = nextStatus;
+                    } else {
+                        clearTimeout(interval);
+                        interval = setTimeout(nextStatus, 3000);
+                    }
+                } else if (status.tagName === 'VIDEO') {
+                    status.pause();
+                    status.currentTime = 0;
+                }
+            });
+
+            statusBar.style.transition = 'none';
+            statusBar.style.width = '0%';
+
+            setTimeout(() => {
+                const duration = statuses[index].tagName === 'VIDEO' ? statuses[index].duration * 1000 : 3000;
+                statusBar.style.transition = `width ${duration}ms linear`;
+                statusBar.style.width = '100%';
+            }, 10);
+        }
+
+        function nextStatus() {
+            currentIndex++;
+            if (currentIndex >= statuses.length || statuses[currentIndex].getAttribute('data-user') !== statuses[currentIndex - 1].getAttribute('data-user')) {
+                statusPopup.style.display = 'none';
+                currentIndex = 0;
+                clearTimeout(interval);
+            } else {
+                showStatus(currentIndex);
+            }
+        }
+
+        function prevStatus() {
+            currentIndex--;
+            if (currentIndex < 0 || statuses[currentIndex].getAttribute('data-user') !== statuses[currentIndex + 1].getAttribute('data-user')) {
+                statusPopup.style.display = 'none';
+                currentIndex = 0;
+                clearTimeout(interval);
+            } else {
+                showStatus(currentIndex);
+            }
+        }
+
+        userStatuses.forEach(userStatus => {
+            userStatus.addEventListener('click', () => {
+                const user = userStatus.getAttribute('data-user');
+                currentIndex = Array.from(statuses).findIndex(status => status.getAttribute('data-user') === user);
+                statusPopup.style.display = 'flex';
+                showStatus(currentIndex);
+            });
+        });
+
+        nextBtn.addEventListener('click', nextStatus);
+        prevBtn.addEventListener('click', prevStatus);
+
+        statusPopup.addEventListener('click', () => {
+            statusPopup.style.display = 'none';
+            clearTimeout(interval);
+        });
+    });
+</script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>

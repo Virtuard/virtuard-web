@@ -5,6 +5,7 @@
     use App\Models\ChMessage as Message;
 use App\Models\FollowUser;
 use App\Models\Ipanorama;
+use App\Models\Story;
 use Illuminate\Notifications\Notifiable;
     use Illuminate\Contracts\Auth\MustVerifyEmail;
     use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -609,6 +610,11 @@ use Illuminate\Notifications\Notifiable;
         public function followingUsers()
         {
             return $this->followings()->with('followingUser');
+        }
+
+        public function stories()
+        {
+            return $this->hasMany(Story::class);
         }
 
     }

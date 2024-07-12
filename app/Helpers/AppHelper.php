@@ -1728,3 +1728,30 @@ if (!function_exists('is_display_panorama_listing')) {
         return $result;
     }
 }
+
+if (!function_exists('get_file_ext')) {
+    function get_file_ext($file)
+    {
+        $pathinfo = pathinfo($file);
+        return $pathinfo['extension'];
+    }
+}
+
+if (!function_exists('get_file_type')) {
+    function get_file_type($file)
+    {
+        $ext = get_file_ext($file);
+
+        $result = '';
+
+        switch ($ext) {
+            case 'mp4':
+                $result = 'video'; 
+                break;
+            default:
+                $result = 'image';
+        }
+
+        return $result;
+    }
+}

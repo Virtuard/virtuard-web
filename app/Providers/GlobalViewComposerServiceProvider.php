@@ -28,13 +28,7 @@ class GlobalViewComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         view()->composer('*', function ($view) {
-            $today = Carbon::now(); 
-            $storyData = Story::whereDate('created_at', $today->toDateString())
-                ->latest()
-                ->take('10')
-                ->get();        
-        
-            $view->with('storyData', $storyData);
+            //
         });
     }
 }
