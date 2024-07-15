@@ -36,6 +36,10 @@
 
                         'vendor_team_enable',
                         'vendor_team_auto_approved',
+
+                        'affiliate_enable',
+                        'affiliate_commission_type',
+                        'affiliate_commission_amount',
                     ],
                     'html_keys' => [
 

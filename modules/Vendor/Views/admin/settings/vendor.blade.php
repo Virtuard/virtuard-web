@@ -72,6 +72,50 @@
     </div>
 </div>
 <hr>
+@if(setting_item('flag_feature_affiliate'))
+<div class="row">
+    <div class="col-sm-4">
+        <h3 class="form-group-title">{{__('Config Affiliate')}}</h3>
+        <p class="form-group-desc">{{__('Change your config affiliate system')}}</p>
+    </div>
+    <div class="col-sm-8">
+        <div class="panel">
+            <div class="panel-body">
+                @if(is_default_lang())
+                    <div class="form-group">
+                        <div class="form-controls">
+                            <div class="form-group">
+                                <label> <input type="checkbox" @if($settings['affiliate_enable'] ?? '' == 1) checked @endif name="affiliate_enable" value="1"> {{__("Affiliate Enable?")}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" data-condition="affiliate_enable:is(1)">
+                        <label>{{__('Affiliate Commission Type')}}</label>
+                        <div class="form-controls">
+                            <select name="affiliate_commission_type" class="form-control">
+                                <option value="percent" {{($settings['affiliate_commission_type'] ?? '') == 'percent' ? 'selected' : ''  }}>{{__('Percent')}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" data-condition="affiliate_enable:is(1)">
+                        <label>{{__('Affiliate commission value')}}</label>
+                        <div class="form-controls">
+                            <input type="text" class="form-control" name="affiliate_commission_amount" value="{{!empty($settings['affiliate_commission_amount'])?$settings['affiliate_commission_amount']:"0" }}">
+                        </div>
+                        <p>
+                            <i>{{__('Example value : 10 or 10.5')}}</i><br>
+                            <i>{{__('Example: 10% commission. Vendor get 90%, Affiliate get 10%')}}</i>
+                        </p>
+                    </div>
+                @else
+                    <p>{{__('You can edit on main lang.')}}</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+@endif
 <div class="row">
     <div class="col-sm-4">
         <h3 class="form-group-title">{{__('Vendor Register')}}</h3>
