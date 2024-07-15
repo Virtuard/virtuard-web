@@ -1589,6 +1589,7 @@ if (!function_exists('hide_submenu_setting')) {
             'car',
             // 'event',
             'tour',
+            'media',
         ];
 
         return $data;

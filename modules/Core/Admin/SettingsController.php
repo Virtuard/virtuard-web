@@ -20,6 +20,7 @@ class SettingsController extends AdminController
 
     public function index($group)
     {
+        abort_if (in_array($group, hide_submenu_setting()), 404);
 
         if(empty($this->groups)){
             $this->setGroups();
@@ -143,6 +144,7 @@ class SettingsController extends AdminController
         if(!empty($all))
         {
             foreach ($all as $item){
+                if (in_array($item['id'], hide_submenu_setting())) continue;
                 $res[$item['id']] = $item;
             }
         }

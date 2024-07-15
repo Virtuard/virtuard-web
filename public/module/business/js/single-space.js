@@ -1,10 +1,15 @@
 (function ($) {
     new Vue({
-        el:'#bravo_event_book_app',
+        el:'#bravo_space_book_app',
         data:{
             id:'',
             extra_price:[],
-            ticket_types:[],
+            person_types:[
+                [
+
+                ]
+            ],
+            buyer_fees:[],
             message:{
                 content:'',
                 type:false
@@ -12,15 +17,16 @@
             html:'',
             onSubmit:false,
             start_date:'',
+            end_date:'',
             start_date_html:'',
+            number_of_guests:0,
             step:1,
-
+            start_date_obj:'',
+            adults:1,
+            children:0,
+            allEvents:[],
             total_price_before_fee:0,
             total_price_fee:0,
-            start_date_obj:'',
-            duration:0,
-            allEvents:[],
-            buyer_fees:[],
 
             is_form_enquiry_and_book:false,
             enquiry_type:'book',
@@ -30,82 +36,84 @@
             enquiry_phone:"",
             enquiry_note:"",
 
-            booking_type:"",
-            booking_time_slots:"",
-            select_start_time:[],
+            booking_type:"by_day",
         },
         watch:{
             extra_price:{
                 handler:function f() {
                     this.step = 1;
+                    // this.handleTotalPrice();
                 },
                 deep:true
             },
             start_date(){
                 this.step = 1;
             },
-            ticket_types:{
+            person_types:{
                 handler:function f() {
                     this.step = 1;
                 },
                 deep:true
             },
-            start_date(){
-                this.step = 1;
-                var me = this;
-                var startDate = new Date(me.start_date).getTime();
-                for (var ix in me.allEvents) {
-                    var item = me.allEvents[ix];
-                    var cur_date = new Date(item.start).getTime();
-                    if (cur_date === startDate) {
-                        if (item.ticket_types != null) {
-                            me.ticket_types = Object.assign([], item.ticket_types);
-                        } else {
-                            me.ticket_types = null
-                        }
-                        if (item.booking_time_slots != null) {
-                            me.booking_time_slots = Object.assign([], item.booking_time_slots);
-                        } else {
-                            me.booking_time_slots = null
-                        }
-                    }
+            adults:function () {
+                if(parseInt(this.guests) > bravo_booking_data.max_guests){
+                    this.adults = parseInt(this.adults)-1;
                 }
-                me.select_start_time = [];
+            },
+            children:function () {
+                if(parseInt(this.guests) > bravo_booking_data.max_guests){
+                    this.children = parseInt(this.children)-1;
+                }
             },
         },
         computed:{
             total_price:function(){
                 var me = this;
                 if (me.start_date !== "") {
-                    var total = 0;
-                    var total_tickets = 0;
+                    var total_price = 0;
                     var startDate = new Date(me.start_date).getTime();
+                    var endDate = new Date(me.end_date).getTime();
+                    var isBook = true;
+                    var guests = parseInt(me.children) + parseInt(me.adults);
 
-                    if(me.booking_type === "ticket")
-                    {
-                        // for ticket types
-                        if (me.ticket_types != null) {
-                            for (var ix in me.ticket_types) {
-                                var person_type = me.ticket_types[ix];
-                                total += parseFloat(person_type.price) * parseInt(person_type.number);
-                                total_tickets += parseInt(person_type.number);
-                            }
-                        }
-                        if(total_tickets <= 0) return 0;
-                    }
-                    if(me.booking_type === "time_slot")
-                    {
-                        if(me.select_start_time.length < 1){
-                            return 0
-                        }
+                    if(me.booking_type === "by_day"){
                         for (var ix in me.allEvents) {
                             var item = me.allEvents[ix];
                             var cur_date = new Date(item.start).getTime();
-                            if (cur_date === startDate) {
-                                total += parseFloat(item.price) * me.select_start_time.length;
+                            if (startDate == endDate) {
+                                if (cur_date >= startDate && cur_date <= endDate) {
+                                    total_price += parseFloat(item.price);
+                                    if (item.active === 0) {
+                                        isBook = false
+                                    }
+                                }
+                            } else {
+                                if (cur_date >= startDate && cur_date <= endDate) {
+                                    total_price += parseFloat(item.price);
+                                    if (item.active === 0) {
+                                        isBook = false
+                                    }
+                                }
                             }
                         }
-                        total_tickets = me.select_start_time.length;
+                    }
+
+                    var duration_in_hour = moment(endDate).diff(moment(startDate), 'hours') + 24;
+                    var duration_in_day = moment(endDate).diff(moment(startDate), 'days') + 1;
+
+                    if(me.booking_type === "by_night"){
+                        for (var ix in me.allEvents) {
+                            var item = me.allEvents[ix];
+                            var cur_date = new Date(item.start).getTime();
+                            if (cur_date >= startDate && cur_date < endDate) {
+                                total_price += parseFloat(item.price);
+                                if (item.active === 0) {
+                                    isBook = false
+                                }
+                            }
+                        }
+                        duration_in_hour -=24
+                        duration_in_day -=1
                     }
 
                     for (var ix in me.extra_price) {
@@ -118,19 +126,19 @@
                                     type_total += parseFloat(item.price);
                                     break;
                                 case "per_hour":
-                                    if (me.duration > 0) {
-                                        type_total += parseFloat(item.price) * parseFloat(me.duration);
-                                    }
+                                        type_total += parseFloat(item.price) * Math.max(duration_in_hour,24);
+                                    break;
+                                case "per_day":
+                                        type_total += parseFloat(item.price) * Math.max(1,duration_in_day) ;
                                     break;
                             }
-                            if (typeof item.per_ticket !== "undefined") {
-                                type_total = type_total * total_tickets;
+                            if (typeof item.per_person !== "undefined") {
+                                type_total = type_total * guests;
                             }
-                            total += type_total;
+                            total_price += type_total;
                         }
                     }
-
-                    this.total_price_before_fee = total;
+                    this.total_price_before_fee = total_price;
 
                     var total_fee = 0;
                     for (var ix in me.buyer_fees) {
@@ -142,20 +150,22 @@
 
                         //for Percent
                         if (typeof item.unit !== "undefined" && item.unit === "percent" ) {
-                            fee_price = ( total / 100 ) * fee_price;
-                        }else{
-                            //for Fixed and per_ticket
-                            if (typeof item.per_ticket !== "undefined" ) {
-                                fee_price = fee_price * total_tickets;
-                            }
+                            fee_price = ( total_price / 100 ) * fee_price;
                         }
 
+                        if (typeof item.per_person !== "undefined") {
+                            fee_price = fee_price * guests;
+                        }
                         total_fee += fee_price;
                     }
-                    total += total_fee;
+                    total_price += total_fee;
                     this.total_price_fee = total_fee;
 
-                    return total;
+                    if (isBook === false || guests === 0) {
+                        return 0;
+                    } else {
+                       return total_price;
+                    }
                 }
                 return 0;
             },
@@ -179,6 +189,9 @@
                 }
 
                 return res;
+            },
+            guests(){
+                return parseInt(this.children) + parseInt(this.adults)
             },
             pay_now_price:function(){
                 if(this.is_deposit_ready){
@@ -217,12 +230,17 @@
             for(var k in bravo_booking_data){
                 this[k] = bravo_booking_data[k];
             }
-            console.log("Create!!!!!");
         },
         mounted(){
             var me = this;
+            /*$(".bravo_tour_book").sticky({
+                topSpacing:30,
+                bottomSpacing:$(document).height() - $('.end_tour_sticky').offset().top + 40
+            });*/
+
+
             var options = {
-                singleDatePicker: true,
+                // singleDatePicker: true,
                 showCalendar: false,
                 sameDate: true,
                 autoApply           : true,
@@ -263,22 +281,31 @@
                 }
             };
 
+
             if (typeof  daterangepickerLocale == 'object') {
                 options.locale = _.merge(daterangepickerLocale,options.locale);
             }
             this.$nextTick(function () {
+
                 $(this.$refs.start_date).daterangepicker(options).on('apply.daterangepicker',
                     function (ev, picker) {
+                        if(me.booking_type === "by_night"){
+                            if(picker.endDate.diff(picker.startDate,'day') <=0){
+                                picker.endDate.add(1,'day');
+                            }
+                        }
                         me.start_date = picker.startDate.format('YYYY-MM-DD');
-                        me.start_date_html = picker.startDate.format(bookingCore.date_format);
+                        me.end_date = picker.endDate.format('YYYY-MM-DD');
+                        me.start_date_html = picker.startDate.format(bookingCore.date_format) +' <i class="fa fa-long-arrow-right" style="font-size: inherit"></i> '+ picker.endDate.format(bookingCore.date_format);
+                        // me.handleTotalPrice();
                     })
                     .on('update-calendar',function (e,obj) {
-                        me.fetchEvents(obj.leftCalendar.calendar[0][0], obj.leftCalendar.calendar[5][6])
+                        me.fetchEvents(obj.leftCalendar.calendar[0][0], obj.rightCalendar.calendar[5][6])
                     });
-            });
+            })
         },
         methods:{
-            handleTotalPrice: function () {
+            handleTotalPrice:function() {
             },
             fetchEvents(start,end){
                 var me = this;
@@ -288,7 +315,6 @@
                     id:bravo_booking_data.id,
                     for_single:1
                 };
-                console.log(data);
 
                 $.ajax({
                     url: bravo_booking_i18n.load_dates_url,
@@ -318,48 +344,45 @@
                 return window.bravo_format_money(m);
             },
             validate(){
-                if(!this.start_date)
+                if(!this.start_date || !this.end_date)
                 {
-                    this.message.status = false;
+					this.message.status = false;
                     this.message.content = bravo_booking_i18n.no_date_select;
                     return false;
                 }
-                return true;
-            },
-            selectStartTime(time){
-                var me = this;
-                if(me.select_start_time.indexOf(time) === -1){
-                    me.select_start_time.push(time)
-                }else{
-                    const index = me.select_start_time.indexOf(time);
-                    if (index > -1) {
-                        me.select_start_time.splice(index, 1);
-                    }
-                }
-            },
-            isInArray(time){
-                var me = this;
-                if(me.select_start_time.indexOf(time) === -1){
+                if(!this.guests )
+                {
+					this.message.status = false;
+                    this.message.content = bravo_booking_i18n.no_guest_select;
                     return false;
                 }
+
                 return true;
             },
             addPersonType(type){
-                type.number = parseInt(type.number);
-                if(type.number < parseInt(type.max)) type.number +=1;
+                if(this.guests >= bravo_booking_data.max_guests) return false;
+                switch (type){
+                    case "adults":
+                        this.adults ++ ;
+                    break;
+                    case "children":
+                        this.children ++;
+                    break;
+                }
             },
             minusPersonType(type){
-                type.number = parseInt(type.number);
-                if(type.number > type.min) type.number -=1;
-            },
-            changePersonType(type){
-                type.number = parseInt(type.number);
-                if(type.number > parseInt(type.max)){
-                    type.number = type.max;
-                }
-                if(type.number < type.min){
-                    type.number = type.min
-                }
+				switch (type){
+					case "adults":
+						if(this.adults  >=2){
+						    this.adults --;
+                        }
+						break;
+					case "children":
+						if(this.children  >=1){
+							this.children --;
+						}
+						break;
+				}
             },
             doSubmit:function (e) {
                 e.preventDefault();
@@ -380,12 +403,12 @@
                     url:bookingCore.url+'/booking/addToCart',
                     data:{
                         service_id:this.id,
-                        service_type:'natural',
+                        service_type:"business",
                         start_date:this.start_date,
-                        ticket_types:this.ticket_types,
+                        end_date:this.end_date,
                         extra_price:this.extra_price,
-                        step:this.step,
-                        select_start_time:this.select_start_time,
+                        adults:this.adults,
+                        children:this.children
                     },
                     dataType:'json',
                     type:'post',
@@ -433,7 +456,6 @@
                         if(e.status != 401 && e.responseJSON){
                             me.message.content = e.responseJSON.message ? e.responseJSON.message : 'Can not booking';
                             me.message.type = false;
-
                         }
                     }
                 })
@@ -450,7 +472,7 @@
                     url:bookingCore.url+'/booking/addEnquiry',
                     data:{
                         service_id:this.id,
-                        service_type:'natural',
+                        service_type:'business',
                         name:this.enquiry_name,
                         email:this.enquiry_email,
                         phone:this.enquiry_phone,
@@ -480,7 +502,6 @@
                             me.enquiry_note = "";
                         }
                         me.onSubmit = false;
-
                     },
                     error:function (e) {
                         me.onSubmit = false;
@@ -535,7 +556,7 @@
         $('.bravo_single_book_wrap').modal('show');
     });
 
-    $(".bravo_detail_event .g-faq .item .header").click(function () {
+    $(".bravo_detail_space .g-faq .item .header").click(function () {
         $(this).parent().toggleClass("active");
     });
 

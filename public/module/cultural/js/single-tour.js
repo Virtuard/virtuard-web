@@ -1,10 +1,10 @@
 (function ($) {
     new Vue({
-        el:'#bravo_event_book_app',
+        el:'#bravo_tour_book_app',
         data:{
             id:'',
             extra_price:[],
-            ticket_types:[],
+            person_types:[],
             message:{
                 content:'',
                 type:false
@@ -14,13 +14,15 @@
             start_date:'',
             start_date_html:'',
             step:1,
-
+            guests:1,
+            price:0,
             total_price_before_fee:0,
             total_price_fee:0,
+            max_guests:1,
             start_date_obj:'',
             duration:0,
             allEvents:[],
-            buyer_fees:[],
+			buyer_fees:[],
 
             is_form_enquiry_and_book:false,
             enquiry_type:'book',
@@ -29,10 +31,6 @@
             enquiry_email:"",
             enquiry_phone:"",
             enquiry_note:"",
-
-            booking_type:"",
-            booking_time_slots:"",
-            select_start_time:[],
         },
         watch:{
             extra_price:{
@@ -44,7 +42,10 @@
             start_date(){
                 this.step = 1;
             },
-            ticket_types:{
+            guests(){
+                this.step = 1;
+            },
+            person_types:{
                 handler:function f() {
                     this.step = 1;
                 },
@@ -58,19 +59,15 @@
                     var item = me.allEvents[ix];
                     var cur_date = new Date(item.start).getTime();
                     if (cur_date === startDate) {
-                        if (item.ticket_types != null) {
-                            me.ticket_types = Object.assign([], item.ticket_types);
+                        if (item.person_types != null) {
+                            me.person_types = Object.assign([], item.person_types);
                         } else {
-                            me.ticket_types = null
+                            me.person_types = null
                         }
-                        if (item.booking_time_slots != null) {
-                            me.booking_time_slots = Object.assign([], item.booking_time_slots);
-                        } else {
-                            me.booking_time_slots = null
-                        }
+                        me.max_guests = parseInt(item.max_guests);
+                        me.price = parseFloat(item.price);
                     }
                 }
-                me.select_start_time = [];
             },
         },
         computed:{
@@ -78,34 +75,19 @@
                 var me = this;
                 if (me.start_date !== "") {
                     var total = 0;
-                    var total_tickets = 0;
+                    var total_guests = 0;
                     var startDate = new Date(me.start_date).getTime();
-
-                    if(me.booking_type === "ticket")
-                    {
-                        // for ticket types
-                        if (me.ticket_types != null) {
-                            for (var ix in me.ticket_types) {
-                                var person_type = me.ticket_types[ix];
-                                total += parseFloat(person_type.price) * parseInt(person_type.number);
-                                total_tickets += parseInt(person_type.number);
-                            }
+                    // for person types
+                    if (me.person_types != null) {
+                        for (var ix in me.person_types) {
+                            var person_type = me.person_types[ix];
+                            total += parseFloat(person_type.price) * parseInt(person_type.number);
+                            total_guests += parseInt(person_type.number);
                         }
-                        if(total_tickets <= 0) return 0;
-                    }
-                    if(me.booking_type === "time_slot")
-                    {
-                        if(me.select_start_time.length < 1){
-                            return 0
-                        }
-                        for (var ix in me.allEvents) {
-                            var item = me.allEvents[ix];
-                            var cur_date = new Date(item.start).getTime();
-                            if (cur_date === startDate) {
-                                total += parseFloat(item.price) * me.select_start_time.length;
-                            }
-                        }
-                        total_tickets = me.select_start_time.length;
+                    }else{
+                        // for default
+                        total_guests = me.guests;
+                        total += me.guests * me.price;
                     }
 
                     for (var ix in me.extra_price) {
@@ -122,9 +104,14 @@
                                         type_total += parseFloat(item.price) * parseFloat(me.duration);
                                     }
                                     break;
+                                case "per_day":
+                                    if (me.duration > 0) {
+                                        type_total += parseFloat(item.price) * Math.ceil(parseFloat(me.duration) / 24);
+                                    }
+                                    break;
                             }
-                            if (typeof item.per_ticket !== "undefined") {
-                                type_total = type_total * total_tickets;
+                            if (typeof item.per_person !== "undefined") {
+                                type_total = type_total * total_guests;
                             }
                             total += type_total;
                         }
@@ -135,6 +122,7 @@
                     var total_fee = 0;
                     for (var ix in me.buyer_fees) {
                         var item = me.buyer_fees[ix];
+
                         if(!item.price) continue;
 
                         //for Fixed
@@ -143,13 +131,11 @@
                         //for Percent
                         if (typeof item.unit !== "undefined" && item.unit === "percent" ) {
                             fee_price = ( total / 100 ) * fee_price;
-                        }else{
-                            //for Fixed and per_ticket
-                            if (typeof item.per_ticket !== "undefined" ) {
-                                fee_price = fee_price * total_tickets;
-                            }
                         }
 
+                        if (typeof item.per_person !== "undefined") {
+                            fee_price = fee_price * total_guests;
+                        }
                         total_fee += fee_price;
                     }
                     total += total_fee;
@@ -217,7 +203,6 @@
             for(var k in bravo_booking_data){
                 this[k] = bravo_booking_data[k];
             }
-            console.log("Create!!!!!");
         },
         mounted(){
             var me = this;
@@ -326,27 +311,9 @@
                 }
                 return true;
             },
-            selectStartTime(time){
-                var me = this;
-                if(me.select_start_time.indexOf(time) === -1){
-                    me.select_start_time.push(time)
-                }else{
-                    const index = me.select_start_time.indexOf(time);
-                    if (index > -1) {
-                        me.select_start_time.splice(index, 1);
-                    }
-                }
-            },
-            isInArray(time){
-                var me = this;
-                if(me.select_start_time.indexOf(time) === -1){
-                    return false;
-                }
-                return true;
-            },
             addPersonType(type){
                 type.number = parseInt(type.number);
-                if(type.number < parseInt(type.max)) type.number +=1;
+                if(type.number < parseInt(type.max) || !type.max) type.number +=1;
             },
             minusPersonType(type){
                 type.number = parseInt(type.number);
@@ -360,6 +327,14 @@
                 if(type.number < type.min){
                     type.number = type.min
                 }
+            },
+            addGuestsType(){
+                var me = this;
+                if(me.guests < parseInt(me.max_guests) || !me.max_guests) me.guests +=1;
+            },
+            minusGuestsType(){
+                var me = this;
+                if(me.guests > 1) me.guests -=1;
             },
             doSubmit:function (e) {
                 e.preventDefault();
@@ -375,17 +350,15 @@
                 if(this.step == 1){
                     this.html = '';
                 }
-
                 $.ajax({
                     url:bookingCore.url+'/booking/addToCart',
                     data:{
                         service_id:this.id,
                         service_type:'cultural',
                         start_date:this.start_date,
-                        ticket_types:this.ticket_types,
+                        person_types:this.person_types,
                         extra_price:this.extra_price,
-                        step:this.step,
-                        select_start_time:this.select_start_time,
+                        guests:this.guests
                     },
                     dataType:'json',
                     type:'post',
@@ -535,8 +508,29 @@
         $('.bravo_single_book_wrap').modal('show');
     });
 
-    $(".bravo_detail_event .g-faq .item .header").click(function () {
+    $(".bravo_detail_tour .g-faq .item .header").click(function () {
         $(this).parent().toggleClass("active");
+    });
+
+
+    $(".bravo_detail_tour .g-itinerary").each(function () {
+        $(this).find(".owl-carousel").owlCarousel({
+            items: 3,
+            loop: false,
+            margin: 15,
+            nav: false,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                1000: {
+                    items: 3
+                }
+            }
+        })
     });
 
 })(jQuery);
