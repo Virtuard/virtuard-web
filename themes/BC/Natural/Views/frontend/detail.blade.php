@@ -65,7 +65,7 @@
         var bravo_booking_i18n = {
                 no_date_select:'{{__('Please select Start date')}}',
                 no_guest_select:'{{__('Please select at least one guest')}}',
-                load_dates_url:'{{route('tour.vendor.availability.loadDates')}}',
+                load_dates_url:'{{route('natural.vendor.availability.loadDates')}}',
                 name_required:'{{ __("Name is Required") }}',
                 email_required:'{{ __("Email is Required") }}',
             };
@@ -73,7 +73,7 @@
     <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
-    <script type="text/javascript" src="{{ asset('module/tour/js/single-tour.js?_ver='.config('app.asset_version')) }}"></script>
+    <script type="text/javascript" src="{{ asset('module/natural/js/single-tour.js?_ver='.config('app.asset_version')) }}"></script>
 
     @include('partials.ipanorama.ipanorama-js-no-jquery')
     @if (is_display_panorama_listing($row))

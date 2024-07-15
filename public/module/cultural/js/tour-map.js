@@ -10,10 +10,7 @@ var mapEngine = new BravoMapEngine('bravo_results_map',{
         }
     }
 });
-
 jQuery(function ($) {
-
-
 	$(".bravo-filter-price").each(function () {
 		var input_price = $(this).find(".filter-price");
 		var min = input_price.data("min");
@@ -39,8 +36,8 @@ jQuery(function ($) {
         setTimeout(function () {
             reloadForm()
         },500)
-        // reloadForm();
     });
+
 	$('.bravo_form_search_map .input-filter').change(function () {
 		reloadForm();
 	});
@@ -112,6 +109,7 @@ jQuery(function ($) {
 							},'fast');
 						}
 					},500);
+
                     if(window.lazyLoadInstance){
                         window.lazyLoadInstance.update();
                     }

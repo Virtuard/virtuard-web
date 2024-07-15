@@ -6,7 +6,7 @@
 
 .bravo_wrap {
     //Page search tour
-    .bravo_search_event {
+    .bravo_search_space {
         .bravo_banner {
             background-color: #1a2b48;
             background-position: center;
@@ -160,7 +160,7 @@
         }
     }
 
-    .bravo_detail_event {
+    .bravo_detail_space {
         .bravo_banner {
             background-color: #fff !important;
             background-position: center !important;
@@ -346,7 +346,7 @@
                     }
                 }
             }
-            .g-event-feature {
+            .g-space-feature {
                 padding-top: 25px;
                 padding-bottom: 15px;
                 border-top: 1px solid #D7DCE3;
@@ -447,18 +447,13 @@
             }
             .g-attributes{
                 margin-bottom: 15px;
-                h3{
-                    margin-bottom: 25px;
-                }
                 .list-attributes{
                     display: flex;
                     flex-wrap: wrap;
-                    margin: 0 -10px;
                     .item{
-                        flex: 0 0 30%;
-                        max-width: 30%;
-                        margin-bottom: 20px;
-                        padding: 0 10px;
+                        flex: 0 0 25%;
+                        max-width: 25%;
+                        margin-bottom: 10px;
                         i{
                             font-size: 16px;
                             position: relative;
@@ -467,8 +462,8 @@
                             }
                         }
                         img{
-                            margin-right: 10px;
-                            max-width: 100%;
+                            max-width: 30px;
+                            margin-right: 5px;
                         }
                         @media(max-width: 768px){
                             flex: 0 0 50%;
@@ -477,16 +472,6 @@
                         @media(max-width: 420px){
                             flex: 0 0 100%;
                             max-width: 100%;
-                        }
-                    }
-                    &.icon_center{
-                        .item{
-                            text-align: center;
-                            img{
-                                display: block;
-                                margin: auto;
-                                padding-bottom: 10px;
-                            }
                         }
                     }
                 }
@@ -516,7 +501,6 @@
                 }
             }
             @import "../../../sass/common/gallery";
-            @import "../../../sass/common/faq";
         }
         .bravo-list-space-related {
             margin-top: 15px;
