@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::table('bravo_bookings', function (Blueprint $table) {
             $table->integer('referral_id')->nullable();
-            $table->double('refferal_commission')->default(0);
+            $table->decimal('referral_commission', 10, 2)->default(0.00);
+            $table->string('referral_commission_type')->nullable();
         });
     }
 
@@ -29,6 +30,7 @@ return new class extends Migration
         Schema::table('bravo_bookings', function (Blueprint $table) {
             $table->dropColumn('referral_id');
             $table->dropColumn('referral_commission');
+            $table->dropColumn('referral_commission_type');
         });
     }
 };

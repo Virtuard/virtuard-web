@@ -278,6 +278,12 @@ class Business extends Bookable
         $booking->total_before_discount = $total_before_fees;
 
         $booking->calculateCommission();
+        
+        $ref_id = $request->referrence;
+        if ($ref_id) {
+            $booking->calculateCommissionRef($ref_id);
+            $booking->ref_id = $ref_id;
+        }
 
         if($this->isDepositEnable())
         {

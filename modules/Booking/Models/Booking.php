@@ -853,11 +853,53 @@ class Booking extends BaseModel
         return $returnArray;
     }
 
+    public function getCommissionRef($ref_id){
+        $total = $this->total_before_fees;
+        $returnArray=[
+            'ref_commission'=>0,
+            'ref_commission_type'=>'',
+        ];
+        if (setting_item('affiliate_enable') == 1) {
+            $ref = User::find($ref_id);
+            if (!empty($ref)) {
+                $commission = [];
+                $commission['amount'] = setting_item('referral_commission_amount', 10);
+                $commission['type'] = setting_item('referral_commission_type', 'percent');
+
+                if($ref->ref_commission_type){
+                    $commission['type'] = $ref->ref_commission_type;
+                }
+                if($ref->ref_commission_amount){
+                    $commission['amount'] = $ref->ref_commission_amount;
+                }
+
+                if($commission['type'] == 'disable'){
+                    return $returnArray;
+                }
+
+                if ($commission['type'] == 'percent') {
+                    $returnArray['ref_commission'] = (float)($total / 100) * $commission['amount'];
+                } else {
+                    $returnArray['ref_commission']= (float)min($total,$commission['amount']);
+                }
+                $returnArray['ref_commission_type'] = json_encode($commission);
+            }
+        }
+        return $returnArray;
+    }
+
     public function calculateCommission(){
         $data = $this->getCommissionVendor();
 
         $this->commission = $data['commission'];
         $this->commission_type = $data['commission_type'];
+    }
+
+    public function calculateCommissionRef($ref_id){
+        $data = $this->getCommissionRef($ref_id);
+
+        $this->ref_commission = $data['ref_commission'];
+        $this->ref_commission_type = $data['ref_commission_type'];
     }
 
 	public static function getContentCalendarIcal($service_type,$id,$module){

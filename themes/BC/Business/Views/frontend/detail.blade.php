@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
-                        @if(setting_item('affiliate_enable'))
+                        @if(setting_item('referral_enable'))
                             @include('partials.listing.sell-button')
                         @endif
                         @include('Business::frontend.layouts.details.business-form-book')
@@ -96,8 +96,7 @@
 
             document.getElementById('copyReferralButton').addEventListener('click', function() {
                 if (isLoggedIn && isSubscribed) {
-                    let referralUrl = `{{ route('business.detail', $row->slug) }}?referral_id=${userId}`;
-                    console.log(referralUrl)
+                    let referralUrl = `{{ route('business.detail', $row->slug) }}?reference=${userId}`;
 
                     //Copy the referral URL to the clipboard
                     var tempInput = document.createElement('input');
