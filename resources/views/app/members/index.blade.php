@@ -58,7 +58,7 @@
                             </div>
                         
                             <div>
-                                <a class="m-0" href="{{ route('user.profile', $user->id) }}">
+                                <a class="m-0" href="{{ route('user.profile', $user->user_name ?? $user->id) }}">
                                     <b>{{ $user->name }}</b>
                                 </a>
                                 <div class="mb-1"><span class="role-name  badge badge-primary">{{ $user->role_name }}</span></div>

@@ -1,9 +1,11 @@
 <?php
 use Modules\Core\Models\Settings;
 use App\Currency;
+use App\User;
 use App\Models\FollowUser;
 use App\Models\UserPost;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Modules\Core\Models\Attributes;
 use Modules\Core\Models\Terms;
@@ -1754,5 +1756,26 @@ if (!function_exists('get_file_type')) {
         }
 
         return $result;
+    }
+}
+
+if (!function_exists('generate_user_name')) {
+    function generate_user_name($first_name, $last_name = null)
+    {
+        $username = $first_name;
+
+        if (!empty($last_name)) {
+            $username = $first_name . ' ' . $last_name;
+        }
+
+        $username = Str::slug($username);
+        $username = str_replace('-', '_', $username);
+
+        $exist = User::where('user_name', $username)->exists();
+        if($exist) {
+            $username = $username . '_1';
+        }
+
+        return $username;
     }
 }
