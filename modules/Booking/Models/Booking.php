@@ -456,6 +456,29 @@ class Booking extends BaseModel
         return $list_booking->paginate(10);
     }
 
+    public static function getReferralHistory($booking_status = false, $customer_id = false, $vendor_id = false, $ref_id = false, $service = false)
+    {
+        $list_booking = parent::query()->orderBy('id', 'desc');
+        if (!empty($booking_status)) {
+            $list_booking->where("status", $booking_status);
+        }
+        if (!empty($customer_id)) {
+            $list_booking->where("customer_id", $customer_id);
+        }
+        if (!empty($vendor_id)) {
+            $list_booking->where("vendor_id", $vendor_id);
+        }
+        if (!empty($ref_id)) {
+            $list_booking->where("ref_id", $ref_id);
+        }
+        if (!empty($service)) {
+            $list_booking->where("object_model", $service);
+        }
+        $list_booking->where('status','!=','draft');
+        $list_booking->whereIn('object_model', array_keys(get_bookable_services()));
+        return $list_booking->paginate(10);
+    }
+
     public static function getTopCardsReportForVendor($user_id)
     {
 

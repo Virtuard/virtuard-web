@@ -401,7 +401,7 @@
 
                 const url = new URL(window.location.href);
                 const params = new URLSearchParams(url.search);
-                const referrence = params.get('referrence');
+                const reference = params.get('reference');
 
                 $.ajax({
                     url:bookingCore.url+'/booking/addToCart',
@@ -413,7 +413,7 @@
                         extra_price:this.extra_price,
                         adults:this.adults,
                         children:this.children,
-                        referrence:referrence,
+                        reference:reference,
                     },
                     dataType:'json',
                     type:'post',

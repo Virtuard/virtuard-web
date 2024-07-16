@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
-                        @if(setting_item('referral_enable'))
+                        @if(auth()->check() && setting_item('referral_enable'))
                             @include('partials.listing.sell-button')
                         @endif
                         @include('Business::frontend.layouts.details.business-form-book')
@@ -84,37 +84,5 @@
     @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
     @endif
-    <script>
-        $(document).ready(function(){
-            copyReferalLink();
-        });
-        
-        function copyReferalLink() {
-            const isLoggedIn = {{ Auth::check() ? 'true' : 'false' }};
-            const userId = {{ auth()->user()->id ?? 'null' }};
-            const isSubscribed = 1;
-
-            document.getElementById('copyReferralButton').addEventListener('click', function() {
-                if (isLoggedIn && isSubscribed) {
-                    let referralUrl = `{{ route('business.detail', $row->slug) }}?reference=${userId}`;
-
-                    //Copy the referral URL to the clipboard
-                    var tempInput = document.createElement('input');
-                    tempInput.value = referralUrl;
-                    document.body.appendChild(tempInput);
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-
-                    Toast.fire({
-                        icon: 'success',
-                        title: 'Copied product referral'
-                    });
-
-                } else {
-                    // Show an error message if the user is not logged in or not subscribed
-                }
-            });
-        }
-    </script>
+    @include('partials.listing.copy-referral-script')
 @endpush

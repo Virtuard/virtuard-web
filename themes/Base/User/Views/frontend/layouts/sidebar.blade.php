@@ -12,7 +12,7 @@ $menus = [
         'url' => route('user.booking_history'),
         'title' => __('Booking History'),
         'icon' => 'fa fa-clock-o',
-        'position' => 4,
+        'position' => 5,
     ],
     'wishlist' => [
         'url' => route('user.wishList.index'),
@@ -50,15 +50,15 @@ $menus = [
         'title' => 'Virtuard 360',
         'icon' => 'fa fa-camera',
         'permission' => 'dashboard_vendor_access',
-        'position' => 5,
+        'position' => 6,
     ],
-    // 'listing' => [
-    //     'url' => '#',
-    //     'title' => 'Listing',
-    //     'icon' => 'fa fa-list',
-    //     'position' => 6,
-    //     'children' => [],
-    // ],
+    'referral' => [
+        'url' => route('vendor.referral.index'),
+        'title' => 'Referral',
+        'icon' => 'fa fa-dollar',
+        'permission' => 'dashboard_vendor_access',
+        'position' => 4,
+    ],
 ];
 
 // Modules

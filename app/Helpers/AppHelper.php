@@ -1313,6 +1313,7 @@ if (!function_exists('menu_vendor')) {
             'business',
             'natural',
             'chat',
+            'referral',
         ];
 
         return $data;

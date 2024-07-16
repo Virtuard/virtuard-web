@@ -306,7 +306,15 @@ use Illuminate\Notifications\Notifiable;
             $total =  $query
                 ->whereIn('status',$status)
                 ->where('vendor_id',$this->id)
-                ->sum(DB::raw('total_before_fees - commission - ref_commission + vendor_service_fee_amount')) - $this->total_paid;
+                ->sum(DB::raw('total_before_fees - commission - ref_commission + vendor_service_fee_amount'));
+            
+            $totalRef = Booking::query()
+            ->whereIn('status',$status)
+            ->where('ref_id',$this->id)
+            ->sum(DB::raw('ref_commission'));
+
+            $total = ($total + $totalRef) - $this->total_paid;
+            
             return max(0,$total);
         }
 
