@@ -460,7 +460,7 @@ class Booking extends BaseModel
     {
 
         $res = [];
-        $total_money = parent::selectRaw('sum( `total_before_fees` - `commission` + `vendor_service_fee_amount` ) AS total_price , sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning')->whereNotIn('status',static::$notAcceptedStatus)->where("vendor_id", $user_id)->first();
+        $total_money = parent::selectRaw('sum( `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount` ) AS total_price , sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning')->whereNotIn('status',static::$notAcceptedStatus)->where("vendor_id", $user_id)->first();
         $total_booking = parent::whereNotIn('status',static::$notAcceptedStatus)->where("vendor_id", $user_id)->count('id');
         $total_service = 0;
         $services = get_bookable_services();
@@ -518,8 +518,8 @@ class Booking extends BaseModel
                 ]
             ]
         ];
-        $sql_raw[] = 'sum( `total_before_fees` - `commission` + `vendor_service_fee_amount`) AS total_price';
-        $sql_raw[] = 'sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning';
+        $sql_raw[] = 'sum( `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount`) AS total_price';
+        $sql_raw[] = 'sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning';
         if (($to - $from) / DAY_IN_SECONDS > 90) {
             $year = date("Y", $from);
             // Report By Month

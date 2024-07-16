@@ -32,6 +32,9 @@
     <td>
         {{ format_money($booking->commission) }}
     </td>
+    <td>
+        {{ format_money($booking->ref_commission) }}
+    </td>
     <td class="{{$booking->status}} a-hidden">{{$booking->statusName}}</td>
     <td width="2%">
         @if($service = $booking->service)
