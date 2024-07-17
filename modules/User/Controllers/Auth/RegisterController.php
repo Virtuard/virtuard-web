@@ -82,14 +82,25 @@
                 ], 200);
             } else {
 
-                $user = \App\User::create([
+                $email = $request->input('email');
+                if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $errors = new MessageBag(['message_error' => __('Email invalid')]);
+                    return response()->json([
+                        'error'    => true,
+                        'messages' => $errors
+                    ], 200);
+                }
+
+                $dataUser = [
                     'first_name' => $request->input('first_name'),
                     'last_name'  => $request->input('last_name'),
-                    'email'      => $request->input('email'),
+                    'email'      => $email,
                     'password'   => Hash::make($request->input('password')),
                     'status'    => 'verify',
                     'phone'    => $request->input('phone'),
-                ]);
+                    'user_name' => generate_user_name($request->input('first_name'), $request->input('last_name')),
+                ];
+                $user = \App\User::create($dataUser);
 
                 $user->assignRole(setting_item('user_role'));
                 

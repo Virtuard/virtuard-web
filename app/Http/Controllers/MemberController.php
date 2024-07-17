@@ -44,7 +44,12 @@ class MemberController extends Controller
             }
         }
 
-        $data['memberCount'] = $this->user->where('role_id', '!=', 1)->count();
+        $data['memberCount'] = $this->user
+        ->where([
+            ['role_id', '!=', 1],
+            ['status', '=', 'publish'],
+        ])
+        ->count();
 
         if (auth()->check()) {
             $data['followerCount'] = auth()->user()->followers->count();
@@ -70,7 +75,10 @@ class MemberController extends Controller
                     });
                 }
             })
-            ->where('role_id', '!=', 1)
+            ->where([
+                ['role_id', '!=', 1],
+                ['status', '=', 'publish'],
+            ])
             ->orderBy('id', 'DESC')
             ->paginate(15);
 

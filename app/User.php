@@ -66,7 +66,8 @@ use Illuminate\Notifications\Notifiable;
             'bio',
             'business_name',
             'status',
-            'is_tour'
+            'is_tour',
+            'user_name',
 //            'vendor_plan_id',
 //            'vendor_plan_enable',
 //            'vendor_plan_start_date',
