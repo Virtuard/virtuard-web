@@ -279,11 +279,7 @@ class Business extends Bookable
 
         $booking->calculateCommission();
         
-        $ref_id = $request->reference;
-        if ($ref_id) {
-            $booking->calculateCommissionRef($ref_id);
-            $booking->ref_id = $ref_id;
-        }
+        $booking->calculateCommissionRef($request->reference ?? false);
 
         if($this->isDepositEnable())
         {

@@ -84,5 +84,7 @@
     @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
     @endif
-    @include('partials.listing.copy-referral-script')
+    @if(auth()->check() && setting_item('referral_enable'))
+        @include('partials.listing.copy-referral-script')
+    @endif
 @endpush

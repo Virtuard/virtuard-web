@@ -918,11 +918,17 @@ class Booking extends BaseModel
         $this->commission_type = $data['commission_type'];
     }
 
-    public function calculateCommissionRef($ref_id){
-        $data = $this->getCommissionRef($ref_id);
+    public function calculateCommissionRef($ref = false){
+        if (!empty($ref)) {
+            $userRef = User::where('user_name', $ref)->first();
+            if ($userRef) {
+                $data = $this->getCommissionRef($userRef->id);
 
-        $this->ref_commission = $data['ref_commission'];
-        $this->ref_commission_type = $data['ref_commission_type'];
+                $this->ref_id = $userRef->id;
+                $this->ref_commission = $data['ref_commission'];
+                $this->ref_commission_type = $data['ref_commission_type'];
+            }
+        }
     }
 
 	public static function getContentCalendarIcal($service_type,$id,$module){
