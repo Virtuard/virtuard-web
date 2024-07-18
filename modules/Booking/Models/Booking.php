@@ -920,7 +920,7 @@ class Booking extends BaseModel
 
     public function calculateCommissionRef($ref = false){
         if (!empty($ref)) {
-            $userRef = User::where('user_name', $ref)->first();
+            $userRef = find_user_by_username_or_id($ref);
             if ($userRef) {
                 $data = $this->getCommissionRef($userRef->id);
 

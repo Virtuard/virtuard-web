@@ -1780,3 +1780,14 @@ if (!function_exists('generate_user_name')) {
         return $username;
     }
 }
+
+if (!function_exists('find_user_by_username_or_id')) {
+    function find_user_by_username_or_id($param)
+    {
+        $user = User::where('user_name', $param)->first();
+        if(empty($user)){
+            $user = User::find($param);
+        }
+        return $user;
+    }
+}
