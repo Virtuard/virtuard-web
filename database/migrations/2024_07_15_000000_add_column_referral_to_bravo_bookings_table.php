@@ -28,9 +28,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('bravo_bookings', function (Blueprint $table) {
-            $table->dropColumn('referral_id');
-            $table->dropColumn('referral_commission');
-            $table->dropColumn('referral_commission_type');
+            $table->dropColumn('ref_id');
+            $table->dropColumn('ref_commission');
+            $table->dropColumn('ref_commission_type');
         });
     }
 };
