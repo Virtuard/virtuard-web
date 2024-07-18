@@ -6,11 +6,14 @@
     function copyReferralLink() {
         const url = "{{ $row->getDetailUrl() }}";
         const isLoggedIn = "{{ auth()->check() ? 'true' : 'false' }}";
-        const userName = "{{ auth()->user()->user_name ?? 'null' }}";
+        let reference = "{{ auth()->user()->user_name ?? 'null' }}";
+        if (reference == 'null') {
+            reference = "{{ auth()->user()->id ?? 'null' }}";
+        }
         
         document.getElementById('copyReferralButton').addEventListener('click', function() {
             if (isLoggedIn == 'true') {
-                let referralUrl = `${url}?reference=${userName}`;
+                let referralUrl = `${url}?reference=${reference}`;
 
                 //Copy the referral URL to the clipboard
                 var tempInput = document.createElement('input');
