@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('bravo_bookings', function (Blueprint $table) {
-            $table->integer('referral_id')->nullable();
-            $table->decimal('referral_commission', 10, 2)->default(0.00);
-            $table->string('referral_commission_type')->nullable();
+            $table->integer('ref_id')->nullable();
+            $table->decimal('ref_commission', 10, 2)->default(0.00);
+            $table->string('ref_commission_type')->nullable();
         });
     }
 
