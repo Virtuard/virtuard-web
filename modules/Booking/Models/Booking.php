@@ -883,7 +883,7 @@ class Booking extends BaseModel
             'ref_commission'=>0,
             'ref_commission_type'=>'',
         ];
-        if (setting_item('referral_enable') == 1) {
+        if (setting_item('referral_enable') == 1 && $total > 0) {
             $ref = User::find($ref_id);
             if (!empty($ref)) {
                 $returnArray['ref_id']= $ref->id;
