@@ -879,12 +879,15 @@ class Booking extends BaseModel
     public function getCommissionRef($ref_id){
         $total = $this->total_before_fees;
         $returnArray=[
+            'ref_id'=>'',
             'ref_commission'=>0,
             'ref_commission_type'=>'',
         ];
         if (setting_item('referral_enable') == 1) {
             $ref = User::find($ref_id);
             if (!empty($ref)) {
+                $returnArray['ref_id']= $ref->id;
+
                 $commission = [];
                 $commission['amount'] = setting_item('referral_commission_amount', 10);
                 $commission['type'] = setting_item('referral_commission_type', 'percent');
@@ -924,7 +927,7 @@ class Booking extends BaseModel
             if ($userRef) {
                 $data = $this->getCommissionRef($userRef->id);
 
-                $this->ref_id = $userRef->id;
+                $this->ref_id = $data['ref_id'];
                 $this->ref_commission = $data['ref_commission'];
                 $this->ref_commission_type = $data['ref_commission_type'];
             }
