@@ -3,10 +3,8 @@
     namespace Modules\User\Listeners;
 
     use Illuminate\Support\Facades\Mail;
-    use Modules\User\Emails\EmailUserNeedConfirm;
     use Modules\User\Events\SendMailUserNeedConfirm;
-use Modules\User\Events\SendMailUserRegistered;
-use Modules\User\Models\User;
+    use Modules\User\Models\User;
 
     class SendMailUserNeedConfirmListen
     {
@@ -28,7 +26,7 @@ use Modules\User\Models\User;
          * @param Event $event
          * @return void
          */
-        public function handle(SendMailUserRegistered $event)
+        public function handle(SendMailUserNeedConfirm $event)
         {
             $event->user->sendEmailUserNeedConfirmNotification();
         }

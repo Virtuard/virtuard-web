@@ -118,7 +118,9 @@
                         <div class="panel-body">
                             <div class="form-group">
                                 <label>{{__('Status')}}</label>
-                                <select required class="custom-select" name="status">
+                                <select required class="custom-select form-control" name="status">
+                                    <option value="">{{ __('-- Select --')}}</option>
+                                    <option @if(old('status',$row->status) =='pending') selected @endif value="pending">{{ __('Pending')}}</option>
                                     <option @if(old('status',$row->status) =='publish') selected @endif value="publish">{{ __('Publish')}}</option>
                                     <option @if(old('status',$row->status) =='blocked') selected @endif value="blocked">{{ __('Blocked')}}</option>
                                 </select>

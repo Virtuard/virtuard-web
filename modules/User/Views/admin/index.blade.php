@@ -55,7 +55,7 @@
                             <th>{{__('Phone')}}</th>
                             <th>{{__('Role')}}</th>
                             <th class="date">{{ __('Date')}}</th>
-{{--                            <th class="status">{{__('Status')}}</th>--}}
+                            <th class="status">{{__('Status')}}</th>
                             <th></th>
                         </tr>
                         </thead>
@@ -79,7 +79,7 @@
                                     {{$row->role->name ?? ''}}
                                 </td>
                                 <td>{{ display_date($row->created_at)}}</td>
-                                {{--<td class="status">{{$row->status}}</td>--}}
+                                <td class="status">{{$row->status}}</td>
                                 <td>
                                     <div class="dropdown">
                                         <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

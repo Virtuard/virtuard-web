@@ -15,6 +15,7 @@
     use Illuminate\Support\MessageBag;
     use Illuminate\Validation\Rules\Password;
     use Matrix\Exception;
+    use Modules\User\Events\SendMailUserNeedConfirm;
     use Modules\User\Events\SendMailUserRegistered;
 
     class RegisterController extends \App\Http\Controllers\Auth\RegisterController
@@ -81,6 +82,7 @@
                     'messages' => $validator->errors()
                 ], 200);
             } else {
+                $register_confirm_email = setting_item('register_confirm_email');
 
                 $email = $request->input('email');
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -96,40 +98,51 @@
                     'last_name'  => $request->input('last_name'),
                     'email'      => $email,
                     'password'   => Hash::make($request->input('password')),
-                    'status'    => 'verify',
+                    'status'    => 'publish',
                     'phone'    => $request->input('phone'),
                     'user_name' => generate_user_name($request->input('first_name'), $request->input('last_name')),
+                    'confirmation_code' => md5(uniqid(mt_rand(), true)),
                 ];
+
+                if ($register_confirm_email) {
+                    $dataUser['status'] = 'pending';
+                }
                 $user = \App\User::create($dataUser);
 
                 $user->assignRole(setting_item('user_role'));
-                
-                event(new Registered($user));
+
+                // event(new Registered($user));
 
                 try {
-                    event(new SendMailUserRegistered($user));
+                    if ($register_confirm_email) {
+                        event(new SendMailUserNeedConfirm($user));
+                    } else {
+                        event(new SendMailUserRegistered($user));
+                    }
                 } catch (Exception $exception) {
-
                     Log::warning("SendMailUserRegistered: " . $exception->getMessage());
                 }
-                
-                return response()->json([
+
+                $response = [
                     'error'    => false,
                     'messages' => false,
-                    // 'redirect' => $request->input('redirect') ?? $request->headers->get('referer') ?? url(app_get_locale(false, '/'))
-                    'redirect' => '/need-confirm-email',
-                ], 200);
+                    'redirect' => $request->input('redirect') ?? $request->headers->get('referer') ?? url(app_get_locale(false, '/'))
+                ];
+
+                if ($register_confirm_email) {
+                    $response['redirect'] = '/need-confirm-email';
+                }
+                
+                return response()->json($response, 200);
             }
         }
 
         public function emailConfirmed($str)
         {
             try {
-                $email = decrypt($str);
+                $user = User::where('confirmation_code', $str)->first();
                 
-                $user = User::whereEmail($email)->first();
-                
-                if ($user && $user->status == 'verify') {
+                if ($user && $user->status == 'pending') {
                     $user->update([
                         'status' => 'publish',
                     ]);

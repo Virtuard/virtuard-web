@@ -68,6 +68,7 @@ use Illuminate\Notifications\Notifiable;
             'status',
             'is_tour',
             'user_name',
+            'confirmation_code',
 //            'vendor_plan_id',
 //            'vendor_plan_enable',
 //            'vendor_plan_start_date',
@@ -410,7 +411,7 @@ use Illuminate\Notifications\Notifiable;
         }
 
         public function sendEmailUserNeedConfirmNotification(){
-        	$actionUrl = route('auth.email.confirm', encrypt($this->email));
+        	$actionUrl = route('auth.email.confirm', $this->confirmation_code);
 	        Mail::to($this->email)->send(new EmailUserVerifyRegister($this, $actionUrl));
         }
 

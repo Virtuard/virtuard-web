@@ -10,6 +10,7 @@ use Modules\Booking\Listeners\EnquiryNotifyListen;
 use Modules\Booking\Listeners\EnquirySendListen;
 use Modules\User\Events\NewVendorRegistered;
 use Modules\User\Events\SendMailUserRegistered;
+use Modules\User\Events\SendMailUserNeedConfirm;
 use Modules\User\Events\VendorApproved;
 use Modules\User\Listeners\SendMailUserNeedConfirmListen;
 use Modules\User\Listeners\SendMailUserRegisteredListen;
@@ -31,10 +32,13 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         Registered::class => [
-            // SendEmailVerificationNotification::class,
+            SendEmailVerificationNotification::class,
         ],
         SendMailUserRegistered::class => [
-            // SendMailUserRegisteredListen::class,
+            SendMailUserRegisteredListen::class,
+            SendNotifyRegisteredListen::class
+        ],
+        SendMailUserNeedConfirm::class => [
             SendMailUserNeedConfirmListen::class,
             SendNotifyRegisteredListen::class
         ],
