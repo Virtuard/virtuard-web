@@ -34,7 +34,10 @@ function actionCopyToClipBoard(text) {
         navigator.clipboard
             .writeText(text)
             .then(function () {
-                // console.error("Text Copied: ", text);
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Copied product referral'
+                });
             })
             .catch(function (err) {
                 // console.error("Error copy text: ", err);

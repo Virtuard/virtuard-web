@@ -1,33 +1,26 @@
 <script>
+    var isLoggedIn = "{{ auth()->check() ? 'true' : 'false' }}";
+
     $(document).ready(function() {
+        openModalReferral();
         copyReferralLink();
     });
 
-    function copyReferralLink() {
-        const url = "{{ $row->getDetailUrl() }}";
-        const isLoggedIn = "{{ auth()->check() ? 'true' : 'false' }}";
-        let reference = "{{ auth()->user()->user_name ?? 'null' }}";
-        if (reference == 'null') {
-            reference = "{{ auth()->user()->id ?? 'null' }}";
-        }
-        
-        document.getElementById('copyReferralButton').addEventListener('click', function() {
+    function openModalReferral() {
+        document.getElementById('sellButtonReferral').addEventListener('click', function(e) {
             if (isLoggedIn == 'true') {
-                let referralUrl = `${url}?reference=${reference}`;
+                $('#modalCopyReferral').modal('show');
+            } else {
+                $('#login').modal('show');
+            }
+        });
+    }
 
-                //Copy the referral URL to the clipboard
-                var tempInput = document.createElement('input');
-                tempInput.value = referralUrl;
-                document.body.appendChild(tempInput);
-                tempInput.select();
-                document.execCommand('copy');
-                document.body.removeChild(tempInput);
-
-                Toast.fire({
-                    icon: 'success',
-                    title: 'Copied product referral'
-                });
-
+    function copyReferralLink() {
+        document.getElementById('copyReferralButton').addEventListener('click', function(e) {
+            let refUrl = this.getAttribute('data-ref');
+            if (isLoggedIn == 'true') {
+                actionCopyToClipBoard(refUrl)
             } else {
                 $('#login').modal('show');
             }

@@ -1791,3 +1791,20 @@ if (!function_exists('find_user_by_username_or_id')) {
         return $user;
     }
 }
+
+if (!function_exists('get_detail_url_referral')) {
+    function get_detail_url_referral($url)
+    {
+        $isLoggedIn = auth()->check();
+        $reference = auth()->user()->user_name ?? false;
+        if (!$reference) {
+            $reference = auth()->user()->id ?? false;
+        }
+        
+        if ($isLoggedIn && $reference) {
+            $url = $url."?reference=".$reference;
+        }
+
+        return $url;
+    }
+}
