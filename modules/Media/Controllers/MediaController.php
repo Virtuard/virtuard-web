@@ -159,11 +159,11 @@ class MediaController extends Controller
 
         $path = 'private/'.\request()->get('path');
 
-        if(Storage::disk('public')->exists($path)) {
+        if(Storage::disk('local')->exists($path)) {
 
-            header('Content-Type: ' . mime_content_type(Storage::disk('public')->path($path)));
+            header('Content-Type: ' . mime_content_type(Storage::disk('local')->path($path)));
 
-            echo Storage::disk('public')->get($path);
+            echo Storage::disk('local')->get($path);
             exit;
         }
 
