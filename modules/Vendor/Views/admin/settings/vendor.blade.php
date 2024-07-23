@@ -72,7 +72,6 @@
     </div>
 </div>
 <hr>
-@if(setting_item('flag_feature_referral'))
 <div class="row">
     <div class="col-sm-4">
         <h3 class="form-group-title">{{__('Config Referral')}}</h3>
@@ -115,7 +114,6 @@
     </div>
 </div>
 <hr>
-@endif
 <div class="row">
     <div class="col-sm-4">
         <h3 class="form-group-title">{{__('Vendor Register')}}</h3>
