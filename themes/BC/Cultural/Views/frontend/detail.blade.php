@@ -22,6 +22,9 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Cultural::frontend.layouts.details.vendor')
+                        @if(setting_item('referral_enable') && $row->price > 0)
+                            @include('partials.listing.sell-button')
+                        @endif
                         @include('Cultural::frontend.layouts.details.cultural-form-book')
                         @include('Cultural::frontend.layouts.details.open-hours')
                     </div>
@@ -79,5 +82,8 @@
     @include('partials.ipanorama.ipanorama-js-no-jquery')
     @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
+    @endif
+    @if(setting_item('referral_enable') && $row->price > 0)
+        @include('partials.listing.copy-referral-script')
     @endif
 @endpush

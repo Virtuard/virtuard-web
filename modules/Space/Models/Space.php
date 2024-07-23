@@ -279,6 +279,8 @@ class Space extends Bookable
 
         $booking->calculateCommission();
 
+        $booking->calculateCommissionRef($request->reference ?? false);
+
         if($this->isDepositEnable())
         {
             $booking_deposit_fomular = $this->getDepositFomular();

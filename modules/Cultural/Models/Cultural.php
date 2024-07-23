@@ -386,6 +386,9 @@ class Cultural extends Bookable
         }
 
         $booking->calculateCommission();
+
+        $booking->calculateCommissionRef($request->reference ?? false);
+        
         if ($this->isDepositEnable()) {
             $booking_deposit_fomular = $this->getDepositFomular();
             $tmp_price_total = $booking->total;

@@ -26,6 +26,9 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
+                        @if(setting_item('referral_enable') && $row->price > 0)
+                            @include('partials.listing.sell-button')
+                        @endif
                         @include('Hotel::frontend.layouts.details.hotel-form-enquiry')
                         @include('Hotel::frontend.layouts.details.hotel-related-list')
                         <div class="g-all-attribute is_pc">
@@ -80,5 +83,7 @@
     @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
     @endif
-
+    @if(setting_item('referral_enable') && $row->price > 0)
+        @include('partials.listing.copy-referral-script')
+    @endif
 @endpush

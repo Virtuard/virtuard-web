@@ -284,6 +284,9 @@ class Event extends Bookable
         $booking->total_before_discount = $total_before_fees;
 
         $booking->calculateCommission();
+
+        $booking->calculateCommissionRef($request->reference ?? false);
+        
         if ($this->isDepositEnable()) {
             $booking_deposit_fomular = $this->getDepositFomular();
             $tmp_price_total = $booking->total;

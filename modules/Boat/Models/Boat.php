@@ -244,6 +244,9 @@ class Boat extends Bookable
         $booking->total_before_discount = $total_before_fees;
 
         $booking->calculateCommission();
+
+        $booking->calculateCommissionRef($request->reference ?? false);
+        
         $booking->number = $number;
 
         if($this->isDepositEnable())
