@@ -22,7 +22,7 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Natural::frontend.layouts.details.vendor')
-                        @if(setting_item('referral_enable') && $row->price > 0)
+                        @if(enable_referral_sell($row))
                             @include('partials.listing.sell-button')
                         @endif
                         @include('Natural::frontend.layouts.details.natural-form-book')
@@ -82,7 +82,7 @@
     @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
     @endif
-    @if(setting_item('referral_enable') && $row->price > 0)
+    @if(enable_referral_sell($row))
         @include('partials.listing.copy-referral-script')
     @endif
 @endpush

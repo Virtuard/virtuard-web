@@ -1808,3 +1808,16 @@ if (!function_exists('get_detail_url_referral')) {
         return $url;
     }
 }
+
+if (!function_exists('enable_referral_sell')) {
+    function enable_referral_sell($row)
+    {
+        $result = false;
+
+        if (setting_item('referral_enable') && $row->author->checkUserPlanStatus()) {
+            $result = true;
+        }
+
+        return $result;
+    }
+}
