@@ -931,7 +931,7 @@ class Business extends Bookable
             $model_business->WhereRaw($raw_sql_min_max,[$pri_from,$pri_from,$pri_to,$pri_to]);
         }
 
-        $terms = $request['terms'] ?? '';
+        $terms = $request['terms'] ?? [];
         if(!empty($request['term_id'])) {
             $terms[] = $request['term_id'];
         }
@@ -1003,6 +1003,21 @@ class Business extends Bookable
         if (!empty($request['franchising'])) {
             $model_business->where("bravo_businesses.franchising", $request['franchising']);
         }
+        if(!empty($request['is_tour']))
+        {
+            $model_business
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
+
         $orderby = $request['orderby'] ?? "";
         switch ($orderby){
             case "price_low_high":
@@ -1017,6 +1032,9 @@ class Business extends Bookable
                 break;
             case "rate_high_low":
                 $model_business->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_business->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 $model_business->orderBy("is_featured", "desc");

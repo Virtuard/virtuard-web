@@ -1,3 +1,4 @@
+var isResetSearch = false;
 var isLoadingScroll = false;
 var countService = 0;
 var pagePaginate = 1;
@@ -47,7 +48,7 @@ function initFilterRadius() {
     });
 }
 
-function initAutocomplete1() {
+function initAutocompleteByCategory() {
     let arrPlaces = $('.filter_map_place');
 
     arrPlaces.each(function() {
@@ -222,6 +223,7 @@ function onChangeTab() {
 function resetServiceList() {
     countService = 0;
     pagePaginate = 1;
+    isResetSearch = true;
 
     $("#list-item").html('');
     $("#count-list").html('');
@@ -271,6 +273,7 @@ $scrollableDiv.scroll(function (e) {
     if (!isLoadingScroll && $scrollableDiv.scrollTop() + $scrollableDiv.height() >= ($scrollableDiv[0].scrollHeight - 20)) {
         pagePaginate++;
         isLoadingScroll = true;
+        isResetSearch = false;
         
         setTimeout(() => {
             infinteLoadMore();
@@ -336,7 +339,11 @@ function fetchService(attr = {}) {
             countService += data.data.length;
 
             if (data.data) {
-                $("#list-item").append(data.html);
+                if (isResetSearch) {
+                    $("#list-item").html(data.html);
+                } else {
+                    $("#list-item").append(data.html);
+                }
                 // $("#count-list").html(`Showing ${countService} Result`);
             }
 
@@ -363,6 +370,7 @@ function onSubmitSearch() {
             service_type: tabActive,
         };
 
+        isResetSearch = true;
         onFetchData(attr);
     })
 }
@@ -429,6 +437,7 @@ jQuery(function($) {
 $(document).ready(function () {
     initMap();
     initAutocomplete();
+    initAutocompleteByCategory();
     initFilterRadius();
     initFilterRadiusMain();
     onFetchData();

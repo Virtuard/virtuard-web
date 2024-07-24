@@ -9,8 +9,8 @@
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
-                                        <input type="text" aria-label='location' class='form-control' id='explore_map_place'
-                                            name='map_place' placeholder="Location"
+                                        <input type="text" aria-label='Map Place' class='form-control' id='explore_map_place'
+                                            name='map_place' placeholder="Map Place"
                                             style="border-top: none;border-left:none;border-right:none;">
                                         <button class="btn btn-sm" id="explore_get_location" type="button" onclick="getLocation('explore')">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"

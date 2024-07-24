@@ -1,9 +1,9 @@
 <div class="filter-item">
     <div class="form-group">
         <div class="form-content" style="padding: 20px 0 10px 10px">
-            <label>Location</label>
+            <label>{{ __('Map Place') }}</label>
             <div class="g-map-place">
-                <input type="text" name="map_place" placeholder="{{__("Location...")}}" class="form-control border-0"
+                <input type="text" name="map_place" placeholder="{{__("Map Place...")}}" class="form-control border-0"
                 style="height: 25px; padding: 0.375rem 0;"
                 >
                 <div class="map d-none" id="map-{{\Illuminate\Support\Str::random(10)}}"></div>

@@ -30,17 +30,20 @@
         </div> --}}
 
         <div class="row d-flex align-items-center">
-            <div class="col-md-3 border-right">
+            <div class="col-md-2 border-right">
                 @include('Business::frontend.layouts.search.fields.service_name')
             </div>
             <div class="col-md-3 border-right">
                 @include('Business::frontend.layouts.search.fields.location')
             </div>
+            <div class="col-md-2 border-right">
+                @include('Business::frontend.layouts.search.fields.range')
+            </div>
             <div class="col-md-3 border-right">
                 @include('Business::frontend.layouts.search.fields.category')
             </div>
-            <div class="col-md-3 border-right">
-                @include('Business::frontend.layouts.search.fields.range')
+            <div class="col-md-2 border-right">
+                @include('partials.search.fields.ipanorama')
             </div>
         </div>
     </div>

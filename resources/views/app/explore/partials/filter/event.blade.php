@@ -71,7 +71,7 @@
                                 <div class="form-content">
                                     <div class="smart-search d-flex justify-content-between align-items-center">
                                         <input type="text" class="form-control filter_map_place"
-                                            id="hotel_map_place" name="map_place" placeholder="Place"
+                                            id="event_map_place" name="map_place" placeholder="Place"
                                             data-id="event"
                                             style="border-top: none;border-left:none;border-right:none;">
                                         <button class="btn btn-sm" type="button" onclick="getLocation()">
@@ -85,15 +85,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="hidden" id="hotel_map_lat" name="map_lat" class="form-control filter_map_lat">
-                                    <input type="hidden" id="hotel_map_lgn" name="map_lgn" class="form-control filter_map_lgn">
+                                    <input type="hidden" id="event_map_lat" name="map_lat" class="form-control filter_map_lat">
+                                    <input type="hidden" id="event_map_lgn" name="map_lgn" class="form-control filter_map_lgn">
                                 </div>
                             </div>
                             <div class="form-group mt-3">
                                 <div class="form-content">
-                                    <label class="mb-2">{{ __('Proximity') }} <span id="hotel_proximity_text">0</span> mil</label>
+                                    <label class="mb-2">{{ __('Proximity') }} <span id="event_proximity_text">0</span> mil</label>
                                     <div class="input-search">
-                                        <input type="range" id="hotel_search_radius" name="search_radius"
+                                        <input type="range" id="event_search_radius" name="search_radius"
                                             min="0" max="500" class="filter-search-radius w-100 cursor-pointer" value="0" data-id="event" />
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                             </div>
                             <div class="form-group mt-3">
                                 <label>{{ __('Keyword search') }}</label>
-                                <input type="text" id="hotel_service_name" name="service_name"
+                                <input type="text" id="event_service_name" name="service_name"
                                     placeholder="Keyword search" class="form-control filter_service_name">
                             </div>
                             <div class="form-group mt-3">
