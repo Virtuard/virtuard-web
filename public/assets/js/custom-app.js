@@ -36,7 +36,7 @@ function actionCopyToClipBoard(text) {
             .then(function () {
                 Toast.fire({
                     icon: 'success',
-                    title: 'Copied product referral'
+                    title: 'Copied to clipboard'
                 });
             })
             .catch(function (err) {

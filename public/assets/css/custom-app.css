@@ -132,6 +132,12 @@ li.create-item a:before {
     display: none !important;
 }
 
+@media (max-width: 767px) {
+    .list-item-hide {
+        display: none;
+    }
+}
+
 .bravo_wrap .bravo_footer .mailchimp .subcribe-form .btn-submit {
     padding-left: 15px;
     padding-right: 15px;
