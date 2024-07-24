@@ -371,6 +371,10 @@
                     this.html = '';
                 }
 
+                const url = new URL(window.location.href);
+                const params = new URLSearchParams(url.search);
+                const reference = params.get('reference');
+
                 $.ajax({
                     url:bookingCore.url+'/booking/addToCart',
                     data:{
@@ -383,6 +387,7 @@
 
                         extra_price:this.extra_price,
                         number:this.number,
+                        reference:reference,
                     },
                     dataType:'json',
                     type:'post',

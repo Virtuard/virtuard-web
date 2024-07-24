@@ -350,6 +350,11 @@
                 if(this.step == 1){
                     this.html = '';
                 }
+
+                const url = new URL(window.location.href);
+                const params = new URLSearchParams(url.search);
+                const reference = params.get('reference');
+                
                 $.ajax({
                     url:bookingCore.url+'/booking/addToCart',
                     data:{
@@ -358,7 +363,8 @@
                         start_date:this.start_date,
                         person_types:this.person_types,
                         extra_price:this.extra_price,
-                        guests:this.guests
+                        guests:this.guests,
+                        reference:reference,
                     },
                     dataType:'json',
                     type:'post',

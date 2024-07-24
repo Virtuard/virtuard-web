@@ -375,6 +375,10 @@
                     this.html = '';
                 }
 
+                const url = new URL(window.location.href);
+                const params = new URLSearchParams(url.search);
+                const reference = params.get('reference');
+
                 $.ajax({
                     url:bookingCore.url+'/booking/addToCart',
                     data:{
@@ -387,7 +391,8 @@
                         children:this.children,
                         rooms:_.map(this.rooms,function (item) {
                             return _.pick(item,['id','number_selected'])
-                        })
+                        }),
+                        reference:reference,
                     },
                     dataType:'json',
                     type:'post',

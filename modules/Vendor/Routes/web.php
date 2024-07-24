@@ -31,6 +31,8 @@ Route::group(['prefix'=>'vendor','middleware' => ['auth']],function(){
         Route::get('/delete/{vendorTeam}','TeamController@delete')->name("delete")->middleware('signed');
     });
 
+    Route::get('/referral','ReferralController@index')->name("vendor.referral.index");
+
 });
 
 Route::group(['prefix'=>'vendor/enquiry-report'],function(){

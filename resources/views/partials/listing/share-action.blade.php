@@ -115,7 +115,9 @@
 
 </div>
 <style>
-    .quick-listing-actions li {
+    .quick-listing-actions li,
+    .quick-listing-actions-share-social li
+    {
         list-style: none;
         padding: 0 10px 0 0;
     }

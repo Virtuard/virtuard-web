@@ -65,6 +65,7 @@
 
                             <th>{{__('Payment Information')}}</th>
                             <th  width="80px" >{{__('Commission')}}</th>
+                            <th  width="80px" >{{__('Ref Commission')}}</th>
                             <th width="80px">{{__('Status')}}</th>
                             <th width="150px">{{__('Payment Method')}}</th>
                             <th width="120px">{{__('Created At')}}</th>
@@ -105,6 +106,12 @@
                                 </td>
                                 <td>
                                     {{format_money_main($booking->commission)}}
+                                </td>
+                                <td>
+                                    @if ($booking->ref_id)
+                                        <div><a href="{{ route('user.profile', $booking->ref_id) }}">{{ $booking->refby->name }}</a></div>
+                                        {{ format_money($booking->ref_commission) }}
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="label label-{{$row->status}}">{{$row->statusName}}</span>

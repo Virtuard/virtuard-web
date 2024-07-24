@@ -74,6 +74,48 @@
 <hr>
 <div class="row">
     <div class="col-sm-4">
+        <h3 class="form-group-title">{{__('Config Referral')}}</h3>
+        <p class="form-group-desc">{{__('Change your config referral system')}}</p>
+    </div>
+    <div class="col-sm-8">
+        <div class="panel">
+            <div class="panel-body">
+                @if(is_default_lang())
+                    <div class="form-group">
+                        <div class="form-controls">
+                            <div class="form-group">
+                                <label> <input type="checkbox" @if($settings['referral_enable'] ?? '' == 1) checked @endif name="referral_enable" value="1"> {{__("Referral Enable?")}}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" data-condition="referral_enable:is(1)">
+                        <label>{{__('Referral Commission Type')}}</label>
+                        <div class="form-controls">
+                            <select name="referral_commission_type" class="form-control">
+                                <option value="percent" {{($settings['referral_commission_type'] ?? '') == 'percent' ? 'selected' : ''  }}>{{__('Percent')}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" data-condition="referral_enable:is(1)">
+                        <label>{{__('Referral commission value')}}</label>
+                        <div class="form-controls">
+                            <input type="text" class="form-control" name="referral_commission_amount" value="{{!empty($settings['referral_commission_amount'])?$settings['referral_commission_amount']:"0" }}">
+                        </div>
+                        <p>
+                            <i>{{__('Example value : 10 or 10.5')}}</i><br>
+                            <i>{{__('Example: 10% commission. Vendor get 90%, Referral get 10%')}}</i>
+                        </p>
+                    </div>
+                @else
+                    <p>{{__('You can edit on main lang.')}}</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <div class="col-sm-4">
         <h3 class="form-group-title">{{__('Vendor Register')}}</h3>
     </div>
     <div class="col-sm-8">

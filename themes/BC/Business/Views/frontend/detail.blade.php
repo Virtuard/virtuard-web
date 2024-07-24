@@ -25,6 +25,9 @@
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
+                        @if(enable_referral_sell($row))
+                            @include('partials.listing.sell-button')
+                        @endif
                         @include('Business::frontend.layouts.details.business-form-book')
                     </div>
                 </div>
@@ -80,5 +83,8 @@
     @include('partials.ipanorama.ipanorama-js-no-jquery')
     @if (is_display_panorama_listing($row))
     @include('partials.ipanorama.ipanorama-preview-js')
+    @endif
+    @if(enable_referral_sell($row))
+        @include('partials.listing.copy-referral-script')
     @endif
 @endpush

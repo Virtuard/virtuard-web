@@ -456,11 +456,34 @@ class Booking extends BaseModel
         return $list_booking->paginate(10);
     }
 
+    public static function getReferralHistory($booking_status = false, $customer_id = false, $vendor_id = false, $ref_id = false, $service = false)
+    {
+        $list_booking = parent::query()->orderBy('id', 'desc');
+        if (!empty($booking_status)) {
+            $list_booking->where("status", $booking_status);
+        }
+        if (!empty($customer_id)) {
+            $list_booking->where("customer_id", $customer_id);
+        }
+        if (!empty($vendor_id)) {
+            $list_booking->where("vendor_id", $vendor_id);
+        }
+        if (!empty($ref_id)) {
+            $list_booking->where("ref_id", $ref_id);
+        }
+        if (!empty($service)) {
+            $list_booking->where("object_model", $service);
+        }
+        $list_booking->where('status','!=','draft');
+        $list_booking->whereIn('object_model', array_keys(get_bookable_services()));
+        return $list_booking->paginate(10);
+    }
+
     public static function getTopCardsReportForVendor($user_id)
     {
 
         $res = [];
-        $total_money = parent::selectRaw('sum( `total_before_fees` - `commission` + `vendor_service_fee_amount` ) AS total_price , sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning')->whereNotIn('status',static::$notAcceptedStatus)->where("vendor_id", $user_id)->first();
+        $total_money = parent::selectRaw('sum( `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount` ) AS total_price , sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning')->whereNotIn('status',static::$notAcceptedStatus)->where("vendor_id", $user_id)->first();
         $total_booking = parent::whereNotIn('status',static::$notAcceptedStatus)->where("vendor_id", $user_id)->count('id');
         $total_service = 0;
         $services = get_bookable_services();
@@ -518,8 +541,8 @@ class Booking extends BaseModel
                 ]
             ]
         ];
-        $sql_raw[] = 'sum( `total_before_fees` - `commission` + `vendor_service_fee_amount`) AS total_price';
-        $sql_raw[] = 'sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning';
+        $sql_raw[] = 'sum( `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount`) AS total_price';
+        $sql_raw[] = 'sum( CASE WHEN `status` = "completed" THEN `total_before_fees` - `commission` - `ref_commission` + `vendor_service_fee_amount` ELSE NULL END ) AS total_earning';
         if (($to - $from) / DAY_IN_SECONDS > 90) {
             $year = date("Y", $from);
             // Report By Month
@@ -853,11 +876,62 @@ class Booking extends BaseModel
         return $returnArray;
     }
 
+    public function getCommissionRef($ref_id){
+        $total = $this->total_before_fees;
+        $returnArray=[
+            'ref_id'=>'',
+            'ref_commission'=>0,
+            'ref_commission_type'=>'',
+        ];
+        if (setting_item('referral_enable') == 1 && $total > 0) {
+            $ref = User::find($ref_id);
+            if (!empty($ref)) {
+                $returnArray['ref_id']= $ref->id;
+
+                $commission = [];
+                $commission['amount'] = setting_item('referral_commission_amount', 10);
+                $commission['type'] = setting_item('referral_commission_type', 'percent');
+
+                if($ref->ref_commission_type){
+                    $commission['type'] = $ref->ref_commission_type;
+                }
+                if($ref->ref_commission_amount){
+                    $commission['amount'] = $ref->ref_commission_amount;
+                }
+
+                if($commission['type'] == 'disable'){
+                    return $returnArray;
+                }
+
+                if ($commission['type'] == 'percent') {
+                    $returnArray['ref_commission'] = (float)($total / 100) * $commission['amount'];
+                } else {
+                    $returnArray['ref_commission']= (float)min($total,$commission['amount']);
+                }
+                $returnArray['ref_commission_type'] = json_encode($commission);
+            }
+        }
+        return $returnArray;
+    }
+
     public function calculateCommission(){
         $data = $this->getCommissionVendor();
 
         $this->commission = $data['commission'];
         $this->commission_type = $data['commission_type'];
+    }
+
+    public function calculateCommissionRef($ref = false){
+        if (!empty($ref)) {
+            $userRef = find_user_by_username_or_id($ref);
+            if ($userRef) {
+                $data = $this->getCommissionRef($userRef->id);
+
+                $this->ref_id = $data['ref_id'];
+                $this->ref_commission = $data['ref_commission'];
+                $this->ref_commission_type = $data['ref_commission_type'];
+            }
+        }
     }
 
 	public static function getContentCalendarIcal($service_type,$id,$module){

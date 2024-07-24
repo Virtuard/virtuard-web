@@ -36,6 +36,10 @@
 
                         'vendor_team_enable',
                         'vendor_team_auto_approved',
+
+                        'referral_enable',
+                        'referral_commission_type',
+                        'referral_commission_amount',
                     ],
                     'html_keys' => [
 

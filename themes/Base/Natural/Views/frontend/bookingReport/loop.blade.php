@@ -27,6 +27,12 @@
     <td>
         {{ format_money($booking->commission) }}
     </td>
+    <td>
+        @if ($booking->ref_id)
+            <div><a href="{{ route('user.profile', $booking->ref_id) }}">{{ $booking->refby->name }}</a></div>
+            {{ format_money($booking->ref_commission) }}
+        @endif
+    </td>
     <td class="{{$booking->status}} a-hidden">{{$booking->statusName}}</td>
     <td width="2%">
         @if($service = $booking->service)

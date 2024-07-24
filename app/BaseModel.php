@@ -126,6 +126,11 @@ class BaseModel extends Model
         return $this->belongsTo(User::class, "vendor_id", 'id')->withDefault();
     }
 
+    public function refby()
+    {
+        return $this->belongsTo(User::class, "ref_id", "id")->withDefault();
+    }
+
     public function cacheKey(){
         return strtolower($this->table);
     }

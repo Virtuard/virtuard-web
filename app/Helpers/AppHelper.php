@@ -1315,6 +1315,7 @@ if (!function_exists('menu_vendor')) {
             'business',
             'natural',
             'chat',
+            'referral',
         ];
 
         return $data;
@@ -1777,5 +1778,46 @@ if (!function_exists('generate_user_name')) {
         }
 
         return $username;
+    }
+}
+
+if (!function_exists('find_user_by_username_or_id')) {
+    function find_user_by_username_or_id($param)
+    {
+        $user = User::where('user_name', $param)->first();
+        if(empty($user)){
+            $user = User::find($param);
+        }
+        return $user;
+    }
+}
+
+if (!function_exists('get_detail_url_referral')) {
+    function get_detail_url_referral($url)
+    {
+        $isLoggedIn = auth()->check();
+        $reference = auth()->user()->user_name ?? false;
+        if (!$reference) {
+            $reference = auth()->user()->id ?? false;
+        }
+        
+        if ($isLoggedIn && $reference) {
+            $url = $url."?reference=".$reference;
+        }
+
+        return $url;
+    }
+}
+
+if (!function_exists('enable_referral_sell')) {
+    function enable_referral_sell($row)
+    {
+        $result = false;
+
+        if (setting_item('referral_enable') && $row->author->checkUserPlanStatus()) {
+            $result = true;
+        }
+
+        return $result;
     }
 }

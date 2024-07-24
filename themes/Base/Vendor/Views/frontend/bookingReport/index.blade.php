@@ -32,6 +32,7 @@
                                 <th class="a-hidden">{{__("Execution Time")}}</th>
                                 <th width="15%">{{__("Payment Detail")}}</th>
                                 <th>{{__("Commission")}}</th>
+                                <th>{{__("Ref Commission")}}</th>
                                 <th class="a-hidden">{{__("Status")}}</th>
                                 <th>{{__("Action")}}</th>
                             </tr>
@@ -50,6 +51,24 @@
             @else
                 {{__("No Booking History")}}
             @endif
+        </div>
+        <div class="modal" tabindex="-1" id="modal_booking_detail">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{__('Booking ID: #')}} <span class="user_id"></span></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex justify-content-center">{{__("Loading...")}}</div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -72,5 +91,17 @@
                 }
             });
         });
+    </script>
+    <script>
+        $('#modal_booking_detail').on('show.bs.modal',function (e){
+            var btn = $(e.relatedTarget);
+            $(this).find('.user_id').html(btn.data('id'));
+            $(this).find('.modal-body').html('<div class="d-flex justify-content-center">{{__("Loading...")}}</div>');
+            var modal = $(this);
+            $.get(btn.data('ajax'), function (html){
+                    modal.find('.modal-body').html(html);
+                }
+            )
+        })
     </script>
 @endpush
