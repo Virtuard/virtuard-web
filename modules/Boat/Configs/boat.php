@@ -2,6 +2,6 @@
 return [
     'layouts'=>[
         'normal'=>__("Normal Layout"),
-        'map'=>__("Map Layout"),
+        // 'map'=>__("Map Layout"),
     ]
 ];

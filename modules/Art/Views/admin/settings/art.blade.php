@@ -25,7 +25,7 @@
                         <div class="form-controls">
                             <select name="art_layout_search" class="form-control" >
                                 <option value="normal" {{ ($settings['art_layout_search'] ?? '') == 'normal' ? 'selected' : ''  }}>{{__("Normal Layout")}}</option>
-                                <option value="map" {{($settings['art_layout_search'] ?? '') == 'map' ? 'selected' : ''  }}>{{__('Map Layout')}}</option>
+                                {{-- <option value="map" {{($settings['art_layout_search'] ?? '') == 'map' ? 'selected' : ''  }}>{{__('Map Layout')}}</option> --}}
                             </select>
                         </div>
                     </div>

@@ -24,7 +24,7 @@
                     <label class="" >{{__("Layout Search")}}</label>
                     <div class="form-controls">
                         <select name="hotel_layout_search" class="form-control" >
-                            @foreach(config('hotel.layouts',['normal'=>__("Normal Layout"),'map'=>__("Map Layout")]) as $id=>$name))
+                            @foreach(config('hotel.layouts',['normal'=>__("Normal Layout"))]) as $id=>$name))
                                 <option value="{{$id}}" {{ setting_item('hotel_layout_search','normal') == $id ? 'selected' : ''  }}>{{$name}}</option>
                             @endforeach
                         </select>

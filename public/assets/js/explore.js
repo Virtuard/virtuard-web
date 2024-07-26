@@ -92,6 +92,19 @@ function initMap() {
     // addMarkersToMap(listMaps);
 }
 
+function getCenterMarker(mdata) {
+    let map_lat = $('#explore_map_lat').val() ?? 0;
+    let map_lgn = $('#explore_map_lgn').val() ?? 0;
+
+    let center = {
+        lat: Number(map_lat),
+        lng: Number(map_lgn)
+    };
+
+    return center;
+}
+
+
 function addMarkersToMap(markerData) {
     markerData.forEach((data) => {
         const lat = Number(data.map_lat);
@@ -121,6 +134,10 @@ function addMarkersToMap(markerData) {
 
         mapMarkers.push(newMarker);
     });
+
+    // map setCenter
+    const mapCenter = getCenterMarker(markerData);
+    map.setCenter(mapCenter);
 
     // Create the MarkerClusterer
     markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
@@ -170,6 +187,9 @@ function resetMarkers() {
         mapMarkers.forEach(marker => marker.setMap(null));
         mapMarkers = [];
     }
+
+    mapCenter = getCenterMarker([])
+    map.setCenter(mapCenter)
 }
 
 function initAutocomplete() {
@@ -301,6 +321,7 @@ function onSubmitForm() {
             attr[obj.name] = obj.value;
         });
 
+        isResetSearch = true;
         fetchService(attr);
         fetchMap(attr);
     });
