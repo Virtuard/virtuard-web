@@ -1082,6 +1082,21 @@ class Natural extends Bookable
         if (!empty($request['custom_ids'])) {
             $model_natural->whereIn("bravo_naturals.id", $request['custom_ids']);
         }
+        if(!empty($request['is_ipanorama']))
+        {
+            $model_natural
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
+
         $orderby = $request['orderby'] ?? "";
         switch ($orderby){
             case "price_low_high":
@@ -1096,6 +1111,9 @@ class Natural extends Bookable
                 break;
             case "rate_high_low":
                 $model_natural->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_natural->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 if(!empty($request['order']) and !empty($request['order_by'])){

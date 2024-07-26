@@ -1003,7 +1003,7 @@ class Business extends Bookable
         if (!empty($request['franchising'])) {
             $model_business->where("bravo_businesses.franchising", $request['franchising']);
         }
-        if(!empty($request['is_tour']))
+        if(!empty($request['is_ipanorama']))
         {
             $model_business
                 ->whereHas('ipanorama', function($query) {

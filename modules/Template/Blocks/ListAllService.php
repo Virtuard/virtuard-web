@@ -113,7 +113,7 @@ class ListAllService extends BaseBlock
                 'link' => route('event.search'),
             ],
             [
-                'name' => __('Cutural'),
+                'name' => __('Cultural'),
                 'image' => 'uploads/images/cultural.jpg',
                 'link' => route('cultural.search'),
             ],

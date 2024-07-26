@@ -868,7 +868,7 @@ class Boat extends Bookable
             $model_boat->WhereRaw($raw_sql_min_max,[$pri_from,$pri_to]);
         }
 
-        $terms = $request["terms"] ?? "";
+        $terms = $request["terms"] ?? [];
         if($term_id = $request["term_id"] ?? "")
         {
             $terms[] = $term_id;
@@ -938,6 +938,20 @@ class Boat extends Bookable
         if (!empty($request['custom_ids'])) {
             $model_boat->whereIn("bravo_boats.id", $request['custom_ids']);
         }
+        if(!empty($request['is_ipanorama']))
+        {
+            $model_boat
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
 
         $orderby = $request['orderby'] ?? "";
         switch ($orderby){
@@ -949,6 +963,9 @@ class Boat extends Bookable
                 break;
             case "rate_high_low":
                 $model_boat->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_boat->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 if(!empty($request['order']) and !empty($request['order_by'])){

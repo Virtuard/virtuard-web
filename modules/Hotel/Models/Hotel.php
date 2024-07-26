@@ -996,7 +996,7 @@ class Hotel extends Bookable
             $model_hotel->WhereIn('star_rate',$star_rate);
         }
 
-        $terms = $request['terms'] ?? "";
+        $terms = $request['terms'] ?? [];
         if($term_id = $request['term_id'] ?? "")
         {
             $terms[] = $term_id;
@@ -1084,6 +1084,20 @@ class Hotel extends Bookable
         if (!empty($request['room'])) {
             $model_hotel->where("bravo_hotels.room", $request['room']);
         }
+        if(!empty($request['is_ipanorama']))
+        {
+            $model_hotel
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
 
         $orderby = $request["orderby"] ?? "";
         switch ($orderby){
@@ -1099,6 +1113,9 @@ class Hotel extends Bookable
                 break;
             case "rate_high_low":
                 $model_hotel->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_hotel->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 if(!empty($request['order']) and !empty($request['order_by'])){

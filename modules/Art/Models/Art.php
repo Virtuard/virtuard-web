@@ -952,7 +952,7 @@ class Art extends Bookable
             $model_art->WhereRaw($raw_sql_min_max, [$pri_from, $pri_from, $pri_to, $pri_to]);
         }
 
-        $terms = $request['terms'] ?? "";
+        $terms = $request['terms'] ?? [];
         if ($term_id = $request['term_id'] ?? "") {
             $terms[] = $term_id;
         }
@@ -1042,6 +1042,20 @@ class Art extends Bookable
         if (!empty($request['software'])) {
             $model_art->where("bravo_arts.software", $request['software']);
         }
+        if(!empty($request['is_ipanorama']))
+        {
+            $model_art
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
 
         $orderby = $request["orderby"] ?? "";
         switch ($orderby) {
@@ -1057,6 +1071,9 @@ class Art extends Bookable
                 break;
             case "rate_high_low":
                 $model_art->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_art->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 if (!empty($request['order']) and !empty($request['order_by'])) {

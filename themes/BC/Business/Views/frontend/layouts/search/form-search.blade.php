@@ -34,7 +34,7 @@
                 @include('Business::frontend.layouts.search.fields.service_name')
             </div>
             <div class="col-md-3 border-right">
-                @include('Business::frontend.layouts.search.fields.location')
+                @include('partials.search.fields.location')
             </div>
             <div class="col-md-2 border-right">
                 @include('Business::frontend.layouts.search.fields.range')

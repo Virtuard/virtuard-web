@@ -931,7 +931,7 @@ class Space extends Bookable
             $model_space->WhereRaw($raw_sql_min_max,[$pri_from,$pri_from,$pri_to,$pri_to]);
         }
 
-        $terms = $request['terms'] ?? '';
+        $terms = $request['terms'] ?? [];
         if(!empty($request['term_id'])) {
             $terms[] = $request['term_id'];
         }
@@ -1017,6 +1017,21 @@ class Space extends Bookable
         if (!empty($request['bathroom'])) {
             $model_space->where("bravo_spaces.bathroom", $request['bathroom']);
         }
+        if(!empty($request['is_ipanorama']))
+        {
+            $model_space
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
+        
         $orderby = $request['orderby'] ?? "";
         switch ($orderby){
             case "price_low_high":
@@ -1031,6 +1046,9 @@ class Space extends Bookable
                 break;
             case "rate_high_low":
                 $model_space->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_space->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 $model_space->orderBy("is_featured", "desc");
