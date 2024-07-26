@@ -348,6 +348,8 @@ function onFetchData(attr) {
 }
 
 function fetchMap(attr) {
+    $('#map-loading').show();
+
     $.ajax({
         type: "POST",
         url: "/explore/map/search",
@@ -357,7 +359,12 @@ function fetchMap(attr) {
 
             resetMarkers();
             addMarkersToMap(maps);
+
+            $('#map-loading').hide();
         },
+        error: function(xhr) {
+            $('#map-loading').hide();
+        }
     });
 }
 

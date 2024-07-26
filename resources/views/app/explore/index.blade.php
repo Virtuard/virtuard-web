@@ -129,7 +129,22 @@
             </div>
             <div class="col-md-5 px-2 md-px-0">
                 <div class="card card-explore">
-                    <div class="card-body">
+                    <div id="map-container" class="card-body">
+                            <div id="map-loading" class="text-center" style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                z-index: 1000;
+                                display: none;
+                                background-color: rgba(255, 255, 255, 0.7);
+                                padding: 10px;
+                                border-radius: 5px;
+                            ">
+                            <div class="spinner-border" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                         <div id="gmap"></div>
                     </div>
                 </div>
