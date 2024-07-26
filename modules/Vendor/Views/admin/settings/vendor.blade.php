@@ -55,13 +55,13 @@
                         </div>
                     </div>
                     <div class="form-group" data-condition="vendor_enable:is(1)">
-                        <label>{{__('Vendor commission value')}}</label>
+                        <label>{{__('Vendor commission value for admin')}}</label>
                         <div class="form-controls">
                             <input type="text" class="form-control" name="vendor_commission_amount" value="{{!empty($settings['vendor_commission_amount'])?$settings['vendor_commission_amount']:"0" }}">
                         </div>
                         <p>
                             <i>{{__('Example value : 10 or 10.5')}}</i><br>
-                            <i>{{__('Example: 10% commssion. Vendor get 90%, Admin get 10%')}}</i>
+                            <i>{{__('Example: 10% commission. Vendor get 90%, Admin get 10%')}}</i>
                         </p>
                     </div>
                 @else

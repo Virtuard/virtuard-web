@@ -162,7 +162,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>{{__('Vendor commission value')}}</label>
+                                <label>{{__('Vendor commission value for admin')}}</label>
                                 <div class="form-controls">
                                     <input type="text" class="form-control" name="vendor_commission_amount" value="{{old("vendor_commission_amount",($row->vendor_commission_amount ?? '')) }}">
                                 </div>
