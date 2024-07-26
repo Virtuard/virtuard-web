@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group mt-3">
                                 <div class="form-content">
                                     <label class="mb-2 font-weight-bold">Proximity <span id="explore_proximity_text">0</span>
@@ -47,7 +47,18 @@
                                     style="border-top: none;border-left:none;border-right:none;">
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
+                            <div class="form-group mt-3">
+                                <div class="smart-search smart-search-category">
+                                    <select id="explore_is_ipanorama" name="is_ipanorama" class="form-control">
+                                        <option value="">--{{ __('Filter 360') }}--</option>
+                                        <option value="">{{ __('All') }}</option>
+                                        <option value="1" @if(request('is_tour') == '1') selected @endif>{{ __('360 Only') }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                             <button id="explore_submit_search" type="submit" class="btn btn-md btn-dark mt-3 w-100">
                                 <i class="fa fa-search"></i>
                                 Search

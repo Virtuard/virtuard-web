@@ -61,7 +61,7 @@
                         </div>
                         <p>
                             <i>{{__('Example value : 10 or 10.5')}}</i><br>
-                            <i>{{__('Example: 10% commission. Vendor get 90%, Admin get 10%')}}</i>
+                            <i>{{__('Example: 10% commission. Admin get 10%, Vendor get 90%')}}</i>
                         </p>
                     </div>
                 @else
@@ -103,7 +103,7 @@
                         </div>
                         <p>
                             <i>{{__('Example value : 10 or 10.5')}}</i><br>
-                            <i>{{__('Example: 10% commission. Vendor get 90%, Referral get 10%')}}</i>
+                            <i>{{__('Example: 10% commission. Referral get 10%, Vendor get 90%')}}</i>
                         </p>
                     </div>
                 @else

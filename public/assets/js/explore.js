@@ -367,6 +367,7 @@ function onSubmitSearch() {
             map_lat: $('#explore_map_lat').val(),
             map_lgn: $('#explore_map_lgn').val(),
             search_radius: $('#explore_search_radius').val(),
+            is_ipanorama: $('#explore_is_ipanorama').val(),
             service_type: tabActive,
         };
 

@@ -19,14 +19,6 @@
                 </div>
                 <a href="{{ route('user.plan') }}" class="btn btn-primary">Subscribe</a>
             </div>
-        {{-- @elseif ($user_plan->status == 1 && $user_plan->is_valid)
-            <div class="border rounded text-center p-4">
-                <span class="icon text-center" style="font-size: 5rem;"><i class="fa fa-unlock"></i></span>
-                <h1>Unlocked feature</h1>
-                <div class="alert alert-success" role="alert">
-                    Your service is <b>ACTIVE</b> until {{ $user_plan->end_date }}
-                </div>
-            </div> --}}
         @endif
     @else
         <div class="border rounded text-center p-4">

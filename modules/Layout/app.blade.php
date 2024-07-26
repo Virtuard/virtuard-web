@@ -75,9 +75,9 @@
         {!! setting_item('footer_scripts') !!}
         {!! setting_item_with_lang_raw('footer_scripts') !!}
     @endif
-    <script src= "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="{{ asset('assets/js/custom-app.js') }}"></script>
     @if(setting_item('google_translate_enable'))
+        <script src= "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         <script>
             function googleTranslateElementInit() {
                 if (window.innerWidth >= 768) {
