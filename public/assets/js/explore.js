@@ -96,6 +96,18 @@ function getCenterMarker(mdata) {
     let map_lat = $('#explore_map_lat').val() ?? 0;
     let map_lgn = $('#explore_map_lgn').val() ?? 0;
 
+    if (mdata.length !== 0) {
+        let mdata_lat = mdata[0].map_lat ?? 0;
+        let mdata_lgn = mdata[0].map_lgn ?? 0;
+
+        if (mdata_lat) {
+            map_lat = mdata_lat
+        }
+        if (mdata_lgn) {
+            map_lat = mdata_lgn
+        }
+    }
+
     let center = {
         lat: Number(map_lat),
         lng: Number(map_lgn)
