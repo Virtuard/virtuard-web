@@ -115,7 +115,17 @@ class LoginController extends Controller
 
                 $userByEmail = User::query()->where('email', $email)->first();
                 if (!empty($userByEmail)) {
-                    return redirect()->route('login')->with('error', __('Email :email exists. Can not register new account with your social email', ['email' => $email]));
+
+                    $userByEmail->addMeta('social_' . $provider . '_id', $user->getId());
+                    $userByEmail->addMeta('social_' . $provider . '_email', $email);
+                    $userByEmail->addMeta('social_' . $provider . '_name', $user->getName());
+                    $userByEmail->addMeta('social_' . $provider . '_avatar', $user->getAvatar());
+                    $userByEmail->addMeta('social_meta_avatar', $user->getAvatar());
+
+                    // Login with user
+                    Auth::login($userByEmail);
+
+                    return redirect($redirectTo);
                 }
 
                 // Create New User
