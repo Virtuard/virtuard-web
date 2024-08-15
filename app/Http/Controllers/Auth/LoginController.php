@@ -122,6 +122,9 @@ class LoginController extends Controller
                     $userByEmail->addMeta('social_' . $provider . '_avatar', $user->getAvatar());
                     $userByEmail->addMeta('social_meta_avatar', $user->getAvatar());
 
+                    $userByEmail->need_update_pw = 0;
+                    $userByEmail->save();
+
                     // Login with user
                     Auth::login($userByEmail);
 
@@ -166,6 +169,9 @@ class LoginController extends Controller
                 if (in_array($existUser->status, ['blocked'])) {
                     return redirect()->route('login')->with('error', __('Your account has been blocked'));
                 }
+
+                $existUser->need_update_pw = 0;
+                $existUser->save();
 
                 Auth::login($existUser);
 
