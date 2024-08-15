@@ -3,6 +3,11 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-between mb20">
             <h1 class="title-bar">{{__("Plan Report")}}</h1>
+            <div class="title-actions">
+                @if(empty($recovery))
+                    <a href="{{route('user.admin.plan_report.create')}}" class="btn btn-primary">{{__("Add new plan")}}</a>
+                @endif
+            </div>
         </div>
         @include('admin.message')
         <div class="row">
@@ -34,7 +39,7 @@
                                             'dataType' => 'json'
                                         ],
                                         'allowClear'  => true,
-                                        'placeholder' => __('-- Select Employer --')
+                                        'placeholder' => __('-- Select User --')
                                     ]
                                 ], !empty($company->id) ? [
                                     $company->id,
@@ -59,26 +64,34 @@
                                 <thead>
                                 <tr>
 {{--                                    <th width="60px"><input type="checkbox" class="check-all"></th>--}}
-                                    <th>{{__("Plan ID")}}</th>
-                                    <th>{{__("Customer")}}</th>
+                                    <th>{{__("#")}}</th>
+                                    <th>{{__("User")}}</th>
+                                    <th>{{__("Email")}}</th>
                                     <th>{{__("Plan Name")}}</th>
                                     <th>{{__("Expiry")}}</th>
-                                    <th>{{__("Used/Total")}}</th>
+                                    <th>{{__("Used/Total Ipanorama")}}</th>
                                     <th>{{__("Price")}}</th>
                                     <th>{{__("Status")}}</th>
-                                    <th width="100px"></th>
+                                    <th width="100px">{{__("Action")}}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @if($rows->total() > 0)
-                                    @foreach($rows as $row)
+                                    @foreach($rows as $key => $row)
                                         <tr>
 {{--                                            <td><input type="checkbox" name="ids[]" value="{{$row->id}}" class="check-item">--}}
-                                            <td>#{{$row->id}}</td>
+                                            <td>{{$key + 1}}</td>
                                             <td>{{ $row->user ? $row->user->getDisplayName() : '' }}</td>
+                                            <td>{{ $row->user->email ?? '' }}</td>
                                             <td class="trans-id">{{$row->plan->title ?? ''}}</td>
-                                            <td class="total-jobs">{{display_datetime($row->end_date)}}</td>
-                                            <td class="used">@if(!$row->max_service) {{__("Unlimited")}} @else {{$row->used}}/{{$row->max_service}} @endif</td>
+                                            <td class="total-jobs">
+                                                @if($row->end_date)
+                                                    {{display_datetime($row->end_date)}}
+                                                @else
+                                                    -
+                                                @endif
+                                            </td>
+                                            <td class="used">@if(!$row->max_ipanorama) {{__("Unlimited")}} @else {{$row->used_ipanorama}}/{{$row->max_ipanorama}} @endif</td>
                                             <td class="remaining">{{format_money($row->price)}}</td>
                                             <td >
                                                 @if($row->status==0)
@@ -87,10 +100,13 @@
                                                     <span class="text-success">{{__('Active')}}</span>
                                                 @else
                                                     <div class="text-danger mb-3">{{__('Expired')}}</div>
-                                                    <div>
+                                                    {{-- <div>
                                                         <a href="{{route('plan')}}" class="btn btn-warning">{{__('Renew')}}</a>
-                                                    </div>
+                                                    </div> --}}
                                                 @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('user.admin.plan_report.edit', $row->id) }}" class="btn btn-primary">Edit</a>
                                             </td>
                                         </tr>
                                     @endforeach

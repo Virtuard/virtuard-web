@@ -16,10 +16,10 @@
                     <table class="table mt-4">
                         <thead class="thead-dark">
                             <tr>
-                                <th width="5%">#</th>
+                                <th>#</th>
                                 <th>Title</th>
-                                <th width="10%">Status</th>
-                                <th width=30%>Action</th>
+                                <th>Status</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -32,16 +32,16 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('user.virtuard-360.show', $pan->id) }}"
-                                            class="virtuard-edit btn btn-primary btn-sm">Preview</a>
+                                            class="virtuard-edit btn btn-info btn-sm">Preview</a>
                                         <a href="{{ route('user.virtuard-360.edit', ['id' => $pan->id, 'user_id' => auth()->user()->id]) }}"
-                                            class="virtuard-edit btn btn-warning btn-sm">Edit</a>
+                                            class="virtuard-edit btn btn-primary btn-sm">Edit</a>
                                         <a href="{{ route('user.virtuard-360.destroy', $pan->id) }}"
                                                 class="virtuard-delete btn btn-danger btn-sm">Delete</a>
                                         @if($pan->status == 'publish')
-                                            <a href="{{ route("user.virtuard-360.bulk_edit",[$pan->id,'action' => "make-hide"]) }}" class="btn btn-secondary btn-sm">{{__("Make hide")}}</a>
+                                            <a href="{{ route("user.virtuard-360.bulk_edit",[$pan->id,'action' => "make-hide"]) }}" class="btn btn-warning btn-sm">{{__("Make Draft")}}</a>
                                         @endif
                                         @if($pan->status == 'draft')
-                                            <a href="{{ route("user.virtuard-360.bulk_edit",[$pan->id,'action' => "make-publish"]) }}" class="btn btn-success btn-sm    ">{{__("Make publish")}}</a>
+                                            <a href="{{ route("user.virtuard-360.bulk_edit",[$pan->id,'action' => "make-publish"]) }}" class="btn btn-success btn-sm    ">{{__("Make Publish")}}</a>
                                         @endif
                                     </td>
                                 </tr>

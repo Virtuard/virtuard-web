@@ -164,10 +164,10 @@ class PlanController extends FrontendController
 
         if (!$plan->price || $plan->price == 0) {
             // For Free
-            $new_user_plan = UserPlan::query()->find($user->id);
+            $new_user_plan = UserPlan::query()->where('user_id', $user->id)->where('plan_id', $plan->id)->first();
             if (empty($new_user_plan)) {
                 $new_user_plan = new UserPlan();
-                $new_user_plan->id = $user->id;
+                // $new_user_plan->id = $user->id;
             }
             $new_user_plan->plan_id = $id;
             $new_user_plan->price = $plan->price;

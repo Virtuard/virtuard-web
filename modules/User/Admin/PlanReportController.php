@@ -3,10 +3,7 @@ namespace Modules\User\Admin;
 
 use Illuminate\Http\Request;
 use Modules\AdminController;
-use Modules\Gig\Models\GigCategory;
-use Modules\Gig\Models\GigCategoryTranslation;
 use Modules\User\Models\Plan;
-use Modules\User\Models\PlanTranslation;
 use Modules\User\Models\UserPlan;
 
 class PlanReportController extends AdminController
@@ -71,5 +68,105 @@ class PlanReportController extends AdminController
             }
         }
         return redirect()->back()->with('success', __('Updated success!'));
+    }
+
+    public function create(Request $request)
+    {
+        $this->checkPermission('dashboard_access');
+        $row = new $this->userPlanClass();
+
+        $data = [
+            'row' => $row,
+            'plans' => $this->planClass::where('status', 'publish')->get(),
+            'breadcrumbs'  => [
+                [
+                    'name' => __('Plan Report'),
+                    'url'  => route('user.admin.plan_report.index')
+                ],
+                [
+                    'name'  => __('Add Plan'),
+                    'class' => 'active'
+                ],
+            ],
+            'page_title'   => __("Add new Plan"),
+
+        ];
+        return view('User::admin.plan-report.detail', $data);
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $this->checkPermission('dashboard_access');
+        $row = $this->userPlanClass::find($id);
+        if (empty($row)) {
+            return redirect(route('user.admin.plan_report.index'));
+        }
+        $data = [
+            'row' => $row,
+            'plans' => $this->planClass::where('status', 'publish')->get(),
+            'breadcrumbs' => [
+                [
+                    'name' => __('Plan Report'),
+                    'url'  => route('user.admin.plan_report.index')
+                ],
+                [
+                    'name'  => __('Edit Plan'),
+                    'class' => 'active'
+                ],
+            ],
+            'page_title'        => __("Edit: :name", ['name' => 'Plan'])
+        ];
+        return view('User::admin.plan-report.detail', $data);
+    }
+
+    public function store(Request $request, $id)
+    {
+        if (is_demo_mode()) {
+            return back()->with("error", "DEMO MODE: You are not allowed to change data");
+        }
+
+        if ($id > 0) {
+            $this->checkPermission('dashboard_access');
+            $row = $this->userPlanClass::find($id);
+            if (empty($row)) {
+                return redirect(route('user.admin.plan_report.index'));
+            }
+        } else {
+            $this->checkPermission('dashboard_access');
+            $row = new $this->userPlanClass();
+        }
+
+        $plan = $this->planClass::query()->find($request->plan_id);
+
+        $user_plan = $this->userPlanClass::query()->find($id);
+        if (empty($user_plan)) {
+            $user_plan = new $this->userPlanClass();
+        }
+        $user_plan->plan_id = $request->plan_id;
+        $user_plan->price = $plan->price;
+        $user_plan->start_date = date('Y-m-d H:i:s');
+        $user_plan->max_service = $plan->max_service;
+        $user_plan->max_ipanorama = $plan->max_ipanorama;
+        $user_plan->plan_data = $plan;
+        $user_plan->user_id = $request->author_id;
+        $user_plan->status = $request->status ?? 0;
+
+        if ($id > 0) {
+            $user_plan->end_date = $request->end_date;
+        } else {
+            if ($plan->duration) {
+                $user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
+            }
+        }
+
+        $user_plan->save();
+
+        if ($user_plan) {
+            if ($id > 0) {
+                return back()->with('success', __('Plan updated'));
+            } else {
+                return redirect(route('user.admin.plan_report.edit', $user_plan->id))->with('success', __('Plan created'));
+            }
+        }
     }
 }

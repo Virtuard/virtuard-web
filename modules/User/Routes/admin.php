@@ -71,5 +71,8 @@ Route::group(['prefix'=>'plan-request'],function (){
 });
 Route::group(['prefix'=>'plan-report'],function (){
     Route::get('/','PlanReportController@index')->name('user.admin.plan_report.index');
+    Route::get('/create','PlanReportController@create')->name('user.admin.plan_report.create');
+    Route::get('/edit/{id}','PlanReportController@edit')->name('user.admin.plan_report.edit');
+    Route::post('/store/{id}','PlanReportController@store')->name('user.admin.plan_report.store');
     Route::post('/bulkEdit','PlanReportController@bulkEdit')->name('user.admin.plan_report.bulkEdit');
 });

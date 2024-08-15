@@ -32,12 +32,12 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th width="60px">#</th>
-                            <th> {{ __('Title')}}</th>
-                            <th width="130px"> {{ __('Author')}}</th>
-                            <th width="100px"> {{ __('Status')}}</th>
-                            <th width="100px"> {{ __('Date')}}</th>
-                            <th width="100px"></th>
+                            <th>#</th>
+                            <th>{{ __('Title')}}</th>
+                            <th>{{ __('Author')}}</th>
+                            <th>{{ __('Email')}}</th>
+                            <th>{{ __('Status')}}</th>
+                            <th>{{ __('Action')}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -55,17 +55,23 @@
                                             {{__("[Author Deleted]")}}
                                         @endif
                                     </td>
+                                    <td>
+                                        @if(!empty($row->author))
+                                            {{$row->author->email}}
+                                        @else
+                                            {{__("[Author Deleted]")}}
+                                        @endif
+                                    </td>
                                     <td><span class="badge badge-{{ $row->status }}">{{ $row->status }}</span></td>
-                                    <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         @if(empty($recovery))
-                                        <a href="{{ route('admin.virtuard360.show', $row->id) }}" class="virtuard-edit btn btn-info btn-sm d-block mb-1">Preview</a>
-                                        @if($row->status == 'publish')
-                                        <a href="{{ route('admin.virtuard360.setstatus', ['id' =>  $row->id, 'status' => 'draft']) }}" class="virtuard-edit btn btn-warning btn-sm d-block mb-1">Draft</a>
-                                        @else
-                                        <a href="{{ route('admin.virtuard360.setstatus', ['id' =>  $row->id, 'status' => 'publish']) }}" class="virtuard-edit btn btn-success btn-sm d-block mb-1">Publish</a>
-                                        @endif
-                                            <a href="{{route('admin.virtuard360.edit',['id'=>$row->id,'user_id'=>$row->user_id])}}" class="btn btn-primary btn-sm d-block mb-1"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
+                                            <a href="{{ route('admin.virtuard360.show', $row->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> Preview</a>
+                                            <a href="{{route('admin.virtuard360.edit',['id'=>$row->id,'user_id'=>$row->user_id])}}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> {{__('Edit')}}</a>
+                                            @if($row->status == 'publish')
+                                                <a href="{{ route('admin.virtuard360.setstatus', ['id' =>  $row->id, 'status' => 'draft']) }}" class="btn btn-warning btn-sm">Make Draft</a>
+                                            @else
+                                                <a href="{{ route('admin.virtuard360.setstatus', ['id' =>  $row->id, 'status' => 'publish']) }}" class="btn btn-success btn-sm">Make Publish</a>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
