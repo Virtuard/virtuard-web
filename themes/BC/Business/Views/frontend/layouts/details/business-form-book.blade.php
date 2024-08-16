@@ -7,7 +7,7 @@
                 </div>
             @endif
             @if($row->price)
-            <div class="form-head">
+            <div class="form-head d-none">
                 <div class="price">
                     <span class="label">
                         {{__("from")}}

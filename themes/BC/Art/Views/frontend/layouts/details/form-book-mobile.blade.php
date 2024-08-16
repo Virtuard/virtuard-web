@@ -1,7 +1,7 @@
 <div class="bravo-more-book-mobile">
     <div class="container">
         <div class="left">
-            <div class="g-price">
+            <div class="g-price d-none">
                 <div class="prefix">
                     <span class="fr_text">{{__("from")}}</span>
                 </div>
@@ -16,7 +16,7 @@
             $reviewData = $row->getScoreReview();
             $score_total = $reviewData['score_total'];
             ?>
-            <div class="service-review tour-review-{{$score_total}}">
+            <div class="service-review tour-review-{{$score_total}} d-none">
                 <div class="list-star">
                     <ul class="booking-item-rating-stars">
                         <li><i class="fa fa-star-o"></i></li>

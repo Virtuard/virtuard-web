@@ -38,9 +38,9 @@
                 </div>
             </div>
         </div>
-        @if($row->author->checkUserPlan())
+        {{-- @if($row->author->checkUserPlan()) --}}
         @include('Art::frontend.layouts.details.form-book-mobile')
-        @endif
+        {{-- @endif --}}
     </div>
 @endsection
 
