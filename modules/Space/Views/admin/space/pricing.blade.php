@@ -18,7 +18,7 @@
                         <span><i>{{__("If the regular price is less than the discount , it will show the regular price")}}</i></span>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-6 d-none">
                     <div class="form-group">
                         <label class="control-label">{{__("Max Guests")}}</label>
                         <input type="number" step="any" name="max_guests" class="form-control" value="{{$row->max_guests}}" >
@@ -26,7 +26,7 @@
                 </div>
             </div>
         @endif
-        <div class="form-group @if(!is_default_lang()) d-none @endif">
+        <div class="form-group d-none @if(!is_default_lang()) d-none @endif">
             <label><input type="checkbox" name="enable_extra_price" @if(!empty($row->enable_extra_price)) checked @endif value="1"> {{__('Enable extra price')}}
             </label>
         </div>
@@ -195,7 +195,7 @@
                 </div>
             </div>
         @endif
-        @if(is_default_lang() and (!empty(setting_item("space_allow_vendor_can_add_service_fee")) or is_admin()))
+        @if(is_default_lang() and (!empty(setting_item("space_allow_vendor_can_add_service_fee"))))
             <hr>
             <h3 class="panel-body-title app_get_locale">{{__('Service fee')}}</h3>
             <div class="form-group app_get_locale">

@@ -1,4 +1,4 @@
-<div class="owner-info widget-box mt-4">
+<div class="owner-info widget-box mt-4 @if($row->getBookingEnquiryType() != 'book') d-none @endif">
     <div class="media">
         <a href="javascript:void(0)" id="sellButtonReferral"
             class="btn btn-larger btn-success w-100">{{ __('Sell This Product') }}</a>

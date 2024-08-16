@@ -84,7 +84,7 @@
                                             <input type="checkbox" name="is_featured" @if($row->is_featured) checked @endif value="1"> {{__("Enable featured")}}
                                         </label>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group @if($row->getBookingEnquiryType() != "book") d-none @endif">
                                         <label >{{__('Default State')}}</label>
                                         <br>
                                         <select name="default_state" class="custom-select">

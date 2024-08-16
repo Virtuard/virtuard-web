@@ -9,7 +9,7 @@
             @if($row->price)
             <div class="form-head">
                 <div class="price">
-                    <span class="label">
+                    <span class="label d-none">
                         {{__("from")}}
                     </span>
                     <span class="value">

@@ -272,3 +272,11 @@ li.create-item a:before {
     background-color: #ddd;
 }
 /* ---------#Story-------- */
+
+.bravo_single_book .form-send-enquiry {
+    margin: 20px !important;
+}
+
+.bravo_single_book .form-send-enquiry button{
+    width: 100%;
+}

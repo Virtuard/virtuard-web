@@ -94,7 +94,7 @@
                                             <input type="checkbox" name="is_instant" @if($row->is_instant) checked @endif value="1"> {{__("Enable instant booking")}}
                                         </label>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group @if($row->getBookingEnquiryType() != "book") d-none @endif">
                                         <label >{{__('Default State')}}</label>
                                         <br>
                                         <select name="default_state" class="custom-select">

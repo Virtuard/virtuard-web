@@ -18,7 +18,7 @@
                         <a data-toggle="tab" href="#nav-tour-pricing" aria-selected="false">{{__("3. Pricing")}}</a>
                         <a data-toggle="tab" href="#nav-availability" aria-selected="false">{{__("4. Availability")}}</a>
                         <a data-toggle="tab" href="#nav-attribute" aria-selected="false">{{__("5. Attributes")}}</a>
-                        <a data-toggle="tab" href="#nav-ical" aria-selected="false">{{__("6. Ical")}}</a>
+                        {{-- <a data-toggle="tab" href="#nav-ical" aria-selected="false">{{__("6. Ical")}}</a> --}}
                     @endif
                 </div>
                 <div class="tab-content" id="nav-tabContent">

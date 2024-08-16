@@ -36,7 +36,7 @@
 
                     </div>
                     <div class="tab-pane fade" id="nav-tour-pricing">
-                        <div class="panel">
+                        <div class="panel @if($row->getBookingEnquiryType() != 'book') d-none @endif">
                             <div class="panel-title"><strong>{{__('Default State')}}</strong></div>
                             <div class="panel-body">
                                 <div class="row">
