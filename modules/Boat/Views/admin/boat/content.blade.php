@@ -196,7 +196,7 @@
         </div>
         <div class="form-group">
             <label>{{ __('Additional Terms & Information') }}</label>
-            <textarea name="terms_information" class="d-none has-ckeditor" rows="10" placeholder="{{ __("For Sanitary purposes ONLY, although there is a working toilet and shower, we've deactivated the shower and the toliet is for limited use (urine only..pardon the graphic detail!)...") }}">{{ $translation->terms_information }}</textarea>
+            <textarea name="terms_information" class="d-none has-ckeditor" data-fullurl="true" rows="10" placeholder="{{ __("For Sanitary purposes ONLY, although there is a working toilet and shower, we've deactivated the shower and the toliet is for limited use (urine only..pardon the graphic detail!)...") }}">{{ $translation->terms_information }}</textarea>
         </div>
         @include('Boat::admin/boat/include-exclude')
     </div>

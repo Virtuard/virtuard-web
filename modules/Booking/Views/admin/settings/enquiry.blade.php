@@ -193,7 +193,7 @@
                     <div class="form-group" data-condition="booking_enquiry_enable_mail_to_vendor:is(1)">
                         <label>{{__("Email to Vendor content")}}</label>
                         <div class="form-controls">
-                            <textarea name="booking_enquiry_mail_to_vendor_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('booking_enquiry_mail_to_vendor_content',request()->query('lang'))?? '' }}</textarea>
+                            <textarea name="booking_enquiry_mail_to_vendor_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('booking_enquiry_mail_to_vendor_content',request()->query('lang'))?? '' }}</textarea>
                         </div>
                     </div>
 
@@ -212,7 +212,7 @@
                     <div class="form-group" data-condition="booking_enquiry_enable_mail_to_admin:is(1)">
                         <label>{{__("Email to Administrator content")}}</label>
                         <div class="form-controls">
-                            <textarea name="booking_enquiry_mail_to_admin_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('booking_enquiry_mail_to_admin_content',request()->query('lang'))?? '' }}</textarea>
+                            <textarea name="booking_enquiry_mail_to_admin_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('booking_enquiry_mail_to_admin_content',request()->query('lang'))?? '' }}</textarea>
                         </div>
                     </div>
 

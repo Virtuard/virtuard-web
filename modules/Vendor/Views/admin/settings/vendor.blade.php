@@ -316,7 +316,7 @@
                 <div class="form-group" data-condition="enable_mail_vendor_registered:is(1)">
                     <label>{{__("Email to vendor content")}}</label>
                     <div class="form-controls">
-                        <textarea name="vendor_content_email_registered" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('vendor_content_email_registered',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="vendor_content_email_registered" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('vendor_content_email_registered',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -336,7 +336,7 @@
                 <div class="form-group" data-condition="admin_enable_mail_vendor_registered:is(1)">
                     <label>{{__("Email to Administrator content")}}</label>
                     <div class="form-controls">
-                        <textarea name="admin_content_email_vendor_registered" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('admin_content_email_vendor_registered',request()->query('lang'))?? '' }}</textarea>
+                        <textarea name="admin_content_email_vendor_registered" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('admin_content_email_vendor_registered',request()->query('lang'))?? '' }}</textarea>
                     </div>
                 </div>
 

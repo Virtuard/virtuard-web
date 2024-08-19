@@ -25,13 +25,13 @@
                 <div class="form-group" data-condition="user_enable_permanently_delete:is(1)">
                     <label>{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="user_permanently_delete_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="user_permanently_delete_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
                 <div class="form-group" data-condition="user_enable_permanently_delete:is(1)">
                     <label>{{__("Content confirm")}}</label>
                     <div class="form-controls">
-                        <textarea name="user_permanently_delete_content_confirm" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content_confirm',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="user_permanently_delete_content_confirm" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content_confirm',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
             </div>
@@ -77,7 +77,7 @@
 
                     <label>{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="user_permanently_delete_content_email" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content_email',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="user_permanently_delete_content_email" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content_email',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -97,7 +97,7 @@
 
                     <label>{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="user_permanently_delete_content_email_to_admin" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content_email_to_admin',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="user_permanently_delete_content_email_to_admin" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('user_permanently_delete_content_email_to_admin',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
 

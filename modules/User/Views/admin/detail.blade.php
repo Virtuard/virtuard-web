@@ -106,7 +106,7 @@
                             <div class="form-group">
                                 <label class="control-label">{{ __('Biographical')}}</label>
                                 <div class="">
-                                    <textarea name="bio" class="d-none has-ckeditor" cols="30" rows="10">{{old('bio',$row->bio)}}</textarea>
+                                    <textarea name="bio" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{old('bio',$row->bio)}}</textarea>
                                 </div>
                             </div>
                         </div>

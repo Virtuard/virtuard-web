@@ -149,7 +149,7 @@
                 <div class="form-group">
                     <label class="" >{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="wallet_new_deposit_admin_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('wallet_new_deposit_admin_content',request()->query('lang')) ?? '',\Modules\User\Emails\CreditPaymentEmail::defaultNewBody() }}</textarea>
+                        <textarea name="wallet_new_deposit_admin_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('wallet_new_deposit_admin_content',request()->query('lang')) ?? '',\Modules\User\Emails\CreditPaymentEmail::defaultNewBody() }}</textarea>
                     </div>
                 </div>
             </div>
@@ -166,7 +166,7 @@
                 <div class="form-group">
                     <label class="" >{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="wallet_new_deposit_customer_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('wallet_new_deposit_customer_content',request()->query('lang')) ?? '',\Modules\User\Emails\CreditPaymentEmail::defaultNewBody() }}</textarea>
+                        <textarea name="wallet_new_deposit_customer_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('wallet_new_deposit_customer_content',request()->query('lang')) ?? '',\Modules\User\Emails\CreditPaymentEmail::defaultNewBody() }}</textarea>
                     </div>
                 </div>
             </div>
@@ -197,7 +197,7 @@
                 <div class="form-group">
                     <label class="" >{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="wallet_update_deposit_admin_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('wallet_update_deposit_admin_content',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="wallet_update_deposit_admin_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('wallet_update_deposit_admin_content',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
             </div>
@@ -214,7 +214,7 @@
                 <div class="form-group">
                     <label class="" >{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="wallet_update_deposit_customer_content" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('wallet_update_deposit_customer_content',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="wallet_update_deposit_customer_content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('wallet_update_deposit_customer_content',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
             </div>

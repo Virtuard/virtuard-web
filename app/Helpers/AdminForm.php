@@ -111,12 +111,12 @@ class AdminForm{
                                             <?php $key_lang = setting_item('site_locale') != $language->locale ? "_".$language->locale : ""   ?>
                                             <div class="g-lang">
                                                 <div class="title-lang"> <?php echo $language->name ?> </div>
-                                                <textarea name="<?php echo e($option['id'].$key_lang ) ?>" class="has-ckeditor"  cols="30" rows="5"><?php echo clean($option['value'.$key_lang]) ?></textarea>
+                                                <textarea name="<?php echo e($option['id'].$key_lang ) ?>" class="has-ckeditor" data-fullurl="true"  cols="30" rows="5"><?php echo clean($option['value'.$key_lang]) ?></textarea>
                                             </div>
                                         <?php } ?>
                                     </div>
                                 <?php }else{ ?>
-                                    <textarea name="<?php echo e($option['id']) ?>" class="has-ckeditor"  cols="30" rows="5"><?php echo clean($option['value']) ?></textarea>
+                                    <textarea name="<?php echo e($option['id']) ?>" class="has-ckeditor" data-fullurl="true"  cols="30" rows="5"><?php echo clean($option['value']) ?></textarea>
                                 <?php } ?>
                             </div>
                         </div>

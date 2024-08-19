@@ -10,5 +10,5 @@
 @endif
 {{--<div class="form-group">--}}
     {{--<label class="control-label">{{ __('Description')}}</label>--}}
-    {{--<textarea name="content" class="d-none has-ckeditor" cols="30" rows="10">{{$translation->content}}</textarea>--}}
+    {{--<textarea name="content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{$translation->content}}</textarea>--}}
 {{--</div>--}}

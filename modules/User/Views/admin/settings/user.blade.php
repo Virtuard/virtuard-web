@@ -147,7 +147,7 @@
                 <div class="form-group" data-condition="enable_mail_user_registered:is(1)">
                     <label>{{__("Email to customer content")}}</label>
                     <div class="form-controls">
-                        <textarea name="user_content_email_registered" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('user_content_email_registered',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="user_content_email_registered" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('user_content_email_registered',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -167,7 +167,7 @@
                 <div class="form-group" data-condition="admin_enable_mail_user_registered:is(1)">
                     <label>{{__("Email to Administrator content")}}</label>
                     <div class="form-controls">
-                        <textarea name="admin_content_email_user_registered" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('admin_content_email_user_registered',request()->query('lang'))?? '' }}</textarea>
+                        <textarea name="admin_content_email_user_registered" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('admin_content_email_user_registered',request()->query('lang'))?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -209,7 +209,7 @@
                 <div class="form-group" >
                     <label>{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="content_email_verify_register_user" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('content_email_verify_register_user',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="content_email_verify_register_user" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('content_email_verify_register_user',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -236,7 +236,7 @@
                 <div class="form-group">
                     <label>{{__("Content")}}</label>
                     <div class="form-controls">
-                        <textarea name="user_content_email_forget_password" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('user_content_email_forget_password',request()->query('lang')) ?? '' }}</textarea>
+                        <textarea name="user_content_email_forget_password" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('user_content_email_forget_password',request()->query('lang')) ?? '' }}</textarea>
                     </div>
                 </div>
 

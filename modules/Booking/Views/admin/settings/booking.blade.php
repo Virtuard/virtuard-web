@@ -83,7 +83,7 @@
                 <div class="form-group">
                     <label class="">{{__("Invoice Company Info")}}</label>
                     <div class="form-controls">
-                        <textarea name="invoice_company_info" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('invoice_company_info',request()->query('lang')) }}</textarea>
+                        <textarea name="invoice_company_info" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('invoice_company_info',request()->query('lang')) }}</textarea>
                     </div>
                 </div>
             </div>

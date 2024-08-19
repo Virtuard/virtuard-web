@@ -242,13 +242,13 @@
                 <div class="form-group">
                     <label>{{__("Footer Text Left")}}</label>
                     <div class="form-controls">
-                        <textarea name="footer_text_left" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('footer_text_left',request()->query('lang')) }}</textarea>
+                        <textarea name="footer_text_left" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('footer_text_left',request()->query('lang')) }}</textarea>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>{{__("Footer Text Right")}}</label>
                     <div class="form-controls">
-                        <textarea name="footer_text_right" class="d-none has-ckeditor" cols="30" rows="10">{{setting_item_with_lang('footer_text_right',request()->query('lang')) }}</textarea>
+                        <textarea name="footer_text_right" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{setting_item_with_lang('footer_text_right',request()->query('lang')) }}</textarea>
                     </div>
                 </div>
                 @php do_action(\Modules\Core\Hook::CORE_SETTING_AFTER_FOOTER) @endphp
@@ -280,7 +280,7 @@
                 <div class="form-group">
                     <label>{{__("Contact Desc")}}</label>
                     <div class="form-controls">
-                        <textarea name="page_contact_desc" class="d-none has-ckeditor" cols="30" rows="7">{{setting_item_with_lang('page_contact_desc',request()->query('lang')) }}</textarea>
+                        <textarea name="page_contact_desc" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="7">{{setting_item_with_lang('page_contact_desc',request()->query('lang')) }}</textarea>
                     </div>
                 </div>
                 @if(is_default_lang())
