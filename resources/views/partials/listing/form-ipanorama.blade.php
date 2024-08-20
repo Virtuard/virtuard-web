@@ -13,7 +13,7 @@
                         @php
                             $dataIpanorama = \App\Models\Ipanorama::query()
                                 ->where([
-                                    ['user_id', $row->author_id],
+                                    ['user_id', auth()->user()->id],
                                     ['status', 'publish'],
                                 ])
                                 ->get();
