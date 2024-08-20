@@ -11,9 +11,10 @@
                     <label>360 Image </label>
                     @if (auth()->user()->checkUserPlanStatus() || auth()->user()->isAdmin())
                         @php
+                            $userId = ($row->id) ? $row->author_id : auth()->user()->id;
                             $dataIpanorama = \App\Models\Ipanorama::query()
                                 ->where([
-                                    ['user_id', auth()->user()->id],
+                                    ['user_id', $userId],
                                     ['status', 'publish'],
                                 ])
                                 ->get();
