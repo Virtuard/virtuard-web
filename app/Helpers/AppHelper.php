@@ -1821,3 +1821,43 @@ if (!function_exists('enable_referral_sell')) {
         return $result;
     }
 }
+
+if (!function_exists('api_currency_update')) {
+    function api_currency_update()
+    {
+        try {
+            $api_currency_last_update = setting_item('api_currency_last_update', Carbon::now()->startOfDay());
+            $api_currency_exp = setting_item('api_currency_exp', 43200); // default 12 hours
+            
+            $timeDb = Carbon::parse($api_currency_last_update);
+            $timeNow = Carbon::now();
+
+            if ($timeDb->diffInSeconds($timeNow) >= $api_currency_exp) {
+                $api_currency_key = setting_item('api_currency_key');
+                if ($api_currency_key) {
+                    $url = 'https://api.currencyapi.com/v3/latest?apikey=' . $api_currency_key;
+                    $response = file_get_contents_curl($url);
+                    $response = json_decode($response);
+
+                    if ($response->data) {
+                        $new_extra_curreny = [];
+                        $extra_curreny = setting_item_array('extra_currency');
+                        foreach ($extra_curreny as $item) {
+                            $code = strtoupper($item['currency_main']);
+                            $cur = $response->data->$code;
+                            if ($cur) {
+                                $item['rate'] = (String) $cur->value;
+                            }
+                            $new_extra_curreny[] = $item;
+                        }
+
+                        setting_update_item('extra_currency', $new_extra_curreny);
+                        setting_update_item('api_currency_last_update', $timeNow->toDateTimeString());
+                    }
+                }
+            }
+        } catch (\Exception $e){
+            //
+        }
+    }
+}

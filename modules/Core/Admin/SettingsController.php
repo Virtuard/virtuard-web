@@ -125,6 +125,9 @@ class SettingsController extends AdminController
 	                if (in_array($key, $htmlKeys)) {
 		                $val = clean($val);
 	                }
+                    if ($setting_key == 'currency_main') {
+                        $val = 'usd';
+                    }
                     setting_update_item($setting_key,$val);
                 }
             }

@@ -82,7 +82,7 @@ class Currency
         $exchange_rate = (float) $exchange_rate;
         if(!$exchange_rate) $exchange_rate = 1;
 
-        $price /= $exchange_rate;
+        $price *= $exchange_rate;
 
         $s = number_format((float)$price, (int)$currency_no_decimal, $currency_decimal, $currency_thousand);
 

@@ -125,7 +125,7 @@
                                                     <label >{{__("Exchange rate")}}</label>
                                                     <div>
                                                         <input step=any type="text" name="extra_currency[{{$key}}][rate]" min=0 class="form-control" value="{{$item['rate'] ?? 0}}">
-                                                        <p><i>{{__('Example: Main currency is VND, and the extra currency is USD, so the exchange rate must be 23400 (1 USD ~ 23400 VND)')}}</i></p>
+                                                        <p><i>{{__('Example: Main currency is USD, and the extra currency is EUR, so the exchange rate must be 0.9 (1 USD ~ 0.9 EUR)')}}</i></p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -193,7 +193,7 @@
                                                 <label >{{__("Exchange rate")}}</label>
                                                 <div>
                                                     <input step=any type="text" __name__="extra_currency[__number__][rate]" min=0 class="form-control" value="">
-                                                    <p><i>{{__('Example: Main currency is VND, and the extra currency is USD, so the exchange rate must be 23400 (1 USD ~ 23400 VND)')}}</i></p>
+                                                    <p><i>{{__('Example: Main currency is USD, and the extra currency is EUR, so the exchange rate must be 0.9 (1 USD ~ 0.9 EUR)')}}</i></p>
                                                 </div>
                                             </div>
                                         </div>

@@ -26,6 +26,8 @@ class SetCurrentCurrency
     {
         if($code = $request->query('set_currency'))
         {
+            api_currency_update();
+            
             $all = Currency::getActiveCurrency();
             if(!empty($all)){
                 foreach ($all as $item){

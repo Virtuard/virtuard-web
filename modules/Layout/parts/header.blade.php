@@ -23,7 +23,6 @@
                 <?php $header_right_menu = true ?>
                 @if(!empty($header_right_menu))
                     <ul class="topbar-items">
-                        {{-- @include('Core::frontend.currency-switcher') --}}
                         @if(setting_item('google_translate_enable'))
                         <li class="menu-hr">
                             <div id="gtranslate-web"></div>
@@ -31,6 +30,7 @@
                         @else
                         @include('Language::frontend.switcher')
                         @endif
+                        @include('Core::frontend.currency-switcher')
                         @if(!Auth::check())
                             <li class="login-item">
                                 <a href="#login" data-toggle="modal" data-target="#login" class="login">{{__('Login')}}</a>
@@ -144,14 +144,14 @@
                 @endif
             </ul>
             <ul class="multi-lang">
-                {{-- @include('Core::frontend.currency-switcher') --}}
-            </ul>
-            <ul class="multi-lang">
                 @if(setting_item('google_translate_enable'))
                     <div id="gtranslate-mobile" style="margin-left: 20px;"></div>
                 @else
                     @include('Language::frontend.switcher')
                 @endif
+            </ul>
+            <ul class="multi-lang">
+                @include('Core::frontend.currency-switcher')
             </ul>
         </div>
         <div class="g-menu">
