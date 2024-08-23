@@ -7,6 +7,7 @@ use App\Models\UserPost;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Modules\Core\Models\Attributes;
 use Modules\Core\Models\Terms;
 
@@ -1839,6 +1840,8 @@ if (!function_exists('api_currency_update')) {
                     $response = file_get_contents_curl($url);
                     $response = json_decode($response);
 
+                    Storage::disk('local')->put('currency.json', json_encode($response));
+
                     if ($response->data) {
                         $new_extra_curreny = [];
                         $extra_curreny = setting_item_array('extra_currency');
@@ -1858,6 +1861,31 @@ if (!function_exists('api_currency_update')) {
             }
         } catch (\Exception $e){
             //
+        }
+    }
+}
+
+if (!function_exists('update_currency_from_file')) {
+    function update_currency_from_file()
+    {
+        if (Storage::disk('local')->exists('currency.json')) {
+            $fileContents = Storage::disk('local')->get('currency.json');
+            $result = json_decode($fileContents, true);
+
+            if ($result['data']) {
+                $new_extra_curreny = [];
+                $extra_curreny = setting_item_array('extra_currency');
+                foreach ($extra_curreny as $item) {
+                    $code = strtoupper($item['currency_main']);
+                    $cur = $result['data'][$code];
+                    if ($cur) {
+                        $item['rate'] = (String) $cur['value'];
+                    }
+                    $new_extra_curreny[] = $item;
+                }
+
+                setting_update_item('extra_currency', $new_extra_curreny);
+            }
         }
     }
 }

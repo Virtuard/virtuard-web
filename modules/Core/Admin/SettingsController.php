@@ -130,6 +130,10 @@ class SettingsController extends AdminController
                     }
                     setting_update_item($setting_key,$val);
                 }
+
+                if ($group == 'payment') {
+                    update_currency_from_file();
+                }
             }
             //Clear Cache for currency
             Session::put('bc_current_currency',"");
