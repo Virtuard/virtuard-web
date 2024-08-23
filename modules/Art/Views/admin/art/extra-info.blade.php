@@ -37,14 +37,6 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>{{ __('Software used') }}</label>
-                        <input type="text" value="{{ $row->software }}" placeholder="{{ __('Software used') }}" name="software" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
                         <label>{{ __('Phone') }}</label>
                         <input type="text" value="{{ $row->phone }}" placeholder="{{ __('Phone') }}" name="phone" class="form-control">
                     </div>
@@ -53,6 +45,48 @@
                     <div class="form-group">
                         <label>{{ __('Website') }}</label>
                         <input type="text" value="{{ $row->website }}" placeholder="{{ __('Website') }}" name="website" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group-item">
+                        <label class="control-label">{{ __('Software') }}</label>
+                        <div class="g-items-header">
+                            <div class="row">
+                                <div class="col-md-11">{{ __('Title') }}</div>
+                                <div class="col-md-1"></div>
+                            </div>
+                        </div>
+                        <div class="g-items">
+                            @foreach ($row->software ?? [] as $key => $soft)
+                                <div class="item" data-number="{{ $key }}">
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <input type="text" name="software[]" class="form-control" value="{{ $soft }}" placeholder="{{ __('Eg: Blender') }}">
+                                        </div>
+                                        <div class="col-md-1">
+                                            <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="text-right">
+                            <span class="btn btn-info btn-sm btn-add-item"><i class="icon ion-ios-add-circle-outline"></i> {{ __('Add item') }}</span>
+                        </div>
+                        <div class="g-more hide">
+                            <div class="item" data-number="__number__">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        <input type="text" __name__="software[]" class="form-control" placeholder="{{ __('Eg: Blender') }}">
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="btn btn-danger btn-sm btn-remove-item"><i class="fa fa-trash"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

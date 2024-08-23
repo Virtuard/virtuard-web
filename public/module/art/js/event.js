@@ -36,5 +36,7 @@ jQuery(function ($) {
     $(".bravo_form_filter input[type=checkbox]").change(function () {
         $(this).closest(".bravo_form_filter").submit();
     });
-
+    $(".bravo_form_filter select").change(function(e) {
+        $(this).closest(".bravo_form_filter").submit();
+    });
 });

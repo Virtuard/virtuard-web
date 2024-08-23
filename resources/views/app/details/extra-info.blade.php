@@ -55,11 +55,18 @@
                 {{ $row->engineering }} {{ __('Engineering') }}
             </div>
         @endif
-        @if (!empty($row->software))
-            <div class="item">
-                <i class="icofont-check-circled icon-default"></i>
-                {{ $row->software }} {{ __('Software') }}
-            </div>
-        @endif
     </div>
 </div>
+@if (!empty($row->software))
+<div class="g-attributes space-type attr-1">
+    <h3>{{ __('Software') }}</h3>
+    <div class="list-attributes">
+        @foreach ($row->software as $software)
+        <div class="item">
+            <i class="icofont-check-circled icon-default"></i>
+            {{ $software }}
+        </div>
+        @endforeach
+    </div>
+</div>
+@endif

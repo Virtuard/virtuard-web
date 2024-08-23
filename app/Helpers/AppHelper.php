@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Modules\Art\Models\Art;
 use Modules\Core\Models\Attributes;
 use Modules\Core\Models\Terms;
 
@@ -1887,5 +1888,23 @@ if (!function_exists('update_currency_from_file')) {
                 setting_update_item('extra_currency', $new_extra_curreny);
             }
         }
+    }
+}
+
+if (!function_exists('get_software_lists')) {
+    function get_software_lists()
+    {
+        $arts = Art::query()
+            ->select('software')
+            ->where('status', 'publish')
+            ->get();
+        
+        $softwares = [];
+        foreach($arts as $art) {
+            $softwares = array_merge($softwares, $art->software ?? []);
+        }
+        $softwares = array_unique($softwares);
+
+        return $softwares;
     }
 }

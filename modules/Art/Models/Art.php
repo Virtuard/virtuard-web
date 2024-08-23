@@ -56,6 +56,7 @@ class Art extends Bookable
         'ticket_types' => 'array',
         'service_fee'  => 'array',
         'surrounding' => 'array',
+        'software' => 'array',
 
     ];
     protected $bookingClass;
@@ -1040,7 +1041,7 @@ class Art extends Bookable
             $model_art->where("bravo_arts.engineering", $request['engineering']);
         }
         if (!empty($request['software'])) {
-            $model_art->where("bravo_arts.software", $request['software']);
+            $model_art->where("bravo_arts.software", "like", "%". $request['software'] . "%");
         }
         if(!empty($request['is_ipanorama']))
         {

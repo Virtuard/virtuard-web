@@ -83,17 +83,13 @@
                             </div>
                             <div class="form-group mt-3">
                                 @php
-                                    $art_soft = \Modules\Art\Models\Art::query()
-                                        ->select('software')
-                                        ->where([['software', '!=', ''], ['status', 'publish']])
-                                        ->groupBy('software')
-                                        ->get();
+                                    $art_soft = get_software_lists();
                                 @endphp
                                 <label>{{ __('Software') }}</label>
                                 <select name="software" class="form-control">
                                     <option value="">{{ __('--Select Software--') }}</option>
-                                    @foreach ($art_soft as $val)
-                                        <option value="{{ $val->software }}">{{ __($val->software) }}</option>
+                                    @foreach ($art_soft as $as)
+                                        <option value="{{ $as }}">{{ __($as) }}</option>
                                     @endforeach
                                 </select>
                             </div>

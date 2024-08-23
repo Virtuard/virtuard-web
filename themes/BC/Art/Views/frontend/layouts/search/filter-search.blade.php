@@ -104,6 +104,22 @@
                 </div>
             @endif
         @endforeach
+        <div class="g-filter-item">
+            <div class="item-title">
+                <h3>{{ __('Software') }}</h3>
+            </div>
+            <div class="item-content">
+                @php
+                    $art_soft = get_software_lists();
+                @endphp
+                <select name="software" class="form-control">
+                    <option value="">{{ __('--Select Software--') }}</option>
+                    @foreach ($art_soft as $as)
+                        <option value="{{ $as }}" {{ Request::query('software') == $as ? 'selected' : '' }}>{{ __($as) }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
     </form>
 </div>
 
