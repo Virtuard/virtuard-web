@@ -20,7 +20,7 @@
         <div class="filter-title">
             {{__("FILTER BY")}}
         </div>
-        <div class="g-filter-item">
+        {{-- <div class="g-filter-item">
             <div class="item-title">
                 <h3>{{__("Filter Price")}}</h3>
                 <i class="fa fa-angle-up" aria-hidden="true"></i>
@@ -46,7 +46,7 @@
                     <button type="submit" class="btn btn-link btn-apply-price-range">{{__("APPLY")}}</button>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="g-filter-item">
             <div class="item-title">
                 <h3>{{__("Review Score")}}</h3>
