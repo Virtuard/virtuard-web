@@ -1,18 +1,12 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\User;
-use Modules\Hotel\Models\Hotel;
-use Modules\Location\Models\LocationCategory;
-use Modules\Page\Models\Page;
-use Modules\News\Models\NewsCategory;
-use Modules\News\Models\Tag;
-use Modules\News\Models\News;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Story;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -84,6 +78,21 @@ class StoryController extends Controller
         ]);
     }
 
+    public function destroy($id)
+    {
+        try {
+            Story::destroy($id);
 
+            return response()
+                    ->json([
+                        'status' => true,
+                    ]);
+        } catch (Exception $e) {
+            return response()
+                    ->json([
+                        'status' => false,
+                    ]);
+        }
+    }
 
 }

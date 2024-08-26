@@ -1,5 +1,6 @@
 @extends ('layouts.app')
 @section('content')
+<div class="page-template-content">
 <div class="container">
     <div class="rows" style="padding: 40px 0; background: #f5f5f5;">
             <div class="row">
@@ -20,6 +21,13 @@
                             {!! session()->get('message') !!}
                         </div>
                     @endif
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9" style="background: #f5f5f5; padding: 0 20px;">
+                    <div class="bravo-list-vendor story-vendor">
+                        @include("Vendor::frontend.blocks.list-vendor-story.index")
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -458,6 +466,7 @@
                 </div>
             </div>
     </div>
+</div>
 </div>
 @endsection
 

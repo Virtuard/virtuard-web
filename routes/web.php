@@ -48,6 +48,7 @@ Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('des
 // Story
 Route::get('/story', 'StoryController@list')->name('story.list');
 Route::post('/story', 'StoryController@addStory')->name('story.store');
+Route::delete('/story/{id}', 'StoryController@destroy')->name('story.destroy');
 
 // Category
 Route::get('/admin/add/category/product/{type}', 'CategoryController@index');
