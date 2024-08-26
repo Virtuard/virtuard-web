@@ -137,6 +137,7 @@ class LoginController extends Controller
                 $realUser->password = Hash::make(uniqid() . time());
                 $realUser->name = $user->getName();
                 $realUser->first_name = $user->getName();
+                $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
 
