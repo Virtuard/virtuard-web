@@ -371,7 +371,6 @@
         function showStories(index) {
             const currentUser = stories[index].getAttribute('data-userId');
             const isOwner = stories[index].getAttribute('data-isowner');
-            console.log('isOwner', isOwner)
             if (isOwner) {
                 $('#story-control').removeClass('d-none');
             }
@@ -426,7 +425,6 @@
         }
 
         function pauseStories() {
-            console.log('pause', currentStoryId)
             isPaused = true;
             clearTimeout(interval);
 
@@ -495,7 +493,7 @@
                 method: 'DELETE',
                 success:function (json) {
                     if (json.status) {
-                        window.location.href = '/';
+                        location.reload();
                     }
                 },
                 error:function (e) {
