@@ -267,13 +267,13 @@
                     $today = \Carbon\Carbon::now(); 
                     $stories = \App\Models\Story::query()
                         ->whereDate('created_at', $today->toDateString())
-                        ->orderBy('created_at', 'asc') 
+                        ->orderBy('created_at', 'desc') 
                         ->get();
 
                     $groupedStoriesByUser = $stories->groupBy('user_id');
 
-                    $storyUsers = $groupedStoriesByUser->map(function ($stories) {
-                        return $stories->sortBy('created_at');
+                    $storyUsers = $groupedStoriesByUser->sortByDesc(function ($story, $userId) {
+                        return $story->first()->id;
                     });
                 @endphp
 
