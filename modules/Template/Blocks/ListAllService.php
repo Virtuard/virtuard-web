@@ -84,22 +84,22 @@ class ListAllService extends BaseBlock
         $list = [
             [
                 'name' => __('Accomodation'),
-                'image' => 'uploads/images/accomodation.jpg',
+                'image' => 'uploads/images/accomodation.webp',
                 'link' => route('hotel.search'),
             ],
             [
                 'name' => __('Property'),
-                'image' => 'uploads/images/property.jpg',
+                'image' => 'uploads/images/property.webp',
                 'link' => route('space.search'),
             ],
             [
                 'name' => __('Business'),
-                'image' => 'uploads/images/business.jpg',
+                'image' => 'uploads/images/business.webp',
                 'link' => route('business.search'),
             ],
             [
                 'name' => __('Vehicle'),
-                'image' => '/uploads/demo/boat/boat-5.jpg',
+                'image' => 'uploads/images/boat.webp',
                 'link' => route('boat.search'),
             ],
             [
@@ -109,22 +109,22 @@ class ListAllService extends BaseBlock
             ],
             [
                 'name' => __('Event'),
-                'image' => '/uploads/demo/event/event-6.jpg',
+                'image' => 'uploads/images/event.webp',
                 'link' => route('event.search'),
             ],
             [
                 'name' => __('Cultural'),
-                'image' => 'uploads/images/cultural.jpg',
+                'image' => 'uploads/images/cultural.webp',
                 'link' => route('cultural.search'),
             ],
             [
                 'name' => __('Natural'),
-                'image' => 'uploads/images/natural.jpg',
+                'image' => 'uploads/images/natural.webp',
                 'link' => route('natural.search'),
             ],
             [
                 'name' => __('Rendering'),
-                'image' => 'uploads/images/art.jpg',
+                'image' => 'uploads/images/art.webp',
                 'link' => route('art.search'),
             ],
         ];
