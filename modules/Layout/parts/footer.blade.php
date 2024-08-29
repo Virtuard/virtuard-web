@@ -120,7 +120,9 @@
         setting_item('event_location_search_style') == 'autocompletePlace')
     {!! App\Helpers\MapEngine::scripts() !!}
 @endif
+@if (!empty($is_user_page))
 <script src="{{ asset('libs/pusher.min.js') }}"></script>
+@endif
 <script src="{{ asset('js/home.js?_ver=' . config('app.asset_version')) }}"></script>
 
 @if (!empty($is_user_page))
