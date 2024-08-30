@@ -54,9 +54,12 @@ class CompressImageController extends Controller
                 if(empty($model)){
                     $model = $this->model->find($id);
                 }
-                $model->timestamps = false;
-                $model->image_id = resize_feature_image($model->image_id);
-                $model->save();
+
+                if ($model) {
+                    $model->timestamps = false;
+                    $model->image_id = resize_feature_image($model->image_id);
+                    $model->save();
+                }
             }
 
             return response()->json([

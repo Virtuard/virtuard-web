@@ -66,7 +66,7 @@ class BookingController extends AdminController
         $breadcrumbs = [
             [
                 'name' => __('Culturals'),
-                'url'  => route('Cultural.admin.index')
+                'url'  => route('cultural.admin.index')
             ],
             [
                 'name'  => __('Booking'),
