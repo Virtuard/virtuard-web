@@ -1922,14 +1922,14 @@ if (!function_exists('resize_feature_image')) {
 
             $newPath = implode('/', $arrPath);
 
-            $width = 750;
-            $height = 750;
+            // $width = 750;
+            // $height = 750;
             // $resizeName = $media->file_name . '-' . $width . 'x' . $height;
-            $resizeName = $media->file_name;
+            $resizeName = $media->file_name . '-compress';
             $resizePath = $newPath .'/'. $resizeName . '.webp';
             $arrPath[] = $resizeName;
 
-            if ($media->file_path != $resizePath) {
+            if ($media->file_extension != 'webp') {
                 $originalFile = Storage::disk($driver)->path($media->file_path);
                 if ($originalFile) {
                     $img = Image::make($originalFile);
@@ -1937,7 +1937,7 @@ if (!function_exists('resize_feature_image')) {
                     $img->save(Storage::disk($driver)->path($resizePath), 80);
     
                     $newMedia = $media->replicate();
-                    // $newMedia->file_name = $resizeName;
+                    $newMedia->file_name = $resizeName;
                     $newMedia->file_path = $resizePath;
                     $newMedia->file_type = 'image/webp';
                     $newMedia->file_extension = 'webp';

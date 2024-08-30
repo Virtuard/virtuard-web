@@ -1,4 +1,6 @@
 <?php
+
+use Illuminate\Support\Facades\Route;
 // Admin Route
 /*Route::group(['prefix'=>'admin','middleware' => ['auth','dashboard']], function() {
     Route::match(['get','post'],'/',function (){
@@ -48,5 +50,12 @@ Route::group([
         Route::post('store', 'Admin\Virtuard360Controller@store')->name('store');
         Route::get('/{id}/setstatus', 'Admin\Virtuard360Controller@setstatus')->name('setstatus');
         Route::put('/{id}', 'Admin\Virtuard360Controller@update')->name('update');
+    });
+
+    Route::group([
+        'prefix'=>'compressimage',
+        'as' => 'compressimage.'
+    ], function() {
+        Route::get('/', 'Admin\CompressImageController@index')->name('index');
     });
 });
