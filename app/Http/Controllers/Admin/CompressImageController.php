@@ -50,7 +50,10 @@ class CompressImageController extends Controller
             $this->model = $this->$service;
     
             foreach ($ids as $id) {
-                $model = $this->model->find($id);
+                $model = $this->model->where('slug', $id)->first();
+                if(empty($model)){
+                    $model = $this->model->find($id);
+                }
                 $model->timestamps = false;
                 $model->image_id = resize_feature_image($model->image_id);
                 $model->save();
