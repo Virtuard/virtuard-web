@@ -31,7 +31,7 @@
     <link href="{{ asset('dist/frontend/css/notification.css') }}" rel="newest stylesheet">
     <link href="{{ asset('dist/frontend/css/app.css?_ver=' . config('app.asset_version')) }}" rel="stylesheet">
     <link href="{{ asset('libs/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet" />
-    <link href="{{ asset('libs/daterange/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('libs/daterange/daterangepicker.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
     <!-- Fonts -->
     <link rel='stylesheet' id='google-font-css-css'
