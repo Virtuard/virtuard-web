@@ -9,7 +9,10 @@
     @include('partials.preconnect')
     @php event(new \Modules\Layout\Events\LayoutBeginHead()); @endphp
     @php
-        $favicon = $seo_meta['seo_image'] ? $seo_meta['seo_image'] : setting_item('site_favicon');
+        $favicon = setting_item('site_favicon');
+        if(isset($seo_meta) && isset($seo_meta['seo_image'])) {
+            $favicon = $seo_meta['seo_image'];
+        }
     @endphp
     @if ($favicon)
         @php
