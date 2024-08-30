@@ -231,6 +231,8 @@ class NaturalController extends AdminController
         $row->default_state = $request->input('default_state', 1);
         $row->enable_service_fee = $request->input('enable_service_fee');
         $row->service_fee = $request->input('service_fee');
+        $row['image_id'] = resize_feature_image($row->image_id);
+
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
 
         if ($res) {
@@ -242,10 +244,10 @@ class NaturalController extends AdminController
             do_action(Hook::AFTER_SAVING,$row,$request);
 
             if ($id > 0) {
-                event(new UpdatedServiceEvent($row));
+                // event(new UpdatedServiceEvent($row));
                 return back()->with('success', __('Natural updated'));
             } else {
-                event(new CreatedServicesEvent($row));
+                // event(new CreatedServicesEvent($row));
                 return redirect(route('natural.admin.edit', $row->id))->with('success', __('Natural created'));
             }
         }

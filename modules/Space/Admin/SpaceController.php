@@ -267,6 +267,7 @@ class SpaceController extends AdminController
 	    $row->ical_import_url  = $request->ical_import_url;
         $row->enable_service_fee = $request->input('enable_service_fee');
         $row->service_fee = $request->input('service_fee');
+        $row['image_id'] = resize_feature_image($row->image_id);
 
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
 
@@ -276,7 +277,7 @@ class SpaceController extends AdminController
             }
 
             if($id > 0 ){
-                event(new UpdatedServiceEvent($row));
+                // event(new UpdatedServiceEvent($row));
                 return back()->with('success',  __('Space updated') );
             }else{
                 event(new CreatedServicesEvent($row));

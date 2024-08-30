@@ -220,7 +220,7 @@ foreach ($menus as $k => $menuItem) {
         <ul class="main-menu">
             @foreach ($menus as $key => $menuItem)
 
-            @if ($key === 5)
+            @if ($key === 6)
                 <li id="nav-listing" class="nav-category nav-listing">
                     <a href="#">
                         <span class="icon text-center"><i class="fa fa-list"></i></span>

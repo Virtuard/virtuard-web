@@ -71,7 +71,7 @@ class AdminChannelServices extends Notification
      */
     public function toDatabase($notifiable)
     {
-        event(new PusherNotificationAdminEvent($this->id, $this->data, $notifiable));
+        // event(new PusherNotificationAdminEvent($this->id, $this->data, $notifiable));
         return [
             'id' =>  $this->id,
             'for_admin' =>  1,

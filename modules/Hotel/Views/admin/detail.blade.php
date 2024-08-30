@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                             </div>
-{{--                            @include('Hotel::admin.hotel.ical')--}}
+                           @include('Hotel::admin.hotel.ical')
 
                         @endif
                     </div>

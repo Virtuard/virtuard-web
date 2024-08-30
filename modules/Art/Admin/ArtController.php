@@ -256,27 +256,7 @@ class ArtController extends AdminController
         if ($request->input('slug')) {
             $row->slug = $request->input('slug');
         }
-
-        if($request->file('image-ipanorama-1')) {
-            $dataIpanorama = array();
-
-            $proofImage1 = $request->file('image-ipanorama-1');
-            $proofImage2 = $request->file('image-ipanorama-2');
-            $proofImage3 = $request->file('image-ipanorama-3');
-            $proofImage4 = $request->file('image-ipanorama-4');
-
-            $path1 = $proofImage1->store('public/images/ipanorama');
-            $path2 = $proofImage2->store('public/images/ipanorama');
-            $path3 = $proofImage3->store('public/images/ipanorama');
-            $path4 = $proofImage4->store('public/images/ipanorama');
-
-            array_push($dataIpanorama, $path1);
-            array_push($dataIpanorama, $path2);
-            array_push($dataIpanorama, $path3);
-            array_push($dataIpanorama, $path4);
-
-            $dataIpanoramaString = implode(', ', $dataIpanorama);
-        }
+        $row['image_id'] = resize_feature_image($row->image_id);
 
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
         if ($res) {
@@ -284,7 +264,7 @@ class ArtController extends AdminController
                 $this->saveTerms($row, $request);
             }
             if ($id > 0) {
-                event(new UpdatedServiceEvent($row));
+                // event(new UpdatedServiceEvent($row));
                 return back()->with('success', __('Art updated'));
             } else {
                 event(new CreatedServicesEvent($row));

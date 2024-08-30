@@ -70,7 +70,7 @@ class PrivateChannelServices extends Notification
      */
     public function toDatabase($notifiable)
     {
-        event(new PusherNotificationPrivateEvent($this->id, $this->data, $notifiable));
+        // event(new PusherNotificationPrivateEvent($this->id, $this->data, $notifiable));
         return [
             'id' =>  $this->id,
             'for_admin' =>  0,

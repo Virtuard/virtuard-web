@@ -255,6 +255,7 @@ class HotelController extends AdminController
         if ($request->input('slug')) {
             $row->slug = $request->input('slug');
         }
+        $row['image_id'] = resize_feature_image($row->image_id);
         
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
 
@@ -265,7 +266,7 @@ class HotelController extends AdminController
             do_action(Hook::AFTER_SAVING, $row, $request);
 
             if ($id > 0) {
-                event(new UpdatedServiceEvent($row));
+                // event(new UpdatedServiceEvent($row));
                 return back()->with('success',  __('Hotel updated'));
             } else {
                 event(new CreatedServicesEvent($row));

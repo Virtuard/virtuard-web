@@ -1,16 +1,18 @@
 <?php
-use Modules\Core\Models\Settings;
 use App\Currency;
 use App\User;
-use App\Models\FollowUser;
 use App\Models\UserPost;
+use App\Models\FollowUser;
+use App\Models\MediaFile;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Storage;
 use Modules\Art\Models\Art;
 use Modules\Core\Models\Attributes;
 use Modules\Core\Models\Terms;
+use Modules\Core\Models\Settings;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 
 //include '../../custom/Helpers/CustomHelper.php';
 
@@ -1906,5 +1908,46 @@ if (!function_exists('get_software_lists')) {
         $softwares = array_unique($softwares);
 
         return $softwares;
+    }
+}
+
+if (!function_exists('resize_feature_image')) {
+    function resize_feature_image($id)
+    {
+        $media = MediaFile::find($id);
+        if ($media) {
+            $driver = $media->driver ?? 'uploads';
+            $arrPath = explode('/', $media->file_path);
+            array_pop($arrPath);
+
+            $newPath = implode('/', $arrPath);
+
+            $width = 750;
+            $height = 750;
+            // $resizeName = $media->file_name . '-' . $width . 'x' . $height;
+            $resizeName = $media->file_name;
+            $resizePath = $newPath .'/'. $resizeName . '.webp';
+            $arrPath[] = $resizeName;
+
+            if ($media->file_path != $resizePath) {
+                $originalFile = Storage::disk($driver)->path($media->file_path);
+                if ($originalFile) {
+                    $img = Image::make($originalFile);
+                    // $img->resize($width, $height);
+                    $img->save(Storage::disk($driver)->path($resizePath), 80);
+    
+                    $newMedia = $media->replicate();
+                    // $newMedia->file_name = $resizeName;
+                    $newMedia->file_path = $resizePath;
+                    $newMedia->file_type = 'image/webp';
+                    $newMedia->file_extension = 'webp';
+                    $newMedia->save();
+    
+                    return $newMedia->id;
+                }
+            }
+        }
+
+        return $id;
     }
 }

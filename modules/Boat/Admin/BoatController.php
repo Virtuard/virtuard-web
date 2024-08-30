@@ -251,6 +251,7 @@ class BoatController extends AdminController
 
         $row->min_price = $row->price_per_day < $row->price_per_hour ? $row->price_per_day : $row->price_per_hour;
         $row->number = 1;
+        $row['image_id'] = resize_feature_image($row->image_id);
 
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
         if ($res) {
@@ -258,7 +259,7 @@ class BoatController extends AdminController
                 $this->saveTerms($row, $request);
             }
             if ($id > 0) {
-                event(new UpdatedServiceEvent($row));
+                // event(new UpdatedServiceEvent($row));
                 return back()->with('success', __('Boat updated'));
             } else {
                 event(new CreatedServicesEvent($row));

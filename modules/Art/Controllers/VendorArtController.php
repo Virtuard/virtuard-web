@@ -197,6 +197,7 @@ class VendorArtController extends FrontendController
         ];
 
         $row->fillByAttr($dataKeys,$request->input());
+        $row['image_id'] = resize_feature_image($row->image_id);
 
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
 

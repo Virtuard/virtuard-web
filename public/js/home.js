@@ -1118,12 +1118,12 @@ jQuery(function($){
     var notificationsCount     = parseInt(notificationsCountElem.html());
     var notifications          = notificationsWrapper.find('ul.dropdown-list-items');
 
-    if(bookingCore.pusher_api_key && bookingCore.pusher_cluster){
-        var pusher = new Pusher(bookingCore.pusher_api_key, {
-            encrypted: true,
-            cluster: bookingCore.pusher_cluster
-        });
-    }
+    // if(bookingCore.pusher_api_key && bookingCore.pusher_cluster){
+    //     var pusher = new Pusher(bookingCore.pusher_api_key, {
+    //         encrypted: true,
+    //         cluster: bookingCore.pusher_cluster
+    //     });
+    // }
 
     $(document).on("click",".markAsRead",function(e) {
         e.stopPropagation();
@@ -1178,15 +1178,15 @@ jQuery(function($){
         notificationsWrapper.find('.notif-count').text(notificationsCount);
     };
 
-    if(bookingCore.isAdmin > 0 && bookingCore.pusher_api_key){
-        var channel = pusher.subscribe('admin-channel');
-        channel.bind('App\\Events\\PusherNotificationAdminEvent', callback);
-    }
+    // if(bookingCore.isAdmin > 0 && bookingCore.pusher_api_key){
+    //     var channel = pusher.subscribe('admin-channel');
+    //     channel.bind('App\\Events\\PusherNotificationAdminEvent', callback);
+    // }
 
-    if(bookingCore.currentUser > 0 && bookingCore.pusher_api_key){
-        var channelPrivate = pusher.subscribe('user-channel-'+bookingCore.currentUser);
-        channelPrivate.bind('App\\Events\\PusherNotificationPrivateEvent', callback);
-    }
+    // if(bookingCore.currentUser > 0 && bookingCore.pusher_api_key){
+    //     var channelPrivate = pusher.subscribe('user-channel-'+bookingCore.currentUser);
+    //     channelPrivate.bind('App\\Events\\PusherNotificationPrivateEvent', callback);
+    // }
 
     if ($('.tabs-box').length) {
         $('.tabs-box .tab-buttons .tab-btn').on('click', function(e) {

@@ -228,6 +228,8 @@ class ManageNaturalController extends FrontendController
 
         ], $request->input());
         $row->ical_import_url = $request->ical_import_url;
+        $row['image_id'] = resize_feature_image($row->image_id);
+        
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
         if ($res) {
             if (!$request->input('lang') or is_default_lang($request->input('lang'))) {

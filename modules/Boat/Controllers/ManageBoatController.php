@@ -195,6 +195,8 @@ class ManageBoatController extends FrontendController
         $row->fillByAttr($dataKeys,$request->input());
         $row->min_price = $row->price_per_day < $row->price_per_hour ? $row->price_per_day : $row->price_per_hour;
         $row->number = 1;
+        $row['image_id'] = resize_feature_image($row->image_id);
+        
         $res = $row->saveOriginOrTranslation($request->input('lang'),true);
         if ($res) {
             if(!$request->input('lang') or is_default_lang($request->input('lang'))) {
