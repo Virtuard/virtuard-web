@@ -239,8 +239,8 @@ function onChangeTab() {
         };
 
         tabActive = id;
+        document.getElementById("explore-form").reset();
         resetServiceList();
-        
 
         setTimeout(() => {
             onFetchData(attr)
@@ -461,6 +461,14 @@ jQuery(function($) {
     });
     
     $(".bravo_form_filter select").change(function(e) {
+        e.preventDefault();
+
+        resetServiceList();
+
+        $(this).closest("form").submit();
+    });
+
+    $("#explore-form select").change(function(e) {
         e.preventDefault();
 
         resetServiceList();
