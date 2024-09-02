@@ -375,6 +375,7 @@
         let pauseWidth = 0;
         let pauseDuration = 0;
         let pauseStartTime = 0;
+        let durationDefault = 5000;
 
         function showStories(index) {
             const currentUser = stories[index].getAttribute('data-userId');
@@ -392,7 +393,7 @@
                         story.onended = nextStory;
                     } else {
                         clearTimeout(interval);
-                        interval = setTimeout(nextStory, 3000);
+                        interval = setTimeout(nextStory, durationDefault);
                     }
                 } else if (story.tagName === 'VIDEO') {
                     story.pause();
@@ -404,7 +405,7 @@
             storyBar.style.width = `${pauseWidth}%`;
 
             setTimeout(() => {
-                const duration = stories[index].tagName === 'VIDEO' ? stories[index].duration * 1000 : 3000;
+                const duration = stories[index].tagName === 'VIDEO' ? stories[index].duration * 1000 : durationDefault;
                 storyBar.style.transition = `width ${duration}ms linear`;
                 storyBar.style.width = '100%';
             }, 10);
@@ -446,7 +447,7 @@
             storyBar.style.transition = 'none';
 
             // Menghitung waktu yang tersisa
-            const storyDuration = stories[currentIndex].tagName === 'VIDEO' ? stories[currentIndex].duration * 1000 : 3000;
+            const storyDuration = stories[currentIndex].tagName === 'VIDEO' ? stories[currentIndex].duration * 1000 : durationDefault;
             const progress = (parseFloat(storyBar.style.width) / 100) * storyDuration;
             pauseDuration = storyDuration - progress;
 
@@ -465,7 +466,7 @@
         function resumeStories() {
             isPaused = false;
             const resumeTime = Date.now() - pauseStartTime;
-            const storyDuration = stories[currentIndex].tagName === 'VIDEO' ? stories[currentIndex].duration * 1000 : 3000;
+            const storyDuration = stories[currentIndex].tagName === 'VIDEO' ? stories[currentIndex].duration * 1000 : 5000;
             const remainingTime = Math.max(pauseDuration - resumeTime, 0);
 
             storyBar.style.transition = `width ${storyDuration}ms linear`;
