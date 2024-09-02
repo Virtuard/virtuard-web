@@ -115,26 +115,34 @@
     .prev-btn,
     .next-btn {
         position: absolute;
-        bottom: 20px;
-        padding: 10px 20px;
-        background-color: #fff;
+        top: 50%;
+        padding: 0px 10px;
+        background-color: #ccc;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 24px;
     }
 
     .prev-btn {
-        left: 20px;
+        left: 10px;
     }
 
     .next-btn {
-        right: 20px;
+        right: 10px;
     }
 
     .prev-btn:hover,
     .next-btn:hover {
         background-color: #ddd;
+    }
+
+    .prev-btn::after {
+        content: '\00AB';
+    }
+
+    .next-btn::after {
+        content: '\00BB';
     }
 
     .story-control-container {
@@ -342,8 +350,8 @@
                             @endforeach
                             @endforeach
                         </div>
-                        <button class="prev-btn d-none" id="prev-btn">Prev</button>
-                        <button class="next-btn d-none" id="next-btn">Next</button>
+                        <span class="prev-btn" id="prev-btn"></span>
+                        <span class="next-btn" id="next-btn"></span>
                     </div>
                 </div>
 
@@ -479,10 +487,10 @@
         prevBtn.addEventListener('click', prevStory);
         btnGroupControl.addEventListener('click', pauseStories);
 
-        storyPopup.addEventListener('click', () => {
-            storyPopup.style.display = 'none';
-            clearTimeout(interval);
-        });
+        // storyPopup.addEventListener('click', () => {
+        //     storyPopup.style.display = 'none';
+        //     clearTimeout(interval);
+        // });
 
         $('.btn-delete-story').on('click', function(e){
             e.preventDefault();
