@@ -1936,14 +1936,19 @@ if (!function_exists('resize_feature_image')) {
                     // $img->resize($width, $height);
                     $img->save(Storage::disk($driver)->path($resizePath), 80);
     
-                    $newMedia = $media->replicate();
-                    $newMedia->file_name = $resizeName;
-                    $newMedia->file_path = $resizePath;
-                    $newMedia->file_type = 'image/webp';
-                    $newMedia->file_extension = 'webp';
-                    $newMedia->save();
+                    // $newMedia = $media->replicate();
+                    // $newMedia->file_name = $resizeName;
+                    // $newMedia->file_path = $resizePath;
+                    // $newMedia->file_type = 'image/webp';
+                    // $newMedia->file_extension = 'webp';
+                    // $newMedia->save();
+                    $media->file_name = $resizeName;
+                    $media->file_path = $resizePath;
+                    $media->file_type = 'image/webp';
+                    $media->file_extension = 'webp';
+                    $media->save();
     
-                    return $newMedia->id;
+                    return $media->id;
                 }
             }
         }
