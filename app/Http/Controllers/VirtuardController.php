@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ipanorama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Ipanorama;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 class VirtuardController extends Controller
 {
@@ -57,6 +59,7 @@ class VirtuardController extends Controller
 
         $data = [
             'panorama' => $panorama,
+            'user_id' => auth()->user()->id,
         ];
 
         return view('user.virtuard360.edit', $data);
@@ -100,7 +103,7 @@ class VirtuardController extends Controller
     public function addNewImageVirtuard360(Request $request)
     {
         $this->validate($request, [
-            'image' => 'required|mimes:jpeg,png',
+            'image' => 'required|mimes:jpeg,png,webp',
         ]);
 
         $proofImage = $request->file('image');
@@ -109,10 +112,13 @@ class VirtuardController extends Controller
         $path = "/ipanoramaBuilder/upload/" . $request['user_id'];
         if ($proofImage) {
             $extension = $proofImage->getClientOriginalExtension();
-    
-            $newFileName = Str::slug($title) . '.' . $extension;
-    
-            $proofImage->storeAs($path, $newFileName);
+            $newFileName = Str::slug($title) . '.webp';
+
+            if ($extension != 'webp') {
+                $img = Image::make($proofImage);
+                $filePath = $path . '/' . $newFileName;
+                $img->save(Storage::disk('uploads')->path($filePath));
+            }
         }
 
         return back()->with('success', 'Insert successfully');

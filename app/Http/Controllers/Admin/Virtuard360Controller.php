@@ -95,6 +95,7 @@ class Virtuard360Controller extends Controller
                 ],
             ],
             'page_title'        => __("Edit Virtuard 360"),
+            'user_id'        => $row->user_id,
         ];
         return view('admin.virtuard360.edit', $data);
     }

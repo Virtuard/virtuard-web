@@ -55,39 +55,7 @@
             </button>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="modalAddImage" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Insert New Image</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form action="{{ route('user.virtuard-360.add-new-image-service') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="modal-body">
-                            <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
-                            <div class="form-group title-image">
-                                <label for="exampleFormControlFile1">Title Image</label>
-                                <input type="text" name="title" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlFile1">Image 360</label>
-                                <input type="file" name="image" id="image" class="form-control-file"
-                                    id="exampleFormControlFile1" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="modal-close" class="btn btn-secondary"
-                                data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        @include('partials.ipanorama.modal-new-image')
 
         <input type="hidden" id="url_panorama" value="{{ url('/uploads/ipanoramaBuilder?id=' . request('id') . '&user_id=' . auth()->user()->id) }}">
         @if(config('app.env') == 'local')
