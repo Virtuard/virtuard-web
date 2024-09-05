@@ -1962,24 +1962,27 @@ if (!function_exists('view_panorama')) {
         $code = json_decode($panorama['code']);
         $driver = 'uploads';
         $mainPath = 'ipanoramaBuilder';
-        foreach ($code->scenes as $key => $scen) {
-            if (!str_contains($scen->image, '.webp')) {
-                $filename = $scen->image;
-                $path = $mainPath.'/'.$filename;
-                $storage = Storage::disk($driver)->path($path);
-                $img = Image::make($storage);
 
-                $newName = $img->filename.'.webp';
+        foreach ($code->scenes as $key => $scen) {
+            $filename = $scen->image;
+            $path = $mainPath.'/'.$filename;
+
+            $storage = Storage::disk($driver)->path($path);
+            $pathinfo = pathinfo($storage);
+
+            if ($pathinfo['extension'] != 'webp') {
+                $newName = $pathinfo['filename'].'.webp';
                 $newDir = 'compress'.'/'.$panorama['user_id'];
                 $newFilename = $newDir.'/'.$newName;
                 $newPath = $mainPath.'/'.$newFilename;
-
+                
                 $mkdir = public_path($driver.'/'.$mainPath.'/'.$newDir);
                 if (!File::isDirectory($mkdir)) {
                     File::makeDirectory($mkdir, 0777, true, true);
                 }
-
-                if(!Storage::disk($driver)->exists($newDir)) {
+                
+                if(!Storage::disk($driver)->exists($newFilename)) {
+                    $img = Image::make($storage);
                     $img->save(Storage::disk($driver)->path($newPath));
                 }
 
