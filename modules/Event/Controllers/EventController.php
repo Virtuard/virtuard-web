@@ -100,6 +100,9 @@ class EventController extends Controller
         if ( empty($row) or !$row->hasPermissionDetailView()) {
             return redirect('/');
         }
+        if (!empty($request['preview_panorama'])) {
+            return view_panorama($row);
+        }
         $translation = $row->translate();
         $event_related = [];
         $location_id = $row->location_id;

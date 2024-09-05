@@ -103,6 +103,10 @@ class BusinessController extends Controller
         if ( empty($row) or !$row->hasPermissionDetailView()) {
             return redirect('/');
         }
+        if (!empty($request['preview_panorama'])) {
+            return view_panorama($row);
+        }
+
         $translation = $row->translate();
         $business_related = [];
         $location_id = $row->location_id;
