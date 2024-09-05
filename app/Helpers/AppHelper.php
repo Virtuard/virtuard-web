@@ -12,6 +12,7 @@ use Modules\Core\Models\Settings;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 //include '../../custom/Helpers/CustomHelper.php';
@@ -1914,6 +1915,8 @@ if (!function_exists('get_software_lists')) {
 if (!function_exists('resize_feature_image')) {
     function resize_feature_image($id)
     {
+        if (config('app.env' == 'local')) return $id;
+
         $media = MediaFile::find($id);
         if ($media) {
             $driver = $media->driver ?? 'uploads';
@@ -1922,9 +1925,6 @@ if (!function_exists('resize_feature_image')) {
 
             $newPath = implode('/', $arrPath);
 
-            // $width = 750;
-            // $height = 750;
-            // $resizeName = $media->file_name . '-' . $width . 'x' . $height;
             $resizeName = $media->file_name . '-compress';
             $resizePath = $newPath .'/'. $resizeName . '.webp';
             $arrPath[] = $resizeName;
@@ -1933,15 +1933,8 @@ if (!function_exists('resize_feature_image')) {
                 $originalFile = Storage::disk($driver)->path($media->file_path);
                 if ($originalFile) {
                     $img = Image::make($originalFile);
-                    // $img->resize($width, $height);
                     $img->save(Storage::disk($driver)->path($resizePath), 80);
     
-                    // $newMedia = $media->replicate();
-                    // $newMedia->file_name = $resizeName;
-                    // $newMedia->file_path = $resizePath;
-                    // $newMedia->file_type = 'image/webp';
-                    // $newMedia->file_extension = 'webp';
-                    // $newMedia->save();
                     $media->file_name = $resizeName;
                     $media->file_path = $resizePath;
                     $media->file_type = 'image/webp';
@@ -1954,5 +1947,61 @@ if (!function_exists('resize_feature_image')) {
         }
 
         return $id;
+    }
+}
+
+if (!function_exists('view_panorama')) {
+    function view_panorama($row)
+    {
+        $panorama = $row->ipanorama->toArray();
+
+        if (empty($panorama)) {
+            return back();
+        }
+
+        $code = json_decode($panorama['code']);
+        $driver = 'uploads';
+        $mainPath = 'ipanoramaBuilder';
+        foreach ($code->scenes as $key => $scen) {
+            if (!str_contains($scen->image, '.webp')) {
+                $filename = $scen->image;
+                $path = $mainPath.'/'.$filename;
+                $storage = Storage::disk($driver)->path($path);
+                $img = Image::make($storage);
+
+                $newName = $img->filename.'.webp';
+                $newDir = 'compress'.'/'.$panorama['user_id'];
+                $newFilename = $newDir.'/'.$newName;
+                $newPath = $mainPath.'/'.$newFilename;
+
+                $mkdir = $driver.'/'.$mainPath.'/'.$newDir;
+                if (!File::isDirectory(public_path($mkdir))) {
+                    File::makeDirectory(public_path($mkdir, 0777, true, true));
+                }
+
+                if(!Storage::disk($driver)->exists($newDir)) {
+                    $img->save(Storage::disk($driver)->path($newPath));
+                }
+
+                $code->scenes->$key->image = $newFilename;
+            }
+
+            $code->scenes->$key->image = '/'.$driver.'/'.$mainPath.'/'.$code->scenes->$key->image;
+        }
+        $panorama['code'] = json_encode($code);
+
+        $data = [
+            'row'          => $row,
+            'panorama' => $panorama,
+            'breadcrumbs'       => [
+                [
+                    'name'  => __('Hotel'),
+                    'url'  => route('hotel.search'),
+                ],
+            ],
+        ];
+        $data['breadcrumbs'] = array_merge($data['breadcrumbs'], $row->locationBreadcrumbs());
+
+        return view('app.panorama.show', $data);
     }
 }

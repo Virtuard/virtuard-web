@@ -16,10 +16,10 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @include('partials.listing.share-action')
+                        @include('user.partials.listing.ipanorama')
                     </div>
                     <div class="col-md-12 col-lg-9">
                         @php $review_score = $row->review_data @endphp
-                        @include('user.partials.listing.ipanorama')
                         @include('Space::frontend.layouts.details.space-detail')
                         @include('Space::frontend.layouts.details.space-review')
                     </div>

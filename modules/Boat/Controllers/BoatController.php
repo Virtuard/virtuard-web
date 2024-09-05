@@ -94,6 +94,11 @@ class BoatController extends Controller
         if ( empty($row) or !$row->hasPermissionDetailView()) {
             return redirect('/');
         }
+
+        if (!empty($request['preview_panorama'])) {
+            return view_panorama($row);
+        }
+
         $translation = $row->translate();
         $boat_related = [];
         $location_id = $row->location_id;
@@ -112,7 +117,7 @@ class BoatController extends Controller
             'body_class'=>'is_single',
             'breadcrumbs'       => [
                 [
-                    'name'  => __('Boat'),
+                    'name'  => __('Vehicle'),
                     'url'  => route('boat.search'),
                 ],
             ],

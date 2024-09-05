@@ -1,4 +1,5 @@
 <div id="ipnrm-ui-modal-{{ modalData.id }}" class="ipnrm-ui-modal" tabindex="-1">
+    <input type="hidden" id="modal-id" value="{{ modalData.id }}">
 	<div class="ipnrm-ui-modal-dialog">
 		<div class="ipnrm-ui-modal-header">
 			<div class="ipnrm-ui-modal-close" x-ng-click="modalData.deferred.resolve('close');">&times;</div>
@@ -101,8 +102,13 @@ $(document).ready(function() {
 			}
 		})
 		.then(function(data) {
-            $('#ipnrm-ui-modal-1').hide()
-			Swal.fire('Saved!', '', 'success')
+            let modal_id = $('#modal-id').val();
+            $(`#ipnrm-ui-modal-${modal_id}`).hide()
+            
+			Swal.fire('Saved!', '', 'success');
+            setTimeout(() => {
+                Swal.close();
+            }, 1500);
 		})
 		.catch(function(error) {
 			console.error('Kesalahan:', error);

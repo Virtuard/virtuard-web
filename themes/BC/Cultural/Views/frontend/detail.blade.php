@@ -15,8 +15,10 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
-                        @php $review_score = $row->review_data @endphp
                         @include('user.partials.listing.ipanorama')
+                    </div>
+                    <div class="col-md-12 col-lg-9">
+                        @php $review_score = $row->review_data @endphp
                         @include('Cultural::frontend.layouts.details.cultural-detail')
                         @include('Cultural::frontend.layouts.details.cultural-review')
                     </div>

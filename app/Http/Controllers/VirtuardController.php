@@ -112,13 +112,19 @@ class VirtuardController extends Controller
         $path = "/ipanoramaBuilder/upload/" . $request['user_id'];
         if ($proofImage) {
             $extension = $proofImage->getClientOriginalExtension();
-            $newFileName = Str::slug($title) . '.webp';
-
-            if ($extension != 'webp') {
-                $img = Image::make($proofImage);
+            $newFileName = Str::slug($title) . '.' . $extension;
+            $filePath = $path . '/' . $newFileName;
+            
+            if ($extension == 'webp') {
+                $proofImage->storeAs($path, $newFileName);
+            } else {
+                $newFileName = Str::slug($title) . '.webp';
                 $filePath = $path . '/' . $newFileName;
+                
+                $img = Image::make($proofImage);
                 $img->save(Storage::disk('uploads')->path($filePath));
             }
+
         }
 
         return back()->with('success', 'Insert successfully');

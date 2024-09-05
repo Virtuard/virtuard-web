@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
     |
     */
 
-Route::get('/intro', 'LandingpageController@index');
+// Route::get('/intro', 'LandingpageController@index');
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
@@ -44,6 +44,7 @@ Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('u
 Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
 });
 });
+Route::get('/panorama/preview', 'VirtuardController@previewIpanorama')->name('panorama.preview');
 
 // Story
 Route::get('/story', 'StoryController@list')->name('story.list');
