@@ -1981,7 +1981,7 @@ if (!function_exists('view_panorama')) {
                     File::makeDirectory($mkdir, 0777, true, true);
                 }
                 
-                if(!Storage::disk($driver)->exists($newFilename)) {
+                if(!Storage::disk($driver)->exists($newPath)) {
                     $img = Image::make($storage);
                     $img->save(Storage::disk($driver)->path($newPath));
                 }
