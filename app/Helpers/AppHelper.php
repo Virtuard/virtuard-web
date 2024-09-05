@@ -1974,9 +1974,9 @@ if (!function_exists('view_panorama')) {
                 $newFilename = $newDir.'/'.$newName;
                 $newPath = $mainPath.'/'.$newFilename;
 
-                $mkdir = $driver.'/'.$mainPath.'/'.$newDir;
-                if (!File::isDirectory(public_path($mkdir))) {
-                    File::makeDirectory(public_path($mkdir, 0777, true, true));
+                $mkdir = public_path($driver.'/'.$mainPath.'/'.$newDir);
+                if (!File::isDirectory($mkdir)) {
+                    File::makeDirectory($mkdir, 0777, true, true);
                 }
 
                 if(!Storage::disk($driver)->exists($newDir)) {
