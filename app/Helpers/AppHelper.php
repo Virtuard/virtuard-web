@@ -1915,7 +1915,7 @@ if (!function_exists('get_software_lists')) {
 if (!function_exists('resize_feature_image')) {
     function resize_feature_image($id)
     {
-        if (config('app.env' == 'local')) return $id;
+        if (config('app.env') == 'local') return $id;
 
         $media = MediaFile::find($id);
         if ($media) {
@@ -1965,10 +1965,7 @@ if (!function_exists('view_panorama')) {
 
         foreach ($code->scenes as $key => $scen) {
             $filename = $scen->image;
-            $path = $mainPath.'/'.$filename;
-
-            $storage = Storage::disk($driver)->path($path);
-            $pathinfo = pathinfo($storage);
+            $pathinfo = pathinfo($filename);
 
             if ($pathinfo['extension'] != 'webp') {
                 $newName = $pathinfo['filename'].'.webp';
@@ -1982,8 +1979,19 @@ if (!function_exists('view_panorama')) {
                 }
                 
                 if(!Storage::disk($driver)->exists($newPath)) {
-                    $img = Image::make($storage);
-                    $img->save(Storage::disk($driver)->path($newPath));
+                    $arrPath = explode('/', $filename);
+                    if (!in_array($panorama['user_id'], $arrPath)) {
+                        $position = count($arrPath) - 1;
+                        array_splice($arrPath, $position, 0, $panorama['user_id']);
+                        $filename = implode('/', $arrPath);
+                    }
+
+                    $pathStorage = $mainPath.'/'.$filename;
+                    if(Storage::disk($driver)->exists($pathStorage)) {
+                        $storage = Storage::disk($driver)->path($pathStorage);
+                        $img = Image::make($storage);
+                        $img->save(Storage::disk($driver)->path($newPath));
+                    }
                 }
 
                 $code->scenes->$key->image = $newFilename;
