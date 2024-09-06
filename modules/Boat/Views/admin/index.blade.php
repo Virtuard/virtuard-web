@@ -106,7 +106,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="7">{{__("No boat found")}}</td>
+                                <td colspan="7">{{__("No vehicle found")}}</td>
                             </tr>
                         @endif
                         </tbody>

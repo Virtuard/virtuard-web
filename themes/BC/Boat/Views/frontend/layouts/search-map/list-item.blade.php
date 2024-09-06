@@ -3,9 +3,9 @@
         <div class="text-paginate">
             <h2 class="text">
                 @if($rows->total() > 1)
-                    {{ __(":count boats found",['count'=>$rows->total()]) }}
+                    {{ __(":count vehicles found",['count'=>$rows->total()]) }}
                 @else
-                    {{ __(":count boat found",['count'=>$rows->total()]) }}
+                    {{ __(":count vehicle found",['count'=>$rows->total()]) }}
                 @endif
             </h2>
             <span class="count-string">{{ __("Showing :from - :to of :total Boats",["from"=>$rows->firstItem(),"to"=>$rows->lastItem(),"total"=>$rows->total()]) }}</span>
