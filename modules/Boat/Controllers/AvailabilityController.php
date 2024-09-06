@@ -94,7 +94,7 @@ class AvailabilityController extends FrontendController{
         $is_single = $request->query('for_single');
         $boat = $this->boatClass::find($request->query('id'));
         if(empty($boat)){
-            return $this->sendError(__('Boat not found'));
+            return $this->sendError(__('Vehicle not found'));
         }
         $query = $this->boatDateClass::query();
         $query->where('target_id',$request->query('id'));
@@ -237,7 +237,7 @@ class AvailabilityController extends FrontendController{
 
         $boat = $this->boatClass::find($request->input('id'));
         if(empty($boat)){
-            return $this->sendError(__('Boat not found'));
+            return $this->sendError(__('Vehicle not found'));
         }
 
         $hour = $request->input('hour',0);
@@ -273,7 +273,7 @@ class AvailabilityController extends FrontendController{
         $target_id = $request->input('target_id');
 
         if(empty($boat)){
-            return $this->sendError(__('Boat not found'));
+            return $this->sendError(__('Vehicle not found'));
         }
 
         if(!$this->hasPermission('boat_manage_others')){

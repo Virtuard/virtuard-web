@@ -7,9 +7,9 @@
             <div class="topbar-search">
                 <h2 class="text">
                     @if($rows->total() > 1)
-                        {{ __(":count boats found",['count'=>$rows->total()]) }}
+                        {{ __(":count vehciles found",['count'=>$rows->total()]) }}
                     @else
-                        {{ __(":count boat found",['count'=>$rows->total()]) }}
+                        {{ __(":count vehcile found",['count'=>$rows->total()]) }}
                     @endif
                 </h2>
                 <div class="control">
@@ -26,7 +26,7 @@
                         @endforeach
                     @else
                         <div class="col-lg-12">
-                            {{__("Boat not found")}}
+                            {{__("Vehicle not found")}}
                         </div>
                     @endif
                 </div>

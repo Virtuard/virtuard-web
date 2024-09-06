@@ -236,7 +236,7 @@ class ManageBoatController extends FrontendController
         $row = $this->boatClass::where("author_id", $user_id);
         $row = $row->find($id);
         if (empty($row)) {
-            return redirect(route('boat.vendor.index'))->with('warning', __('Boat not found!'));
+            return redirect(route('boat.vendor.index'))->with('warning', __('Vehicle not found!'));
         }
         $translation = $row->translate($request->query('lang'));
         $data = [
