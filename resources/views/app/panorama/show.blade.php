@@ -9,11 +9,15 @@
                         <h2>{{ $row->title }}</h2>
                     </div>
                     <div class="col-md-9 mb-5">
+                        <div id="service-loading" class="text-center my-5" style="display: none;">
+                            <div class="spinner-border" role="status">
+                              <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
                         @if (is_display_panorama_listing($row))
-                            <input type="hidden" id="data-panorama" data-code="{{ $panorama['code'] }}"
-                                data-user_id="{{ $panorama['user_id'] }}">
+                            <input type="hidden" id="panorama_id" value="{{ $row->ipanorama_id }}">
 
-                            <div id="mypanorama" class="mypanorama-preview"></div>
+                            <div id="mypanorama" class="mypanorama-preview" style="display: none;"></div>
                         @endif
                     </div>
                 </div>
@@ -28,16 +32,30 @@
 @push('js')
     @include('partials.ipanorama.ipanorama-js-no-jquery')
     @if (is_display_panorama_listing($row))
-        @include('partials.ipanorama.ipanorama-preview-js')
-    @endif
-    <script>
-        $(document).ready(function() {
-            previewPanorama();
-        });
+        <script>
+            $(document).ready(function() {
+                previewPanorama();
+            });
+            
+            function previewPanorama() {
+                $('#service-loading').show();
 
-        function previewPanorama() {
-            let panoramaCode = $('#data-panorama').data('code');
-            $(`#mypanorama`).ipanorama(panoramaCode);
-        }
-    </script>
+                let id = $('#panorama_id').val();
+                $.ajax({
+                    url: `/panorama/compress/${id}`,
+                    success: function(res) {
+                        if (res.data) {
+                            let code = JSON.parse(res.data.code);
+                            $(`#mypanorama`).show();
+                            $(`#mypanorama`).ipanorama(code);
+                            $('#service-loading').hide();
+                        }
+                    },
+                    error: function(xhr) {
+                        //
+                    }
+                });
+            }
+        </script>
+    @endif
 @endpush

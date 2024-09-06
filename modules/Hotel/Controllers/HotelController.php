@@ -104,7 +104,7 @@ class HotelController extends Controller
         }
 
         if (!empty($request['preview_panorama'])) {
-            return view_panorama($row);
+            return view_panorama('hotel', $row);
         }
         
         $translation = $row->translate();

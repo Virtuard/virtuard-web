@@ -101,7 +101,7 @@ class EventController extends Controller
             return redirect('/');
         }
         if (!empty($request['preview_panorama'])) {
-            return view_panorama($row);
+            return view_panorama('event', $row);
         }
         $translation = $row->translate();
         $event_related = [];

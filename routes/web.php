@@ -45,6 +45,7 @@ Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('des
 });
 });
 Route::get('/panorama/preview', 'VirtuardController@previewIpanorama')->name('panorama.preview');
+Route::get('/panorama/compress/{id}', 'VirtuardController@compressPanorama')->name('panorama.compress');
 
 // Story
 Route::get('/story', 'StoryController@list')->name('story.list');

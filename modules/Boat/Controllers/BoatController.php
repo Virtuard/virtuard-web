@@ -96,7 +96,7 @@ class BoatController extends Controller
         }
 
         if (!empty($request['preview_panorama'])) {
-            return view_panorama($row);
+            return view_panorama('boat', $row);
         }
 
         $translation = $row->translate();

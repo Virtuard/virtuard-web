@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ipanorama;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -244,5 +245,22 @@ class VirtuardController extends Controller
         $query->save();
 
         return redirect()->back()->with('success', __('Update success!'));
+    }
+
+    public function compressPanorama($id)
+    {
+        try {
+            $panorama = $this->panorama->find($id);
+            $compress = compress_view_panorama($panorama);
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $compress,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'error',
+            ]);
+        }
     }
 }

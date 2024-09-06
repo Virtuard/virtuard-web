@@ -101,7 +101,7 @@ class SpaceController extends Controller
             return redirect('/');
         }
         if (!empty($request['preview_panorama'])) {
-            return view_panorama($row);
+            return view_panorama('space', $row);
         }
         $translation = $row->translate();
         $space_related = [];

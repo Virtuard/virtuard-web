@@ -1951,14 +1951,33 @@ if (!function_exists('resize_feature_image')) {
 }
 
 if (!function_exists('view_panorama')) {
-    function view_panorama($row)
+    function view_panorama($service, $row)
     {
-        $panorama = $row->ipanorama->toArray();
+        $data = [
+            'row' => $row,
+            'breadcrumbs' => [
+                [
+                    'name'  => __($service),
+                    'url'  => route("$service.search"),
+                ],
+                [
+                    'name'  => $row->title,
+                    'url'  => route("$service.detail", $row->title),
+                ],
+                [
+                    'name'  => $row->ipanorama->title,
+                    'class'  => 'active',
+                ],
+            ],
+        ];
 
-        if (empty($panorama)) {
-            return back();
-        }
+        return view('app.panorama.show', $data);
+    }
+}
 
+if (!function_exists('compress_view_panorama')) {
+    function compress_view_panorama($panorama)
+    {
         $code = json_decode($panorama['code']);
         $driver = 'uploads';
         $mainPath = 'ipanoramaBuilder';
@@ -2001,18 +2020,6 @@ if (!function_exists('view_panorama')) {
         }
         $panorama['code'] = json_encode($code);
 
-        $data = [
-            'row'          => $row,
-            'panorama' => $panorama,
-            'breadcrumbs'       => [
-                [
-                    'name'  => __('Hotel'),
-                    'url'  => route('hotel.search'),
-                ],
-            ],
-        ];
-        $data['breadcrumbs'] = array_merge($data['breadcrumbs'], $row->locationBreadcrumbs());
-
-        return view('app.panorama.show', $data);
+        return $panorama;
     }
 }

@@ -99,7 +99,7 @@
                 return redirect('/');
             }
             if (!empty($request['preview_panorama'])) {
-                return view_panorama($row);
+                return view_panorama('natural', $row);
             }
             $translation = $row->translate();
             $natural_related = [];
