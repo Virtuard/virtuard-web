@@ -8,7 +8,7 @@
             class="btn btn-warning btn-sm">
             <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top"
                 title="If the panorama preview is not visible, please try using low mode"></i>
-            Low Mode
+            Click to View Low Quality
         </a>
     </div>
 @endif
