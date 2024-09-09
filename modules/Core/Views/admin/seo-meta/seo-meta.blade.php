@@ -27,12 +27,12 @@ $seo_share = $meta_seo['seo_share'] ?? false;
             <li class="nav-item">
                 <a class="nav-link active" data-toggle="tab" href="#seo_1">{{__("General Options")}}</a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#seo_2">{{__("Share Facebook")}}</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" data-toggle="tab" href="#seo_3">{{__("Share Twitter")}}</a>
-            </li>
+            </li> --}}
         </ul>
         <div class="tab-content" data-condition="seo_index:is(1)">
             <div class="tab-pane active" id="seo_1">
