@@ -116,15 +116,15 @@ class VirtuardController extends Controller
             $newFileName = Str::slug($title) . '.' . $extension;
             $filePath = $path . '/' . $newFileName;
             
-            if ($extension == 'webp') {
+            // if ($extension == 'webp') {
                 $proofImage->storeAs($path, $newFileName);
-            } else {
-                $newFileName = Str::slug($title) . '.webp';
-                $filePath = $path . '/' . $newFileName;
+            // } else {
+            //     $newFileName = Str::slug($title) . '.webp';
+            //     $filePath = $path . '/' . $newFileName;
                 
-                $img = Image::make($proofImage);
-                $img->save(Storage::disk('uploads')->path($filePath));
-            }
+            //     $img = Image::make($proofImage);
+            //     $img->save(Storage::disk('uploads')->path($filePath));
+            // }
 
         }
 
@@ -247,11 +247,13 @@ class VirtuardController extends Controller
         return redirect()->back()->with('success', __('Update success!'));
     }
 
-    public function compressPanorama($id)
+    public function compressPanorama(Request $request, $id)
     {
+        $is_replace = $request['is_replace'] ?? false;
+
         try {
             $panorama = $this->panorama->find($id);
-            $compress = compress_view_panorama($panorama);
+            $compress = compress_view_panorama($panorama, $is_replace);
 
             return response()->json([
                 'status' => 'success',

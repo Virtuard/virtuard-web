@@ -1976,17 +1976,18 @@ if (!function_exists('view_panorama')) {
 }
 
 if (!function_exists('compress_view_panorama')) {
-    function compress_view_panorama($panorama)
+    function compress_view_panorama($panorama, $is_replace = false)
     {
         $code = json_decode($panorama['code']);
         $driver = 'uploads';
         $mainPath = 'ipanoramaBuilder';
+        $width = 2000;
 
         foreach ($code->scenes as $key => $scen) {
             $filename = $scen->image;
             $pathinfo = pathinfo($filename);
 
-            if ($pathinfo['extension'] != 'webp') {
+            // if ($pathinfo['extension'] != 'webp') {
                 $newName = $pathinfo['filename'].'.webp';
                 $newDir = 'compress'.'/'.$panorama['user_id'];
                 $newFilename = $newDir.'/'.$newName;
@@ -1996,8 +1997,10 @@ if (!function_exists('compress_view_panorama')) {
                 if (!File::isDirectory($mkdir)) {
                     File::makeDirectory($mkdir, 0777, true, true);
                 }
-                
-                if(!Storage::disk($driver)->exists($newPath)) {
+
+                $exists = Storage::disk($driver)->exists($newPath);
+
+                if (!$exists or $is_replace) {
                     $arrPath = explode('/', $filename);
                     if (!in_array($panorama['user_id'], $arrPath)) {
                         $position = count($arrPath) - 1;
@@ -2009,12 +2012,17 @@ if (!function_exists('compress_view_panorama')) {
                     if(Storage::disk($driver)->exists($pathStorage)) {
                         $storage = Storage::disk($driver)->path($pathStorage);
                         $img = Image::make($storage);
+                        if ($img->width() > $width) {
+                            $img->resize($width, null, function ($constraint) {
+                                $constraint->aspectRatio();
+                            });
+                        }
                         $img->save(Storage::disk($driver)->path($newPath));
                     }
                 }
 
                 $code->scenes->$key->image = $newFilename;
-            }
+            // }
 
             $code->scenes->$key->image = '/'.$driver.'/'.$mainPath.'/'.$code->scenes->$key->image;
         }
