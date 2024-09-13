@@ -99,7 +99,7 @@
                 @endforeach
             </div>
             <div class="d-flex justify-content-center mt-5">
-                {{ $users->links() }}
+                {{ $users->onEachSide(0)->links() }}
             </div>
         </div>
 @endsection
