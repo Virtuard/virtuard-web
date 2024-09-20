@@ -6,7 +6,7 @@
                 <div class="card p-4">
                     <div class="text-right">
                         <a href=""></a>
-                        <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.index') }}"><i class="icon ion-ios-add-circle-outline"></i> Add 360 Image</a>
+                        <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.index') }}" target="_blank"><i class="icon ion-ios-add-circle-outline"></i> Add 360 Image</a>
                     </div>
                     <label>360 Image </label>
                     @if (auth()->user()->checkUserPlanStatus() || auth()->user()->isAdmin())

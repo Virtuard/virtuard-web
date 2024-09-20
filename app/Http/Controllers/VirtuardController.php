@@ -174,6 +174,9 @@ class VirtuardController extends Controller
 
         $id = $request->id;
 
+        if(auth()->user()->checkUserIpanoramaPlan()) {
+            $attr['status'] = 'publish';
+        }
         $panorama = Ipanorama::find($id);
         $panorama->update($attr);
 

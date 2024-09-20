@@ -38,8 +38,8 @@ Route::group([
     'middleware' => ['user_ipanorama_plan']
 ], function (){
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
-Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
 Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
+Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
 Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
 Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
 });

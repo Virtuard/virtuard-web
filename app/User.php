@@ -550,7 +550,7 @@ use Illuminate\Notifications\Notifiable;
             $maxService = $user_plans->sum('max_service');
             $count_service = $this->service()->where('status','publish')->count('id');
 
-            if($maxService and $count_service > $maxService){
+            if($count_service >= $maxService){
                 return false;
             }
             return true;
@@ -558,9 +558,9 @@ use Illuminate\Notifications\Notifiable;
 
         public function checkUserIpanoramaPlan(){
 
-            // if(!is_enable_plan()) return true;
+            if(!is_enable_plan()) return true;
 
-            $user_plans = $this->userIpanoramaPlans()->where('status',1)->get();
+            $user_plans = $this->userPlans()->where('status',1)->where('end_date','>',now())->get();
 
             if(!$user_plans) return false;
             // $end_date = $user_plans->max('end_date');
