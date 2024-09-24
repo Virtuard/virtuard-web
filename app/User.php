@@ -551,7 +551,7 @@ use Illuminate\Notifications\Notifiable;
             $count_service = $this->service()->where('status','publish')->count('id');
 
             if($count_service >= $maxService){
-                return false;
+                // return false;
             }
             return true;
         }
