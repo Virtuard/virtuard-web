@@ -1913,7 +1913,7 @@ if (!function_exists('get_software_lists')) {
 }
 
 if (!function_exists('resize_feature_image')) {
-    function resize_feature_image($id, $type = false)
+    function resize_feature_image($id)
     {
         if (config('app.env') == 'local') return $id;
 
@@ -1933,11 +1933,6 @@ if (!function_exists('resize_feature_image')) {
                 $originalFile = Storage::disk($driver)->path($media->file_path);
                 if ($originalFile) {
                     $img = Image::make($originalFile);
-                    if ($type == 'favicon') {
-                        if ($img->width() > 50) {
-                            $img->resize(50,50);
-                        }
-                    }
                     $img->save(Storage::disk($driver)->path($resizePath), 80);
     
                     $media->file_name = $resizeName;
