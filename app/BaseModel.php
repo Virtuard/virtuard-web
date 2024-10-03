@@ -194,6 +194,11 @@ class BaseModel extends Model
             $meta->object_model = $seo_key;
         }
         $meta->fill($request->input());
+        if ($meta->seo_image) {
+            $meta->seo_image = resize_feature_image($meta->seo_image, 'favicon');
+        } else {
+            $meta->seo_image = resize_feature_image($request['image_id'], 'favicon');
+        }
         return $meta->save();
     }
 
