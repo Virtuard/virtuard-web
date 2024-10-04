@@ -7,13 +7,13 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Price per hour")}}</label>
+                        <label class="control-label">{{__("Price per hour")}} ({{ currency_symbol() }})</label>
                         <input type="number" step="any" min="0" name="price_per_hour" class="form-control" value="{{$row->price_per_hour}}" placeholder="{{__("Price per hour")}}">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Price per day")}}</label>
+                        <label class="control-label">{{__("Price per day")}} ({{ currency_symbol() }})</label>
                         <input type="number" step="any" name="price_per_day" class="form-control" value="{{$row->price_per_day}}" placeholder="{{__("Price per day")}}">
                     </div>
                 </div>
@@ -67,7 +67,7 @@
             <div class="g-items-header">
                 <div class="row">
                     <div class="col-md-5">{{__("Name")}}</div>
-                    <div class="col-md-3">{{__('Price')}}</div>
+                    <div class="col-md-3">{{__('Price')}} ({{ currency_symbol() }})</div>
                     <div class="col-md-3">{{__('Type')}}</div>
                     <div class="col-md-1"></div>
                 </div>

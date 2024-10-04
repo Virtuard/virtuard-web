@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Price")}}</label>
+                        <label class="control-label">{{__("Price")}} ({{ currency_symbol() }})</label>
                         <input type="number" step="any" min="0" name="price" class="form-control" value="{{$row->price}}" placeholder="{{__("Space Price")}}">
                     </div>
                 </div>

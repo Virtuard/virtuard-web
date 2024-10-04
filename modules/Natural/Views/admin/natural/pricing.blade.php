@@ -6,13 +6,13 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Price")}}</label>
+                        <label class="control-label">{{__("Price")}} ({{ currency_symbol() }})</label>
                         <input type="text" name="price" class="form-control" value="{{$row->price}}" placeholder="{{__("Natural Price")}}">
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Sale Price")}}</label>
+                        <label class="control-label">{{__("Sale Price")}} ({{ currency_symbol() }})</label>
                         <input type="text" name="sale_price" class="form-control" value="{{$row->sale_price}}" placeholder="{{__("Natural Sale Price")}}">
                     </div>
                 </div>
@@ -37,7 +37,7 @@
                         <div class="col-md-5">{{__("Person Type")}}</div>
                         <div class="col-md-2">{{__('Min')}}</div>
                         <div class="col-md-2">{{__('Max')}}</div>
-                        <div class="col-md-2">{{__('Price')}}</div>
+                        <div class="col-md-2">{{__('Price')}} ({{ currency_symbol() }})</div>
                         <div class="col-md-1"></div>
                     </div>
                 </div>
@@ -130,7 +130,7 @@
                 <div class="g-items-header">
                     <div class="row">
                         <div class="col-md-5">{{__("Name")}}</div>
-                        <div class="col-md-3">{{__('Price')}}</div>
+                        <div class="col-md-3">{{__('Price')}} ({{ currency_symbol() }})</div>
                         <div class="col-md-3">{{__('Type')}}</div>
                         <div class="col-md-1"></div>
                     </div>
@@ -301,7 +301,7 @@
                 <div class="g-items-header">
                     <div class="row">
                         <div class="col-md-5">{{__("Name")}}</div>
-                        <div class="col-md-3">{{__('Price')}}</div>
+                        <div class="col-md-3">{{__('Price')}} ({{ currency_symbol() }})</div>
                         <div class="col-md-3">{{__('Type')}}</div>
                         <div class="col-md-1"></div>
                     </div>
