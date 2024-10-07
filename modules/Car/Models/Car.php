@@ -271,6 +271,7 @@ class Car extends Bookable
         $booking->total_before_discount = $total_before_fees;
 
         $booking->calculateCommission();
+        $booking->calculateCommissionRef($request->reference ?? false);
         $booking->number = $number;
 
         if ($this->isDepositEnable()) {
@@ -935,6 +936,20 @@ class Car extends Bookable
         if (!empty($request['custom_ids'])) {
             $model_car->whereIn("bravo_cars.id", $request['custom_ids']);
         }
+        if(!empty($request['is_ipanorama']))
+        {
+            $model_boat
+                ->whereHas('ipanorama', function($query) {
+                    $query->where('status', 'publish');
+                })
+                ->whereHas('author', function($query) {
+                    if(is_enable_plan()) {
+                        $query->whereHas('userPlans', function($query) {
+                            $query->where('status', 1)->where('end_date', '>', now());
+                        });
+                    }
+                });
+        }
         $orderby = $request['orderby'] ?? "";
         switch ($orderby) {
             case "price_low_high":
@@ -949,6 +964,9 @@ class Car extends Bookable
                 break;
             case "rate_high_low":
                 $model_car->orderBy("review_score", "desc");
+                break;
+            case "ipanorama_id":
+                $model_car->orderBy("ipanorama_id", "desc");
                 break;
             default:
                 if (!empty($request['order']) and !empty($request['order_by'])) {
