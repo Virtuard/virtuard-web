@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        <label class="control-label">{{__("Sale Price")}}</label>
+                        <label class="control-label">{{__("Sale Price")}} ({{ currency_symbol() }})</label>
                         <input type="number" step="any" name="sale_price" class="form-control" value="{{$row->sale_price}}" placeholder="{{__("Space Sale Price")}}">
                         <span><i>{{__("If the regular price is less than the discount , it will show the regular price")}}</i></span>
                     </div>
