@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @if($row->author->checkUserPlan())
-                            <a id="scroll-to-book" class="btn btn-primary mb-2 d-mobile-" href="#hotel-rooms">Book Now</a>
+                            <a id="scroll-to-hotelrooms" class="btn btn-primary mb-2 d-mobile-" href="javascript:void(0)">Book Now</a>
                         @endif
                         @include('user.partials.listing.ipanorama')
                         @php $review_score = $row->review_data @endphp
@@ -73,6 +73,10 @@
             name_required:'{{ __("Name is Required") }}',
             email_required:'{{ __("Email is Required") }}',
         };
+
+        $('#scroll-to-hotelrooms').on('click', function(e){
+            document.getElementById("hotel-rooms").scrollIntoView();
+        });
     </script>
     <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
