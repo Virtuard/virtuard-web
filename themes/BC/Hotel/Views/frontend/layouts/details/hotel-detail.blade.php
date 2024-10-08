@@ -66,6 +66,7 @@
         </div>
     </div>
 @endif
+@include('partials.listing.share-action')
 @if($translation->content)
     <div class="g-overview">
         <h3>{{__("Description")}}</h3>

@@ -1,3 +1,17 @@
+html {
+    scroll-behavior: smooth;
+}
+
+.d-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .d-mobile {
+        display: block;
+    }
+}
+
 /*Top Bar*/
 .bravo_wrap .bravo_topbar {
     background: #172641;
