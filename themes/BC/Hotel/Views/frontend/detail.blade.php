@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
                         @if($row->author->checkUserPlan())
-                            <a id="scroll-to-hotelrooms" class="btn btn-primary mb-2 d-mobile-" href="javascript:void(0)">Book Now</a>
+                            <a id="scroll-to-hotelrooms" class="btn btn-primary mb-2 d-block d-mobile-" href="javascript:void(0)">Book Now</a>
                         @endif
                         @include('user.partials.listing.ipanorama')
                         @php $review_score = $row->review_data @endphp
