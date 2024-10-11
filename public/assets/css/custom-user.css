@@ -2,3 +2,14 @@
     background-color: #d66c00;
     color: #fff;
 }
+#nav-seo .nav-tabs {
+    background: transparent;
+    padding: unset;
+}
+#nav-seo .nav-tabs a {
+    margin: 0;
+}
+#nav-seo .nav-tabs a.active {
+    background: transparent;
+    color: #000;
+}

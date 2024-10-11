@@ -18,6 +18,7 @@
                     @if(is_default_lang())
                         <a data-toggle="tab" href="#nav-attribute" aria-selected="false">{{__("3. Attributes")}}</a>
                     @endif
+                    <a data-toggle="tab" href="#nav-seo" aria-selected="false">{{__("4. Seo")}}</a>
                 </div>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-tour-content">
@@ -64,6 +65,9 @@
                             @include('Art::admin/art/attributes')
                         </div>
                     @endif
+                    <div class="tab-pane fade" id="nav-seo">
+                        @include('Core::admin/seo-meta/seo-meta')
+                   </div>
                 </div>
             </div>
             <div class="d-flex justify-content-between">
