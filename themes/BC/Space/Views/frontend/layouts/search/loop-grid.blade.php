@@ -17,7 +17,7 @@
                 @endif
             @endif
         </a>
-        @if ($row->display_price == 0)
+        @if ($row->display_price > 0)
         <div class="price-wrapper">
             <div class="price">
                 <span class="onsale">{{ $row->display_sale_price }}</span>

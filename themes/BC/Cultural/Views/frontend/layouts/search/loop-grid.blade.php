@@ -74,7 +74,7 @@
             <i class="icofont-wall-clock"></i>
             {{duration_format($row->duration)}}
         </div>
-        @if ($row->display_price == 0)
+        @if ($row->display_price > 0)
         <div class="g-price">
             <div class="prefix">
                 <i class="icofont-flash"></i>
