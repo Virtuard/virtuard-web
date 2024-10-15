@@ -38,7 +38,7 @@ class ModuleProvider extends ModuleServiceProvider
             'car'=>[
                 "position"=>16,
                 'url'        => route('car.admin.index'),
-                'title'      => __('Cars'),
+                'title'      => __('Manage Cars'),
                 'icon'       => 'ion-logo-model-s',
                 'permission' => 'car_view',
                 'children'   => [

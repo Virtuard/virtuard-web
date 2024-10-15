@@ -45,6 +45,17 @@ return [
         'categories' => 'Vehicle Categories',
         'category' => 'Vehicle Category',
     ],
+    'car' => [
+        'title' => 'Car',
+        'manage' => 'Manage Car',
+        'all' => 'All Car',
+        'add' => 'Add Car',
+        'add_new' => 'Add New Car',
+        'no' => 'No Car',
+        'content' => 'Car Content',
+        'categories' => 'Car Categories',
+        'category' => 'Car Category',
+    ],
     'natural' => [
         'title' => 'Natural and Landscape',
         'manage' => 'Manage Natural',

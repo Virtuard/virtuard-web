@@ -98,9 +98,9 @@ class ListAllService extends BaseBlock
                 'link' => route('business.search'),
             ],
             [
-                'name' => __('Vehicle'),
-                'image' => 'uploads/images/boat.webp',
-                'link' => route('boat.search'),
+                'name' => __('Car'),
+                'image' => 'uploads/demo/car/car-2.jpg',
+                'link' => route('car.search'),
             ],
             [
                 'name' => __('hide'),
