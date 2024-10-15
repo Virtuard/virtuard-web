@@ -1239,7 +1239,7 @@ if (!function_exists('menu_listing')) {
             'hotel', //accomodation
             'space', //property
             'business',
-            'boat', //vehicles
+            // 'boat', //vehicles
             'car', //vehicles
             'event',
             'natural',
@@ -1313,7 +1313,7 @@ if (!function_exists('menu_vendor')) {
             'event',
             // 'tour',
             // 'flight',
-            'boat',
+            // 'boat',
             // 'news',
             'verification',
             'my_plan',
@@ -1347,7 +1347,7 @@ if (!function_exists('menu_admin')) {
             'event',
             // 'tour',
             // 'flight',
-            'boat',
+            // 'boat',
             'media',
             'news',
             'page',
@@ -1613,7 +1613,7 @@ if (!function_exists('hide_submenu_setting')) {
     function hide_submenu_setting() {
         $data = [
             'flight',
-            'car',
+            // 'car',
             // 'event',
             'tour',
             'media',
