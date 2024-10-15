@@ -98,7 +98,7 @@ class AttributeController extends AdminController
             }
         } else {
             $row = new $this->attributesClass($request->input());
-            $row->service = 'Car';
+            $row->service = 'car';
         }
         $row->fill($request->input());
         $res = $row->saveOriginOrTranslation($request->input('lang'));
