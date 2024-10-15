@@ -84,6 +84,8 @@
     </div>
 </div>
 
+@include('partials.listing.form-ipanorama')
+
 @if (is_default_lang())
     <div class="panel">
         <div class="panel-title"><strong>{{ __('Extra Info') }}</strong></div>

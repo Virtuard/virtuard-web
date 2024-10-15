@@ -1240,6 +1240,7 @@ if (!function_exists('menu_listing')) {
             'space', //property
             'business',
             'boat', //vehicles
+            'car', //vehicles
             'event',
             'natural',
             'cultural',
@@ -1261,6 +1262,9 @@ if (!function_exists('menu_listing_as')) {
                 break;
             case 'boat':
                 $str = 'vehicle';
+                break;
+            case 'car':
+                $str = 'car';
                 break;
         }
         return $str;
@@ -1284,6 +1288,9 @@ if (!function_exists('get_attribute_listing')) {
             case 'boat':
                 $data['new_key'] = 'vehicle';
                 break;
+            case 'car':
+                $data['new_key'] = 'car';
+                break;
         }
 
         return $data;
@@ -1302,7 +1309,7 @@ if (!function_exists('menu_vendor')) {
             'admin',
             'hotel',
             'space',
-            // 'car',
+            'car',
             'event',
             // 'tour',
             // 'flight',
@@ -1336,7 +1343,7 @@ if (!function_exists('menu_admin')) {
             'tools',
             'hotel',
             'space',
-            // 'car',
+            'car',
             'event',
             // 'tour',
             // 'flight',
@@ -1419,6 +1426,9 @@ if (!function_exists('setMenuPosition')) {
             case 'boat':
                 $position = 14;
                 break;
+            case 'car':
+                $position = 14;
+                break;
             case 'event':
                 $position = 15;
                 break;
@@ -1444,6 +1454,9 @@ if (!function_exists('setMenuAdminPosition')) {
                 $position = 7;
                 break;
             case 'boat':
+                $position = 8;
+                break;
+            case 'car':
                 $position = 8;
                 break;
             case 'event':
@@ -1519,6 +1532,12 @@ if (!function_exists('get_attr_listing')) {
             case 'boat' :
                 $data['route_as'] = 'boat';
                 $data['svg'] = 'icon/directions-boat.svg';
+                break;
+            case 'car':
+            case 'cars':
+            case 'car' :
+                $data['route_as'] = 'car';
+                $data['svg'] = 'icon/car.svg';
                 break;
             case 'event':
             case 'events':
@@ -1647,6 +1666,10 @@ if (!function_exists('get_explore_service')) {
                 case 'boat':
                     $data['title'] = __('Vehicle');
                     $data['icon'] = '<i class="fa fa-sm mr-2 fa-ship"></i>';
+                    break;
+                case 'car':
+                    $data['title'] = __('Car');
+                    $data['icon'] = '<i class="fa fa-sm mr-2 fa-car"></i>';
                     break;
                 case 'event':
                      $data['title'] = __('Event');

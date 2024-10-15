@@ -182,7 +182,8 @@ class ManageCarController extends FrontendController
             'service_fee',
             'min_day_before_booking',
             'min_day_stays',
-            'ical_import_url'
+            'ical_import_url',
+            'ipanorama_id',
         ];
 
         $row->fillByAttr($dataKeys,$request->input());

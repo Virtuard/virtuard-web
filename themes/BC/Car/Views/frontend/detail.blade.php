@@ -3,6 +3,8 @@
     <link href="{{ asset('dist/frontend/module/car/css/car.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/ion_rangeslider/css/ion.rangeSlider.min.css") }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset("libs/fotorama/fotorama.css") }}"/>
+    <!-- iPanorama -->
+   @include('partials.ipanorama.ipanorama-css')
 @endpush
 @section('content')
     <div class="bravo_detail_car">
@@ -12,12 +14,17 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12 col-lg-9">
+                        @include('partials.listing.share-action')
+                        @include('user.partials.listing.ipanorama')
                         @php $review_score = $row->review_data @endphp
                         @include('Car::frontend.layouts.details.detail')
                         @include('Car::frontend.layouts.details.review')
                     </div>
                     <div class="col-md-12 col-lg-3">
                         @include('Tour::frontend.layouts.details.vendor')
+                        @if(enable_referral_sell($row))
+                            @include('partials.listing.sell-button')
+                        @endif
                         @include('Car::frontend.layouts.details.form-book')
                     </div>
                 </div>
@@ -67,4 +74,12 @@
     <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
     <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
     <script type="text/javascript" src="{{ asset('module/car/js/single-car.js?_ver='.config('app.asset_version')) }}"></script>
+
+    @include('partials.ipanorama.ipanorama-js-no-jquery')
+    @if (is_display_panorama_listing($row))
+    @include('partials.ipanorama.ipanorama-preview-js')
+    @endif
+    @if(enable_referral_sell($row))
+        @include('partials.listing.copy-referral-script')
+    @endif
 @endpush

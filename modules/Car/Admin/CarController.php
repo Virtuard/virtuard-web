@@ -230,7 +230,8 @@ class CarController extends AdminController
             'service_fee',
             'min_day_before_booking',
             'min_day_stays',
-            'ical_import_url'
+            'ical_import_url',
+            'ipanorama_id',
         ];
         if ($this->hasPermission('car_manage_others')) {
             $dataKeys[] = 'author_id';

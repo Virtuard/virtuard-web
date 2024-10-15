@@ -7,6 +7,7 @@ use Modules\Art\Models\Art;
 use Modules\Space\Models\Space;
 use Modules\Boat\Models\Boat;
 use Modules\Business\Models\Business;
+use Modules\Car\Models\Car;
 use Modules\Cultural\Models\Cultural;
 use Modules\Event\Models\Event;
 use Modules\Hotel\Models\Hotel;
@@ -17,6 +18,7 @@ class ExploreController extends Controller
     protected $hotel;
     protected $space;
     protected $boat;
+    protected $car;
     protected $business;
     protected $natural;
     protected $cultural;
@@ -28,6 +30,7 @@ class ExploreController extends Controller
         $this->hotel = new Hotel();
         $this->space = new Space();
         $this->boat = new Boat();
+        $this->car = new Car();
         $this->business = new Business();
         $this->cultural = new Cultural();
         $this->natural = new Natural();
@@ -142,6 +145,9 @@ class ExploreController extends Controller
             case 'boat':
                 $searchs = ['boat' => $this->boat->search($req)];
                 break;
+            case 'car':
+                $searchs = ['car' => $this->car->search($req)];
+                break;
             case 'event':
                 $searchs = ['event' => $this->event->search($req)];
                 break;
@@ -160,6 +166,7 @@ class ExploreController extends Controller
                     'space' => $this->space->search($req),
                     'hotel' => $this->hotel->search($req),
                     'boat' => $this->boat->search($req),
+                    'car' => $this->car->search($req),
                     'event' => $this->event->search($req),
                     'natural' => $this->natural->search($req),
                     'cultural' => $this->cultural->search($req),
