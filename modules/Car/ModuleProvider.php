@@ -99,7 +99,7 @@ class ModuleProvider extends ModuleServiceProvider
         if(Car::isEnable()){
             $res['car'] = [
                 'url'   => route('car.vendor.index'),
-                'title'      => __('Cars'),
+                'title'      => __('Manage Cars'),
                 'icon'       => Car::getServiceIconFeatured(),
                 'position'   => 70,
                 'permission' => 'car_view',
@@ -113,16 +113,16 @@ class ModuleProvider extends ModuleServiceProvider
                         'title'      => __('Add new Car'),
                         'permission' => 'car_create',
                     ],
-                    // [
-                    //     'url'        => route('car.vendor.availability.index'),
-                    //     'title'      => __("Availability"),
-                    //     'permission' => 'car_create',
-                    // ],
-                    // [
-                    //     'url'   => route('car.vendor.recovery'),
-                    //     'title'      => __("Recovery"),
-                    //     'permission' => 'car_create',
-                    // ],
+                    [
+                        'url'        => route('car.vendor.availability.index'),
+                        'title'      => __("Availability"),
+                        'permission' => 'car_create',
+                    ],
+                    [
+                        'url'   => route('car.vendor.recovery'),
+                        'title'      => __("Recovery"),
+                        'permission' => 'car_create',
+                    ],
                 ]
             ];
         }
