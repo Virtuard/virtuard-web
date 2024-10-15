@@ -24,9 +24,10 @@
                     <label class="" >{{__("Layout Search")}}</label>
                     <div class="form-controls">
                         <select name="hotel_layout_search" class="form-control" >
-                            @foreach(config('hotel.layouts',['normal'=>__("Normal Layout"))]) as $id=>$name))
+                            <option value="normal" {{ ($settings['hotel_layout_search'] ?? '') == 'normal' ? 'selected' : ''  }}>{{__("Normal Layout")}}</option>
+                            {{-- @foreach(config('hotel.layouts',['normal'=>__("Normal Layout"))]) as $id=>$name))
                                 <option value="{{$id}}" {{ setting_item('hotel_layout_search','normal') == $id ? 'selected' : ''  }}>{{$name}}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
                 </div>
