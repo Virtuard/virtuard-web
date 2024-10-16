@@ -165,7 +165,7 @@ class ExploreController extends Controller
                     'business' => $this->business->search($req),
                     'space' => $this->space->search($req),
                     'hotel' => $this->hotel->search($req),
-                    'boat' => $this->boat->search($req),
+                    // 'boat' => $this->boat->search($req),
                     'car' => $this->car->search($req),
                     'event' => $this->event->search($req),
                     'natural' => $this->natural->search($req),
