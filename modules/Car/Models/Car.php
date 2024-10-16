@@ -938,7 +938,7 @@ class Car extends Bookable
         }
         if(!empty($request['is_ipanorama']))
         {
-            $model_boat
+            $model_car
                 ->whereHas('ipanorama', function($query) {
                     $query->where('status', 'publish');
                 })
