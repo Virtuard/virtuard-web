@@ -34,14 +34,14 @@ Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-vi
 Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
 Route::get('bulkEdit/{id}', 'VirtuardController@bulkEdit')->name('bulk_edit');
 
+Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
+Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
+Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
+Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
 Route::group([
     'middleware' => ['user_ipanorama_plan']
 ], function (){
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
-Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
-Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
-Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
-Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
 });
 });
 Route::get('/panorama/preview', 'VirtuardController@previewIpanorama')->name('panorama.preview');
