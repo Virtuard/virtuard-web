@@ -14,11 +14,11 @@
                 <div class="modal-body">
                     <input type="hidden" name="user_id" value="{{ $user_id }}">
                     <div class="form-group title-image">
-                        <label>Title Image</label>
+                        <label>Title</label>
                         <input type="text" name="title" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Image 360</label>
+                        <label>Image</label>
                         <input type="file" name="image" class="form-control-file" id="image" accept="image/jpeg, image/png, image/webp" required>
                     </div>
                 </div>
@@ -42,7 +42,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <iframe width="100%" height="350" src="https://www.youtube.com/embed/r4btk4OgCJ0?si=zYydQU50Tv4OxsNA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                {{-- <iframe width="100%" height="350" src="https://www.youtube.com/embed/r4btk4OgCJ0?si=zYydQU50Tv4OxsNA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> --}}
+                @include('partials.ipanorama.tutorial')
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"
