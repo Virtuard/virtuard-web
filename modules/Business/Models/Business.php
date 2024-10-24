@@ -52,6 +52,7 @@ class Business extends Bookable
         'extra_price'  => 'array',
         'service_fee' => 'array',
         'surrounding' => 'array',
+        'items' => 'array',
     ];
     /**
      * @var Booking

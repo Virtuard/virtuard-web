@@ -90,6 +90,9 @@
                 </div>
             </div>
         </div>
+
+        @include('Business::admin/business/item')
+
         @if (is_default_lang())
             <div class="form-group">
                 <label class="control-label">{{ __('Banner Image') }}</label>

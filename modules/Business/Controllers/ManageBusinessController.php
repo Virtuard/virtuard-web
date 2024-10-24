@@ -196,6 +196,7 @@ class ManageBusinessController extends FrontendController
             'phone',
             'website',
             'ipanorama_id',
+            'items',
 
         ];
         $row->fillByAttr($dataKeys,$request->input());

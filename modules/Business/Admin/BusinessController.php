@@ -250,6 +250,7 @@ class BusinessController extends AdminController
             'phone',
             'website',
             'ipanorama_id',
+            'items',
 
         ];
         if($this->hasPermission('business_manage_others')){

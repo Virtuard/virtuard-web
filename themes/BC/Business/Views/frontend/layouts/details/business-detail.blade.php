@@ -134,6 +134,26 @@
 @endif
 @include('Business::frontend.layouts.details.business-attributes')
 @include('app.details.extra-info')
+@if($translation->items)
+    <div class="g-items">
+        <h3> {{__("Products")}} </h3>
+        <div class="list-item owl-carousel">
+            @foreach($translation->items as $item)
+                <div class="item" style="background-image: url('{{ !empty($item['image_id']) ? get_file_url($item['image_id'],"full") : "" }}')">
+                    <div class="header">
+                        <div class="item-desc">{{$item['title']}}</div>
+                    </div>
+                    <div class="body">
+                        @if($item['price'] > 0)
+                            <div class="item-title">{{ currency_symbol() }} {{$item['price']}}</div>
+                        @endif
+                        <div class="item-desc">{{$item['title']}}</div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+@endif
 @if($translation->faqs)
 <div class="g-faq">
     <h3> {{__("FAQs")}} </h3>
@@ -152,6 +172,7 @@
 </div>
 @endif
 @includeIf("Hotel::frontend.layouts.details.hotel-surrounding")
+
 @if($row->map_lat && $row->map_lng)
 <div class="g-location">
     <h3>{{__("Location")}}</h3>

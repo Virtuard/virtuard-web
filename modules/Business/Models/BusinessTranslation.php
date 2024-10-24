@@ -13,7 +13,8 @@ class BusinessTranslation extends Business
         'content',
         'faqs',
         'address',
-        'extra_price'
+        'extra_price',
+        'items',
     ];
 
     protected $slugField     = false;
@@ -26,6 +27,7 @@ class BusinessTranslation extends Business
         'faqs'  => 'array',
         'extra_price'  => 'array',
         'surrounding'  => 'array',
+        'items'  => 'array',
     ];
 
     public function getSeoType(){
