@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Api\Controllers;
 
 use App\User;
@@ -8,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
 use Matrix\Exception;
 use Modules\User\Events\SendMailUserRegistered;
@@ -24,13 +26,70 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:sanctum', ['except' => ['login','register']]);
+        $this->middleware('auth:sanctum', [
+            'except' => [
+                'login',
+                'register',
+                'sendResetLinkEmail'
+                ]
+        ]);
     }
 
     /**
      * Get a JWT via given credentials.
      *
      */
+
+    /**
+     * @OA\Post(
+     *     path="/api/auth/login",
+     *     tags={"Auth"},
+     *     summary="User login",
+     *     description="Authenticate a user and return a token",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email","password","device_name"},
+     *             @OA\Property(property="email", type="string", format="email", example="your_email"),
+     *             @OA\Property(property="password", type="string", example="your_password"),
+     *             @OA\Property(property="device_name", type="string", example="your_device")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful login",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="token", type="string", example="eyJhbGciOiJIUzI1NiIsInR..."),
+     *             @OA\Property(property="user", type="object", 
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="jhondoe@example.com")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid input",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="errors", type="object", 
+     *                 @OA\AdditionalProperties(type="array", @OA\Items(type="string"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized, invalid credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Password is not correct"),
+     *             @OA\Property(property="code", type="string", example="invalid_credentials")
+     *         )
+     *     )
+     * )
+     */
+
     public function login(Request $request)
     {
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
@@ -39,19 +98,19 @@ class AuthController extends Controller
             'device_name' => 'required',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('',['errors'=>$validator->errors()]);
+            return $this->sendError('', ['errors' => $validator->errors()])->setStatusCode(400);;
         }
 
         $user = User::where('email', $request->email)->first();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
-            return $this->sendError(__("Password is not correct"),['code'=>'invalid_credentials']);
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return $this->sendError(__("Password is not correct"), ['code' => 'invalid_credentials'])->setStatusCode(401);;
         }
 
         return [
-            'token'=>$user->createToken($request->device_name)->plainTextToken,
-            'user'=> new UserResource($user),
-            'status'=>1
+            'token' => $user->createToken($request->device_name)->plainTextToken,
+            'user' => new UserResource($user),
+            'status' => 1
         ];
     }
 
@@ -197,5 +256,63 @@ class AuthController extends Controller
         $user->tokens()->delete();
 
         return $this->sendSuccess(['message'=>__("Password updated. Please re-login"),'code'=>"need_relogin"]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/auth/forgot-password",
+     *     tags={"Auth"},
+     *     summary="Send reset password link",
+     *     description="Send a reset password link to the specified email address.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email"},
+     *             @OA\Property(property="email", type="string", format="email", example="user@example.com")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Reset link sent successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="message", type="string", example="Reset link sent!")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Unable to send reset link",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Unable to send reset link.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The email must be a valid email address."),
+     *             @OA\Property(property="errors", type="object", 
+     *                 @OA\AdditionalProperties(type="array", @OA\Items(type="string"))
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function sendResetLinkEmail(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $response = Password::sendResetLink($request->only('email'));
+
+        return $response == Password::RESET_LINK_SENT
+            ? response()->json([
+                'status' => 1,
+                'message' => 'Reset link sent!'
+            ], 200)
+            : response()->json([
+                'status' => 0,
+                'message' => 'Unable to send reset link.'
+            ], 500);
     }
 }
