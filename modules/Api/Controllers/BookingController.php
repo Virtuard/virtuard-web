@@ -67,11 +67,33 @@ class BookingController extends \Modules\Booking\Controllers\BookingController
      *         description="Successful response with home page data",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="integer", example=1),
-     *             @OA\Property(property="data", type="object", 
-     *                 @OA\Property(property="service_types", type="array", @OA\Items(type="string")),
-     *                 @OA\Property(property="title", type="string", example="Virtuard Tus Tours Virtuales."),
-     *                 @OA\Property(property="bg_image", type="integer", example=61),
-     *                 @OA\Property(property="bg_image_url", type="string", example="http://localhost:8000/uploads/demo/space/banner-search-space.jpg"),
+     *             @OA\Property(property="data", type="array", 
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="type", type="string", example="list_hotel"),
+     *                     @OA\Property(property="name", type="string", example="Hotel: List Items"),
+     *                     @OA\Property(property="model", type="object",
+     *                         @OA\Property(property="title", type="string", example="Accomodation"),
+     *                         @OA\Property(property="desc", type="string", example="Recommended Accomodation"),
+     *                         @OA\Property(property="number", type="integer", example=6),
+     *                         @OA\Property(property="style", type="string", example="carousel"),
+     *                         @OA\Property(property="location_id", type="string", example=""),
+     *                         @OA\Property(property="order", type="string", example="id"),
+     *                         @OA\Property(property="order_by", type="string", example="desc"),
+     *                         @OA\Property(property="is_featured", type="boolean", example=false),
+     *                         @OA\Property(property="custom_ids", type="array", @OA\Items(type="integer")),
+     *                         @OA\Property(property="data", type="array",
+     *                             @OA\Items(
+     *                                 type="object",
+     *                                 @OA\Property(property="id", type="integer", example=1),
+     *                                 @OA\Property(property="object_model", type="string", example="hotel"),
+     *                                 @OA\Property(property="title", type="string", example="My Hotel"),
+     *                                 @OA\Property(property="price", type="number", example=100)
+     *                             )
+     *                         )
+     *                      )
+     *                   )
+     *                )
      *             )
      *         )
      *     ),
