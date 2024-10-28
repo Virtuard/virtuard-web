@@ -40,7 +40,7 @@ return [
                  */
                 'annotations' => [
                     base_path('app'),
-                    base_path('modules/api'),
+                    base_path('modules/Api'),
                 ],
             ],
         ],
