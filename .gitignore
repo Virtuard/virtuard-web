@@ -23,4 +23,3 @@ storage/installed
 public/themes/*/dist
 /local_note
 .DS_Store
-/storage/api-docs

@@ -9,18 +9,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * @OA\Info(
- *      version="1.0.0",
- *      title="Virtuard API",
- *      description="Virtuard API Documentation"
- * )
- *
- * @OA\Server(
- *      url=L5_SWAGGER_CONST_HOST,
- * )
- */
-    
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
