@@ -46,7 +46,7 @@ $seo_share = $meta_seo['seo_share'] ?? false;
                 </div>
                 @if(is_default_lang())
                     <div class="form-group form-group-image">
-                        <label class="control-label">{{__("Featured Image")}}</label>
+                        <label class="control-label">{{__("Favicon")}}</label>
                         <samll class="text-danger"><sup>*</sup>Recomended max 100x100px</samll>
                         {!! \Modules\Media\Helpers\FileHelper::fieldUpload('seo_image', $meta_seo['seo_image'] ?? "" ) !!}
                     </div>
