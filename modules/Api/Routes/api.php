@@ -41,7 +41,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::get('me', 'AuthController@me');
     Route::post('me', 'AuthController@updateUser');
     Route::post('change-password', 'AuthController@changePassword');
-
+    Route::post('forgot-password', 'AuthController@sendResetLinkEmail');
 });
 
 /* User */

@@ -56,10 +56,70 @@ class BookingController extends \Modules\Booking\Controllers\BookingController
         return $this->sendSuccess($res);
     }
 
-    public function getHomeLayout(){
+    /**
+     * @OA\Get(
+     *     path="/api/home-page",
+     *     tags={"Page"},
+     *     summary="Get home page",
+     *     description="Retrieve the processed content of the home page.",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response with home page data",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="data", type="array", 
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="type", type="string", example="list_hotel"),
+     *                     @OA\Property(property="name", type="string", example="Hotel: List Items"),
+     *                     @OA\Property(property="model", type="object",
+     *                         @OA\Property(property="title", type="string", example="Accomodation"),
+     *                         @OA\Property(property="desc", type="string", example="Recommended Accomodation"),
+     *                         @OA\Property(property="number", type="integer", example=6),
+     *                         @OA\Property(property="style", type="string", example="carousel"),
+     *                         @OA\Property(property="location_id", type="string", example=""),
+     *                         @OA\Property(property="order", type="string", example="id"),
+     *                         @OA\Property(property="order_by", type="string", example="desc"),
+     *                         @OA\Property(property="is_featured", type="boolean", example=false),
+     *                         @OA\Property(property="custom_ids", type="array", @OA\Items(type="integer")),
+     *                         @OA\Property(property="data", type="array",
+     *                             @OA\Items(
+     *                                 type="object",
+     *                                 @OA\Property(property="id", type="integer", example=1),
+     *                                 @OA\Property(property="object_model", type="string", example="hotel"),
+     *                                 @OA\Property(property="title", type="string", example="My Hotel"),
+     *                                 @OA\Property(property="price", type="number", example=100)
+     *                             )
+     *                         )
+     *                      )
+     *                   )
+     *              )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Template not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Template not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Unable to retrieve home layout.")
+     *         )
+     *     )
+     * )
+     */
+
+    public function getHomeLayout()
+    {
         $res = [];
         $template = Template::find(setting_item('api_app_layout'));
-        if(!empty($template)){
+        if (!empty($template)) {
             $translate = $template->translate();
             $res = $translate->getProcessedContentAPI();
         }
