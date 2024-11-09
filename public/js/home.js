@@ -1103,10 +1103,44 @@ jQuery(function ($) {
     });
 
     $('.btn_review_edit').click(function (e) {
-        let item = $(e.target).data('item');
-        $('#review_id').val(item.id);
-        $('#review_title').val(item.title);
-        $('#review_content').val(item.content);
+        let review = $(e.target).data('item');
+        $('#review_id').val(review.id);
+        $('#review_title').val(review.title);
+        $('#review_content').val(review.content);
+        
+        let metaPicture = $(e.target).data('pictures');
+        
+        console.log(metaPicture.length)
+        let pictures = [];
+        if (metaPicture) {
+            for (i = 0; i < metaPicture.length; i++){
+                let pic = JSON.parse(metaPicture[i])
+                console.log('pic', pic)
+               var me = $('#review_upload_file')
+            var p = $('.review_upload_wrap');
+            var lists = p.find('.review_upload_photo_list');
+            var div = $('<div class="col-md-2 mb-2"/>');
+            var item = $('<div class="review_upload_item"/>');
+            div.append(item);
+            var input = $("<input/>");
+            input.attr('type', 'hidden');
+            // input.attr('name', me.data('name')+'[]');
+            input.attr('name','review_upload[]');
+            input.val(JSON.stringify(pic));
+
+            item.append(input);
+            item.css({
+                'background-image':'url('+pic.download+')'
+            });
+
+            // if ($('#review_upload_file').data('multiple')) {
+                lists.append(div);
+            // } else {
+            //     lists.html(div);
+            // }
+            }
+        }
+        console.log(pictures)
 
         document.getElementById("review-form").scrollIntoView();
     });

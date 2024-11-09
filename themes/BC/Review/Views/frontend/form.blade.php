@@ -114,9 +114,9 @@
                         </div>
                         @endif
                     </div>
-                    @if(auth()->user()->id == $item->author_id or auth()->user()->isAdmin())
+                    @if(auth()->check() and (auth()->user()->id == $item->author_id or auth()->user()->isAdmin()))
                         <div class="review-footer my-2">
-                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn_review_edit" data-item="{{ $item }}">Edit</a>
+                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn_review_edit" data-item="{{ $item }}" data-pictures={{ $item->getReviewMetaPicture()->val ?? '' }}>Edit</a>
                                 <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="event.preventDefault(); document.getElementById('delete-review-{{ $item->id }}').submit();">Delete</a>
                             <form id="delete-review-{{ $item->id }}" action="{{ route('review.destroy', $item->id) }}" method="POST" style="display: none;">
                                 @csrf
@@ -211,7 +211,7 @@
                                     <div class="col-md-2">
                                         <div class="review_upload_btn">
                                             <span class="helpText" id="helpText"></span>
-                                            <input type="file" id="file" multiple data-name="review_upload" data-multiple="1" accept="image/*" class="review_upload_file">
+                                            <input type="file" id="file" id="review_upload_file" multiple data-name="review_upload" data-multiple="1" accept="image/*" class="review_upload_file">
                                         </div>
                                     </div>
                                     <div class="col-md-10">
