@@ -117,6 +117,13 @@ class ReviewController extends Controller
                 "val"          => json_encode($review_upload)
             ];
         }
+        $id = $request->review_id ?? false;
+        if($id) {
+            $review = Review::find($id);
+            $review->title = $request->review_title;
+            $review->content = $request->review_content;
+            $review->rate_number = $rate;
+        } else {
         $review = new Review([
             "object_id"    => $service_id,
             "object_model" => $service_type,
@@ -129,12 +136,16 @@ class ReviewController extends Controller
             'author_id' => auth()->user()->id,
             'create_user' => auth()->user()->id,
         ]);
+        }
+        
         if ($review->save()) {
             if (!empty($metaReview)) {
                 foreach ($metaReview as $meta) {
                     $meta['review_id'] = $review->id;
-                    $reviewMeta = new ReviewMeta($meta);
-                    $reviewMeta->save();
+                    $reviewMeta = ReviewMeta::updateOrCreate([
+                        "review_id" => $meta['review_id'],
+                        "name" => $meta['name']
+                    ],$meta);
                 }
             }
             $images = $request->input('review_upload');
@@ -174,4 +185,12 @@ class ReviewController extends Controller
 
         return true;
     }
+
+    public function destroy($id)
+    {
+        Review::destroy($id);
+
+        return redirect()->to(url()->previous() . '#bravo-reviews')->with('success', 'Review deleted!');
+    }
+
 }

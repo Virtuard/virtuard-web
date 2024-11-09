@@ -1102,6 +1102,15 @@ jQuery(function ($) {
 
     });
 
+    $('.btn_review_edit').click(function (e) {
+        let item = $(e.target).data('item');
+        $('#review_id').val(item.id);
+        $('#review_title').val(item.title);
+        $('#review_content').val(item.content);
+
+        document.getElementById("review-form").scrollIntoView();
+    });
+
     $('.bc_popup').modal('show').on('hidden.bs.modal',function(){
         var id = $(this).attr('id');
         setCookie(id,1,parseInt($(this).data('days')));

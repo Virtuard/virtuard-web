@@ -114,6 +114,16 @@
                         </div>
                         @endif
                     </div>
+                    @if(auth()->user()->id == $item->author_id or auth()->user()->isAdmin())
+                        <div class="review-footer my-2">
+                            <a href="javascript:void(0)" class="btn btn-primary btn-sm btn_review_edit" data-item="{{ $item }}">Edit</a>
+                                <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="event.preventDefault(); document.getElementById('delete-review-{{ $item->id }}').submit();">Delete</a>
+                            <form id="delete-review-{{ $item->id }}" action="{{ route('review.destroy', $item->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                        </div>
+                    @endif
                 @endforeach
             @endif
         </div>
@@ -130,7 +140,7 @@
             @endif
         </div>
         @if(Auth::id())
-            <div class="review-form">
+            <div id="review-form" class="review-form">
                 <div class="title-form">
                     {{__("Write a review")}}
                 </div>
@@ -138,10 +148,11 @@
                     @include('admin.message')
                     <form action="{{ route('review.store')}}" class="needs-validation" novalidate method="post">
                         @csrf
+                        <input type="hidden" id="review_id" name="review_id" value="">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <input type="text" required class="form-control" name="review_title" placeholder="{{__("Title")}}">
+                                    <input type="text" required class="form-control" id="review_title" name="review_title" placeholder="{{__("Title")}}">
                                     <div class="invalid-feedback">{{__('Review title is required')}}</div>
                                 </div>
                             </div>
@@ -149,7 +160,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-8">
                                 <div class="form-group">
-                                    <textarea name="review_content" required class="form-control" placeholder="{{__("Review content")}}" minlength="10"></textarea>
+                                    <textarea id="review_content" name="review_content" required class="form-control" placeholder="{{__("Review content")}}" minlength="10"></textarea>
                                     <div class="invalid-feedback">
                                         {{__('Review content has at least 10 character')}}
                                     </div>
