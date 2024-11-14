@@ -64,7 +64,7 @@
                             <th>{{__('Customer')}}</th>
 
                             <th>{{__('Payment Information')}}</th>
-                            <th  width="80px" >{{__('Commission')}}</th>
+                            <th  width="80px" >{{__('Admin Commission')}}</th>
                             <th  width="80px" >{{__('Ref Commission')}}</th>
                             <th width="80px">{{__('Status')}}</th>
                             <th width="150px">{{__('Payment Method')}}</th>

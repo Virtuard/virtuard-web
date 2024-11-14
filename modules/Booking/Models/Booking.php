@@ -39,7 +39,7 @@ class Booking extends BaseModel
     const PARTIAL_PAYMENT       = 'partial_payment'; //
 
     protected $casts = [
-        'commission' => 'array',
+        // 'commission' => 'array',
         'vendor_service_fee' => 'array',
     ];
 
@@ -877,7 +877,7 @@ class Booking extends BaseModel
     }
 
     public function getCommissionRef($ref_id){
-        $total = $this->total_before_fees;
+        $total = (float) $this->commission;
         $returnArray=[
             'ref_id'=>'',
             'ref_commission'=>0,
@@ -888,27 +888,33 @@ class Booking extends BaseModel
             if (!empty($ref)) {
                 $returnArray['ref_id']= $ref->id;
 
-                $commission = [];
-                $commission['amount'] = setting_item('referral_commission_amount', 10);
-                $commission['type'] = setting_item('referral_commission_type', 'percent');
+                $ref_commission = [];
+                $ref_commission['amount'] = setting_item('referral_commission_amount', 0);
+                $ref_commission['type'] = setting_item('referral_commission_type', 'percent');
 
                 if($ref->ref_commission_type){
-                    $commission['type'] = $ref->ref_commission_type;
+                    $ref_commission['type'] = $ref->ref_commission_type;
                 }
                 if($ref->ref_commission_amount){
-                    $commission['amount'] = $ref->ref_commission_amount;
+                    $ref_commission['amount'] = $ref->ref_commission_amount;
                 }
 
-                if($commission['type'] == 'disable'){
+                if($ref_commission['type'] == 'disable'){
                     return $returnArray;
                 }
 
-                if ($commission['type'] == 'percent') {
-                    $returnArray['ref_commission'] = (float)($total / 100) * $commission['amount'];
+                if ($ref_commission['type'] == 'percent') {
+                    $returnArray['ref_commission'] = (float)($total / 100) * $ref_commission['amount'];
                 } else {
-                    $returnArray['ref_commission']= (float)min($total,$commission['amount']);
+                    $returnArray['ref_commission']= (float)min($total,$ref_commission['amount']);
                 }
-                $returnArray['ref_commission_type'] = json_encode($commission);
+                
+                $commission_type = json_decode($this->commission_type);
+                $commission_type->amount -= $ref_commission['amount'];
+                $returnArray['commission'] = (float) $total - $returnArray['ref_commission'];
+                $returnArray['commission_type'] = json_encode($commission_type);
+
+                $returnArray['ref_commission_type'] = json_encode($ref_commission);
             }
         }
         return $returnArray;
@@ -930,6 +936,11 @@ class Booking extends BaseModel
                 $this->ref_id = $data['ref_id'];
                 $this->ref_commission = $data['ref_commission'];
                 $this->ref_commission_type = $data['ref_commission_type'];
+
+                if (isset($data['commission'])) {
+                    $this->commission = $data['commission'];
+                    $this->commission_type = $data['commission_type'];
+                }
             }
         }
     }

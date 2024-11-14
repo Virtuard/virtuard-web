@@ -102,8 +102,8 @@
                             <input type="text" class="form-control" name="referral_commission_amount" value="{{!empty($settings['referral_commission_amount'])?$settings['referral_commission_amount']:"0" }}">
                         </div>
                         <p>
-                            <i>{{__('Example value : 10 or 10.5')}}</i><br>
-                            <i>{{__('Example: 10% commission. Referral get 10%, Vendor get 90%')}}</i>
+                            <i>{{__('Example value : 2')}}</i><br>
+                            <i>{{__('Example: 2% commission. Referral get 2%, Admin get 8%')}}</i>
                         </p>
                     </div>
                 @else
