@@ -10,6 +10,8 @@
 |
 */
 use Illuminate\Support\Facades\Route;
+use Modules\Vendor\Controllers\ReferralController;
+
 Route::group(['prefix'=>'vendor'],function(){
     Route::post('/register','VendorController@register')->name('vendor.register');
 
@@ -31,7 +33,9 @@ Route::group(['prefix'=>'vendor','middleware' => ['auth']],function(){
         Route::get('/delete/{vendorTeam}','TeamController@delete')->name("delete")->middleware('signed');
     });
 
-    Route::get('/referral','ReferralController@index')->name("vendor.referral.index");
+    Route::get('/referral', [ReferralController::class, 'index'])->name('vendor.referral.index');
+    // Route::get('/referral', [ReferralController::class, 'getUserInfo']);
+
 
 });
 

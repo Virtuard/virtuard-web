@@ -36,6 +36,9 @@ class HotelController extends Controller
 
     public function index(Request $request)
     {
+        // $hotel = hotel::find(1);
+        
+        // dd($hotel->author);
 
         $is_ajax = $request->query('_ajax');
         if (!empty($request->query('limit'))) {

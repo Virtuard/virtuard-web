@@ -17,6 +17,8 @@
     use Matrix\Exception;
     use Modules\User\Events\SendMailUserNeedConfirm;
     use Modules\User\Events\SendMailUserRegistered;
+    use Illuminate\Support\Facades\Cookie;
+
 
     class RegisterController extends \App\Http\Controllers\Auth\RegisterController
 	{
@@ -104,6 +106,10 @@
                     'confirmation_code' => md5(uniqid(mt_rand(), true)),
                 ];
 
+                if (Cookie::has('affiliate_id')) {
+                    $dataUser['affiliate_plan_user_id'] = Cookie::get('affiliate_id');
+                }
+
                 if ($register_confirm_email) {
                     $dataUser['status'] = 'pending';
                 }
@@ -122,6 +128,8 @@
                 } catch (Exception $exception) {
                     Log::warning("SendMailUserRegistered: " . $exception->getMessage());
                 }
+
+                Cookie::queue(Cookie::forget('affiliate_id'));
 
                 $response = [
                     'error'    => false,

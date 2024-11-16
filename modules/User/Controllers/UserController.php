@@ -168,6 +168,8 @@ class UserController extends FrontendController
             ],
             'page_title' => __("Booking History"),
         ];
+
+        // dd('data');
         return view('User::frontend.bookingHistory', $data);
     }
 

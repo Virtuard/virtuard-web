@@ -174,11 +174,17 @@ class PlanController extends FrontendController
             $new_user_plan->start_date = date('Y-m-d H:i:s');
             if ($plan->duration) {
                 $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
+           
             }
             $new_user_plan->max_service = $plan->max_service;
             $new_user_plan->max_ipanorama = $plan->max_ipanorama;
             $new_user_plan->plan_data = $plan;
             $new_user_plan->user_id = \Auth::id();
+            
+            //new referal concept
+            // $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
+            // $new_user_plan->referal_amount = $plan->price * 0.1;
+
             $new_user_plan->save();
 
             event(new UpdatePlanRequest($user));
@@ -196,12 +202,15 @@ class PlanController extends FrontendController
             $payment->payment_gateway = $payment_gateway;
             $payment->amount = $is_annual ? $plan->annual_price : $plan->price;
             $payment->user_id = auth()->id();
+            $payment->affiliate_id = $user->affiliate_plan_user_id;
 
             $payment->save();
             $payment->addMeta('user_request', $user->id);
             $payment->addMeta('annual', $is_annual);
 
             $user->applyPlan($plan, $payment->amount, $is_annual, false);
+
+            
 
             $res = $gatewayObj->processNormal($payment);
 
@@ -210,6 +219,27 @@ class PlanController extends FrontendController
             $redirect_url = $res[2] ?? null;
             if ($success) {
                 event(new CreatePlanRequest($user));
+        
+                $new_user_plan = UserPlan::query()->where('user_id', $user->id)->where('plan_id', $plan->id)->first();
+                if (empty($new_user_plan)) {
+                    $new_user_plan = new UserPlan();
+                }
+        
+                $new_user_plan->plan_id = $plan->id;
+                $new_user_plan->price = $payment->amount;
+                $new_user_plan->start_date = date('Y-m-d H:i:s');
+                if ($plan->duration) {
+                    $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
+                }
+                $new_user_plan->max_service = $plan->max_service;
+                $new_user_plan->max_ipanorama = $plan->max_ipanorama;
+                $new_user_plan->plan_data = $plan;
+                $new_user_plan->user_id = $user->id;
+                $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
+                $new_user_plan->referal_amount = $payment->amount * 0.1;
+        
+                $new_user_plan->save();
+        
 
                 if (empty($redirect_url) and $payment->status == 'completed') {
                     return redirect()
