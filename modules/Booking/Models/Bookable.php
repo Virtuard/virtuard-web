@@ -408,6 +408,7 @@
                 'title'            => $translation->title,
                 'price'            => $this->price,
                 'sale_price'       => $this->sale_price,
+                // 'author'           => $this->author,
                 'discount_percent' => $this->discount_percent ?? null,
                 'image'            => get_file_url($this->image_id,'medium'),
                 'content'          => $translation->content,

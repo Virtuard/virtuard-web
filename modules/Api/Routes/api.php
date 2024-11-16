@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
+use Modules\Api\Controllers\RecentlyController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,6 +33,7 @@ Route::group(['middleware' => 'api'],function(){
 
 /* Layout HomePage */
 Route::get('home-page','BookingController@getHomeLayout')->name('api.get_home_layout');
+Route::get('recently-services', [RecentlyController::class, 'getRecentlyServices']);
 
 /* Register - Login */
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {

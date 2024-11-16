@@ -10,6 +10,7 @@ class UserPlan extends BaseModel
 {
     protected $table  = 'bravo_user_plan';
 
+    protected $guarded = [];
 
 
     protected $casts = [

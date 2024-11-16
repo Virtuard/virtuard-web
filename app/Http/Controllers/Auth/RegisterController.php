@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Cookie;
 
 class RegisterController extends Controller
 {
@@ -57,6 +58,7 @@ class RegisterController extends Controller
 
     public function showRegistrationForm()
     {
+        // dd(Cookie::get('affiliate_id'));
         return view('auth.register',['page_title'=> __("Sign Up")]);
     }
 

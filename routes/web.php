@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Cookie;
 
 /*
     |--------------------------------------------------------------------------
@@ -107,3 +108,10 @@ Route::get(config('admin.admin_route_prefix') . '/logs', '\Rap2hpoutre\LaravelLo
 
 Route::get('/install', 'InstallerController@redirectToRequirement')->name('LaravelInstaller::welcome');
 Route::get('/install/environment', 'InstallerController@redirectToWizard')->name('LaravelInstaller::environment');
+
+
+Route::get('/affiliate-{id_user}_{username}', function ($id_user, $username) {
+    // Cookie::queue('affiliate_username', $username, 60); 
+    Cookie::queue('affiliate_id', $id_user, 1060);
+    return redirect()->route('home');
+});
