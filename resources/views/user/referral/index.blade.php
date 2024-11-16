@@ -81,7 +81,7 @@
                                         <td>{{ $booking->user->name }}</td>
                                         <td>{{ $booking->plan->title }}</td>
                                         <td>{{ format_money($booking->price) }}</td>
-                                        <td>{{ $booking->referalName->name ?? '-' }}</td>
+                                        <td>{{ $booking->referalName->name ?? 'Direct' }}</td>
                                         <td>{{ format_money($booking->referal_amount ?? '-') }}</td>
                                     </tr>
                                 @endforeach
