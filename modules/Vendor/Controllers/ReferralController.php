@@ -2,6 +2,9 @@
 
 namespace Modules\Vendor\Controllers;
 
+
+
+
 use App\Helpers\ReCaptchaEngine;
 use App\User;
 use Illuminate\Http\Request;
@@ -22,9 +25,11 @@ use Modules\Booking\Models\BookingPayment;
 class ReferralController extends FrontendController
 {
     protected $bookingClass;
+    protected $bookingPayment;
     public function __construct()
     {
-        $this->bookingClass = BookingPayment::class;
+        $this->bookingClass = Booking::class;
+        $this->bookingPayment = BookingPayment::class;
         parent::__construct();
     }
 
@@ -37,16 +42,17 @@ class ReferralController extends FrontendController
         }
     
         if ($user->role_id == 2) {
-            $bookings = $this->bookingClass::getReferralHistory(Auth::id())->paginate(10);
+            $bookings = $this->bookingPayment::getReferralHistory(Auth::id())->paginate(10);
         } elseif ($user->role_id == 1) {
-            $bookings = $this->bookingClass::getReferralAdminHistory();
+            $bookings = $this->bookingPayment::getReferralAdminHistory();
         } elseif ($user->role_id == 3) {
             $bookings = null;
         }
-    
+
         $data = [
-            'bookings'    => $bookings,
-            'statuses'    => config('booking.statuses'),
+            'referals'    => $bookings,
+            'bookings'    => $this->bookingClass::getReferralHistory($request->input('status') ?? 'paid', false, false, Auth::id()),
+            'statues'     => config('booking.statuses'),
             'userInfo'    => [
                 'username' => $user->user_name,
                 'userId'   => $user->id,
@@ -59,8 +65,8 @@ class ReferralController extends FrontendController
             ],
             'page_title'  => __("Referral Report"),
         ];
-    
         return view('user.referral.index', $data);
     }
-    
+
+
 }
