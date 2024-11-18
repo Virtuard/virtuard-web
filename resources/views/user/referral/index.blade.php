@@ -142,14 +142,6 @@
                             {{ __('Services') }}
                         </a>
                     </li>
-                    <li class="pull-right" style="margin-left: auto;">
-                        @if (Auth::user()->role_id == 2)
-                            <button id="copyButton" class="btn btn-link"
-                                style="border: none; text-decoration: none; color: inherit;">
-                                <i class="fa fa-copy"></i> Copy Referral Link
-                            </button>
-                        @endif
-                    </li>
                 </ul>
                 <div>
                     @if (!empty($bookings) and $bookings->total() > 0)
