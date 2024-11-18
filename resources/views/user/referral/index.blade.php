@@ -7,15 +7,15 @@
         <div class="booking-history-manager">
             <div class="tabbable">
                 <ul class="nav nav-tabs ht-nav-tabs">
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="javascript:void(0);" id="referalServicesTab" onclick="showContent('referalServices')"
                             >
                             {{ __('Referal Services') }}
                         </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="javascript:void(0);" id="referalPlanTab" onclick="showContent('referalPlan')">
-                            {{ __('Referal Plan') }}
+                    </li> --}}
+                    <li class="active">
+                        <a>
+                            {{ __('Plan') }}
                         </a>
                     </li>
                     <li class="pull-right" style="margin-left: auto;">
@@ -27,55 +27,7 @@
                         @endif
                     </li>
                 </ul>
-                <div id="referalServices" class="tab-content d-none">
-                    @if (!empty($bookings) and $bookings->total() > 0)
-                        <div class="tab-content">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-striped table-booking-history">
-                                    <thead>
-                                        <tr>
-                                            <th width="2%">{{ __('Type') }}</th>
-                                            <th>{{ __('Title') }}</th>
-                                            <th class="a-hidden">{{ __('Order Date') }}</th>
-                                            <th>{{ __('Commission') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($bookings as $booking)
-                                            <tr>
-                                                <td class="booking-history-type">
-                                                    @if ($service = $booking->service)
-                                                        <i class="{{ $service->getServiceIconFeatured() }}"></i>
-                                                    @endif
-                                                    <small>{{ $booking->object_model }}</small>
-                                                </td>
-                                                <td>
-                                                    @if ($service = $booking->service)
-                                                        <a target="_blank" href="{{ $service->getDetailUrl() }}">
-                                                            {{ $service->title }}
-                                                        </a>
-                                                    @else
-                                                        {{ __('[Deleted]') }}
-                                                    @endif
-                                                </td>
-                                                <td class="a-hidden">{{ display_date($booking->created_at) }}</td>
-                                                <td>
-                                                    {{ format_money($booking->ref_commission) }}
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="bravo-pagination">
-                                {{ $bookings->appends(request()->query())->links() }}
-                            </div>
-                        </div>
-                    @else
-                        {{ __('No Referral Report') }}
-                    @endif
-                </div>
-                <div id="referalPlan" class="tab-content d-none">
+                <div>
                     <div class="table-responsive">
                         @if (Auth::user()->role_id == 2)
                             <table class="table table-bordered table-striped table-booking-history">
@@ -155,6 +107,100 @@
                         @endif
                     </div>
                 </div>
+               
+               
+
+            </div>
+            <div class="modal" tabindex="-1" id="modal_booking_detail">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ __('Booking ID: #') }} <span class="user_id"></span></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="d-flex justify-content-center">{{ __('Loading...') }}</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary"
+                                data-dismiss="modal">{{ __('Close') }}</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="title-bar no-border-bottom">
+        </h2>
+        @include('admin.message')
+        <div class="booking-history-manager">
+            <div class="tabbable">
+                <ul class="nav nav-tabs ht-nav-tabs">
+                    <li class="active">
+                        <a>
+                            {{ __('Services') }}
+                        </a>
+                    </li>
+                    <li class="pull-right" style="margin-left: auto;">
+                        @if (Auth::user()->role_id == 2)
+                            <button id="copyButton" class="btn btn-link"
+                                style="border: none; text-decoration: none; color: inherit;">
+                                <i class="fa fa-copy"></i> Copy Referral Link
+                            </button>
+                        @endif
+                    </li>
+                </ul>
+                <div>
+                    @if (!empty($bookings) and $bookings->total() > 0)
+                        <div class="tab-content">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-booking-history">
+                                    <thead>
+                                        <tr>
+                                            <th width="2%">{{ __('Type') }}</th>
+                                            <th>{{ __('Title') }}</th>
+                                            <th class="a-hidden">{{ __('Order Date') }}</th>
+                                            <th>{{ __('Commission') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($bookings as $booking)
+                                            <tr>
+                                                <td class="booking-history-type">
+                                                    @if ($service = $booking->service)
+                                                        <i class="{{ $service->getServiceIconFeatured() }}"></i>
+                                                    @endif
+                                                    <small>{{ $booking->object_model }}</small>
+                                                </td>
+                                                <td>
+                                                    @if ($service = $booking->service)
+                                                        <a target="_blank" href="{{ $service->getDetailUrl() }}">
+                                                            {{ $service->title }}
+                                                        </a>
+                                                    @else
+                                                        {{ __('[Deleted]') }}
+                                                    @endif
+                                                </td>
+                                                <td class="a-hidden">{{ display_date($booking->created_at) }}</td>
+                                                <td>
+                                                    {{ format_money($booking->ref_commission) }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="bravo-pagination">
+                                {{ $bookings->appends(request()->query())->links() }}
+                            </div>
+                        </div>
+                    @else
+                        {{ __('No Referral Report') }}
+                    @endif
+                </div>
+               
+               
 
             </div>
             <div class="modal" tabindex="-1" id="modal_booking_detail">
@@ -192,22 +238,7 @@
                 })
             })
         </script>
-        <script>
-            function showContent(contentId) {
-                document.getElementById('referalServices').classList.add('d-none');
-                document.getElementById('referalPlan').classList.add('d-none');
-
-                document.getElementById('referalServicesTab').classList.remove('active');
-                document.getElementById('referalPlanTab').classList.remove('active');
-
-                document.getElementById(contentId).classList.remove('d-none');
-                document.getElementById(contentId + 'Tab').classList.add('active');
-            }
-
-            document.addEventListener('DOMContentLoaded', function() {
-                showContent('referalServices');
-            });
-        </script>
+       
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script>

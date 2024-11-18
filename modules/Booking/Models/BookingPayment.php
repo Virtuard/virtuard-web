@@ -11,11 +11,20 @@ class BookingPayment extends BaseModel
     protected $table = 'bravo_user_plan';
 
 
-    public static function getReferralHistory($userId)
-    {
-        return self::where('referal_user_id', $userId)
-        ->orderBy('created_at', 'desc');
+    public static function getReferralHistory($ref_id = false)
+{
+    $list_booking = parent::query()->orderBy('id', 'desc');
+    
+    if (!empty($ref_id)) {
+        $list_booking->where("ref_id", $ref_id);
     }
+
+    // Add any other conditions as needed
+    $list_booking->where('status', '!=', 'draft');
+    $list_booking->whereIn('object_model', array_keys(get_bookable_services()));
+
+    return $list_booking->paginate(10); // Pagination applied here
+}
 
     public static function getReferralAdminHistory()
     {
