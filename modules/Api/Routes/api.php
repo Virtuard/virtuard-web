@@ -2,7 +2,11 @@
 
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
+use Modules\Api\Controllers\MessagesController;
+use Modules\Api\Controllers\PostController as ControllersPostController;
+use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
+use Modules\Api\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +23,7 @@ Route::get('configs','BookingController@getConfigs')->name('api.get_configs');
 /* Service */
 Route::get('services','SearchController@searchServices')->name('api.service-search');
 Route::get('{type}/search','SearchController@search')->name('api.search2');
+Route::get('/search-by-author/{type?}', [SearchController::class, 'searchByAuthor']);
 Route::get('{type}/detail/{id}','SearchController@detail')->name('api.detail');
 Route::get('{type}/availability/{id}','SearchController@checkAvailability')->name('api.service.check_availability');
 Route::get('boat/availability-booking/{id}','SearchController@checkBoatAvailability')->name('api.service.checkBoatAvailability');
@@ -28,7 +33,14 @@ Route::get('{type}/form-search','SearchController@getFormSearch')->name('api.ser
 
 Route::group(['middleware' => 'api'],function(){
     Route::post('{type}/write-review/{id}','ReviewController@writeReview')->name('api.service.write_review');
+    // Route::get('messages/iframe/{id?}', [MessagesController::class, 'iframe']);
+    // Route::get('messages/search', [MessagesController::class, 'search']);
+    // Route::get('messages/contacts', [MessagesController::class, 'getContacts']);
+    // Route::get('messages/fetch/{id}', [MessagesController::class, 'idFetchData']);
+  
 });
+
+
 
 
 /* Layout HomePage */
@@ -45,7 +57,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('me', 'AuthController@updateUser');
     Route::post('change-password', 'AuthController@changePassword');
     Route::post('forgot-password', 'AuthController@sendResetLinkEmail');
-});
+}); 
 
 /* User */
 Route::group(['prefix' => 'user', 'middleware' => ['api'],], function ($router) {
@@ -59,6 +71,9 @@ Route::group(['prefix' => 'user', 'middleware' => ['api'],], function ($router) 
 /* Location */
 Route::get('locations','LocationController@search')->name('api.location.search');
 Route::get('location/{id}','LocationController@detail')->name('api.location.detail');
+
+// Route::post('send-message', [MessagesController::class, 'sendMessage']);
+// Route::post('read-messages', [MessagesController::class, 'readMessages']);
 
 // Booking
 Route::group(['prefix'=>config('booking.booking_route_prefix')],function(){
@@ -80,6 +95,12 @@ Route::get('/gateways','BookingController@getGatewaysForApi');
 Route::get('news','NewsController@search')->name('api.news.search');
 Route::get('news/category','NewsController@category')->name('api.news.category');
 Route::get('news/{id}','NewsController@detail')->name('api.news.detail');
+
+
+//post
+Route::get('/profile-user/profile/{id_or_slug}', [ProfileController::class, 'profile']);
+Route::get('/profile-user/{id_or_slug}/reviews', [ProfileController::class, 'allReviews']);
+Route::get('/profile-user/{id_or_slug}/services', [ProfileController::class, 'allServices']);
 
 /* Media */
 Route::group(['prefix'=>'media','middleware' => 'auth:api'],function(){

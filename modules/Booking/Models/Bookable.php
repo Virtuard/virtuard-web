@@ -306,6 +306,8 @@
             return $this->belongsTo(User::class,'author_id');
         }
 
+        
+
         public function getDisplayPriceAttribute()
         {
             if (!empty($this->price) and $this->price > 0 and !empty($this->sale_price) and $this->sale_price > 0 and $this->price > $this->sale_price) {
@@ -408,7 +410,8 @@
                 'title'            => $translation->title,
                 'price'            => $this->price,
                 'sale_price'       => $this->sale_price,
-                // 'author'           => $this->author,
+                'author'           => $this->author->makeHidden('mediaFile'),
+                'photo_profile'    => $this->author->mediaFile ? url('/uploads/' . $this->author->mediaFile->file_path) : url('/uploads/images/virtuard.png'),
                 'discount_percent' => $this->discount_percent ?? null,
                 'image'            => get_file_url($this->image_id,'medium'),
                 'content'          => $translation->content,

@@ -5,6 +5,7 @@
     use App\Models\ChMessage as Message;
 use App\Models\FollowUser;
 use App\Models\Ipanorama;
+use App\Models\MediaFile;
 use App\Models\Story;
 use Illuminate\Notifications\Notifiable;
     use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -488,6 +489,8 @@ use Illuminate\Notifications\Notifiable;
             return $this->hasMany(UserPlan::class,'user_id');
         }
 
+        
+        
         public function userIpanoramaPlans(){
             return $this->hasMany(UserPlan::class, 'user_id')->where('end_date', '=', null);
         }
@@ -623,6 +626,11 @@ use Illuminate\Notifications\Notifiable;
         public function stories()
         {
             return $this->hasMany(Story::class);
+        }
+
+        public function mediaFile()
+        {
+            return $this->belongsTo(MediaFile::class, 'avatar_id');
         }
 
     }
