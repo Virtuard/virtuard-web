@@ -106,6 +106,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'message' => 'required',
             'media_user.*' => 'nullable|mimes:jpeg,png,mp4|max:20000',
         ], [
             'media_user.*.mimes' => 'File extention denied',

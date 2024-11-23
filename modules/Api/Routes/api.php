@@ -85,3 +85,12 @@ Route::get('news/{id}','NewsController@detail')->name('api.news.detail');
 Route::group(['prefix'=>'media','middleware' => 'auth:api'],function(){
     Route::post('/store','MediaController@store')->name("api.media.store");
 });
+
+/* Post */
+Route::get('/', 'PostController@index');
+Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function () {
+    Route::get('/', 'PostController@index');
+    Route::post('/','PostController@store');
+    Route::post('/{id}/comment','PostController@storeComment');
+    Route::delete('{id}','PostController@destroy');
+});
