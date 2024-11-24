@@ -635,3 +635,4 @@ use Illuminate\Notifications\Notifiable;
 
     }
 
+    
