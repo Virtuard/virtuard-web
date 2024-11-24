@@ -183,14 +183,12 @@ class AuthController extends Controller
     public function me()
     {
         $user = auth()->user();
-
-        if(!empty($user['avatar_id'])){
-            $user['avatar_url'] = get_file_url($user['avatar_id'],'full');
-            $user['avatar_thumb_url'] = get_file_url($user['avatar_id']);
-        }
-
+    
+        $user['avatar_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id', 'full');
+        $user['avatar_thumb_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id');
+    
         return $this->sendSuccess([
-            'data'=>$user
+            'data' => $user
         ]);
     }
 

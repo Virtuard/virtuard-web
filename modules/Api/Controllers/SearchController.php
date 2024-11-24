@@ -105,6 +105,40 @@ class SearchController extends Controller
         );
     }
 
+    public function searchByAuthor(Request $request)
+    {
+        $author_id = $request->query('author_id');
+        if (empty($author_id)) {
+            return $this->sendError(__("Author ID is required"));
+        }
+
+        $allServices = get_bookable_services();
+        $mergedData = collect();
+
+        foreach ($allServices as $type => $class) {
+            $query = new $class();
+            $rows = $query->search(['author_id' => $author_id])->get();
+
+            $filteredRows = $rows->filter(function ($item) use ($author_id) {
+                return $item->author->id == $author_id;
+            })->map(function ($item) use ($type) {
+                $data = $item->dataForApi();
+                $data['type'] = $type;
+                return $data;
+            });
+
+            if ($filteredRows->isNotEmpty()) {
+                $mergedData = $mergedData->merge($filteredRows);
+            }
+        }
+
+        $total = $mergedData->count();
+
+        return $this->sendSuccess([
+            'total' => $total,
+            'data' => $mergedData->values(),
+        ]);
+    }
 
     public function searchServices()
     {
