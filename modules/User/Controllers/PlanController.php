@@ -182,8 +182,8 @@ class PlanController extends FrontendController
             $new_user_plan->user_id = \Auth::id();
             
             //new referal concept
-            // $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
-            // $new_user_plan->referal_amount = $plan->price * 0.1;
+            $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
+            $new_user_plan->referal_amount = $plan->price * 0.1;
 
             $new_user_plan->save();
 
