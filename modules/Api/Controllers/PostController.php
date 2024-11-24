@@ -49,11 +49,13 @@ class PostController extends Controller
      *     ),
      *  )
      */
+
+     
     public function index(Request $request)
     {
         try {
             $posts = $this->userPost
-                ->with(['ipanorama', 'medias', 'likes', 'comments', 'author.mediaFile']) // Muat 'mediaFile' agar bisa diakses di transformasi
+                ->with(['ipanorama', 'medias', 'likes', 'comments', 'author.mediaFile']) 
                 ->when(isset($request->filter), function ($q) use ($request) {
                     if (auth()->check()) {
                         if ($request->filter == 'me') {
