@@ -70,13 +70,12 @@ class PostController extends Controller
                 ->paginate(20)
                 ->withQueryString();
 
-            // Transform the posts collection to add photo_profile and remove mediaFile
             $posts->getCollection()->transform(function ($post) {
                 if ($post->author) {
                     $post->author->photo_profile = $post->author->mediaFile
                         ? url('/uploads/' . $post->author->mediaFile->file_path)
                         : url('/uploads/images/virtuard.png');
-                    unset($post->author->mediaFile); // Hapus objek mediaFile
+                    unset($post->author->mediaFile); 
                 }
                 return $post;
             });
