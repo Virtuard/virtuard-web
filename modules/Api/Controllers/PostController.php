@@ -49,19 +49,21 @@ class PostController extends Controller
      *     ),
      *  )
      */
+
+     
     public function index(Request $request)
     {
         try {
             $posts = $this->userPost
-                ->with(['ipanorama', 'medias', 'likes', 'comments'])
+                ->with(['ipanorama', 'medias', 'likes', 'comments', 'author.mediaFile']) 
                 ->when(isset($request->filter), function ($q) use ($request) {
                     if (auth()->check()) {
                         if ($request->filter == 'me') {
                             $q->where('user_id', auth()->user()->id);
                         } elseif ($request->filter == 'friend') {
                             $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
-                            $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
-                            $ids = array_merge($following_ids, $follwer_ids);
+                            $follower_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
+                            $ids = array_merge($following_ids, $follower_ids);
                             $q->whereIn('user_id', $ids);
                         }
                     }
@@ -69,6 +71,16 @@ class PostController extends Controller
                 ->orderBy('id', 'desc')
                 ->paginate(20)
                 ->withQueryString();
+
+            $posts->getCollection()->transform(function ($post) {
+                if ($post->author) {
+                    $post->author->photo_profile = $post->author->mediaFile
+                        ? url('/uploads/' . $post->author->mediaFile->file_path)
+                        : url('/uploads/images/virtuard.png');
+                    unset($post->author->mediaFile); 
+                }
+                return $post;
+            });
 
             $memberCount = User::count();
             $idUser = Auth::id();
@@ -83,8 +95,8 @@ class PostController extends Controller
                             $q->where('user_id', auth()->user()->id);
                         } elseif ($request->filter == 'friend') {
                             $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
-                            $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
-                            $ids = array_merge($following_ids, $follwer_ids);
+                            $follower_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
+                            $ids = array_merge($following_ids, $follower_ids);
                             $q->whereIn('user_id', $ids);
                         }
                     }
@@ -114,7 +126,7 @@ class PostController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Post received failed',
-                'data' => $data
+                'data' => isset($data) ? $data : []
             ], 400);
         }
     }

@@ -36,4 +36,9 @@ class UserPost extends Model
     {
         return $this->hasMany(PostComment::class, 'post_id');
     }
+
+    public function author()
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
 }

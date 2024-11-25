@@ -23,6 +23,9 @@ class UserResource extends JsonResource
             'phone' => $this->phone,
             'business_name' => $this->business_name,
             'user_name' => $this->user_name,
+            'photo_profile' => $this->mediaFile
+            ? url('/uploads/' . $this->mediaFile->file_path)
+            : url('/images/avatar.png'),
         ];
     }
 }
