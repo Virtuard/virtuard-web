@@ -145,7 +145,7 @@ class PostController extends Controller
      *                 type="object",
      *                 @OA\Property(property="message", type="string", example="My new post message"),
      *                 @OA\Property(property="ipanorama_id", type="integer"),
-     *                 @OA\Property(property="media_user", type="array", items=@OA\Items(type="file"))
+     *                 @OA\Property(property="media_user", type="array", items=@OA\Items(type="file", format="binary"))
      *             )
      *         )
      *     ),
@@ -178,10 +178,6 @@ class PostController extends Controller
     {
         $this->validate($request, [
             'message' => 'required',
-            'media_user.*' => 'nullable|mimes:jpeg,png,mp4|max:20000',
-        ], [
-            'media_user.*.mimes' => 'File extention denied',
-            'media_user.*.max' => 'Maximum upload file 20MB'
         ]);
 
         DB::beginTransaction();
@@ -212,6 +208,8 @@ class PostController extends Controller
                     $mediaItem = PostMedia::create($dataMedia);
                 }
             }
+
+            $post->load('medias');
 
             DB::commit();
 
