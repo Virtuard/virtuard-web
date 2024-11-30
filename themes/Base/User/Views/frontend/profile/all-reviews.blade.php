@@ -6,10 +6,12 @@
         <div class="container">
             <div class="">
                 <div class="row">
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         @include('User::frontend.profile.sidebar')
-                    </div>
-                    <div class="col-md-9">
+                    </div> --}}
+                    <div class="col-md-12">
+                        @include('User::frontend.profile.main-profile')
+
                         <?php
                         $reviews = \Modules\Review\Models\Review::query()->where([
                             'vendor_id'=>$user->id,

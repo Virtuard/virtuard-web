@@ -21,6 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     // Message routes
-    Route::post('send-message', [MessagesController::class, 'sendMessage']);
-    Route::post('read-messages', [MessagesController::class, 'readMessages']);
+    // Route::post('send-message', [MessagesController::class, 'sendMessage']);
+    // Route::post('read-messages', [MessagesController::class, 'readMessages']);
 });
