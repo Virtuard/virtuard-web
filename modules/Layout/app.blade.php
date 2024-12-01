@@ -10,20 +10,26 @@
     @php event(new \Modules\Layout\Events\LayoutBeginHead()); @endphp
     @php
         $favicon = setting_item('site_favicon');
-        if(isset($seo_meta) && isset($seo_meta['seo_image'])) {
+        if (isset($seo_meta) && isset($seo_meta['seo_image'])) {
             $favicon = $seo_meta['seo_image'];
         }
     @endphp
-    @if ($favicon)
+    @if ($favicon && (request()->is('profile/*') || request()->is('user/profile')))
+        @php
+            $avatarUrl = $user->getAvatarUrl() ?? url('images/favicon.png');
+        @endphp
+        <link rel="icon" type="image/png" href="{{ $avatarUrl }}" />
+    @else
         @php
             $file = (new \Modules\Media\Models\MediaFile())->findById($favicon);
         @endphp
         @if (!empty($file))
             <link rel="icon" type="{{ $file['file_type'] }}" href="{{ asset('uploads/' . $file['file_path']) }}" />
-        @else:
+        @else
             <link rel="icon" type="image/png" href="{{ url('images/favicon.png') }}" />
         @endif
     @endif
+
 
     @include('Layout::parts.seo-meta')
     <link href="{{ asset('libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
@@ -40,7 +46,7 @@
     <link rel='stylesheet' id='google-font-css-css'
         href='https://fonts.googleapis.com/css?family=Poppins%3A300%2C400%2C500%2C600&display=swap' type='text/css'
         media='all' />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ asset('assets/css/custom-app.css') }}">
     {!! \App\Helpers\Assets::css() !!}
     {!! \App\Helpers\Assets::js() !!}
@@ -78,8 +84,8 @@
         {!! setting_item_with_lang_raw('footer_scripts') !!}
     @endif
     <script src="{{ asset('assets/js/custom-app.js') }}"></script>
-    @if(setting_item('google_translate_enable'))
-        <script src= "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    @if (setting_item('google_translate_enable'))
+        <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
         <script>
             function googleTranslateElementInit() {
                 if (window.innerWidth >= 768) {

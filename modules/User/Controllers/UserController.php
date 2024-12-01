@@ -2,6 +2,7 @@
 namespace Modules\User\Controllers;
 
 use App\Models\FollowUser;
+use App\Models\User;
 use App\Models\UserPost;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -24,6 +25,7 @@ use Modules\Vendor\Models\VendorRequest;
 use Validator;
 use Modules\Booking\Models\Booking;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Enquiry;
 use Illuminate\Support\Str;
 
@@ -264,17 +266,38 @@ class UserController extends FrontendController
 
     }
 
-    public function myProfile(){
+    public function myProfile()
+    {
         $user = auth()->user();
 
-        if(empty($user)){
+        $findUser = User::where('user_name', '=', $user->user_name)->first();
+    
+        if (empty($user)) {
             abort(404);
         }
+    
+        $followerCount = DB::table('follow_member')
+            ->where('follower_id', $user->id)
+            ->count();
+    
+        $followingCount = DB::table('follow_member')
+            ->where('user_id', $user->id)
+            ->count();
+            $profileUrl = url('/profile/' . $user->user_name);
 
-        $data['user'] = $user;
-        $data['page_title'] = $user->getDisplayName();
+    
+        $data = [
+            'user' => $user,
+            'page_title' => $user->getDisplayName(),
+            'followerCount' => $followerCount,
+            'followingCount' => $followingCount,
+            'profileUrl' => $profileUrl,
+            'avatarUrl' => $findUser->getAvatarUrl(),
+        ];
+    
         $this->registerCss('dist/frontend/module/user/css/profile.css');
-        
-        return view('User::frontend.profile.profile',$data);
+    
+        return view('User::frontend.profile.profile', $data);
     }
+    
 }

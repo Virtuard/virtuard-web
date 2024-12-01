@@ -6,10 +6,12 @@
         <div class="container">
             <div class="">
                 <div class="row">
-                    <div class="col-md-3">
+                    {{-- <div class="col-md-3">
                         @include('User::frontend.profile.sidebar')
-                    </div>
-                    <div class="col-md-9">
+                    </div> --}}
+                    <div class="col-md-12">
+                        @include('User::frontend.profile.main-profile')
+
                         @if(view()->exists(ucfirst($type).'::frontend.profile.service'))
                             @include(ucfirst($type).'::frontend.profile.service',['view_all'=>1])
                         @endif

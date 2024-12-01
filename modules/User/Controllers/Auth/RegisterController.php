@@ -63,7 +63,7 @@
                 'email.required'      => __('Email is required field'),
                 'email.email'         => __('Email invalidate'),
                 'password.required'   => __('Password is required field'),
-                'first_name.required' => __('The first name is required field'),
+                'first_name.required' =>    __('The first name is required field'),
                 'last_name.required'  => __('The last name is required field'),
                 'term.required'       => __('The terms and conditions field is required'),
             ];
@@ -134,7 +134,7 @@
                 $response = [
                     'error'    => false,
                     'messages' => false,
-                    'redirect' => $request->input('redirect') ?? $request->headers->get('referer') ?? url(app_get_locale(false, '/'))
+                    'redirect' => '/plan' ?? $request->headers->get('referer') ?? url(app_get_locale(false, '/'))
                 ];
 
                 if ($register_confirm_email) {

@@ -112,5 +112,5 @@ Route::get('/install/environment', 'InstallerController@redirectToWizard')->name
 
 Route::get('/affiliate-{id_user}_{username}', function ($id_user, $username) {
     Cookie::queue('affiliate_id', $id_user, 43200);
-    return redirect()->route('home');
+    return redirect()->route('auth.register');
 });
