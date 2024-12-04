@@ -5,13 +5,9 @@
             @if ($post->ipanorama)
                 <div class="col-4  mb-2">
                     <div class="gallery-item">
-                        <a class="preview-panorama cursor-pointer"
-                            data-id="{{ $post->ipanorama->id }}" 
-                            data-code="{{ $post->ipanorama->code }}"
-                            data-user_id="{{ $post->ipanorama->user_id }}">
-                            <img 
-                                src="{{ getThumbPanorama($post->ipanorama) }}" 
-                                class="gallery-image thumb-panorama" 
+                        <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
+                            data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->ipanorama->user_id }}">
+                            <img src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
                                 alt="image">
                         </a>
                     </div>
@@ -21,11 +17,8 @@
                 <div class="col-4  mb-2">
                     <div class="gallery-item">
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
-                            <img 
-                               class="img-responsive lazy loaded"
-                                data-src="{{ asset('uploads/' . $media->media) }}" 
-                                alt="image" 
-                                src="{{ asset('uploads/' . $media->media) }}"
+                            <img class="img-responsive lazy loaded" data-src="{{ asset('uploads/' . $media->media) }}"
+                                alt="image" src="{{ asset('uploads/' . $media->media) }}"
                                 data-was-processed="true" />
                         </a>
                     </div>
@@ -44,20 +37,33 @@
         position: relative;
         overflow: hidden;
         background: #f0f0f0;
-        aspect-ratio: 1 / 1; 
+        aspect-ratio: 1 / 1;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    
+    .gallery-item img {
+
+        height: 100%;
+        object-fit: fill;
+        transform: scale(0.5);
+        transform-origin: center center;
+        background-color: #f0f0f0;
+    }
+
+    @media (max-width: 768px) {
+        .gallery-item img {
+            transform: scale(0.2);
+        }
+    }
 
     .col-4 {
-        padding-left: 5px;  
+        padding-left: 5px;
         padding-right: 5px;
     }
 
     .col-4.mb-2 {
-        margin-bottom: 5px; 
+        margin-bottom: 5px;
     }
 </style>
