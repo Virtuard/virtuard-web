@@ -54,7 +54,7 @@
 
     @media (max-width: 768px) {
         .gallery-item img {
-            transform: scale(0.2);
+            transform: scale(0.1);
         }
     }
 
