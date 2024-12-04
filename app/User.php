@@ -3,6 +3,7 @@
     namespace App;
 
     use App\Models\ChMessage as Message;
+use App\Models\FollowMember;
 use App\Models\FollowUser;
 use App\Models\Ipanorama;
 use App\Models\MediaFile;
@@ -633,6 +634,7 @@ use Illuminate\Notifications\Notifiable;
             return $this->belongsTo(MediaFile::class, 'avatar_id');
         }
 
+    
     }
 
     

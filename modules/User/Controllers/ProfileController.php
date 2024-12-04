@@ -41,6 +41,28 @@ class ProfileController extends FrontendController
             ->where('user_id', $user->id)
             ->count();
 
+        $followers = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.user_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.follower_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($followers as $follower) {
+            $follower->avatar_url = $follower->file_path ? url('/uploads/' . $follower->file_path) : url('/images/avatar.png');
+        }
+
+        $following = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.follower_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.user_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($following as $follow) {
+            $follow->avatar_url = $follow->file_path ? url('/uploads/' . $follow->file_path) : url('/images/avatar.png');
+        }
+
         $profileUrl = url('/profile/' . $user->user_name);
         $avatarUrl = $user->getAvatarUrl();
 
@@ -50,6 +72,8 @@ class ProfileController extends FrontendController
         $data['followingCount'] = $followingCount;
         $data['profileUrl'] = $profileUrl;
         $data['avatarUrl'] = $avatarUrl;
+        $data['followers'] = $followers;
+        $data['following'] = $following;
 
         $this->registerCss('dist/frontend/module/user/css/profile.css');
         return view('User::frontend.profile.profile', $data);
@@ -73,6 +97,28 @@ class ProfileController extends FrontendController
         $followingCount = DB::table('follow_member')
             ->where('user_id', $user->id)
             ->count();
+        
+            $followers = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.user_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.follower_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($followers as $follower) {
+            $follower->avatar_url = $follower->file_path ? url('/uploads/' . $follower->file_path) : url('/images/avatar.png');
+        }
+
+        $following = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.follower_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.user_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($following as $follow) {
+            $follow->avatar_url = $follow->file_path ? url('/uploads/' . $follow->file_path) : url('/images/avatar.png');
+        }
 
         $profileUrl = url('/profile/' . $user->user_name);
         $avatarUrl = $user->getAvatarUrl();
@@ -83,6 +129,8 @@ class ProfileController extends FrontendController
         $data['followingCount'] = $followingCount;
         $data['profileUrl'] = $profileUrl;
         $data['avatarUrl'] = $avatarUrl;
+        $data['followers'] = $followers;
+        $data['following'] = $following;
 
         $data['breadcrumbs'] = [
             ['name' => $user->getDisplayName(), 'url' => route('user.profile', ['id' => $user->user_name ?? $user->id])],
@@ -107,15 +155,38 @@ class ProfileController extends FrontendController
             abort(404);
         }
         $followerCount = DB::table('follow_member')
-        ->where('follower_id', $user->id)
-        ->count();
+            ->where('follower_id', $user->id)
+            ->count();
 
-    $followingCount = DB::table('follow_member')
-        ->where('user_id', $user->id)
-        ->count();
+        $followingCount = DB::table('follow_member')
+            ->where('user_id', $user->id)
+            ->count();
+        
+            $followers = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.user_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.follower_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
 
-    $profileUrl = url('/profile/' . $user->user_name);
-    $avatarUrl = $user->getAvatarUrl();
+        foreach ($followers as $follower) {
+            $follower->avatar_url = $follower->file_path ? url('/uploads/' . $follower->file_path) : url('/images/avatar.png');
+        }
+
+        $following = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.follower_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.user_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($following as $follow) {
+            $follow->avatar_url = $follow->file_path ? url('/uploads/' . $follow->file_path) : url('/images/avatar.png');
+        }
+
+
+        $profileUrl = url('/profile/' . $user->user_name);
+        $avatarUrl = $user->getAvatarUrl();
 
         $data['user'] = $user;
         $data['page_title'] = __(':name - :type', ['name' => $user->getDisplayName(), 'type' => $moduleClass::getModelName()]);
@@ -128,6 +199,8 @@ class ProfileController extends FrontendController
         $data['followingCount'] = $followingCount;
         $data['profileUrl'] = $profileUrl;
         $data['avatarUrl'] = $avatarUrl;
+        $data['followers'] = $followers;
+        $data['following'] = $following;
         $data['services'] = $all[$type]::getVendorServicesQuery($user->id)->orderBy('id', 'desc')->paginate(6);
         $this->registerCss('dist/frontend/module/user/css/profile.css');
         return view('User::frontend.profile.all-services', $data);

@@ -225,14 +225,14 @@
         display: flex;
         gap: 10px;
         align-items: stretch;
-        
+
     }
 
     .ig-buttons .btn {
         flex: 1;
         display: flex;
-    justify-content: center; 
-    align-items: center; 
+        justify-content: center;
+        align-items: center;
         padding: 10px 20px;
         font-size: 16px;
         font-weight: bold;
@@ -358,9 +358,10 @@
     .contact-item span {
         line-height: 1.4;
     }
+
     .clamp-text {
         display: -webkit-box;
-        -webkit-line-clamp: 3; 
+        -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -368,7 +369,108 @@
 
     @media (max-width: 768px) {
         .clamp-text {
-            -webkit-line-clamp: 2; 
+            -webkit-line-clamp: 2;
+        }
+    }
+
+    .avatar-info {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+    }
+
+    .name {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .list-group-item {
+        padding: 10px;
+        border: none;
+        background-color: #fff;
+    }
+
+    .list-group-item .btn {
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 20px;
+    }
+
+
+    .btn-primary {
+        background-color: #0095f6;
+        border-color: #0095f6;
+    }
+
+    .btn-secondary {
+        background-color: #dbdbdb;
+        border-color: #dbdbdb;
+    }
+
+
+    .modal-header {
+        background-color: #fafafa;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .modal-body {
+        padding: 20px;
+    }
+
+    .modal-title {
+        font-weight: bold;
+    }
+
+    #searchFollowers,
+    #searchFollowing {
+        font-size: 14px;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 20px;
+        border: 1px solid #ddd;
+    }
+
+    #searchFollowers::placeholder,
+    #searchFollowing::placeholder {
+        font-style: italic;
+        color: #888;
+    }
+
+
+    .modal-dialog {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0 auto;
+        padding: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+
+    .modal-content {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+
+    @media (min-width: 768px) {
+        .modal-dialog {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
     }
 </style>
@@ -379,17 +481,14 @@
         </div>
     </div>
     <div class="profile-details ml-4 text-center text-md-left">
-        <h3
-            class="display-name d-flex align-items-center justify-content-center justify-content-md-start">
+        <h3 class="display-name d-flex align-items-center justify-content-center justify-content-md-start">
             {{ $user->getDisplayName() }}
             <div class="ml-2">
                 @if ($user->is_verified)
-                    <img data-toggle="tooltip" data-placement="top"
-                        src="{{ asset('icon/ico-vefified-1.svg') }}" title="{{ __('Verified') }}"
-                        alt="ico-vefified-1">
+                    <img data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-vefified-1.svg') }}"
+                        title="{{ __('Verified') }}" alt="ico-vefified-1">
                 @else
-                    <img data-toggle="tooltip" data-placement="top"
-                        src="{{ asset('icon/ico-not-vefified-1.svg') }}"
+                    <img data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-not-vefified-1.svg') }}"
                         title="{{ __('Not verified') }}" alt="ico-vefified-1">
                 @endif
             </div>
@@ -410,43 +509,140 @@
             @endif
         </div>
 
+        <!-- Followers Section -->
         <div class="follow-stats d-flex justify-content-center justify-content-md-start">
             <div class="stat text-center">
-                <p class="number">{{ $followerCount }}</p>
+                <p class="number cursor-pointer" id="show-followers" data-toggle="modal" data-target="#followersModal">
+                    {{ $followerCount }}</p>
                 <p class="label">Followers</p>
             </div>
             <div class="stat text-center ml-4">
-                <p class="number">{{ $followingCount }}</p>
+                <p class="number cursor-pointer" id="show-following" data-toggle="modal" data-target="#followingModal">
+                    {{ $followingCount }}</p>
                 <p class="label">Following</p>
             </div>
         </div>
-        @if (setting_item('vendor_show_email') || setting_item('vendor_show_phone'))
-    <div class="contact-info d-flex justify-content-between mt-3 flex-wrap">
-        @if (setting_item('vendor_show_email'))
-            <div class="contact-item d-flex align-items-center">
-                <i class="bi-envelope"></i> 
-                <span class="label ms-2">{{ $user->email }}</span>
-            </div>
-        @endif
 
-        @if (setting_item('vendor_show_phone'))
-            <div class="contact-item d-flex align-items-center">
-                <i class="bi-phone"></i> 
-                <span class="label ms-2">{{ $user->phone }}</span>
+        <!-- Followers Modal -->
+        <div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="followersModalLabel">Followers</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                        <ul class="list-group" id="followersList">
+                            @foreach ($followers as $follower)
+                                <li class="list-group-item d-flex align-items-center"
+                                    data-name="{{ strtolower($follower->name) }}">
+                                    <div class="avatar-info d-flex align-items-center w-100">
+                                        <img src="{{ $follower->avatar_url }}" alt="{{ $follower->name }}'s avatar"
+                                            class="avatar rounded-circle">
+
+                                        <a href="{{ url('profile/' . $follower->user_name) }}"
+                                            style="color: black; text-decoration: none;"
+                                            class="name ml-3">{{ $follower->name }}</a>
+
+                                        @auth
+                                            <form action="{{ route('member.store') }}" method="POST" class="ml-auto">
+                                                @csrf
+                                                <input type="hidden" name="action"
+                                                    value="{{ !is_following($follower->id) ? 'follow' : 'unfollow' }}">
+                                                <input type="hidden" name="follower_id" value="{{ $follower->id }}">
+                                                <button
+                                                    class="btn btn-{{ !is_following($follower->id) ? 'primary' : 'secondary' }}">
+                                                    {{ !is_following($follower->id) ? 'Follow' : 'Unfollow' }}
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button class="btn btn-primary ml-auto"
+                                                onclick="showModalLogin()">Follow</button>
+                                        @endauth
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Following Modal -->
+        <div class="modal fade" id="followingModal" tabindex="-1" role="dialog" aria-labelledby="followingModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog d-flex justify-content-center align-items-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="followingModalLabel">Following</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                        <ul class="list-group" id="followingList">
+                            @foreach ($following as $follow)
+                                <li class="list-group-item d-flex align-items-center"
+                                    data-name="{{ strtolower($follow->name) }}">
+                                    <div class="avatar-info d-flex align-items-center w-100">
+                                        <img src="{{ $follow->avatar_url }}" alt="{{ $follow->name }}'s avatar"
+                                            class="avatar rounded-circle">
+                                        <a href="{{ url('profile/' . $follow->user_name) }}"
+                                            style="color: black; text-decoration: none;"
+                                            class="name ml-3">{{ $follow->name }}</a>
+
+                                        @auth
+                                            <form action="{{ route('member.store') }}" method="POST" class="ml-auto">
+                                                @csrf
+                                                <input type="hidden" name="action"
+                                                    value="{{ !is_following($follow->id) ? 'follow' : 'unfollow' }}">
+                                                <input type="hidden" name="follower_id" value="{{ $follow->id }}">
+                                                <button
+                                                    class="btn btn-{{ !is_following($follow->id) ? 'primary' : 'secondary' }}">
+                                                    {{ !is_following($follow->id) ? 'Follow' : 'Unfollow' }}
+                                                </button>
+                                            </form>
+                                        @else
+                                            <button class="btn btn-primary ml-auto"
+                                                onclick="showModalLogin()">Follow</button>
+                                        @endauth
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (setting_item('vendor_show_email') || setting_item('vendor_show_phone'))
+            <div class="contact-info d-flex justify-content-between mt-3 flex-wrap">
+                @if (setting_item('vendor_show_email'))
+                    <div class="contact-item d-flex align-items-center">
+                        <i class="bi-envelope"></i>
+                        <span class="label ms-2">{{ $user->email }}</span>
+                    </div>
+                @endif
+
+                @if (setting_item('vendor_show_phone'))
+                    <div class="contact-item d-flex align-items-center">
+                        <i class="bi-phone"></i>
+                        <span class="label ms-2">{{ $user->phone }}</span>
+                    </div>
+                @endif
             </div>
         @endif
-    </div>
-@endif
 
         <div class="ig-buttons d-flex justify-content-between mt-4 flex-wrap">
             @auth
                 <form action="{{ route('member.store') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="action"
-                        value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
+                    <input type="hidden" name="action" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
                     <input type="hidden" name="follower_id" value="{{ $user->id }}">
-                    <button
-                        class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} ig-follow-btn">
+                    <button class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} ig-follow-btn">
                         {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}
                     </button>
                 </form>
@@ -470,14 +666,13 @@
         <p id="bio-text">
             {!! $user->bio !!}
         </p>
-        <span id="myBtn" class="show-more-btn"
-            style="cursor: pointer; color: #007bff; font-size: 14px;">Read more</span>
+        <span id="myBtn" class="show-more-btn" style="cursor: pointer; color: #007bff; font-size: 14px;">Read
+            more</span>
     </div>
 </div>
 
 
 
-{{-- modal --}}
 <div class="modal fade social-share-modal" id="social-share-modal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -500,7 +695,8 @@
                             </a>
                         </li>
                         <li>
-                            <a class="whatsapp" href="https://api.whatsapp.com/send?text={{ urlencode($profileUrl) }}"
+                            <a class="whatsapp"
+                                href="https://api.whatsapp.com/send?text={{ urlencode($profileUrl) }}"
                                 target="_blank" rel="noopener">
                                 <i class="fa fa-whatsapp fa-lg"></i>
                                 <p>{{ __('Whatsapp') }}</p>
@@ -569,51 +765,54 @@
 
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const bioText = document.getElementById("bio-text");
-    const readMoreBtn = document.getElementById("myBtn");
+    document.addEventListener("DOMContentLoaded", function() {
+        const bioText = document.getElementById("bio-text");
+        const readMoreBtn = document.getElementById("myBtn");
 
-    const originalText = bioText.textContent; 
-    let maxChars; 
+        const originalText = bioText.textContent;
+        let maxChars;
 
-    function setMaxChars() {
-        if (window.innerWidth <= 768) {
-            maxChars = 150; 
-        } else {
-            maxChars = 300; 
+        function setMaxChars() {
+            if (window.innerWidth <= 768) {
+                maxChars = 150;
+            } else {
+                maxChars = 300;
+            }
         }
-    }
 
-    setMaxChars();
-
-    function truncateText() {
-        if (originalText.length > maxChars) {
-            bioText.textContent = originalText.substring(0, maxChars) + "...";
-            readMoreBtn.style.display = "inline"; 
-        } else {
-            bioText.textContent = originalText; 
-            readMoreBtn.style.display = "none"; 
-        }
-    }
-
-    window.addEventListener("resize", function () {
         setMaxChars();
+
+        function truncateText() {
+            if (originalText.length > maxChars) {
+                bioText.textContent = originalText.substring(0, maxChars) + "...";
+                readMoreBtn.style.display = "inline";
+            } else {
+                bioText.textContent = originalText;
+                readMoreBtn.style.display = "none";
+            }
+        }
+
+        window.addEventListener("resize", function() {
+            setMaxChars();
+            truncateText();
+        });
+
+        readMoreBtn.addEventListener("click", function() {
+            if (bioText.textContent.endsWith("...")) {
+                bioText.textContent = originalText;
+                readMoreBtn.textContent = "Read less";
+            } else {
+                truncateText();
+                readMoreBtn.textContent = "Read more";
+            }
+        });
+
         truncateText();
     });
-
-    readMoreBtn.addEventListener("click", function () {
-        if (bioText.textContent.endsWith("...")) {
-            bioText.textContent = originalText; 
-            readMoreBtn.textContent = "Read less";
-        } else {
-            truncateText(); 
-            readMoreBtn.textContent = "Read more";
-        }
-    });
-
-    truncateText();
-});
-
 </script>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+{{-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script> --}}

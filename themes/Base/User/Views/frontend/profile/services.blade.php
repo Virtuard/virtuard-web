@@ -4,8 +4,8 @@ if (empty($types)) return;
 $list_service = [];
 ?>
 <div class="profile-service-tabs">
-    <div class="service-nav-tabs">
-        <ul class="nav nav-tabs w-100">
+    <div class="service-nav-tabs mb-2">
+        <ul class="nav nav-tabs w-100 flex-nowrap">
             @php $i = 0; @endphp
             <li class="nav-item">
                 <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">Profile</a>
@@ -18,15 +18,15 @@ $list_service = [];
                     $services = $moduleClass::getVendorServicesQuery($user->id)->orderBy('id','desc')->paginate(6);
                     if(empty($services->total())) continue;
                     $list_service[$type] = $services;
-
+    
                     $attrType = get_attribute_listing($type);
                     $typeKey = $attrType['old_key'];
                     $typeText = $attrType['new_key'];
                 @endphp
-                    <li class="nav-item">
-                        <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$typeKey}}">{{ $typeText }}</a>
-                    </li>
-                @php $i++; @endphp
+                <li class="nav-item">
+                    <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$typeKey}}">{{ $typeText }}</a>
+                </li>
+            @php $i++; @endphp
             @endforeach
         </ul>
     </div>
@@ -50,3 +50,27 @@ $list_service = [];
         @endforeach
     </div>
 </div>
+
+
+<style>
+    .nav-tabs {
+        display: flex;
+        flex-wrap: nowrap; 
+        gap: 10px; 
+    }
+
+    .nav-item {
+        flex: 0 0 auto; 
+    }
+
+    @media (max-width: 768px) {
+        .nav-tabs {
+            overflow-x: auto; 
+            -webkit-overflow-scrolling: touch; 
+        }
+
+        .nav-item {
+            flex: 0 0 auto; 
+        }
+    }
+</style>
