@@ -22,7 +22,7 @@
                     <div class="gallery-item">
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
                             <img 
-                                class="img-responsive lazy loaded"
+                               class="img-responsive lazy loaded"
                                 data-src="{{ asset('uploads/' . $media->media) }}" 
                                 alt="image" 
                                 src="{{ asset('uploads/' . $media->media) }}"
@@ -50,12 +50,7 @@
         align-items: center;
     }
 
-    .gallery-item img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; 
-        background-color: #f0f0f0; 
-    }
+    
 
     .col-4 {
         padding-left: 5px;  
