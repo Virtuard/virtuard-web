@@ -1,46 +1,68 @@
-<div class="bravo-list-event layout_normal">
-    <div class="sub-title"></div>
-    <div class="list-item">
-        <div class="row">
-            @forelse ($userPosts as $post)
-                @if ($post->ipanorama)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="item-loop" style="padding-bottom: 0;">
-                            <div class="thumb-image">
-                                <a 
-                                    class="preview-panorama cursor-pointer"
-                                    data-id="{{ $post->ipanorama->id }}" 
-                                    data-code="{{ $post->ipanorama->code }}"
-                                    data-user_id="{{ $post->ipanorama->user_id }}"
-                                    >
-                                    <img id="thumb-panorama-{{ $post->ipanorama->id }}" src="{{ getThumbPanorama($post->ipanorama) }}"
-                                        class="gallery-image thumb-panorama" alt="image">
-                                </a>
-                            </div>
-                        </div>
+<!-- HTML -->
+<div class="container">
+    <div class="row mt-2">
+        @foreach ($userPosts as $post)
+            @if ($post->ipanorama)
+                <div class="col-4  mb-2">
+                    <div class="gallery-item">
+                        <a class="preview-panorama cursor-pointer"
+                            data-id="{{ $post->ipanorama->id }}" 
+                            data-code="{{ $post->ipanorama->code }}"
+                            data-user_id="{{ $post->ipanorama->user_id }}">
+                            <img 
+                                src="{{ getThumbPanorama($post->ipanorama) }}" 
+                                class="gallery-image thumb-panorama" 
+                                alt="image">
+                        </a>
                     </div>
-                @endif
-                @forelse ($post->medias as $media)
-                    <div class="col-lg-4 col-md-6">
-                        <div class="item-loop" style="padding-bottom: 0;">
-                            <div class="thumb-image">
-                                <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
-                                    <img class="img-responsive lazy loaded"
-                                        data-src="{{ asset('uploads/' . $media->media) }}" alt="image" src="{{ asset('uploads/' . $media->media) }}"
-                                        data-was-processed="true" />
-                                </a>
-                            </div>
-                        </div>
+                </div>
+            @endif
+            @foreach ($post->medias as $media)
+                <div class="col-4  mb-2">
+                    <div class="gallery-item">
+                        <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
+                            <img 
+                                class="img-responsive lazy loaded"
+                                data-src="{{ asset('uploads/' . $media->media) }}" 
+                                alt="image" 
+                                src="{{ asset('uploads/' . $media->media) }}"
+                                data-was-processed="true" />
+                        </a>
                     </div>
-                @empty
-                @endforelse
-            @empty
-            @endforelse
-        </div>
+                </div>
+            @endforeach
+        @endforeach
     </div>
 </div>
-
 
 <section class="section-modal">
     @include('vendor.ipanorama.demo.includes.ipanorama-modal')
 </section>
+
+<style>
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        background: #f0f0f0;
+        aspect-ratio: 1 / 1; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; 
+        background-color: #f0f0f0; 
+    }
+
+    .col-4 {
+        padding-left: 5px;  
+        padding-right: 5px;
+    }
+
+    .col-4.mb-2 {
+        margin-bottom: 5px; 
+    }
+</style>

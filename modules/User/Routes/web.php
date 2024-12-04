@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Route;
+use Modules\User\Controllers\ProfileController;
+
 Route::group(['prefix'=>'user','middleware' => ['auth','verified']],function(){
     Route::match(['get'],'/dashboard','UserController@dashboard')->name("vendor.dashboard");
     Route::post('/reloadChart','UserController@reloadChart');
@@ -58,6 +60,7 @@ Route::group(['prefix'=>'profile'],function(){
     Route::match(['get'],'/{id}','ProfileController@profile')->name("user.profile");
     Route::match(['get'],'/{id}/reviews','ProfileController@allReviews')->name("user.profile.reviews");
     Route::match(['get'],'/{id}/services','ProfileController@allServices')->name("user.profile.services");
+    
 });
 
 //Newsletter

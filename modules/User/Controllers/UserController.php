@@ -285,7 +285,39 @@ class UserController extends FrontendController
             ->count();
             $profileUrl = url('/profile/' . $user->user_name);
 
-    
+            $followers = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.user_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.follower_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'media_files.file_path')
+            ->get();
+
+        foreach ($followers as $follower) {
+            $follower->avatar_url = $follower->file_path ? url('/uploads/' . $follower->file_path) : url('/images/avatar.png');
+        }
+
+        $followers = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.user_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.follower_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'media_files.file_path')
+            ->get();
+
+        foreach ($followers as $follower) {
+            $follower->avatar_url = $follower->file_path ? url('/uploads/' . $follower->file_path) : url('/images/avatar.png');
+        }
+
+        $following = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.follower_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.user_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($following as $follow) {
+            $follow->avatar_url = $follow->file_path ? url('/uploads/' . $follow->file_path) : url('/images/avatar.png');
+        }
+        
         $data = [
             'user' => $user,
             'page_title' => $user->getDisplayName(),
@@ -293,6 +325,8 @@ class UserController extends FrontendController
             'followingCount' => $followingCount,
             'profileUrl' => $profileUrl,
             'avatarUrl' => $findUser->getAvatarUrl(),
+            'followers' => $followers,
+            'following' => $following,
         ];
     
         $this->registerCss('dist/frontend/module/user/css/profile.css');
