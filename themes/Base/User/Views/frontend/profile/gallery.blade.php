@@ -13,6 +13,8 @@
                     </div>
                 </div>
             @endif
+            @endforeach
+
             @foreach ($post->medias as $media)
                 <div class="col-4  mb-2">
                     <div class="gallery-item">
@@ -23,7 +25,6 @@
                         </a>
                     </div>
                 </div>
-            @endforeach
         @endforeach
     </div>
 </div>
