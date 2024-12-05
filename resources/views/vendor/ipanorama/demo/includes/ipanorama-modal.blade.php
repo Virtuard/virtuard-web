@@ -16,7 +16,10 @@
                      style=" position: relative; width: 100%; height: 450px; z-index: 1;">
                  </div>
                  @else
-                 <p class="text-center">{{ __("If you don't preview the 360 tour. The uploader does not have a subscription plan or the subscription has expired.") }}</p>
+                 <div id="mypanorama" class="load-panorama"
+                     style=" position: relative; width: 100%; height: 450px; z-index: 1;">
+                 </div>
+                 {{-- <p class="text-center">{{ __("If you don't preview the 360 tour. The uploader does not have a subscription plan or the subscription has expired.") }}</p> --}}
                  @endif
                 @endisset
              </div>
