@@ -100,11 +100,36 @@ class UserController extends FrontendController
         $followingUser = FollowUser::where('follower_id', Auth::user()->id)->count();
         $userPosts = UserPost::with('medias', 'ipanorama')->where('user_id', $user->id)->get();
         
+        $followers = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.user_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.follower_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($followers as $follower) {
+            $follower->avatar_url = $follower->file_path ? url('/uploads/' . $follower->file_path) : url('/images/avatar.png');
+        }
+
+        $following = DB::table('follow_member')
+            ->join('users', 'users.id', '=', 'follow_member.follower_id')
+            ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
+            ->where('follow_member.user_id', $user->id)
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
+            ->get();
+
+        foreach ($following as $follow) {
+            $follow->avatar_url = $follow->file_path ? url('/uploads/' . $follow->file_path) : url('/images/avatar.png');
+        }
+
+
         $data = [
             'userPosts' => $userPosts,
             'dataUser' => $user,
             'followed' => $followUser,
             'following' => $followingUser,
+           'followers' => $followers,
+           'following' =>  $following,
             'page_title' => __("Profile"),
             'breadcrumbs' => [
                 [
@@ -289,7 +314,7 @@ class UserController extends FrontendController
             ->join('users', 'users.id', '=', 'follow_member.user_id')
             ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
             ->where('follow_member.follower_id', $user->id)
-            ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'media_files.file_path')
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
             ->get();
 
         foreach ($followers as $follower) {
@@ -300,7 +325,7 @@ class UserController extends FrontendController
             ->join('users', 'users.id', '=', 'follow_member.user_id')
             ->leftJoin('media_files', 'media_files.id', '=', 'users.avatar_id')
             ->where('follow_member.follower_id', $user->id)
-            ->select('users.id', 'users.name', 'users.email', 'users.created_at', 'media_files.file_path')
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at','users.user_name', 'media_files.file_path')
             ->get();
 
         foreach ($followers as $follower) {
