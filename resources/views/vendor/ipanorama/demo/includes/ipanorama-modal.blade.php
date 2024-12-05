@@ -10,7 +10,7 @@
                  </button>
              </div>
              <div class="modal-body">
-                @isset($post)
+                {{-- @isset($post) --}}
                 {{-- and $post->ipanorama->author->checkUserPlanStatus() --}}
                 @if ($post->ipanorama && $post->ipanorama->status == 'publish')
                  <div id="mypanorama" class="load-panorama"
@@ -19,7 +19,7 @@
                  @else
                  <p class="text-center">{{ __("If you don't preview the 360 tour. The uploader does not have a subscription plan or the subscription has expired.") }}</p>
                  @endif
-                @endisset
+                {{-- @endisset --}}
              </div>
              <div class="modal-footer">
                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
