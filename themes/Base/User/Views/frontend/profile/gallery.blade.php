@@ -1,4 +1,4 @@
-<!-- HTML -->
+{{-- <!-- HTML -->
 <div class="container">
     <div class="row mt-2">
         @foreach ($userPosts as $post)
@@ -13,8 +13,6 @@
                     </div>
                 </div>
             @endif
-            @endforeach
-
             @foreach ($post->medias as $media)
                 <div class="col-4  mb-2">
                     <div class="gallery-item">
@@ -25,7 +23,50 @@
                         </a>
                     </div>
                 </div>
+            @endforeach
         @endforeach
+    </div>
+</div> --}}
+
+<div class="bravo-list-event layout_normal">
+    <div class="sub-title"></div>
+    <div class="list-item">
+        <div class="row">
+            @forelse ($userPosts as $post)
+                @if ($post->ipanorama)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="item-loop" style="padding-bottom: 0;">
+                            <div class="thumb-image">
+                                <a 
+                                    class="preview-panorama cursor-pointer"
+                                    data-id="{{ $post->ipanorama->id }}" 
+                                    data-code="{{ $post->ipanorama->code }}"
+                                    data-user_id="{{ $post->ipanorama->user_id }}"
+                                    >
+                                    <img id="thumb-panorama-{{ $post->ipanorama->id }}" src="{{ getThumbPanorama($post->ipanorama) }}"
+                                        class="gallery-image thumb-panorama" alt="image">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                @forelse ($post->medias as $media)
+                    <div class="col-lg-4 col-md-6">
+                        <div class="item-loop" style="padding-bottom: 0;">
+                            <div class="thumb-image">
+                                <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
+                                    <img class="img-responsive lazy loaded"
+                                        data-src="{{ asset('uploads/' . $media->media) }}" alt="image" src="{{ asset('uploads/' . $media->media) }}"
+                                        data-was-processed="true" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                @endforelse
+            @empty
+            @endforelse
+        </div>
     </div>
 </div>
 
