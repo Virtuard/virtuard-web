@@ -2,13 +2,16 @@
 <div class="container">
     <div class="row mt-2">
         @foreach ($userPosts as $post)
-            @if ($post->ipanorama && $post->ipanorama->status == 'publish')
+            @if ($post->ipanorama)
                 <div class="col-4  mb-2">
                     <div class="gallery-item">
                         <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
                             data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->ipanorama->user_id }}">
-                            <img  id="thumb-panorama-{{ $post->ipanorama->id }}" src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
-                                alt="image">
+                            <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
+                            class="thumb-panorama preview-panorama cursor-pointer"
+                            data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}"
+                            data-user_id="{{ $post->ipanorama->user_id }}"
+                            >
                         </a>
                     </div>
                 </div>
