@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row mt-2">
         @foreach ($userPosts as $post)
-            @if ($post->ipanorama)
+            @if ($post->ipanorama && $post->ipanorama->status == 'publish')
                 <div class="col-4  mb-2">
                     <div class="gallery-item">
                         <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
