@@ -24,11 +24,30 @@
                                     <span class="tag">{{__('Recommended')}}</span>
                                 @endif
                                 <div class="title">{{$translate->title}}</div>
-                                <div class="price">{{$plan->price ? format_money($plan->price) : __('Free')}}
+                                <div class="price">
+                                    @if($hasAffiliatePlan) 
+                                        @if($plan->price)
+                                        <del style="font-size: 0.8em; color: #999; text-decoration: line-through;">{{ format_money($plan->price) }}</del>
+                                        @endif
+                                        
+                                        @if($plan->price)
+                                        <span style="font-size: 0.8em;">{{ format_money($plan->price * 0.9) }}</span>
+                                        @else
+                                            {{ __('Free') }}
+                                        @endif
+                                    @else
+                                        @if($plan->price)
+                                            {{ format_money($plan->price) }}
+                                        @else
+                                            {{ __('Free') }}
+                                        @endif
+                                    @endif
+                                
                                     @if($plan->price && $plan->duration)
-                                    <span class="duration">/ {{$plan->duration > 1 ? $plan->duration : ''}} {{$plan->duration_type_text}}</span>
+                                        <span class="duration">/ {{$plan->duration > 1 ? $plan->duration : ''}} {{$plan->duration_type_text}}</span>
                                     @endif
                                 </div>
+                                
                                 <div class="table-content">
                                     {!! clean($translate->content) !!}
                                 </div>
@@ -71,7 +90,18 @@
                                     <span class="tag">{{__('Recommended')}}</span>
                                 @endif
                                 <div class="title">{{$plan->title}}</div>
-                                <div class="price">{{format_money($plan->annual_price)}} <span class="duration">/ {{__("year")}}</span></div>
+                                <div class="price">
+                                    @if($hasAffiliatePlan) <!-- Cek jika pengguna memiliki affiliate_plan_user_id -->
+                                        <!-- Tampilkan harga yang dicoret -->
+                                        <del style="font-size: 0.8em; color: #999; text-decoration: line-through;">{{ format_money($plan->annual_price) }}</del>
+                                        <!-- Tampilkan harga setelah diskon 10% -->
+                                        <span style="font-size: 0.8em;">{{ format_money($plan->annual_price * 0.9) }}</span>
+                                    @else
+                                        <!-- Tampilkan harga normal jika tidak ada affiliate_plan_user_id -->
+                                        <span>{{ format_money($plan->annual_price) }}</span>
+                                    @endif
+                                    <span class="duration">/ {{ __("year") }}</span>
+                                </div>
                                 <div class="table-content">
                                     {!! clean($plan->content) !!}
                                 </div>

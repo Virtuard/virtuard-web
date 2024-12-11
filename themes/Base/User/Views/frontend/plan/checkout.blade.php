@@ -6,10 +6,10 @@
     @php
         $translate = $plan->translate();
         if(request()->query('annual')!=1){
-            $price = $plan->price;
+            $price = $hasAffiliatePlan ? $plan->price * 0.9 : $plan->price;
             $duration_text = $plan->duration_type_text;
         }else{
-            $price = $plan->annual_price;
+            $price = $hasAffiliatePlan ? $plan->annual_price * 0.9 : $plan->annual_price;
             $duration_text = __('Year');
         }
             $term_conditions = setting_item('booking_term_conditions');
@@ -30,11 +30,24 @@
                             <div class="pricing-table col-12">
                                 <div class="inner-box">
                                     <div class="title">{{$translate->title}}</div>
-                                    <div class="price">{{ format_money($price)}}
+                                    
+                                    <div class="price">
+                                      
+                                        <span>{{ format_money($price) }}</span>
+                                        
                                         @if($price)
                                             <span class="duration">/ {{$duration_text}}</span>
                                         @endif
+                                        
                                     </div>
+                                    @if($hasAffiliatePlan)
+                                        <p class="text-muted" style="color: green;">You are using a price discounted by 10%.</p>
+                                        @endif
+                                    {{-- <div class="price">{{ format_money($price)}}
+                                        @if($price)
+                                            <span class="duration">/ {{$duration_text}}</span>
+                                        @endif
+                                    </div> --}}
                                     <div class="table-content">
                                         {!! clean($translate->content) !!}
                                     </div>

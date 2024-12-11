@@ -4,6 +4,7 @@ namespace Modules\User\Controllers;
 
 use App\Helpers\ReCaptchaEngine;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\FrontendController;
 use Modules\User\Events\CreatePlanRequest;
@@ -23,13 +24,36 @@ class PlanController extends FrontendController
         if (!auth()->check()) {
             return redirect(route('login'));
         }
+
+        $user = auth()->user();
+
+        $hasValidUserPlan = DB::table('bravo_booking_payments')
+            ->where('create_user', $user->id)
+            ->whereNotNull('affiliate_id')
+            ->where('status', 'completed')
+            ->exists();
+
+        if ($hasValidUserPlan) {
+            $hasAffiliatePlan =  false;
+        } else {
+            $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+        }
+
         $plans = Plan::query()
-            ->where('role_id', auth()->user()->role_id)
+            ->where('role_id', $user->role_id)
             ->whereStatus('publish')
             ->get();
-        $data = ['page_title' => __('Pricing Packages'), 'plans' => $plans, 'user' => auth()->user()];
+
+        $data = [
+            'page_title' => __('Pricing Packages'),
+            'plans' => $plans,
+            'user' => $user,
+            'hasAffiliatePlan' => $hasAffiliatePlan
+        ];
+
         return view('User::frontend.plan.index', $data);
     }
+
 
     public function myPlan()
     {
@@ -39,16 +63,33 @@ class PlanController extends FrontendController
         if (!auth()->user()->user_plan) {
             return redirect(route('plan'));
         }
+        $user = auth()->user();
+
 
         $plans = Plan::query()
             ->where('role_id', auth()->user()->role_id)
             ->whereStatus('publish')
             ->get();
 
+
+        $hasValidUserPlan = DB::table('bravo_booking_payments')
+            ->where('create_user', $user->id)
+            ->whereNotNull('affiliate_id')
+            ->where('status', 'completed')
+            ->exists();
+
+        if ($hasValidUserPlan) {
+            $hasAffiliatePlan =  false;
+        } else {
+            $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+        }
+
         $data = [
             'user' => auth()->user(),
             'page_title' => __('My Plan'),
             'menu_active' => 'my_plan',
+            'hasAffiliatePlan' => $hasAffiliatePlan,
+
             'breadcrumbs' => [
                 [
                     'name' => __('My plans'),
@@ -72,6 +113,19 @@ class PlanController extends FrontendController
 
         $user = auth()->user();
 
+        $hasValidUserPlan = DB::table('bravo_booking_payments')
+            ->where('create_user', $user->id)
+            ->whereNotNull('affiliate_id')
+            ->where('status', 'completed')
+            ->exists();
+
+        if ($hasValidUserPlan) {
+            $hasAffiliatePlan =  false;
+        } else {
+            $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+        }
+
+
         $plan_page = route('plan');
         $gateways = app()
             ->make(\Modules\Booking\Controllers\BookingController::class)
@@ -89,8 +143,15 @@ class PlanController extends FrontendController
                 ->with('warning', __("This plan doesn't have annual pricing"));
         }
 
-        return view('User::frontend.plan.checkout', ['plan' => $plan, 'user' => $user, 'gateways' => $gateways]);
+        return view('User::frontend.plan.checkout', [
+            'plan' => $plan,
+            'user' => $user,
+            'gateways' => $gateways,
+            'hasAffiliatePlan' => $hasAffiliatePlan
+
+        ]);
     }
+
 
     public function buyProcess(Request $request, $id)
     {
@@ -174,13 +235,12 @@ class PlanController extends FrontendController
             $new_user_plan->start_date = date('Y-m-d H:i:s');
             if ($plan->duration) {
                 $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
-           
             }
             $new_user_plan->max_service = $plan->max_service;
             $new_user_plan->max_ipanorama = $plan->max_ipanorama;
             $new_user_plan->plan_data = $plan;
             $new_user_plan->user_id = \Auth::id();
-            
+
             //new referal concept
             $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
             $new_user_plan->referal_amount = $plan->price * 0.1;
@@ -193,6 +253,18 @@ class PlanController extends FrontendController
                 ->route('user.plan')
                 ->with('success', __('Purchased user package successfully'));
         } else {
+            $hasValidUserPlan = DB::table('bravo_booking_payments')
+                ->where('create_user', $user->id)
+                ->whereNotNull('affiliate_id')
+                ->where('status', 'completed')
+                ->exists();
+
+            if ($hasValidUserPlan) {
+                $hasAffiliatePlan =  false;
+            } else {
+                $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+            }
+
             $is_annual = !empty($request->input('annual')) ? true : false;
 
             $payment = new PlanPayment();
@@ -200,7 +272,7 @@ class PlanController extends FrontendController
             $payment->object_id = $plan->id;
             $payment->status = 'draft';
             $payment->payment_gateway = $payment_gateway;
-            $payment->amount = $is_annual ? $plan->annual_price : $plan->price;
+            $payment->amount =  $hasAffiliatePlan ? ($is_annual ? $plan->annual_price * 0.9 : $plan->price * 0.9) : ($is_annual ? $plan->annual_price : $plan->price);
             $payment->user_id = auth()->id();
             $payment->affiliate_id = $user->affiliate_plan_user_id;
 
@@ -210,7 +282,7 @@ class PlanController extends FrontendController
 
             $user->applyPlan($plan, $payment->amount, $is_annual, false);
 
-            
+            // dd($payment->amount);
 
             $res = $gatewayObj->processNormal($payment);
 
@@ -219,12 +291,15 @@ class PlanController extends FrontendController
             $redirect_url = $res[2] ?? null;
             if ($success) {
                 event(new CreatePlanRequest($user));
-        
-                $new_user_plan = UserPlan::query()->where('user_id', $user->id)->where('plan_id', $plan->id)->first();
+
+                $new_user_plan = UserPlan::query()->where('user_id', $user->id)
+                    ->where('plan_id', $plan->id)->where('price', $payment->amount)
+
+                    ->first();
                 if (empty($new_user_plan)) {
-                    $new_user_plan = new UserPlan();
+                    // $new_user_plan = new UserPlan();
                 }
-        
+
                 $new_user_plan->plan_id = $plan->id;
                 $new_user_plan->price = $payment->amount;
                 $new_user_plan->start_date = date('Y-m-d H:i:s');
@@ -236,10 +311,10 @@ class PlanController extends FrontendController
                 $new_user_plan->plan_data = $plan;
                 $new_user_plan->user_id = $user->id;
                 $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
-                $new_user_plan->referal_amount = $payment->amount * 0.1;
-        
+                $new_user_plan->referal_amount = $plan->price * 0.1;
+
                 $new_user_plan->save();
-        
+
 
                 if (empty($redirect_url) and $payment->status == 'completed') {
                     return redirect()
@@ -265,6 +340,7 @@ class PlanController extends FrontendController
             }
         }
     }
+
 
     public function thankYou(Request $request)
     {

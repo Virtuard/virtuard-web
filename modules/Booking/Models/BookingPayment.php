@@ -14,12 +14,15 @@ class BookingPayment extends BaseModel
     public static function getReferralHistory($userId)
     {
         return self::where('referal_user_id', $userId)
+        ->where('status', 1)
         ->orderBy('created_at', 'desc');
     }
 
     public static function getReferralAdminHistory()
     {
-        return self::query()->paginate(10); 
+        return self::query()
+        ->where('status', 1)
+        ->paginate(10);
     }
 
     public function user()
