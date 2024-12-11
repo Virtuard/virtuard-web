@@ -1,4 +1,5 @@
 <?php
+
 namespace Modules\Booking\Models;
 
 use App\BaseModel;
@@ -41,67 +42,79 @@ class Payment extends BaseModel
         return md5(uniqid() . rand(0, 99999));
     }
 
-    public function notifyObject(){
-        switch ($this->object_model){
+    public function notifyObject()
+    {
+        switch ($this->object_model) {
             case "wallet_deposit":
                 $user = User::find($this->object_id);
-                if($this->status != 'completed'){
+                if ($this->status != 'completed') {
                     $url = route('user.wallet');
-                    return [false,__("Payment fail"),$url];
+                    return [false, __("Payment fail"), $url];
                 }
-                if(!empty($user)){
+                if (!empty($user)) {
                     try {
                         $user->creditPaymentUpdate($this);
-                    }catch (\Exception $exception){
+                    } catch (\Exception $exception) {
                         $url =  route('user.wallet');
-                        return [false,$exception->getMessage(),$url];
+                        return [false, $exception->getMessage(), $url];
                     }
 
                     $url = route('user.wallet');
-                    return [true,__("Payment updated"),$url];
+                    return [true, __("Payment updated"), $url];
                 }
 
                 break;
             case "plan":
                 $userRequest = $this->getMeta('user_request');
-                if(!empty($userRequest)){
+                if (!empty($userRequest)) {
                     $user = User::find($userRequest);
-                }else{
+                } else {
                     $user = $this->user;
                 }
-                if($this->status != 'completed'){
+                if ($this->status != 'completed') {
                     $url = route('user.plan');
-                    return [false,__("Plan fail"),$url];
+                    return [false, __("Plan fail"), $url];
                 }
 
-                if(!empty($user)){
+                if (!empty($user)) {
                     try {
                         $plan = Plan::find($this->object_id);
                         $is_annual = $this->getMeta('annual');
-                        $price = $is_annual?$plan->annual_price:$plan->price;
-                        $user->applyPlan($plan,$price,$is_annual);
 
-                    }catch (\Exception $exception){
+                        $hasValidUserPlan = DB::table('bravo_user_plan')
+                            ->where('update_user', $user->id)
+                            ->where('status', 1)
+                            ->exists();
+
+                        if ($hasValidUserPlan) {
+                            $hasAffiliatePlan = false;
+                        } else {
+                            $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+                        }
+                        $price = $hasAffiliatePlan ? ($is_annual ? $plan->annual_price * 0.9 : $plan->price * 0.9) : ($is_annual ? $plan->annual_price : $plan->price);
+                        $user->applyPlan($plan, $price, $is_annual);
+                    } catch (\Exception $exception) {
                         $url =  route('user.plan');
-                        return [false,$exception->getMessage(),$url];
+                        return [false, $exception->getMessage(), $url];
                     }
 
                     $url = route('user.plan');
-                    return [true,__("Plan updated"),$url];
+                    return [true, __("Plan updated"), $url];
                 }
-            break;
-
+                break;
         }
     }
 
-    public function markAsFailed($logs = ''){
+    public function markAsFailed($logs = '')
+    {
         $this->status = 'fail';
         $this->logs = \GuzzleHttp\json_encode($logs);
         $this->save();
         $this->sendUpdatedPurchaseEmail();
         return $this->notifyObject();
     }
-    public function markAsCancel($logs = ''){
+    public function markAsCancel($logs = '')
+    {
         $this->status = 'cancel';
         $this->logs = \GuzzleHttp\json_encode($logs);
         $this->save();
@@ -109,7 +122,8 @@ class Payment extends BaseModel
         return $this->notifyObject();
     }
 
-    public function markAsCompleted($logs = ''){
+    public function markAsCompleted($logs = '')
+    {
         $this->status = 'completed';
         $this->logs = \GuzzleHttp\json_encode($logs);
         $this->save();
@@ -120,7 +134,7 @@ class Payment extends BaseModel
 
     public function getMeta($key = '', $default = '')
     {
-        if(!$key){
+        if (!$key) {
             return PaymentMeta::query()->get()->toArray();
         }
         $val = PaymentMeta::query()->where([
@@ -136,7 +150,7 @@ class Payment extends BaseModel
     public function getJsonMeta($key, $default = [])
     {
         $meta = $this->getMeta($key, $default);
-        if(empty($meta)) return false;
+        if (empty($meta)) return false;
         return json_decode($meta, true);
     }
 
@@ -159,7 +173,6 @@ class Payment extends BaseModel
             if ($old) {
                 $old->val = $val;
                 return $old->save();
-
             } else {
                 return PaymentMeta::create([
                     'name'       => $key,
@@ -172,14 +185,15 @@ class Payment extends BaseModel
 
 
 
-    public function sendUpdatedPurchaseEmail(){
+    public function sendUpdatedPurchaseEmail()
+    {
 
-        switch ($this->object_model){
+        switch ($this->object_model) {
             case "wallet_deposit":
                 Mail::to(setting_item('admin_email'))->send(new CreditPaymentEmail(false, $this, 'admin'));
-                if($this->user)
+                if ($this->user)
                     Mail::to($this->user->email)->send(new CreditPaymentEmail(false, $this, 'customer'));
-            break;
+                break;
             case "plan":
                 if (!empty(setting_item("plan_update_payment_admin_enable")) and !empty(setting_item("plan_update_payment_admin_subject")) and !empty(setting_item("plan_update_payment_admin_content"))) {
                     Mail::to(setting_item('admin_email'))->send(new PlanPaymentEmail(false, $this, 'admin'));
@@ -190,12 +204,12 @@ class Payment extends BaseModel
                         Mail::to($this->user->email)->send(new PlanPaymentEmail(false, $this, 'customer'));
                     }
                 }
-            break;
+                break;
         }
-
     }
 
-    public function sendNewPurchaseEmail(){
+    public function sendNewPurchaseEmail()
+    {
 
         switch ($this->object_model) {
             case "wallet_deposit":
@@ -203,14 +217,14 @@ class Payment extends BaseModel
 
                 if ($this->user)
                     Mail::to($this->user->email)->send(new CreditPaymentEmail(true, $this, 'customer'));
-            break;
+                break;
 
             case "plan":
                 $userRequest = $this->getMeta('user_request');
 
-                if(!empty($userRequest)){
+                if (!empty($userRequest)) {
                     $user = User::find($userRequest);
-                }else{
+                } else {
                     $user = $this->user;
                 }
 
@@ -225,8 +239,7 @@ class Payment extends BaseModel
                         Mail::to($user->email)->send(new PlanPaymentEmail(true, $this, 'customer'));
                     }
                 }
-            break;
+                break;
         }
     }
-
 }

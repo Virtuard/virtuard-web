@@ -93,9 +93,75 @@
                         </li>
                     </ul>
                 @endif
-                <button class="bravo-more-menu">
+                <div class="mobile-header">
+                    <div class="mobile-icons d-md-none">
+                        @if(Auth::check() && setting_item('inbox_enable'))
+                        <a href="{{ route('user.chat') }}" class="mobile-icon">
+                            <i class="fa fa-comments" style="font-size: 18px;"></i>
+                            <span class="badge badge-danger" style="top: -5px; right: -10px;">{{ auth()->user()->unseen_message_count ?? 0 }}</span>
+                        </a>
+                        @endif
+                        
+                        @include('Layout::parts.notification')
+
+                        <button class="bravo-more-menu">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <style>
+                .mobile-header {
+                    display: flex;
+                    justify-content: flex-end;
+                    align-items: center; 
+                    padding: 10px; 
+                   
+                }
+                
+                .mobile-icons {
+                    display: flex;
+                    gap: 10px; 
+                    align-items: center;
+                }
+                
+                .mobile-icons .mobile-icon {
+                    position: relative;
+                    font-size: 18px;
+                    color: #333;
+                    text-decoration: none;
+                }
+                
+                .mobile-icons .badge {
+                    position: absolute;
+                    top: -5px;
+                    right: -10px;
+                    font-size: 12px;
+                    background-color: red;
+                    color: white;
+                    border-radius: 50%;
+                    padding: 2px 6px;
+                }
+                
+                .bravo-more-menu {
+                    font-size: 18px;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    color: #333;
+                    padding: 5px;
+                }
+                
+                @media (min-width: 768px) {
+                    .mobile-header {
+                        display: none;
+                    }
+                }
+                </style>
+                         
+                {{-- <button class="bravo-more-menu">
                     <i class="fa fa-bars"></i>
-                </button>
+                </button> --}}
             </div>
         </div>
     </div>
@@ -150,6 +216,7 @@
                     @include('Language::frontend.switcher')
                 @endif
             </ul>
+            {{-- //tes --}}
             <ul class="multi-lang">
                 @include('Core::frontend.currency-switcher')
             </ul>
