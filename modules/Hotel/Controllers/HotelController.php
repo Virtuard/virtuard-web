@@ -37,29 +37,27 @@ class HotelController extends Controller
     public function index(Request $request)
     {
         $is_ajax = $request->query('_ajax');
-        if (!empty($request->query('limit'))) {
-            $limit = $request->query('limit');
-        } else {
-            $limit = !empty(setting_item("hotel_page_limit_item")) ? setting_item("hotel_page_limit_item") : 9;
-        }
-
+    
+        // Menentukan jumlah item per halaman
+        $limit = $request->query('limit', setting_item("hotel_page_limit_item") ?: 9);
+    
         $check_in = $request->input('check_in');
         $check_out = $request->input('check_out');
         $adults = $request->input('adults');
         $children = $request->input('children');
-
+    
         if ($check_in && $check_out) {
             $check_in_date = strtotime($check_in);
             $check_out_date = strtotime($check_out);
-
+    
             if ($check_out_date <= $check_in_date) {
                 return $this->sendError(__('Check-out date must be later than check-in date.'));
             }
         }
-
+    
         $query = $this->hotelClass->search($request->input());
-        $list = $query->get(); 
-
+        $list = $query->get();
+    
         $available_hotels = [];
         if ($check_in && $check_out) {
             foreach ($list as $hotel) {
@@ -69,70 +67,69 @@ class HotelController extends Controller
                 }
             }
         } else {
-            $available_hotels = $list; 
+            $available_hotels = $list;
         }
-
+    
+        // Implementasi pagination manual
+        $current_page = $request->input('page', 1); // Halaman saat ini
+        $total_items = count($available_hotels); // Total item
         $paginated_hotels = new \Illuminate\Pagination\LengthAwarePaginator(
-            $available_hotels,
-            count($available_hotels),
+            collect($available_hotels)->forPage($current_page, $limit),
+            $total_items,
             $limit,
-            $request->input('page', 1)
+            $current_page,
+            [
+                'path' => $request->url(),
+                'query' => $request->query(), // Tambahkan query parameters ke pagination
+            ]
         );
-
+    
+        // Markers untuk map
         $markers = [];
-        if (!empty($available_hotels)) {
-            foreach ($available_hotels as $row) {
-                $markers[] = [
-                    "id"      => $row->id,
-                    "title"   => $row->title,
-                    "lat"     => (float)$row->map_lat,
-                    "lng"     => (float)$row->map_lng,
-                    "gallery" => $row->getGallery(true),
-                    "infobox" => view('Hotel::frontend.layouts.search.loop-grid', ['row' => $row, 'disable_lazyload' => 1, 'wrap_class' => 'infobox-item'])->render(),
-                    'marker' => get_file_url(setting_item("hotel_icon_marker_map"), 'full') ?? url('images/icons/png/pin.png'),
-                ];
-            }
+        foreach ($paginated_hotels as $row) {
+            $markers[] = [
+                "id"      => $row->id,
+                "title"   => $row->title,
+                "lat"     => (float)$row->map_lat,
+                "lng"     => (float)$row->map_lng,
+                "gallery" => $row->getGallery(true),
+                "infobox" => view('Hotel::frontend.layouts.search.loop-grid', ['row' => $row, 'disable_lazyload' => 1, 'wrap_class' => 'infobox-item'])->render(),
+                'marker'  => get_file_url(setting_item("hotel_icon_marker_map"), 'full') ?? url('images/icons/png/pin.png'),
+            ];
         }
-
-        $limit_location = 15;
-        if (empty(setting_item("hotel_location_search_style")) or setting_item("hotel_location_search_style") == "normal") {
-            $limit_location = 1000;
-        }
-
+    
+        $limit_location = setting_item("hotel_location_search_style") == "normal" ? 1000 : 15;
+    
         $data = [
-            'rows'               => $paginated_hotels,  
+            'rows'               => $paginated_hotels,  // Data dengan pagination
             'list_location'      => $this->locationClass::where('status', 'publish')->limit($limit_location)->with(['translation'])->get()->toTree(),
             'hotel_min_max_price' => $this->hotelClass::getMinMaxPrice(),
             'markers'            => $markers,
-            "blank" => setting_item('search_open_tab') == "current_tab" ? 0 : 1,
-            "seo_meta"           => $this->hotelClass::getSeoMetaForPageList()
+            "blank"              => setting_item('search_open_tab') == "current_tab" ? 0 : 1,
+            "seo_meta"           => $this->hotelClass::getSeoMetaForPageList(),
         ];
-
-        $layout = setting_item("hotel_layout_search", 'normal');
-        if ($request->query('_layout')) {
-            $layout = $request->query('_layout');
-        }
+    
+        $layout = $request->query('_layout', setting_item("hotel_layout_search", 'normal'));
+    
         if ($is_ajax) {
             return $this->sendSuccess([
                 'html'    => view('Hotel::frontend.layouts.search-map.list-item', $data)->render(),
-                "markers" => $data['markers']
+                "markers" => $data['markers'],
             ]);
         }
-
+    
         $data['attributes'] = Attributes::where('service', 'hotel')->orderBy("position", "desc")->with(['terms', 'translation'])->get();
         $data['layout'] = $layout;
-
-        $data['kntl'] = ["data" => "anam kntl"];
-
+    
         if ($layout == "map") {
             $data['body_class'] = 'has-search-map';
             $data['html_class'] = 'full-page';
             return view('Hotel::frontend.search-map', $data);
         }
-
+    
         return view('Hotel::frontend.search', $data);
     }
-
+    
     public function detail(Request $request, $slug)
     {
         $row = $this->hotelClass::where('slug', $slug)->with(['location', 'translation', 'hasWishList'])->first();;
