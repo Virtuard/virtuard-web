@@ -47,6 +47,8 @@ class HotelRoom extends Bookable
         $this->roomBookingClass = HotelRoomBooking::class;
     }
 
+    
+
     public static function getModelName()
     {
         return __("Hotel Room");
@@ -138,7 +140,6 @@ class HotelRoom extends Bookable
         $this->tmp_number = !empty($allDates) ?  (int) min(array_column($allDates,'number')) : 0;
         if(empty($this->tmp_number)) return false;
 
-        //Adult - Children
         if( !empty($filters['adults']) and $this->adults * $this->tmp_number < $filters['adults'] ){
             return false;
         }
