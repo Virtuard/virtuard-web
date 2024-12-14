@@ -64,9 +64,11 @@
         <div class="row align-items-center">
             <div class="col-md-2">
                 <label for="service_name" class="form-label">{{ __('Service Name') }}</label>
-                <input type="text" class="form-control" name="service_name" placeholder="Service or location Name">
+                <input type="text" class="form-control" name="service_name" placeholder="Service name">
             </div>
-
+            <div class="col-md-2">
+                @include('partials.search.fields.location')
+            </div>
             <div class="col-md-2">
                 <label for="date_range" class="form-label">{{ __('Check In - Check Out') }}</label>
                 <div class="input-group">
@@ -97,10 +99,11 @@
 
                 @include('Hotel::frontend.layouts.search.fields.range')
             </div>
+            
             <div class="col-md-2 ">
                 @include('partials.search.fields.ipanorama')
             </div>
-            <div class="col-md-2 d-flex align-items-end">
+            <div class="col-md-12 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">
                     <i class="bi bi-search"></i> {{ __('Search') }}
                 </button>

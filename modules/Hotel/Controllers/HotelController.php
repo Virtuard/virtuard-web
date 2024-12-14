@@ -38,7 +38,6 @@ class HotelController extends Controller
     {
         $is_ajax = $request->query('_ajax');
     
-        // Menentukan jumlah item per halaman
         $limit = $request->query('limit', setting_item("hotel_page_limit_item") ?: 9);
     
         $check_in = $request->input('check_in');
@@ -70,9 +69,8 @@ class HotelController extends Controller
             $available_hotels = $list;
         }
     
-        // Implementasi pagination manual
-        $current_page = $request->input('page', 1); // Halaman saat ini
-        $total_items = count($available_hotels); // Total item
+        $current_page = $request->input('page', 1); 
+        $total_items = count($available_hotels); 
         $paginated_hotels = new \Illuminate\Pagination\LengthAwarePaginator(
             collect($available_hotels)->forPage($current_page, $limit),
             $total_items,
@@ -80,11 +78,10 @@ class HotelController extends Controller
             $current_page,
             [
                 'path' => $request->url(),
-                'query' => $request->query(), // Tambahkan query parameters ke pagination
+                'query' => $request->query(), 
             ]
         );
     
-        // Markers untuk map
         $markers = [];
         foreach ($paginated_hotels as $row) {
             $markers[] = [
@@ -101,7 +98,7 @@ class HotelController extends Controller
         $limit_location = setting_item("hotel_location_search_style") == "normal" ? 1000 : 15;
     
         $data = [
-            'rows'               => $paginated_hotels,  // Data dengan pagination
+            'rows'               => $paginated_hotels,  
             'list_location'      => $this->locationClass::where('status', 'publish')->limit($limit_location)->with(['translation'])->get()->toTree(),
             'hotel_min_max_price' => $this->hotelClass::getMinMaxPrice(),
             'markers'            => $markers,
