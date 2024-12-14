@@ -78,6 +78,42 @@ class Hotel extends Bookable
         return __("Hotel");
     }
 
+    public function checkAvailabilityAll($check_in, $check_out, $adults, $children)
+    {
+        $check_in_date = \Carbon\Carbon::parse($check_in);
+        $check_out_date = \Carbon\Carbon::parse($check_out);
+        
+        $stay_duration = $check_in_date->diffInDays($check_out_date);
+    
+        $rooms = $this->rooms()  
+            ->where('status', 'publish') // Filter by available rooms
+            // ->whereHas('availability', function ($query) use ($check_in, $check_out) {
+            //     $query->where('start_date', '<=', $check_in)
+            //           ->where('end_date', '>=', $check_out);
+            // })
+            ->get();
+    
+        $total_capacity = 0;
+    
+        foreach ($rooms as $room) {
+            $room_capacity = $room->adults + $room->children;
+            
+            if ($room_capacity >= ($adults + $children)) {
+                if ($stay_duration >= $room->min_day_stays) {
+                    $total_capacity += $room_capacity; 
+                }
+            }
+        }
+    
+        $total_guests = $adults + $children;
+        if ($total_capacity >= $total_guests) {
+            return ['available' => true];  
+        } else {
+            return ['available' => false]; 
+        }
+    }
+    
+
     public static function getTableName()
     {
         return with(new static)->table;

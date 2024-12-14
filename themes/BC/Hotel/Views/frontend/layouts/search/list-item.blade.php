@@ -6,11 +6,19 @@
         <div class="bravo-list-item">
             <div class="topbar-search">
                 <h2 class="text">
-                    @if($rows->total() > 1)
-                        {{ __(":count hotels found",['count'=>$rows->total()]) }}
+                    @if ($rows instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    @if ($rows->total() > 1)
+                        {{ __(":count hotels found", ['count' => $rows->total()]) }}
                     @else
-                        {{ __(":count hotel found",['count'=>$rows->total()]) }}
+                        {{ __(":count hotel found", ['count' => $rows->total()]) }}
                     @endif
+                @else
+                    @if (count($rows) > 1)
+                        {{ __(":count hotels found", ['count' => count($rows)]) }}
+                    @else
+                        {{ __(":count hotel found", ['count' => count($rows)]) }}
+                    @endif
+                @endif
                 </h2>
                 <div class="control">
                     @include('Hotel::frontend.layouts.search.orderby')
