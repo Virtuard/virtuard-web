@@ -5,8 +5,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Modules\Booking\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\Location\Models\Location;
 use Modules\User\Models\UserWishList;
+
 
 class UserController extends Controller
 {
@@ -17,37 +19,77 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware('auth:sanctum');
     }
 
-    public function getBookingHistory(Request $request){
+    public function getBookingHistory(Request $request)
+{
+    try {
         $user_id = Auth::id();
-        $query = Booking::getBookingHistory($request->input('status'), $user_id);
-        $rows = [];
-        foreach ($query as $item){
-            $service = $item->service;
-            $serviceTranslation = $service->translate();
-            $meta_tmp = $item->getAllMeta();
-            $item = $item->toArray();
-            $meta = [];
-            if(!empty($meta_tmp)){
-                foreach ( $meta_tmp as $val){
-                    $meta[ $val->name ] = !empty($json = json_decode($val->val,true)) ? $json : $val->val  ;
-                }
+
+        $bookings = Booking::where(function ($query) use ($user_id) {
+            $query->where('create_user', $user_id)
+                  ->orWhere('customer_id', $user_id);
+        })
+        ->when($request->input('status'), function ($query, $status) {
+            return $query->where('status', $status);
+        })
+        ->get();
+    
+        $bookingsWithServiceTitle = $bookings->map(function ($booking) {
+            if ($booking->service) {
+                $booking->service_title = $booking->service->title;
+            } else {
+                $booking->service_title = null; 
             }
-            $item['commission_type'] = json_decode( $item['commission_type'] , true);
-            $item['buyer_fees'] = json_decode( $item['buyer_fees'] , true);
-            $item['booking_meta'] = $meta;
-            $item['service_icon'] = $service->getServiceIconFeatured() ?? null;
-            $item['service'] = ['title'=>$serviceTranslation->title];
-            $rows[] = $item;
-        }
-        return $this->sendSuccess([
-            'data'=> $rows,
-            'total'=>$query->total(),
-            'max_pages'=>$query->lastPage()
-        ]);
+            return $booking;
+        });
+    
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'bookings' => $bookingsWithServiceTitle,
+            ],
+            'message' => __('Booking history retrieved successfully'),
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => __('An error occurred while retrieving booking history'),
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
+    
+    // public function getBookingHistory(Request $request){
+    //     $user_id = Auth::id();
+    //     $query = Booking::getBookingHistory($request->input('status'), $user_id);
+    //     $rows = [];
+    //     foreach ($query as $item){
+    //         $service = $item->service;
+    //         $serviceTranslation = $service->translate();
+    //         $meta_tmp = $item->getAllMeta();
+    //         $item = $item->toArray();
+    //         $meta = [];
+    //         if(!empty($meta_tmp)){
+    //             foreach ( $meta_tmp as $val){
+    //                 $meta[ $val->name ] = !empty($json = json_decode($val->val,true)) ? $json : $val->val  ;
+    //             }
+    //         }
+    //         $item['commission_type'] = json_decode( $item['commission_type'] , true);
+    //         $item['buyer_fees'] = json_decode( $item['buyer_fees'] , true);
+    //         $item['booking_meta'] = $meta;
+    //         $item['service_icon'] = $service->getServiceIconFeatured() ?? null;
+    //         $item['service'] = ['title'=>$serviceTranslation->title];
+    //         $rows[] = $item;
+    //     }
+    //     return $this->sendSuccess([
+    //         'data'=> $rows,
+    //         'total'=>$query->total(),
+    //         'max_pages'=>$query->lastPage()
+    //     ]);
+    // }
 
     public function handleWishList(Request $request){
         $class = new \Modules\User\Controllers\UserWishListController();

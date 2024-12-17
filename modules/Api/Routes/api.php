@@ -59,8 +59,9 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('forgot-password', 'AuthController@sendResetLinkEmail');
 }); 
 
+
 /* User */
-Route::group(['prefix' => 'user', 'middleware' => ['api'],], function ($router) {
+Route::group(['middleware' => 'api','prefix' => 'user' ], function ($router) {
     Route::get('booking-history', 'UserController@getBookingHistory')->name("api.user.booking_history");
     Route::post('/wishlist','UserController@handleWishList')->name("api.user.wishList.handle");
     Route::get('/wishlist','UserController@indexWishlist')->name("api.user.wishList.index");
