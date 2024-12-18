@@ -36,7 +36,7 @@ class ChatController  extends \Chatify\Http\Controllers\MessagesController
             'id' => $id ?? 0,
             'type' => $type ?? 'user',
             'messengerColor' => Auth::user()->messenger_color ?? $this->messengerFallbackColor,
-            'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark', 
+            'dark_mode' => Auth::user()->dark_mode < 1 ? 'light' : 'dark',
         ]);
     }
 
@@ -122,7 +122,7 @@ class ChatController  extends \Chatify\Http\Controllers\MessagesController
                 $contacts[] = [
                     'id' => $user->id,
                     'name' => $user->name,
-                    'avatar_url' => url('storage/users-avatar/' . $user->avatar_url), 
+                    'avatar_url' => url('storage/users-avatar/' . $user->avatar_url),
                     'last_message' => $lastMessage ? $lastMessage->body : null,
                     'last_message_time' => $lastMessage ? $lastMessage->created_at->diffForHumans() : null,
                     'has_attachment' => $lastMessage && $lastMessage->has_attachment ? true : false,
@@ -191,111 +191,110 @@ class ChatController  extends \Chatify\Http\Controllers\MessagesController
     public function fetch(Request $request)
     {
         $toId = $request['to_id'];
-    
+
         $query = Chatify::fetchMessagesQuery($toId)
-            ->where(function($q) {
+            ->where(function ($q) {
                 $q->where('from_id', Auth::user()->id)
-                  ->orWhere('to_id', Auth::user()->id);
+                    ->orWhere('to_id', Auth::user()->id);
             })
-            ->where(function($q) use ($toId) {
+            ->where(function ($q) use ($toId) {
                 $q->where('from_id', $toId)
-                  ->orWhere('to_id', $toId);
+                    ->orWhere('to_id', $toId);
             })
-            ->latest('created_at'); 
-    
+            ->latest('created_at');
+
         $messages = $query->paginate($request->per_page ?? $this->perPage);
-    
+
         $totalMessages = $messages->total();
         $lastPage = $messages->lastPage();
-    
+
         $response = [
             'total' => $totalMessages,
             'last_page' => $lastPage,
             'last_message_id' => collect($messages->items())->last()->id ?? null,
             'messages' => [],
         ];
-    
+
         if ($totalMessages < 1) {
-            $response['messages'] = []; 
+            $response['messages'] = [];
             return Response::json($response);
         }
-    
+
         foreach ($messages->reverse() as $message) {
             $response['messages'][] = [
                 'id' => $message->id,
                 'from_id' => $message->from_id,
                 'to_id' => $message->to_id,
                 'body' => $message->body,
-                'created_at' => $message->created_at->diffForHumans(), 
+                'created_at' => $message->created_at->diffForHumans(),
                 'updated_at' => $message->updated_at->diffForHumans(),
-                'attachments' => $message->attachments, 
-                'sender' => $message->from_id == Auth::user()->id, 
+                'attachments' => $message->attachments,
+                'sender' => $message->from_id == Auth::user()->id,
             ];
         }
-    
+
         return Response::json($response);
     }
-    
+
     public function send(Request $request)
-{
-    $error = (object)[
-        'status' => 0,
-        'message' => null
-    ];
-    $attachment = null;
-    $attachment_title = null;
+    {
+        $error = (object)[
+            'status' => 0,
+            'message' => null
+        ];
+        $attachment = null;
+        $attachment_title = null;
 
-    if ($request->hasFile('file')) {
-        $allowed_images = Chatify::getAllowedImages();
-        $allowed_files  = Chatify::getAllowedFiles();
-        $allowed        = array_merge($allowed_images, $allowed_files);
+        if ($request->hasFile('file')) {
+            $allowed_images = Chatify::getAllowedImages();
+            $allowed_files  = Chatify::getAllowedFiles();
+            $allowed        = array_merge($allowed_images, $allowed_files);
 
-        $file = $request->file('file');
-        if ($file->getSize() < Chatify::getMaxUploadSize()) {
-            if (in_array(strtolower($file->extension()), $allowed)) {
-                $attachment_title = $file->getClientOriginalName();
-                $attachment = Str::uuid() . "." . $file->extension();
-                $file->storeAs(config('chatify.attachments.folder'), $attachment, config('chatify.storage_disk_name'));
+            $file = $request->file('file');
+            if ($file->getSize() < Chatify::getMaxUploadSize()) {
+                if (in_array(strtolower($file->extension()), $allowed)) {
+                    $attachment_title = $file->getClientOriginalName();
+                    $attachment = Str::uuid() . "." . $file->extension();
+                    $file->storeAs(config('chatify.attachments.folder'), $attachment, config('chatify.storage_disk_name'));
+                } else {
+                    $error->status = 1;
+                    $error->message = "Ekstensi file tidak diizinkan!";
+                }
             } else {
                 $error->status = 1;
-                $error->message = "Ekstensi file tidak diizinkan!";
+                $error->message = "Ukuran file terlalu besar!";
             }
-        } else {
-            $error->status = 1;
-            $error->message = "Ukuran file terlalu besar!";
         }
-    }
 
-    if (!$error->status) {
-        $message = Chatify::newMessage([
-            'from_id' => Auth::user()->id,
-            'to_id' => $request['id'],
-            'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
-            'attachment' => ($attachment) ? json_encode((object)[
-                'new_name' => $attachment,
-                'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
-            ]) : null,
-        ]);
-        
-        $messageData = Chatify::parseMessage($message);
-        
-        if (Auth::user()->id != $request['id']) {
-            Chatify::push("private-chatify.".$request['id'], 'messaging', [
+        if (!$error->status) {
+            $message = Chatify::newMessage([
                 'from_id' => Auth::user()->id,
                 'to_id' => $request['id'],
-                'message' => Chatify::messageCard($messageData, true)
+                'body' => trim($request['message']),
+                'attachment' => ($attachment) ? json_encode((object)[
+                    'new_name' => $attachment,
+                    'old_name' => trim($attachment_title),
+                ]) : null,
             ]);
+
+            $messageData = Chatify::parseMessage($message);
+
+            $messageBody = is_array($messageData) && isset($messageData['body']) ? $messageData['body'] : (isset($messageData->body) ? $messageData->body : null);
+
+            if (Auth::user()->id != $request['id']) {
+                Chatify::push("private-chatify." . $request['id'], 'messaging', [
+                    'from_id' => Auth::user()->id,
+                    'to_id' => $request['id'],
+                    'message' => $messageBody,
+                ]);
+            }
         }
+
+        return Response::json([
+            'status' => '200',
+            'error' => $error,
+            'message' => $messageBody,
+            'tempID' => $request['temporaryMsgId'],
+        ]);
     }
-
-    return Response::json([
-        'status' => '200',
-        'error' => $error,
-        'message' => Chatify::messageCard(@$messageData),
-        'tempID' => $request['temporaryMsgId'],
-    ]);
-}
-
-
-
 }
