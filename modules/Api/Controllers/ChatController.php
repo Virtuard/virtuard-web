@@ -270,10 +270,10 @@ class ChatController  extends \Chatify\Http\Controllers\MessagesController
             $message = Chatify::newMessage([
                 'from_id' => Auth::user()->id,
                 'to_id' => $request['id'],
-                'body' => htmlentities(trim($request['message']), ENT_QUOTES, 'UTF-8'),
+                'body' => trim($request['message']),
                 'attachment' => ($attachment) ? json_encode((object)[
                     'new_name' => $attachment,
-                    'old_name' => htmlentities(trim($attachment_title), ENT_QUOTES, 'UTF-8'),
+                    'old_name' => trim($attachment_title),
                 ]) : null,
             ]);
 
@@ -291,7 +291,7 @@ class ChatController  extends \Chatify\Http\Controllers\MessagesController
         return Response::json([
             'status' => '200',
             'error' => $error,
-            'message' => Chatify::messageCard(@$messageData),
+            'message' => $messageData['body'],
             'tempID' => $request['temporaryMsgId'],
         ]);
     }
