@@ -2,11 +2,13 @@
 
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
+use Modules\Api\Controllers\ChatController;
 use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
 use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
 use Modules\Api\Controllers\SearchController;
+use Modules\User\Controllers\MessagesController as ControllersMessagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +35,12 @@ Route::get('{type}/form-search','SearchController@getFormSearch')->name('api.ser
 
 Route::group(['middleware' => 'api'],function(){
     Route::post('{type}/write-review/{id}','ReviewController@writeReview')->name('api.service.write_review');
-    // Route::get('messages/iframe/{id?}', [MessagesController::class, 'iframe']);
-    // Route::get('messages/search', [MessagesController::class, 'search']);
-    // Route::get('messages/contacts', [MessagesController::class, 'getContacts']);
-    // Route::get('messages/fetch/{id}', [MessagesController::class, 'idFetchData']);
-  
+    Route::get('messages/iframe/{id?}', [ChatController::class, 'iframe']);
+    Route::get('messages/search', [ChatController::class, 'search']);
+    Route::get('messages/contacts', [ChatController::class, 'getContacts']);
+    Route::get('messages/fetch/{id}', [ChatController::class, 'idFetchData']);
+    Route::get('messages/detail', [ChatController::class, 'fetch']);
+    Route::post('messages/send', [ChatController::class, 'send']);
 });
 
 
@@ -75,6 +78,12 @@ Route::get('location/{id}','LocationController@detail')->name('api.location.deta
 
 // Route::post('send-message', [MessagesController::class, 'sendMessage']);
 // Route::post('read-messages', [MessagesController::class, 'readMessages']);
+
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::get('/chats', [ChatController::class, 'index']); // Daftar chat
+//     Route::get('/chats/{id}', [ChatController::class, 'show']); // Detail chat
+//     Route::post('/chats', [ChatController::class, 'store']); // Kirim chat
+// });
 
 // Booking
 Route::group(['prefix'=>config('booking.booking_route_prefix')],function(){
