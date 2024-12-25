@@ -101,7 +101,7 @@
             new BravoMapEngine('map_content', {
                 fitBounds: true,
                 center: [{{$row->map_lat ?? setting_item('map_lat_default',51.505 ) }}, {{$row->map_lng ?? setting_item('map_lng_default',-0.09 ) }}],
-                zoom:{{$row->map_zoom ?? "8"}},
+                zoom:22,
                 ready: function (engineMap) {
                     @if($row->map_lat && $row->map_lng)
                     engineMap.addMarker([{{$row->map_lat}}, {{$row->map_lng}}], {

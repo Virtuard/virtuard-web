@@ -96,7 +96,7 @@
                 disableScripts: true,
                 fitBounds: true,
                 center: [{{$row->map_lat}}, {{$row->map_lng}}],
-                zoom:{{$row->map_zoom ?? "8"}},
+                zoom:22,
                 ready: function (engineMap) {
                     engineMap.addMarker([{{$row->map_lat}}, {{$row->map_lng}}], {
                         icon_options: {}
