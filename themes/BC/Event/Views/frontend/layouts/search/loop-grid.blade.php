@@ -76,3 +76,184 @@
         </div>
     </div>
 </div>
+
+<style>
+    .item-tour {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border: 1px solid #eaeaea;
+        border-radius: 8px;
+        padding: 16px;
+        background-color: #fff;
+        margin-bottom: 20px;
+    }
+
+    .thumb-image {
+        width: 100%;
+        aspect-ratio: 16/9;
+        border-radius: 8px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .thumb-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .featured {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #ff9800;
+        color: #fff;
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    .sale_info {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: red;
+        color: #fff;
+        padding: 4px 8px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+
+    .item-title a {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: grab;
+    }
+
+    .item-title a:active {
+        cursor: grabbing;
+    }
+
+    @media screen and (max-width: 768px) {
+        .item-title {
+            overflow-x: auto;
+        }
+
+        .item-title::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .item-title::-webkit-scrollbar-thumb {
+            background: #aaa;
+            border-radius: 2px;
+        }
+
+        .item-title::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+    }
+
+    .service-review {
+        font-size: 14px;
+    }
+
+    .g-price {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+    }
+
+    .g-price .onsale {
+        font-size: 16px;
+        text-decoration: line-through;
+        color: red;
+    }
+
+    .g-price .text-price {
+        font-size: 18px;
+        font-weight: bold;
+        color: green;
+    }
+
+    @media screen and (max-width: 768px) {
+        .item-tour {
+            padding: 12px;
+            gap: 8px;
+        }
+
+        .thumb-image {
+            aspect-ratio: 4/3;
+        }
+
+        .item-title a {
+            font-size: 14px;
+        }
+
+        .service-review {
+            font-size: 12px;
+        }
+
+        .g-price .onsale,
+        .g-price .text-price {
+            font-size: 16px;
+        }
+    }
+
+    @media screen and (max-width: 480px) {
+        .item-tour {
+            padding: 8px;
+            gap: 6px;
+        }
+
+        .thumb-image {
+            aspect-ratio: 1;
+        }
+
+        .item-title a {
+            font-size: 12px;
+        }
+
+        .service-review {
+            font-size: 10px;
+        }
+
+        .g-price .onsale,
+        .g-price .text-price {
+            font-size: 14px;
+        }
+    }
+
+    .location {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: grab;
+    }
+
+    .location:active {
+        cursor: grabbing;
+    }
+
+    @media screen and (max-width: 768px) {
+        .location {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .location::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .location::-webkit-scrollbar-thumb {
+            background: #aaa;
+            border-radius: 2px;
+        }
+
+        .location::-webkit-scrollbar-thumb:hover {
+            background: #888;
+        }
+    }
+</style>
