@@ -79,181 +79,147 @@
 
 <style>
     .item-tour {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        border: 1px solid #eaeaea;
-        border-radius: 8px;
-        padding: 16px;
-        background-color: #fff;
-        margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease-in-out;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.item-tour:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.item-tour .thumb-image {
+    position: relative;
+}
+
+.item-tour .thumb-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.item-tour .featured {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff5a5f;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+.item-tour .sale_info {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff5a5f;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+}
+
+.item-tour .service-wishlist {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: white;
+    color: #ff5a5f;
+    padding: 5px;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.item-tour .location {
+    font-size: 14px;
+    color: #555;
+    margin: 10px 0;
+}
+
+.item-tour .item-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 5px 0;
+    color: #333;
+}
+
+.item-tour .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.item-tour .g-price {
+    text-align: right;
+}
+
+.item-tour .g-price .onsale {
+    font-size: 14px;
+    color: #ff5a5f;
+    text-decoration: line-through;
+    margin-right: 5px;
+}
+
+.item-tour .g-price .text-price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+@media screen and (max-width: 768px) {
+    .item-tour {
+        margin-bottom: 15px;
     }
 
-    .thumb-image {
-        width: 100%;
-        aspect-ratio: 16/9;
-        border-radius: 8px;
-        position: relative;
-        overflow: hidden;
+    .item-tour .featured,
+    .item-tour .sale_info,
+    .item-tour .service-wishlist {
+        font-size: 10px;
+        padding: 3px 7px;
     }
 
-    .thumb-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .featured {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        background-color: #ff9800;
-        color: #fff;
-        padding: 4px 8px;
-        font-size: 12px;
-        border-radius: 4px;
-    }
-
-    .sale_info {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: red;
-        color: #fff;
-        padding: 4px 8px;
-        font-size: 12px;
-        border-radius: 4px;
-    }
-
-    .item-title a {
-        display: block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: grab;
-    }
-
-    .item-title a:active {
-        cursor: grabbing;
-    }
-
-    @media screen and (max-width: 768px) {
-        .item-title {
-            overflow-x: auto;
-        }
-
-        .item-title::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .item-title::-webkit-scrollbar-thumb {
-            background: #aaa;
-            border-radius: 2px;
-        }
-
-        .item-title::-webkit-scrollbar-thumb:hover {
-            background: #888;
-        }
-    }
-
-    .service-review {
+    .item-tour .item-title {
         font-size: 14px;
     }
 
-    .g-price {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
+    .item-tour .info {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .g-price .onsale {
-        font-size: 16px;
-        text-decoration: line-through;
-        color: red;
+    .item-tour .g-price .onsale,
+    .item-tour .g-price .text-price {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .item-tour {
+        padding: 10px;
     }
 
-    .g-price .text-price {
-        font-size: 18px;
-        font-weight: bold;
-        color: green;
+    .item-tour .location {
+        font-size: 12px;
     }
 
-    @media screen and (max-width: 768px) {
-        .item-tour {
-            padding: 12px;
-            gap: 8px;
-        }
-
-        .thumb-image {
-            aspect-ratio: 4/3;
-        }
-
-        .item-title a {
-            font-size: 14px;
-        }
-
-        .service-review {
-            font-size: 12px;
-        }
-
-        .g-price .onsale,
-        .g-price .text-price {
-            font-size: 16px;
-        }
+    .item-tour .item-title {
+        font-size: 14px;
     }
 
-    @media screen and (max-width: 480px) {
-        .item-tour {
-            padding: 8px;
-            gap: 6px;
-        }
-
-        .thumb-image {
-            aspect-ratio: 1;
-        }
-
-        .item-title a {
-            font-size: 12px;
-        }
-
-        .service-review {
-            font-size: 10px;
-        }
-
-        .g-price .onsale,
-        .g-price .text-price {
-            font-size: 14px;
-        }
+    .item-tour .info {
+        font-size: 12px;
     }
 
-    .location {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        cursor: grab;
+    .item-tour .g-price .onsale,
+    .item-tour .g-price .text-price {
+        font-size: 12px;
     }
+}
 
-    .location:active {
-        cursor: grabbing;
-    }
-
-    @media screen and (max-width: 768px) {
-        .location {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .location::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .location::-webkit-scrollbar-thumb {
-            background: #aaa;
-            border-radius: 2px;
-        }
-
-        .location::-webkit-scrollbar-thumb:hover {
-            background: #888;
-        }
-    }
 </style>
