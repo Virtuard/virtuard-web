@@ -14,6 +14,7 @@
             @if($style_list === "normal")
                 <div class="row">
                     @foreach($rows as $row)
+                        {{-- <div class="col-lg-{{$col ?? 3}} col-md-6"> --}}
                         <div class="col-lg-{{$col ?? 3}} col-md-6">
                             @include('Boat::frontend.layouts.search.loop-grid')
                         </div>
