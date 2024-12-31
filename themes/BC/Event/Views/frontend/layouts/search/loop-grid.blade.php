@@ -1,6 +1,28 @@
+{{-- <style>
+    .desktop-only {
+    display: block;
+}
+.mobile-only {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none;
+    }
+    .mobile-only {
+        display: block;
+    }
+}
+</style> --}}
+
 @php
     $translation = $row->translate();
 @endphp
+
+
+
+
 <div class="item-loop {{$wrap_class ?? ''}}">
     @if($row->is_featured == "1")
         <div class="featured">
@@ -75,4 +97,22 @@
             </div>
         </div>
     </div>
+    @if(auth()->check() && auth()->id() === $row->author_id)
+    <div class="service-actions" style="display: flex; gap: 10px; align-items: center; padding: 10px 10px;">
+        <span class="badge" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">
+            <a href="{{ route("event.vendor.edit",[$row->id]) }}" class="edit-icon" style="color: white; text-decoration: none;">
+                <i class="fa fa-edit"></i> Edit
+            </a>
+        </span>
+        <span class="badge" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px;">
+            <form action="" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <a href="{{ route("event.vendor.delete",[$row->id]) }}" class="edit-icon" style="color: white; text-decoration: none;">
+                    <i class="fa fa-trash"></i> Delete
+                </a>
+            </form>
+        </span>
+    </div>
+@endif
 </div>
