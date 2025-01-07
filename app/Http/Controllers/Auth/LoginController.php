@@ -65,20 +65,28 @@ class LoginController extends Controller
 
     public function socialLogin($provider)
     {
-        $this->initConfigs($provider);
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
-    
-        // Retrieve affiliate_id from the cookie and store it
         $affiliateId = null;
         if (Cookie::has('affiliate_id')) {
             $affiliateId = Cookie::get('affiliate_id');
         }
     
-        // Store affiliate_id in session to pass it to the callback
+        // Store affiliate_id in session as well
         session()->put('affiliate_id', $affiliateId);
     
-        return Socialite::driver($provider)->redirect();
+        // Store intended URL for redirection
+        $redirectTo = request()->server('HTTP_REFERER', url('/'));
+        session()->put('url.intended', $redirectTo);
+    
+        // Initialize social login configurations
+        $this->initConfigs($provider);
+    
+        // Redirect to the social login provider with affiliate_id as query parameter
+        return Socialite::driver($provider)
+        ->stateless()  // Make sure to use stateless() for social login without session
+        ->with([
+            'affiliate_id' => $affiliateId
+        ])
+        ->redirect();
     }
 
     protected function initConfigs($provider)
@@ -153,9 +161,10 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
-
-                if ($affiliateId) {
-                    $realUser->affiliate_plan_user_id = $affiliateId;
+                //  = $affiliateId;
+                
+                if (Cookie::has('affiliate_id')) {
+                    $realUser->affiliate_plan_user_id = Cookie::get('affiliate_id');
                 }
 
                 $realUser->save();
