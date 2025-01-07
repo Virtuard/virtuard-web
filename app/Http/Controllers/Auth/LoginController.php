@@ -14,7 +14,7 @@ use Modules\User\Events\SendMailUserRegistered;
 use \Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Illuminate\Support\Facades\Hash;
-    use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Cookie;
 
 
 class LoginController extends Controller
@@ -64,16 +64,18 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-    {
-        $this->initConfigs($provider);
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
-    
-        $affiliateId = Cookie::get('affiliate_id'); // Ambil affiliate_id dari cookie
-        $urlWithAffiliate = Socialite::driver($provider)->stateless()->redirectUrl(url('auth/callback/' . $provider . '?affiliate_id=' . $affiliateId));
-    
-        return redirect($urlWithAffiliate);
-    }
+{
+    $this->initConfigs($provider);
+
+    // Ambil affiliate_id dari cookie atau URL parameter
+    $affiliateId = Cookie::get('affiliate_id') ?? request()->get('affiliate_id');
+
+    // Tambahkan affiliate_id sebagai parameter dalam URL redirect
+    $redirectTo = request()->server('HTTP_REFERER', url('/')) . ($affiliateId ? '?affiliate_id=' . $affiliateId : '');
+    session()->put('url.intended', $redirectTo);
+
+    return Socialite::driver($provider)->redirect();
+}
 
     protected function initConfigs($provider)
     {
@@ -97,9 +99,10 @@ class LoginController extends Controller
 
             $user = Socialite::driver($provider)->user();
 
-            $affiliateId = request()->get('affiliate_id');  // Ambil affiliate_id dari sesi
-            // session()->forget('affiliate_id'); // Hapus affiliate_id dari sesi
+            $affiliateId = request()->get('affiliate_id');
 
+            // Simpan affiliate_id jika pengguna baru
+           
             $redirectTo = $this->getRedirectTo();
             session()->forget('url.intended');
 
@@ -148,8 +151,11 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
-
-                $realUser->affiliate_plan_user_id = $affiliateId;
+                
+                if ($affiliateId) {
+                    $realUser->affiliate_plan_user_id = $affiliateId;
+                }
+    
 
                 $realUser->save();
 
