@@ -14,7 +14,7 @@ use Modules\User\Events\SendMailUserRegistered;
 use \Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
+    use Illuminate\Support\Facades\Cookie;
 
 
 class LoginController extends Controller
@@ -64,30 +64,16 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-    {
-        $affiliateId = null;
-        if (Cookie::has('affiliate_id')) {
-            $affiliateId = Cookie::get('affiliate_id');
-        }
-    
-        // Store affiliate_id in session as well
-        session()->put('affiliate_id', $affiliateId);
-    
-        // Store intended URL for redirection
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
-    
-        // Initialize social login configurations
-        $this->initConfigs($provider);
-    
-        // Redirect to the social login provider with affiliate_id as query parameter
-        return Socialite::driver($provider)
-        ->stateless()  // Make sure to use stateless() for social login without session
-        ->with([
-            'affiliate_id' => $affiliateId
-        ])
-        ->redirect();
-    }
+{
+    $this->initConfigs($provider);
+    $redirectTo = request()->server('HTTP_REFERER', url('/'));
+    session()->put('url.intended', $redirectTo);
+
+    $affiliateId = Cookie::get('affiliate_id'); // Ambil affiliate_id dari cookie
+    $urlWithAffiliate = Socialite::driver($provider)->stateless()->redirectUrl(url('auth/callback/' . $provider . '?affiliate_id=' . $affiliateId));
+
+    return redirect($urlWithAffiliate);
+}
 
     protected function initConfigs($provider)
     {
@@ -111,6 +97,8 @@ class LoginController extends Controller
 
             $user = Socialite::driver($provider)->user();
 
+            $affiliateId = request()->get('affiliate_id');
+
             $redirectTo = $this->getRedirectTo();
             session()->forget('url.intended');
 
@@ -120,8 +108,6 @@ class LoginController extends Controller
             }
 
             $existUser = User::getUserBySocialId($provider, $user->getId());
-
-            $affiliateId = session()->get('affiliate_id');
 
             if (empty($existUser)) {
 
@@ -161,11 +147,8 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
-                //  = $affiliateId;
-                
-                if (Cookie::has('affiliate_id')) {
-                    $realUser->affiliate_plan_user_id = Cookie::get('affiliate_id');
-                }
+
+                $realUser->affiliate_plan_user_id = $affiliateId;
 
                 $realUser->save();
 
