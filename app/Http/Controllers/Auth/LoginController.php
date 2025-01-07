@@ -64,16 +64,21 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-    {
-        $this->initConfigs($provider);
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
+{
+    $this->initConfigs($provider);
     
-        $affiliateId = Cookie::get('affiliate_id'); // Ambil affiliate_id dari cookie
-        $urlWithAffiliate = Socialite::driver($provider)->stateless()->redirectUrl(url('auth/callback/' . $provider . '?affiliate_id=' . $affiliateId));
-    
-        return redirect($urlWithAffiliate);
-    }
+    // Ambil affiliate_id dari session atau cookie
+    $affiliate_id = Cookie::get('affiliate_id'); // Misalnya ambil dari cookie
+
+    $redirectTo = request()->server('HTTP_REFERER', url('/'));
+    session()->put('url.intended', $redirectTo);
+
+    // Sertakan affiliate_id dalam query parameter
+    $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+    $urlWithAffiliate = $url . '?affiliate_id=' . urlencode($affiliate_id); // Tambahkan affiliate_id
+
+    return redirect()->to($urlWithAffiliate); // Redirect ke URL dengan parameter affiliate_id
+}
 
     protected function initConfigs($provider)
     {
