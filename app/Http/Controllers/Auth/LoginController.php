@@ -159,6 +159,10 @@ class LoginController extends Controller
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
 
+                if ($affiliateId) {
+                    $realUser->affiliate_plan_user_id = $affiliateId;
+                }
+
                 $realUser->save();
 
                 $realUser->addMeta('social_' . $provider . '_id', $user->getId());
