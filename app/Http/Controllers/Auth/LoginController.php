@@ -14,6 +14,8 @@ use Modules\User\Events\SendMailUserRegistered;
 use \Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Cookie;
+
 
 class LoginController extends Controller
 {
@@ -140,6 +142,10 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
+
+                if (Cookie::has('affiliate_id')) {
+                    $realUser->affiliate_plan_user_id = Cookie::get('affiliate_id');
+                }
 
                 $realUser->save();
 
