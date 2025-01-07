@@ -62,18 +62,13 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-    {
-        $this->initConfigs($provider);
-    
-        $affiliateId = request()->query('affiliate_id');
-    
-        // Simpan affiliate_id di parameter state
-        $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
-    
-        return Socialite::driver($provider)
-            ->with(['state' => $state])
-            ->redirect();
-    }
+{
+    $this->initConfigs($provider);
+    $redirectTo = request()->server('HTTP_REFERER', url('/'));
+    session()->put('url.intended', $redirectTo);
+
+    return Socialite::driver($provider)->redirect();
+}
     
 
     protected function initConfigs($provider)
