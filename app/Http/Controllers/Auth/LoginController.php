@@ -67,22 +67,18 @@ class LoginController extends Controller
 {
     $this->initConfigs($provider);
 
-    // Ambil affiliate_id dari cookie atau URL parameter
+    // Ambil affiliate_id dari cookie atau parameter URL
     $affiliateId = Cookie::get('affiliate_id') ?? request()->get('affiliate_id');
 
-    // Dapatkan URL redirect dari request sebelumnya
-    $redirectTo = request()->server('HTTP_REFERER', url('/'));
-
-    // Jika affiliate_id ada, tambahkan ke URL redirect
-    if ($affiliateId) {
-        $redirectTo = $redirectTo . (strpos($redirectTo, '?') === false ? '?' : '&') . 'affiliate_id=' . $affiliateId;
-    }
+    // Jika affiliate_id ada, tambahkan ke parameter state
+    $state = $affiliateId ? encrypt($affiliateId) : null;
 
     // Simpan URL yang dimaksud dalam sesi
+    $redirectTo = request()->server('HTTP_REFERER', url('/'));
     session()->put('url.intended', $redirectTo);
 
-    // Redirect ke social login
-    return Socialite::driver($provider)->redirect();
+    // Redirect ke provider dengan parameter state
+    return Socialite::driver($provider)->stateless()->with(['state' => $state])->redirect();
 }
 
 
@@ -108,7 +104,7 @@ class LoginController extends Controller
 
             $user = Socialite::driver($provider)->user();
 
-            $affiliateId = request()->get('affiliate_id');
+            $affiliateId = decrypt(request()->get('state'));
 
             // Simpan affiliate_id jika pengguna baru
            
