@@ -70,12 +70,21 @@ class LoginController extends Controller
     // Ambil affiliate_id dari cookie atau URL parameter
     $affiliateId = Cookie::get('affiliate_id') ?? request()->get('affiliate_id');
 
-    // Tambahkan affiliate_id sebagai parameter dalam URL redirect
-    $redirectTo = request()->server('HTTP_REFERER', url('/')) . ($affiliateId ? '?affiliate_id=' . $affiliateId : '');
+    // Dapatkan URL redirect dari request sebelumnya
+    $redirectTo = request()->server('HTTP_REFERER', url('/'));
+
+    // Jika affiliate_id ada, tambahkan ke URL redirect
+    if ($affiliateId) {
+        $redirectTo = $redirectTo . (strpos($redirectTo, '?') === false ? '?' : '&') . 'affiliate_id=' . $affiliateId;
+    }
+
+    // Simpan URL yang dimaksud dalam sesi
     session()->put('url.intended', $redirectTo);
 
+    // Redirect ke social login
     return Socialite::driver($provider)->redirect();
 }
+
 
     protected function initConfigs($provider)
     {
