@@ -14,8 +14,6 @@ use Modules\User\Events\SendMailUserRegistered;
 use \Laravel\Socialite\Facades\Socialite;
 use App\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
-
 
 class LoginController extends Controller
 {
@@ -63,24 +61,19 @@ class LoginController extends Controller
         return view('auth.login',['page_title'=> __("Login")]);
     }
 
-    public function socialLogin($provider, $affiliateId = null)
-    {
-        $this->initConfigs($provider);
-    
-        // Jika ada affiliate_id, simpan dalam state
-        $state = $affiliateId ? encrypt($affiliateId) : null;
-    
-        // Simpan URL yang dimaksud dalam sesi
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
-    
-        // Redirect ke provider dengan parameter state
-        return Socialite::driver($provider)
-            ->stateless()
-            ->with(['state' => $state])  // Menambahkan state
-            ->redirect();
-    }
+    public function socialLogin($provider)
+{
+    $this->initConfigs($provider);
 
+    $affiliateId = request()->query('affiliate_id');
+
+    // Simpan affiliate_id di parameter state
+    $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
+
+    return Socialite::driver($provider)
+        ->with(['state' => $state])
+        ->redirect();
+}
 
     protected function initConfigs($provider)
     {
@@ -101,53 +94,51 @@ class LoginController extends Controller
     {
         try {
             $this->initConfigs($provider);
+    
+            $state = request()->input('state');
+            $decodedState = json_decode(base64_decode($state), true);
+            $affiliateId = $decodedState['affiliate_id'] ?? null;
 
             $user = Socialite::driver($provider)->user();
-
-            $affiliateId = request()->get('affiliate_id');
-
-            // Simpan affiliate_id jika pengguna baru
-           
+    
             $redirectTo = $this->getRedirectTo();
             session()->forget('url.intended');
-
-
+    
             if (empty($user)) {
                 return redirect()->to('login')->with('error', __('Can not authorize'));
             }
-
+    
             $existUser = User::getUserBySocialId($provider, $user->getId());
-
+    
             if (empty($existUser)) {
-
                 $meta = UserMeta::query()->where('name', 'social_' . $provider . '_id')->where('val', $user->getId())->first();
                 if (!empty($meta)) {
                     $meta->delete();
                 }
-
-                // if we can not get email, then fake email will be generated
+    
                 $email = $user->getEmail();
-                $email = $email?:$user->getId().'@'.$provider;
-
+                $email = $email ?: $user->getId() . '@' . $provider;
+    
                 $userByEmail = User::query()->where('email', $email)->first();
                 if (!empty($userByEmail)) {
-
                     $userByEmail->addMeta('social_' . $provider . '_id', $user->getId());
                     $userByEmail->addMeta('social_' . $provider . '_email', $email);
                     $userByEmail->addMeta('social_' . $provider . '_name', $user->getName());
                     $userByEmail->addMeta('social_' . $provider . '_avatar', $user->getAvatar());
                     $userByEmail->addMeta('social_meta_avatar', $user->getAvatar());
-
+    
                     $userByEmail->need_update_pw = 0;
                     $userByEmail->save();
-
-                    // Login with user
+    
                     Auth::login($userByEmail);
-
+    
                     return redirect($redirectTo);
                 }
-
-                // Create New User
+    
+                // Tangkap affiliate_id dari URL
+                // $affiliateId = request()->query('affiliate_id');
+                dd($affiliateId);
+                // Buat pengguna baru
                 $realUser = new User();
                 $realUser->email = $email;
                 $realUser->password = Hash::make(uniqid() . time());
@@ -161,62 +152,52 @@ class LoginController extends Controller
                     $realUser->affiliate_plan_user_id = $affiliateId;
                 }
     
-
                 $realUser->save();
-
+    
                 $realUser->addMeta('social_' . $provider . '_id', $user->getId());
                 $realUser->addMeta('social_' . $provider . '_email', $email);
                 $realUser->addMeta('social_' . $provider . '_name', $user->getName());
                 $realUser->addMeta('social_' . $provider . '_avatar', $user->getAvatar());
                 $realUser->addMeta('social_meta_avatar', $user->getAvatar());
-
+    
                 $realUser->assignRole(setting_item('user_role'));
-
+    
                 try {
                     event(new SendMailUserRegistered($realUser));
                 } catch (Exception $exception) {
                     Log::warning("SendMailUserRegistered: " . $exception->getMessage());
                 }
-
-                // Login with user
+    
                 Auth::login($realUser);
-
+    
                 return redirect($redirectTo);
-
             } else {
-
                 if ($existUser->deleted == 1) {
                     return redirect()->route('login')->with('error', __('User blocked'));
                 }
                 if (in_array($existUser->status, ['blocked'])) {
                     return redirect()->route('login')->with('error', __('Your account has been blocked'));
                 }
-
+    
                 $existUser->need_update_pw = 0;
                 $existUser->save();
-
+    
                 Auth::login($existUser);
-
+    
                 return redirect($redirectTo);
             }
-        }catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             $message = $exception->getMessage();
-            if(empty($message) and request()->get('error_message')) $message = request()->get('error_message');
-            if(empty($message)) $message = $exception->getCode();
-
-            return redirect()->route('login')->with('error',$message);
+            if (empty($message) && request()->get('error_message')) {
+                $message = request()->get('error_message');
+            }
+            if (empty($message)) {
+                $message = $exception->getCode();
+            }
+    
+            return redirect()->route('login')->with('error', $message);
         }
     }
-
-    public function getRedirectTo(){
-        $url = session()->get('url.intended', url('/'));
-        session()->forget('url.intended');
-        if($url == url('/') or $url ==route('login') or $url == route('auth.register')){
-            $url = url('/');
-        }
-        return $url;
-    }
-
+    
 
 }
