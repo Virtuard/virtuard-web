@@ -84,7 +84,7 @@ Route::post('following', 'MemberController@following')->name('following');
 });
 
 // Social Login
-Route::get('social-login/{provider}', 'Auth\LoginController@socialLogin');
+Route::get('social-login/{provider}/{affiliate_id?}', 'Auth\LoginController@socialLogin');
 Route::get('social-callback/{provider}', 'Auth\LoginController@socialCallBack');
 
 // create

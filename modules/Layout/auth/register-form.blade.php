@@ -66,13 +66,13 @@
                     </div>
                 @endif
                 @if(setting_item('google_enable'))
-                    <div class="col-xs-12 col-sm-4">
-                        <a href="{{url('social-login/google')}}" class="btn btn_login_gg_link" data-channel="google">
-                            <i class="input-icon fa fa-google"></i>
-                            {{__('Google')}}
-                        </a>
-                    </div>
-                @endif
+                <div class="col-xs-12 col-sm-4">
+                    <a href="{{ url('social-login/google') . (Cookie::has('affiliate_id') ? '?affiliate_id=' . Cookie::get('affiliate_id') : '') }}" class="btn btn_login_gg_link" data-channel="google">
+                        <i class="input-icon fa fa-google"></i>
+                        {{__('Google')}}
+                    </a>
+                </div>
+            @endif
                 @if(setting_item('twitter_enable'))
                     <div class="col-xs-12 col-sm-4">
                         <a href="{{url('social-login/twitter')}}" class="btn btn_login_tw_link" data-channel="twitter">
