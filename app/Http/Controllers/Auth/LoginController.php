@@ -64,27 +64,16 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-{
-    // Cek apakah affiliate_id ada di cookie atau parameter
-    $affiliate_id = Cookie::get('affiliate_id'); // Ambil affiliate_id dari cookie
-
-    // Jika tidak ada di cookie, cek apakah ada di parameter URL
-    if (!$affiliate_id) {
-        $affiliate_id = request()->get('affiliate_id');
+    {
+        $this->initConfigs($provider);
+        $redirectTo = request()->server('HTTP_REFERER', url('/'));
+        session()->put('url.intended', $redirectTo);
+    
+        $affiliateId = Cookie::get('affiliate_id'); // Ambil affiliate_id dari cookie
+        $urlWithAffiliate = Socialite::driver($provider)->stateless()->redirectUrl(url('auth/callback/' . $provider . '?affiliate_id=' . $affiliateId));
+    
+        return redirect($urlWithAffiliate);
     }
-
-    // Buat URL login Google dengan Socialite
-    $redirectUrl = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
-
-    // Jika affiliate_id ada, tambahkan ke URL redirect
-    if ($affiliate_id) {
-        $redirectUrlWithAffiliate = $redirectUrl . (strpos($redirectUrl, '?') !== false ? '&' : '?') . 'affiliate_id=' . urlencode($affiliate_id);
-        return redirect()->to($redirectUrlWithAffiliate);
-    }
-
-    // Jika tidak ada affiliate_id, arahkan tanpa menambahkannya
-    return redirect()->to($redirectUrl);
-}
 
     protected function initConfigs($provider)
     {
