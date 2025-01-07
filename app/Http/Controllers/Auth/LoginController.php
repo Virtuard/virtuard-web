@@ -51,16 +51,16 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        if (Auth::user()->hasPermission('dashboard_access')) {
+        if(Auth::user()->hasPermission('dashboard_access')){
             return '/admin';
-        } else {
+        }else{
             return $this->redirectTo;
         }
     }
 
     public function showLoginForm()
     {
-        return view('auth.login', ['page_title' => __("Login")]);
+        return view('auth.login',['page_title'=> __("Login")]);
     }
 
     public function socialLogin($provider)
@@ -68,31 +68,31 @@ class LoginController extends Controller
         $this->initConfigs($provider);
         $redirectTo = request()->server('HTTP_REFERER', url('/'));
         session()->put('url.intended', $redirectTo);
-
+    
         // Retrieve affiliate_id from the cookie and store it
         $affiliateId = null;
         if (Cookie::has('affiliate_id')) {
             $affiliateId = Cookie::get('affiliate_id');
         }
-
+    
         // Store affiliate_id in session to pass it to the callback
         session()->put('affiliate_id', $affiliateId);
-
+    
         return Socialite::driver($provider)->redirect();
     }
 
     protected function initConfigs($provider)
     {
-        switch ($provider) {
+        switch($provider){
             case "facebook":
             case "google":
             case "twitter":
                 config()->set([
-                    'services.' . $provider . '.client_id' => setting_item($provider . '_client_id'),
-                    'services.' . $provider . '.client_secret' => setting_item($provider . '_client_secret'),
-                    'services.' . $provider . '.redirect' => '/social-callback/' . $provider,
+                    'services.'.$provider.'.client_id'=>setting_item($provider.'_client_id'),
+                    'services.'.$provider.'.client_secret'=>setting_item($provider.'_client_secret'),
+                    'services.'.$provider.'.redirect'=>'/social-callback/'.$provider,
                 ]);
-                break;
+            break;
         }
     }
 
@@ -106,27 +106,29 @@ class LoginController extends Controller
             $redirectTo = $this->getRedirectTo();
             session()->forget('url.intended');
 
+
             if (empty($user)) {
                 return redirect()->to('login')->with('error', __('Can not authorize'));
             }
 
             $existUser = User::getUserBySocialId($provider, $user->getId());
 
-            // Get the affiliate_id from session
             $affiliateId = session()->get('affiliate_id');
 
             if (empty($existUser)) {
+
                 $meta = UserMeta::query()->where('name', 'social_' . $provider . '_id')->where('val', $user->getId())->first();
                 if (!empty($meta)) {
                     $meta->delete();
                 }
 
-                // if we can't get an email, generate a fake one
+                // if we can not get email, then fake email will be generated
                 $email = $user->getEmail();
-                $email = $email ?: $user->getId() . '@' . $provider;
+                $email = $email?:$user->getId().'@'.$provider;
 
                 $userByEmail = User::query()->where('email', $email)->first();
                 if (!empty($userByEmail)) {
+
                     $userByEmail->addMeta('social_' . $provider . '_id', $user->getId());
                     $userByEmail->addMeta('social_' . $provider . '_email', $email);
                     $userByEmail->addMeta('social_' . $provider . '_name', $user->getName());
@@ -136,13 +138,13 @@ class LoginController extends Controller
                     $userByEmail->need_update_pw = 0;
                     $userByEmail->save();
 
-                    // Login with the user
+                    // Login with user
                     Auth::login($userByEmail);
 
                     return redirect($redirectTo);
                 }
 
-                // Create new user
+                // Create New User
                 $realUser = new User();
                 $realUser->email = $email;
                 $realUser->password = Hash::make(uniqid() . time());
@@ -152,7 +154,6 @@ class LoginController extends Controller
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
 
-                // Assign affiliate_plan_user_id if affiliate_id exists
                 if ($affiliateId) {
                     $realUser->affiliate_plan_user_id = $affiliateId;
                 }
@@ -173,11 +174,13 @@ class LoginController extends Controller
                     Log::warning("SendMailUserRegistered: " . $exception->getMessage());
                 }
 
-                // Login with the new user
+                // Login with user
                 Auth::login($realUser);
 
                 return redirect($redirectTo);
+
             } else {
+
                 if ($existUser->deleted == 1) {
                     return redirect()->route('login')->with('error', __('User blocked'));
                 }
@@ -192,16 +195,24 @@ class LoginController extends Controller
 
                 return redirect($redirectTo);
             }
-        } catch (\Exception $exception) {
+        }catch (\Exception $exception)
+        {
             $message = $exception->getMessage();
-            if (empty($message) && request()->get('error_message')) {
-                $message = request()->get('error_message');
-            }
-            if (empty($message)) {
-                $message = $exception->getCode();
-            }
+            if(empty($message) and request()->get('error_message')) $message = request()->get('error_message');
+            if(empty($message)) $message = $exception->getCode();
 
-            return redirect()->route('login')->with('error', $message);
+            return redirect()->route('login')->with('error',$message);
         }
     }
+
+    public function getRedirectTo(){
+        $url = session()->get('url.intended', url('/'));
+        session()->forget('url.intended');
+        if($url == url('/') or $url ==route('login') or $url == route('auth.register')){
+            $url = url('/');
+        }
+        return $url;
+    }
+
+
 }
