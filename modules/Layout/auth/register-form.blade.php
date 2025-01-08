@@ -67,12 +67,33 @@
                 @endif
                 @if(setting_item('google_enable'))
                 <div class="col-xs-12 col-sm-4">
-                    <a href="{{ url('social-login/google') . (Cookie::has('affiliate_id') ? '?affiliate_id=' . Cookie::get('affiliate_id') : '') }}" class="btn btn_login_gg_link" data-channel="google">
+                    <a href="javascript:void(0);" id="btn-google-login" class="btn btn_login_gg_link" data-channel="google">
                         <i class="input-icon fa fa-google"></i>
-                        {{__('Google')}}
+                        {{ __('Google') }}
                     </a>
                 </div>
-            @endif
+                
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                
+                <script>
+                    var hasAffiliateId = {{ Cookie::has('affiliate_id') ? 'true' : 'false' }};
+                
+                    document.getElementById('btn-google-login').addEventListener('click', function () {
+                        if (hasAffiliateId) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Sorry',
+                                text: 'You are using the affiliate feature, please register without using Google.',
+                            });
+                        } else {
+                            window.location.href = "{{ url('social-login/google') }}";
+                        }
+                    });
+                </script>
+                
+                
+                                
+                @endif
                 @if(setting_item('twitter_enable'))
                     <div class="col-xs-12 col-sm-4">
                         <a href="{{url('social-login/twitter')}}" class="btn btn_login_tw_link" data-channel="twitter">
