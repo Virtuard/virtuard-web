@@ -62,24 +62,26 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-{
-    $this->initConfigs($provider);
-
-    // Ambil affiliate_id dari query parameter URL
-    $affiliateId = request()->query('affiliate_id');
-
-    // Simpan affiliate_id di parameter state dalam format base64
-    $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
-
-    // Simpan URL referer yang diakses sebelumnya di session
-    $redirectTo = request()->server('HTTP_REFERER', url('/'));
-    session()->put('url.intended', $redirectTo);
-
-    // Redirect ke provider dengan membawa state yang sudah diencode
-    return Socialite::driver($provider)
-        ->with(['state' => $state])
-        ->redirect();
-}
+    {
+        $this->initConfigs($provider);
+    
+        // Ambil affiliate_id dari query parameter URL
+        $affiliateId = request()->query('affiliate_id');
+    
+        // Encode affiliate_id dalam parameter state
+        $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
+    
+        // Simpan URL referer di session
+        $redirectTo = request()->server('HTTP_REFERER', url('/'));
+        session()->put('url.intended', $redirectTo);
+    
+        // Redirect ke provider dengan parameter state
+        return Socialite::driver($provider)
+            ->stateless()
+            ->with(['state' => $state])
+            ->redirect();
+    }
+    
 
 
     protected function initConfigs($provider)
@@ -102,10 +104,15 @@ class LoginController extends Controller
         try {
             $this->initConfigs($provider);
 
-            $user = Socialite::driver($provider)->user();
+            $state = request()->query('state');
+        $decodedState = json_decode(base64_decode($state), true);
 
-            $redirectTo = $this->getRedirectTo();
-            session()->forget('url.intended');
+        // Ambil affiliate_id dari state jika ada
+        $affiliateId = $decodedState['affiliate_id'] ?? null;
+
+        // Lanjutkan proses otorisasi
+        $user = Socialite::driver($provider)->stateless()->user();
+        $redirectTo = $this->getRedirectTo();
 
 
             if (empty($user)) {
@@ -152,6 +159,9 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
+                if ($affiliateId) {
+                    $realUser->affiliate_plan_user_id = $affiliateId;                    
+                }
 
                 $realUser->save();
 
