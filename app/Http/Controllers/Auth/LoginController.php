@@ -62,13 +62,25 @@ class LoginController extends Controller
     }
 
     public function socialLogin($provider)
-    {
-        $this->initConfigs($provider);
-        $redirectTo = request()->server('HTTP_REFERER',url('/'));
-        session()->put('url.intended',$redirectTo);
+{
+    $this->initConfigs($provider);
 
-        return Socialite::driver($provider)->redirect();
-    }
+    // Ambil affiliate_id dari query parameter URL
+    $affiliateId = request()->query('affiliate_id');
+
+    // Simpan affiliate_id di parameter state dalam format base64
+    $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
+
+    // Simpan URL referer yang diakses sebelumnya di session
+    $redirectTo = request()->server('HTTP_REFERER', url('/'));
+    session()->put('url.intended', $redirectTo);
+
+    // Redirect ke provider dengan membawa state yang sudah diencode
+    return Socialite::driver($provider)
+        ->with(['state' => $state])
+        ->redirect();
+}
+
 
     protected function initConfigs($provider)
     {
