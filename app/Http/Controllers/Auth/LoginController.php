@@ -106,7 +106,7 @@ class LoginController extends Controller
             $decodedState = json_decode(base64_decode($state), true);
             $affiliateId = $decodedState['affiliate_id'] ?? null;
 
-            // dd($affiliateId);
+            dd($affiliateId);
 
             $user = Socialite::driver($provider)->user();
 
