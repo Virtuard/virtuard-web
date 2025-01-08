@@ -64,23 +64,11 @@ class LoginController extends Controller
     public function socialLogin($provider)
     {
         $this->initConfigs($provider);
-    
-        // Ambil affiliate_id dari query parameter URL
-        $affiliateId = request()->query('affiliate_id');
-    
-        // Simpan affiliate_id di parameter state dalam format base64
-        $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
-    
-        // Simpan URL referer yang diakses sebelumnya di session
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
-    
-        // Redirect ke provider dengan membawa state yang sudah diencode
-        return Socialite::driver($provider)
-            ->with(['state' => $state])
-            ->redirect();
+        $redirectTo = request()->server('HTTP_REFERER',url('/'));
+        session()->put('url.intended',$redirectTo);
+
+        return Socialite::driver($provider)->redirect();
     }
-    
 
     protected function initConfigs($provider)
     {
@@ -101,12 +89,6 @@ class LoginController extends Controller
     {
         try {
             $this->initConfigs($provider);
-
-            $state = request()->input('state');
-            $decodedState = json_decode(base64_decode($state), true);
-            $affiliateId = $decodedState['affiliate_id'] ?? null;
-
-            // dd($affiliateId);
 
             $user = Socialite::driver($provider)->user();
 
@@ -158,10 +140,6 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
-
-                if ($affiliateId) {
-                    $realUser->affiliate_plan_user_id = $affiliateId;
-                }
 
                 $realUser->save();
 
