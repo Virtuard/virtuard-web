@@ -64,25 +64,11 @@ class LoginController extends Controller
     public function socialLogin($provider)
     {
         $this->initConfigs($provider);
-    
-        // Ambil affiliate_id dari query parameter URL
-        $affiliateId = request()->query('affiliate_id');
-    
-        // Encode affiliate_id dalam parameter state
-        $state = base64_encode(json_encode(['affiliate_id' => $affiliateId]));
-    
-        // Simpan URL referer di session
-        $redirectTo = request()->server('HTTP_REFERER', url('/'));
-        session()->put('url.intended', $redirectTo);
-    
-        // Redirect ke provider dengan parameter state
-        return Socialite::driver($provider)
-            ->stateless()
-            ->with(['state' => $state])
-            ->redirect();
-    }
-    
+        $redirectTo = request()->server('HTTP_REFERER',url('/'));
+        session()->put('url.intended',$redirectTo);
 
+        return Socialite::driver($provider)->redirect();
+    }
 
     protected function initConfigs($provider)
     {
@@ -104,15 +90,10 @@ class LoginController extends Controller
         try {
             $this->initConfigs($provider);
 
-            $state = request()->query('state');
-        $decodedState = json_decode(base64_decode($state), true);
+            $user = Socialite::driver($provider)->user();
 
-        // Ambil affiliate_id dari state jika ada
-        $affiliateId = $decodedState['affiliate_id'] ?? null;
-
-        // Lanjutkan proses otorisasi
-        $user = Socialite::driver($provider)->stateless()->user();
-        $redirectTo = $this->getRedirectTo();
+            $redirectTo = $this->getRedirectTo();
+            session()->forget('url.intended');
 
 
             if (empty($user)) {
@@ -159,9 +140,6 @@ class LoginController extends Controller
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
                 $realUser->email_verified_at = Carbon::now();
-                if ($affiliateId) {
-                    $realUser->affiliate_plan_user_id = $affiliateId;                    
-                }
 
                 $realUser->save();
 
