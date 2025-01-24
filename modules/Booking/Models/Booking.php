@@ -28,6 +28,7 @@ class Booking extends BaseModel
     use HasPassenger;
     protected $table      = 'bravo_bookings';
     protected $cachedMeta = [];
+    protected $guarded = []; 
     //protected $cachedMetaArr = [];
     const DRAFT      = 'draft'; // New booking, before payment processing
     const UNPAID     = 'unpaid'; // Require payment

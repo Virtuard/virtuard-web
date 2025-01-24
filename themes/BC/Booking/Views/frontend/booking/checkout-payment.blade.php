@@ -6,7 +6,7 @@
                 <div class="card-header">
                     <h4 class="mb-0">
                         <label class="" data-toggle="collapse" data-target="#gateway_{{$k}}" >
-                            <input type="radio" name="payment_gateway" value="{{$k}}" {{ $k == 'stripe' ? 'checked' : '' }}>
+                            <input type="radio" name="payment_gateway" value="{{$k}}" {{ $k == 'offline_payment' ? 'checked' : '' }}>
                             @if($logo = $gateway->getDisplayLogo())
                                 <img src="{{$logo}}" alt="{{$gateway->getDisplayName()}}">
                             @endif

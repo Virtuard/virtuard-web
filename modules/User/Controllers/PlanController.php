@@ -3,16 +3,19 @@
 namespace Modules\User\Controllers;
 
 use App\Helpers\ReCaptchaEngine;
+use Burtds\CashConverter\Facades\CashConverter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Midtrans\Config;
+use Midtrans\Snap;
 use Modules\FrontendController;
 use Modules\User\Events\CreatePlanRequest;
 use Modules\User\Events\UpdatePlanRequest;
 use Modules\User\Models\Plan;
 use Modules\User\Models\PlanPayment;
 use Modules\User\Models\UserPlan;
-
+use Worksome\Exchange\Facades\Exchange;
 
 class PlanController extends FrontendController
 {
@@ -271,7 +274,7 @@ class PlanController extends FrontendController
             $payment->object_model = 'plan';
             $payment->object_id = $plan->id;
             $payment->status = 'draft';
-            $payment->payment_gateway = $payment_gateway;
+            $payment->payment_gateway = 'midtrans';
             $payment->amount =  $hasAffiliatePlan ? ($is_annual ? $plan->annual_price * 0.9 : $plan->price * 0.9) : ($is_annual ? $plan->annual_price : $plan->price);
             $payment->user_id = auth()->id();
             $payment->affiliate_id = $user->affiliate_plan_user_id;
@@ -284,62 +287,159 @@ class PlanController extends FrontendController
 
             // dd($payment->amount);
 
-            $res = $gatewayObj->processNormal($payment);
+            Config::$serverKey = config('midtrans.server_key');
+            Config::$clientKey = config('midtrans.client_key');
+            Config::$isProduction = config('midtrans.is_production');
+            Config::$is3ds = true;
+            Config::$isSanitized = true;
 
-            $success = $res[0] ?? null;
-            $message = $res[1] ?? null;
-            $redirect_url = $res[2] ?? null;
-            if ($success) {
-                event(new CreatePlanRequest($user));
+           $convertIdr = CashConverter::convert('USD','IDR', $payment->amount);
+           $convertIdr = round($convertIdr);
 
-                $new_user_plan = UserPlan::query()->where('user_id', $user->id)
-                    ->where('plan_id', $plan->id)->where('price', $payment->amount)
+            $transactionDetails = [
+                'order_id' => $payment->code,
+                'gross_amount' =>  $convertIdr,
+            ];
 
-                    ->first();
-                if (empty($new_user_plan)) {
-                    // $new_user_plan = new UserPlan();
-                }
+            $itemDetails = [
+                [
+                    'id' => 'Plan' . $plan->id,
+                    'price' => $convertIdr,
+                    'quantity' => 1,
+                    'name' => 'Plan #' . $payment->id
+                ]
+            ];
 
-                $new_user_plan->plan_id = $plan->id;
-                $new_user_plan->price = $payment->amount;
-                $new_user_plan->start_date = date('Y-m-d H:i:s');
-                if ($plan->duration) {
-                    $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
-                }
-                $new_user_plan->max_service = $plan->max_service;
-                $new_user_plan->max_ipanorama = $plan->max_ipanorama;
-                $new_user_plan->plan_data = $plan;
-                $new_user_plan->user_id = $user->id;
-                $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
-                $new_user_plan->referal_amount = $plan->price * 0.1;
+            $customerDetails = [
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+            ];
 
-                $new_user_plan->save();
+            $transaction = [
+                'payment_type' => 'credit_card',
+                'credit_card' => [
+                    'secure' => true
+                ],
+                'transaction_details' => $transactionDetails,
+                'item_details' => $itemDetails,
+                'customer_details' => $customerDetails,
+            ];
+
+            $snapToken = Snap::getSnapToken($transaction);
+
+            $payment->addMeta('snap_token', $snapToken);
+
+            return redirect()->route('frontend.plan.confirm-plan', ['code' => $payment->code]);
 
 
-                if (empty($redirect_url) and $payment->status == 'completed') {
-                    return redirect()
-                        ->route('user.plan')
-                        ->with($success ? 'success' : 'error', $message);
-                }
-                if ($payment->status == 'completed') {
-                    $redirect_url = route('user.plan');
-                }
+            // $res = $gatewayObj->processNormal($payment);
+            // $success = $res[0] ?? null;
+            // $message = $res[1] ?? null;
+            // $redirect_url = $res[2] ?? null;
+            // if ($success) {
+            //     event(new CreatePlanRequest($user));
 
-                if ($redirect_url) {
-                    return redirect()
-                        ->to($redirect_url)
-                        ->with('success', $message);
-                }
-                return redirect()
-                    ->route('user.plan.thank-you')
-                    ->with('success', $message);
-            } else {
-                return redirect()
-                    ->back()
-                    ->with('error', $message);
-            }
+            //     $new_user_plan = UserPlan::query()->where('user_id', $user->id)
+            //         ->where('plan_id', $plan->id)->where('price', $payment->amount)
+
+            //         ->first();
+            //     if (empty($new_user_plan)) {
+            //         // $new_user_plan = new UserPlan();
+            //     }
+
+            //     $new_user_plan->plan_id = $plan->id;
+            //     $new_user_plan->price = $payment->amount;
+            //     $new_user_plan->start_date = date('Y-m-d H:i:s');
+            //     if ($plan->duration) {
+            //         $new_user_plan->end_date = date('Y-m-d H:i:s', strtotime('+ ' . $plan->duration . ' ' . $plan->duration_type));
+            //     }
+            //     $new_user_plan->max_service = $plan->max_service;
+            //     $new_user_plan->max_ipanorama = $plan->max_ipanorama;
+            //     $new_user_plan->plan_data = $plan;
+            //     $new_user_plan->user_id = $user->id;
+            //     $new_user_plan->referal_user_id = $user->affiliate_plan_user_id;
+            //     $new_user_plan->referal_amount = $plan->price * 0.1;
+
+            //     $new_user_plan->save();
+
+
+            //     if (empty($redirect_url) and $payment->status == 'completed') {
+            //         return redirect()
+            //             ->route('user.plan')
+            //             ->with($success ? 'success' : 'error', $message);
+            //     }
+            //     if ($payment->status == 'completed') {
+            //         $redirect_url = route('user.plan');
+            //     }
+
+            //     if ($redirect_url) {
+            //         return redirect()
+            //             ->to($redirect_url)
+            //             ->with('success', $message);
+            //     }
+            //     return redirect()
+            //         ->route('user.plan.thank-you')
+            //         ->with('success', $message);
+            // } else {
+            //     return redirect()
+            //         ->back()
+            //         ->with('error', $message);
+            // }
         }
     }
+
+    public function handleSuccessPayment(Request $request)
+    {
+        $orderId = $request->orderId;
+        $transactionStatus = $request->transactionStatus;
+        $paymentType = $request->paymentType;
+        $fraudStatus = $request->fraudStatus;
+        $grossAmount = $request->grossAmount;
+
+        $user = auth()->user();
+        $payment = PlanPayment::where('code', $orderId)->firstOrFail();
+
+        if (!$payment) {
+            return response()->json(['message' => 'payment not found'], 404);
+        }
+
+        if ($transactionStatus == 'capture') {
+            if ($paymentType == 'credit_card') {
+                $payment->status = ($fraudStatus == 'challenge') ? 'pending' : 'paid';
+            }
+        } elseif ($transactionStatus == 'settlement') {
+            $payment->status = 'completed';
+
+
+            $plan = UserPlan::query()->where('user_id', $user->id)
+                ->where('plan_id', $payment->object_id)
+                ->where('price', $payment->amount)
+                ->orderBy('created_at', 'desc')
+                ->first();  
+
+            if ($plan) {
+                $plan->status = '1';
+                $plan->referal_user_id = $user->affiliate_plan_user_id;
+                $plan->referal_amount = $plan->price * 0.1;
+                $plan->save();
+            }
+        } elseif ($transactionStatus == 'pending') {
+            $payment->status = 'pending';
+        } elseif ($transactionStatus == 'deny') {
+            $payment->status = 'failed';
+        } elseif ($transactionStatus == 'expire') {
+            $payment->status = 'expired';
+        } elseif ($transactionStatus == 'cancel') {
+            $payment->status = 'canceled';
+        }
+
+        $payment->save();
+
+        return response()->json(['message' => 'Booking status updated']);
+    }
+
 
 
     public function thankYou(Request $request)
@@ -350,5 +450,16 @@ class PlanController extends FrontendController
     public function planStatus()
     {
         return view('plan-status');
+    }
+
+    public function confirmPlan($code)
+    {
+        $payment = PlanPayment::where('code', $code)->firstOrFail();
+
+
+        return view('User::frontend.plan.confirm-plan', [
+            'payment' => $payment,
+            'snapToken' => $payment->getMeta('snap_token')
+        ]);
     }
 }

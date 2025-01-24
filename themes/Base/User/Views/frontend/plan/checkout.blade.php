@@ -15,7 +15,7 @@
             $term_conditions = setting_item('booking_term_conditions');
 
     @endphp
-    <section class="pricing-section bravo-booking-page">
+<section class="pricing-section bravo-booking-page">
         <div class="container">
             <div class="row">
                 <div class="col-12">
