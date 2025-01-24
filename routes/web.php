@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cookie;
+use Modules\Booking\Controllers\BookingController;
+use Modules\User\Controllers\PlanController;
 
 /*
     |--------------------------------------------------------------------------
@@ -114,3 +116,9 @@ Route::get('/affiliate-{id_user}_{username}', function ($id_user, $username) {
     Cookie::queue('affiliate_id', $id_user, 43200);
     return redirect()->route('auth.register');
 });
+
+Route::post('midtrans/notification', [BookingController::class, 'handleNotification'])->name('midtrans.notification');
+Route::post('midtrans/success/plan', [PlanController::class, 'handleSuccessPayment'])->name('midtrans.success.plan');
+
+Route::get('thankyou/booking', [BookingController::class, 'thanyouController'])->name('booking.success.thankyou');
+

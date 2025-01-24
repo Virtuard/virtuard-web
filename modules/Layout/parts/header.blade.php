@@ -30,7 +30,7 @@
                         @else
                         @include('Language::frontend.switcher')
                         @endif
-                        @include('Core::frontend.currency-switcher')
+                        {{-- @include('Core::frontend.currency-switcher') --}}
                         @if(!Auth::check())
                             <li class="login-item">
                                 <a href="#login" data-toggle="modal" data-target="#login" class="login">{{__('Login')}}</a>

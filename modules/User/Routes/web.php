@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use \Illuminate\Support\Facades\Route;
+use Modules\User\Controllers\PlanController;
 use Modules\User\Controllers\ProfileController;
 
 Route::group(['prefix'=>'user','middleware' => ['auth','verified']],function(){
@@ -79,4 +80,6 @@ Route::get('/plan/thank-you','PlanController@thankYou')->name('user.plan.thank-y
 Route::get('/user/plan/buy/{id}','PlanController@buy')->name('user.plan.buy')->middleware(['auth', 'verified']);
 Route::post('/user/plan/buyProcess/{id}','PlanController@buyProcess')->name('user.plan.buyProcess')->middleware(['auth', 'verified']);
 Route::get('/user/plan/status','PlanController@planStatus')->name('user.plan.status')->middleware(['auth', 'verified']);
+Route::get('/confirm-plan/{code}', [PlanController::class, 'confirmPlan'])->name('frontend.plan.confirm-plan');
 
+Route::post('/midtrans/callback', [PlanController::class, 'midtransCallback']);
