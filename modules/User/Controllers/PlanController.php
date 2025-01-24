@@ -166,32 +166,31 @@ class PlanController extends FrontendController
         $rules = [];
         $message = [];
 
-        $payment_gateway = $request->input('payment_gateway');
-        $gateways = get_payment_gateways();
-        if (empty($payment_gateway)) {
-            return redirect()
-                ->back()
-                ->with('error', __('Please select payment gateway'));
-        }
-        if (empty($payment_gateway) or empty($gateways[$payment_gateway]) or !class_exists($gateways[$payment_gateway])) {
-            return redirect()
-                ->back()
-                ->with('error', __('Payment gateway not found'));
-        }
-        $gatewayObj = new ($gateways[$payment_gateway])($payment_gateway);
-        if (!$gatewayObj->isAvailable()) {
-            return redirect()
-                ->back()
-                ->with('error', __('Payment gateway is not available'));
-        }
-        if ($gRules = $gatewayObj->getValidationRules()) {
-            $rules = array_merge($rules, $gRules);
-        }
-        if ($gMessages = $gatewayObj->getValidationMessages()) {
-            $message = array_merge($message, $gMessages);
-        }
+        // $payment_gateway = $request->input('payment_gateway');
+        // $gateways = get_payment_gateways();
+        // if (empty($payment_gateway)) {
+        //     return redirect()
+        //         ->back()
+        //         ->with('error', __('Please select payment gateway'));
+        // }
+        // if (empty($payment_gateway) or empty($gateways[$payment_gateway]) or !class_exists($gateways[$payment_gateway])) {
+        //     return redirect()
+        //         ->back()
+        //         ->with('error', __('Payment gateway not found'));
+        // }
+        // $gatewayObj = new ($gateways[$payment_gateway])($payment_gateway);
+        // if (!$gatewayObj->isAvailable()) {
+        //     return redirect()
+        //         ->back()
+        //         ->with('error', __('Payment gateway is not available'));
+        // }
+        // if ($gRules = $gatewayObj->getValidationRules()) {
+        //     $rules = array_merge($rules, $gRules);
+        // }
+        // if ($gMessages = $gatewayObj->getValidationMessages()) {
+        //     $message = array_merge($message, $gMessages);
+        // }
 
-        $rules['payment_gateway'] = 'required';
         $rules['term_conditions'] = 'required';
 
         /**
