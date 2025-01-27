@@ -454,9 +454,9 @@ class BookingController extends \App\Http\Controllers\Controller
         $payment_gateway = 'offline_payment';
 
         // require payment gateway except pay full
-        if(empty(floatval($booking->deposit)) || $how_to_pay == 'deposit' || !auth()->check()){
-            $rules['payment_gateway'] = 'required';
-        }
+        // if(empty(floatval($booking->deposit)) || $how_to_pay == 'deposit' || !auth()->check()){
+        //     $rules['payment_gateway'] = 'required';
+        // }
 
         if(auth()->check()) {
             if ($credit > $user->balance) {
