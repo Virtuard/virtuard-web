@@ -451,12 +451,12 @@ class BookingController extends \App\Http\Controllers\Controller
 
         $how_to_pay = $request->input('how_to_pay', '');
         $credit = $request->input('credit', 0);
-        // $payment_gateway = $request->input('payment_gateway');
+        $payment_gateway = 'offline_payment';
 
         // require payment gateway except pay full
-        // if(empty(floatval($booking->deposit)) || $how_to_pay == 'deposit' || !auth()->check()){
-        //     $rules['payment_gateway'] = 'required';
-        // }
+        if(empty(floatval($booking->deposit)) || $how_to_pay == 'deposit' || !auth()->check()){
+            $rules['payment_gateway'] = 'required';
+        }
 
         if(auth()->check()) {
             if ($credit > $user->balance) {
@@ -471,7 +471,7 @@ class BookingController extends \App\Http\Controllers\Controller
         if (!empty($rules)) {
 
             $messages['term_conditions.required']    = __('Term conditions is required field');
-            // $messages['payment_gateway.required'] = __('Payment gateway is required field');
+            $messages['payment_gateway.required'] = __('Payment gateway is required field');
 
             $validator = Validator::make($request->all(), $rules , $messages );
             if ($validator->fails()) {

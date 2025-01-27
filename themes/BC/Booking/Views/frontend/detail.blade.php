@@ -63,7 +63,7 @@
             if (!snapToken) {
                 alert('Snap token not found!');
                 return;
-            }
+            }   
 
             snap.pay(snapToken, {
                 onSuccess: function(result) {
