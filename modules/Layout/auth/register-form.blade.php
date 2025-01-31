@@ -28,7 +28,7 @@
     </div>
     <div class="form-group">
         <input type="password" class="form-control" name="password" autocomplete="off" placeholder="{{__('Password')}}">
-        <i class="input-icon field-icon icofont-ui-password"></i>
+        {{-- <i class="input-icon field-icon icofont-ui-password"></i> --}}
         <span class="invalid-feedback error error-password"></span>
     </div>
     <div class="form-group">

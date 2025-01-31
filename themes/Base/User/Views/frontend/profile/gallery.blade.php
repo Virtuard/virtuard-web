@@ -15,6 +15,15 @@
             @endif
             @foreach ($post->medias as $media)
                 <div class="col-4  mb-2">
+                    {{-- @if(auth()->check() && auth()->user()->id == $post->user_id)
+                    <form action="{{ route('post.destroy', $post->id) }}" class="mb-0" method="POST">
+                        @csrf
+                        @method('delete')
+                            <button type="submit" class="cursor-pointer" style="color: red; border: 0; background: unset;">
+                                <i class="fa fa-trash"></i> Delete
+                            </button>
+                    </form>
+                @endif --}}
                     <div class="gallery-item">
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
                             <img class="img-responsive lazy loaded" data-src="{{ asset('uploads/' . $media->media) }}"

@@ -5,6 +5,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FollowUser;
+use Illuminate\Support\Facades\DB;
 
 class MemberController extends Controller
 {
@@ -57,30 +58,38 @@ class MemberController extends Controller
         }
 
         $data['users'] = $this->user
-            ->when(auth()->check(), function($q){
-                $q->where('id', '!=', auth()->user()->id);
-            })
-            ->when(isset($request->search), function($q) use ($request){
-                return $q->where('name', 'like', '%' . $request->search . '%');
-            })
-            ->when(isset($request->type), function($q) use ($request) {
-                if ($request->type == 'following') {
-                    return $q->whereHas('followers', function ($q1) {
-                        $q1->where('user_id', auth()->user()->id);
-                    });
-                }
-                elseif ($request->type == 'follower') {
-                    return $q->whereHas('followings', function ($q1) {
-                        $q1->where('follower_id', auth()->user()->id);
-                    });
-                }
-            })
-            ->where([
-                ['role_id', '!=', 1],
-                ['status', '=', 'publish'],
-            ])
-            ->orderBy('id', 'DESC')
-            ->paginate(15);
+        ->withCount([
+            'followers as followersCount' => function ($query) {
+                $query->select(DB::raw("count(*)"));
+            },
+            'followings as followingCount' => function ($query) {
+                $query->select(DB::raw("count(*)"));
+            }
+        ])
+        ->when(auth()->check(), function ($q) {
+            $q->where('id', '!=', auth()->user()->id);
+        })
+        ->when(isset($request->search), function ($q) use ($request) {
+            return $q->where('name', 'like', '%' . $request->search . '%');
+        })
+        ->when(isset($request->type), function ($q) use ($request) {
+            if ($request->type == 'following') {
+                return $q->whereHas('followers', function ($q1) {
+                    $q1->where('user_id', auth()->user()->id);
+                });
+            } elseif ($request->type == 'follower') {
+                return $q->whereHas('followings', function ($q1) {
+                    $q1->where('follower_id', auth()->user()->id);
+                });
+            }
+        })
+        ->where([
+            ['role_id', '!=', 1],
+            ['status', '=', 'publish'],
+        ])
+        ->orderBy('id', 'DESC')
+        ->paginate(15);
+    
 
         return view('app.members.index', $data);
     }
