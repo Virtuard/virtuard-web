@@ -19,6 +19,7 @@ use App\Models\PostLike;
 use App\Models\PostComment;
 use App\Models\Story;
 use App\Models\Ipanorama;
+use App\Notifications\PrivateChannelServices;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Str;
@@ -152,43 +153,122 @@ class PostController extends Controller
         }
     }
 
-    public function likePost($id)
+    public function likePost(Request $request, $id)
     {
         $idUser = Auth::id();
-
+        
+        $post = UserPost::find($id);
+        if (!$post) {
+            return redirect()->back()->with('error', 'Post not found');
+        }
+    
         $postLike = PostLike::where('post_id', $id)
             ->where('user_id', $idUser)
             ->first();
-
+    
         if (!$postLike) {
             $like = new PostLike();
             $like->post_id = $id;
             $like->user_id = $idUser;
             $like->save();
-
-            return redirect()->to(url()->previous() . '#Post-' . $id);
+    
+            $messageData = [
+                'id' => $post->user_id, 
+                'message' => 'Liked your post',
+            ];
+    
+            $this->notifyUser($post->user_id, $messageData);
         } else {
             $postLike->delete();
-            return redirect()->to(url()->previous() . '#Post-' . $id);
         }
+    
+        return redirect()->to(url()->previous() . '#Post-' . $id);
     }
+    
+    protected function notifyUser($toUserId, $message)
+    {
+        $currentUser = auth()->user();
+        $toUser = User::find($toUserId); 
+    
+        if (!$toUser) return;
+    
+        $message_content = __(':name :message', [
+            'name' => $currentUser->display_name, 
+            'message' => $message['message']
+        ]);
+    
+        $data = [
+            'id' => $toUserId, 
+            'notifiable_id' => $toUserId, 
+            'event' => 'LikeUser',
+            'to' => 'user',
+            'name' => $currentUser->display_name,
+            'avatar' => $currentUser->profile_picture ?? '', 
+            'link' => route('user.profile', ['id' => $currentUser->id]), 
+            'type' => 'like',
+            'message' => $message_content
+        ];
+    
+        $toUser->notify(new PrivateChannelServices($data));
+    }
+    
 
     public function storeComment(Request $request, $id)
     {
         $idUser = Auth::id();
-
+    
         $request->validate([
             'comment' => 'required',
         ]);
-
+    
+        $post = UserPost::find($id);
+        if (!$post) {
+            return redirect()->back()->with('error', 'Post not found');
+        }
+    
         $comment = new PostComment();
         $comment->post_id = $id;
         $comment->user_id = $idUser;
         $comment->comment = $request->input('comment');
         $comment->save();
-
+    
+        $messageData = [
+            'id' => $post->user_id, 
+            'message' => 'Commented on your post',
+        ];
+    
+        $this->notifyUserComeent($post->user_id, $messageData);
+    
         return redirect()->to(url()->previous() . '#Post-' . $id);
     }
+    
+    protected function notifyUserComeent($toUserId, $message)
+    {
+        $currentUser = auth()->user();
+        $toUser = User::find($toUserId); 
+    
+        if (!$toUser) return;
+    
+        $message_content = __(':name :message', [
+            'name' => $currentUser->display_name, 
+            'message' => $message['message']
+        ]);
+    
+        $data = [
+            'id' => $toUserId, 
+            'notifiable_id' => $toUserId, 
+            'event' => 'CommentUser',
+            'to' => 'user',
+            'name' => $currentUser->display_name,
+            'avatar' => $currentUser->profile_picture ?? '', 
+            'link' => route('user.profile', ['id' => $currentUser->id]), 
+            'type' => 'comment',
+            'message' => $message_content
+        ];
+    
+        $toUser->notify(new PrivateChannelServices($data));
+    }
+    
 
     public function destroy($id)
     {

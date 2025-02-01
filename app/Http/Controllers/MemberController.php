@@ -5,7 +5,10 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\FollowUser;
+use App\Notifications\PrivateChannelServices;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
 
 class MemberController extends Controller
 {
@@ -97,25 +100,67 @@ class MemberController extends Controller
     public function store(Request $request) {
         $data = $request->all();
         $data['user_id'] = auth()->user()->id;
-
-        if($data['action'] === 'follow'){
+        
+        if ($data['action'] === 'follow') {
             FollowUser::create($data);
-
+    
+            $messageData = [
+                'id' => uniqid(), 
+                'message' => 'started following you', 
+                'attachment' => null 
+            ];
+            $this->notifyUser($request, $messageData);
+    
             return back()->with([
                 'status' => 'success',
                 'message' => 'Following success'
             ]);
-        }else{
+        } else {
             FollowUser::where([
                 ['user_id', $data['user_id']],
                 ['follower_id', $data['follower_id']],
             ])->delete();
-
+    
+            $messageData = [
+                'id' => uniqid(),
+                'message' => 'unfollowed you',
+                'attachment' => null
+            ];
+            $this->notifyUser($request, $messageData);
+    
             return back()->with([
                 'status' => 'success',
                 'message' => 'Unfollowing success'
             ]);
         }
-
     }
+    
+
+    protected function notifyUser(Request $request, $message) {
+        $currentUser = auth()->user();
+        $toUser = User::find($request->follower_id); 
+    
+        if (!$toUser) return;
+    
+       
+        $message_content = __(':name :message', [
+            'name' => $currentUser->display_name, 
+            'message' => $message['message']
+        ]);
+    
+        $data = [
+            'id' =>  $message['id'],
+            'event' => 'FollowUser',
+            'to' => 'user',
+            'name' => $currentUser->display_name,
+            'avatar' => '',
+            'link' => route('user.profile', ['id' => $currentUser->id]), 
+            'type' => 'follow',
+            'message' => $message_content
+        ];
+    
+        $toUser->notify(new PrivateChannelServices($data));
+    }
+    
+    
 }

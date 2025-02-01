@@ -3,28 +3,44 @@
     <div class="row mt-2">
         @foreach ($userPosts as $post)
             @if ($post->ipanorama)
-            <div class="col-4  mb-2">
-                <div class="gallery-item">
-                    <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
-                        data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->ipanorama->user_id }}">
-                        <img src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
-                            alt="image">
-                    </a>
-                </div>
-            </div>
-            @endif
-            @foreach ($post->medias as $media)
-                <div class="col-4  mb-2">
-                    {{-- @if(auth()->check() && auth()->user()->id == $post->user_id)
-                    <form action="{{ route('post.destroy', $post->id) }}" class="mb-0" method="POST">
-                        @csrf
-                        @method('delete')
-                            <button type="submit" class="cursor-pointer" style="color: red; border: 0; background: unset;">
-                                <i class="fa fa-trash"></i> Delete
-                            </button>
-                    </form>
-                @endif --}}
+                <div class="col-4 mb-2">
                     <div class="gallery-item">
+                        {{-- Tombol Delete --}}
+                        @if (auth()->check() && auth()->user()->id == $post->user_id)
+                            <form action="{{ route('post.destroy', $post->id) }}" method="POST"
+                                class="delete-btn-wrapper">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        @endif
+
+                        <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
+                            data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->ipanorama->user_id }}">
+                            <img src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
+                                alt="image">
+                        </a>
+                    </div>
+                </div>
+            @endif
+
+            @foreach ($post->medias as $media)
+                <div class="col-4 mb-2">
+                    <div class="gallery-item">
+                        {{-- Tombol Delete --}}
+                        @if (auth()->check() && auth()->user()->id == $post->user_id)
+                            <form action="{{ route('post.destroy', $post->id) }}" method="POST"
+                                class="delete-btn-wrapper">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        @endif
+
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
                             <img class="img-responsive lazy loaded" data-src="{{ asset('uploads/' . $media->media) }}"
                                 alt="image" src="{{ asset('uploads/' . $media->media) }}"
@@ -37,11 +53,41 @@
     </div>
 </div>
 
+
+
 <section class="section-modal">
     @include('vendor.ipanorama.demo.includes.ipanorama-modal')
 </section>
 
 <style>
+    .delete-btn-wrapper {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        z-index: 10;
+    }
+
+    .delete-btn {
+        background: rgba(255, 0, 0, 0.7);
+        color: white;
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+        font-size: 16px;
+    }
+
+    .delete-btn:hover {
+        background: rgba(255, 0, 0, 1);
+        transform: scale(1.1);
+        box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.5);
+    }
+
     .gallery-item {
         position: relative;
         overflow: hidden;
