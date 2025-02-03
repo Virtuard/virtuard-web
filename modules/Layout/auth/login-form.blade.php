@@ -7,10 +7,27 @@
         <span class="invalid-feedback error error-email"></span>
     </div>
     <div class="form-group">
-        <input type="password" class="form-control" name="password" autocomplete="off"  placeholder="{{__('Password')}}">
-        {{-- <i class="input-icon icofont-ui-password"></i> --}}
+        <input type="password" class="form-control" name="password" id="password" autocomplete="off" placeholder="{{__('Password')}}">
+        <span class="input-icon icofont-eye" id="toggle-password" style="cursor: pointer;"></span>
         <span class="invalid-feedback error error-password"></span>
     </div>
+    
+    <script>
+        document.getElementById('toggle-password').addEventListener('click', function () {
+            var passwordField = document.getElementById('password');
+            var passwordType = passwordField.type === 'password' ? 'text' : 'password';
+            passwordField.type = passwordType;
+            
+            if (passwordType === 'password') {
+                this.classList.remove('icofont-eye-blocked'); 
+                this.classList.add('icofont-eye'); 
+            } else {
+                this.classList.remove('icofont-eye'); 
+                this.classList.add('icofont-eye-blocked'); 
+            }
+        });
+    </script>
+    
     <div class="form-group">
         <div class="d-flex justify-content-between">
             <label for="remember-me" class="mb0">
