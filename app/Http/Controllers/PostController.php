@@ -47,24 +47,23 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $posts = $this->userPost
-        ->with(['ipanorama', 'medias', 'likes', 'comments'])
-        ->when(isset($request->filter), function($q) use ($request){
-            if (auth()->check()) {
-                if ($request->filter == 'me') {
-                    $q->where('user_id', auth()->user()->id);
+            ->with(['ipanorama', 'medias', 'likes', 'comments'])
+            ->when(isset($request->filter), function ($q) use ($request) {
+                if (auth()->check()) {
+                    if ($request->filter == 'me') {
+                        $q->where('user_id', auth()->user()->id);
+                    } elseif ($request->filter == 'friend') {
+                        $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
+                        $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
+                        $ids = array_merge($following_ids, $follwer_ids);
+                        $q->whereIn('user_id', $ids);
+                    }
                 }
-                elseif ($request->filter == 'friend') {
-                    $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
-                    $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
-                    $ids = array_merge($following_ids, $follwer_ids);
-                    $q->whereIn('user_id', $ids);
-                }
-            }
-        })
-        ->orderBy('id', 'desc')
-        ->paginate(20)
-        ->withQueryString();
-        
+            })
+            ->orderBy('id', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+
         $memberCount = User::count();
         $idUser = Auth::id();
         $dataIpanorama = Ipanorama::where([
@@ -72,12 +71,11 @@ class PostController extends Controller
             ['status', 'publish'],
         ])->get();
         $feeds = Story::query()
-            ->when(isset($request->filter), function($q) use ($request){
+            ->when(isset($request->filter), function ($q) use ($request) {
                 if (auth()->check()) {
                     if ($request->filter == 'me') {
                         $q->where('user_id', auth()->user()->id);
-                    }
-                    elseif ($request->filter == 'friend') {
+                    } elseif ($request->filter == 'friend') {
                         $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
                         $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
                         $ids = array_merge($following_ids, $follwer_ids);
@@ -116,37 +114,37 @@ class PostController extends Controller
 
         DB::beginTransaction();
         try {
-        
 
-        $dataPost = [
-            'user_id' =>  auth()->user()->id,
-            'ipanorama_id' =>  $request->input('ipanorama_id'),
-            'message' =>  $request->input('message'),
-            'type_status' =>  'Status',
-            'type_post' =>  $request->input('type_post'),
-            'tag' =>  '-',
-        ];
-        $post = UserPost::create($dataPost);
 
-        if ($request->hasFile('media_user')) {
-            $files = $request->file('media_user');
-            foreach ($files as $file) {
-                $filename = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-                $type = getMimeTypeFromExtension($extension);
-                $path = $file->storeAs('/media', $filename);
+            $dataPost = [
+                'user_id' =>  auth()->user()->id,
+                'ipanorama_id' =>  $request->input('ipanorama_id'),
+                'message' =>  $request->input('message'),
+                'type_status' =>  'Status',
+                'type_post' =>  $request->input('type_post'),
+                'tag' =>  '-',
+            ];
+            $post = UserPost::create($dataPost);
 
-                $dataMedia = [
-                    'post_id' => $post->id,
-                    'media' => $path,
-                    'type' => $type,
-                ];
-                $mediaItem = PostMedia::create($dataMedia);
+            if ($request->hasFile('media_user')) {
+                $files = $request->file('media_user');
+                foreach ($files as $file) {
+                    $filename = $file->getClientOriginalName();
+                    $extension = $file->getClientOriginalExtension();
+                    $type = getMimeTypeFromExtension($extension);
+                    $path = $file->storeAs('/media', $filename);
+
+                    $dataMedia = [
+                        'post_id' => $post->id,
+                        'media' => $path,
+                        'type' => $type,
+                    ];
+                    $mediaItem = PostMedia::create($dataMedia);
+                }
             }
-        }
 
-        DB::commit();
-        return back()->with('success', 'Updated status');
+            DB::commit();
+            return back()->with('success', 'Updated status');
         } catch (Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Something wrong!');
@@ -156,119 +154,118 @@ class PostController extends Controller
     public function likePost(Request $request, $id)
     {
         $idUser = Auth::id();
-        
+
         $post = UserPost::find($id);
         if (!$post) {
             return redirect()->back()->with('error', 'Post not found');
         }
-    
+
         $postLike = PostLike::where('post_id', $id)
             ->where('user_id', $idUser)
             ->first();
-    
+
         if (!$postLike) {
             $like = new PostLike();
             $like->post_id = $id;
             $like->user_id = $idUser;
             $like->save();
-    
+
             $messageData = [
-                'id' => $post->user_id, 
+                'id' => $post->user_id,
                 'message' => 'Liked your post',
             ];
-    
-            $this->notifyUser($post->user_id, $messageData);
+
+            $this->notifyUser($post->user_id, $messageData, $id);
         } else {
             $postLike->delete();
         }
-    
         return redirect()->to(url()->previous() . '#Post-' . $id);
     }
-    
-    protected function notifyUser($toUserId, $message)
+
+    protected function notifyUser($toUserId, $message, $postId)
     {
         $currentUser = auth()->user();
-        $toUser = User::find($toUserId); 
-    
+        $toUser = User::find($toUserId);
+
         if (!$toUser) return;
-    
+
         $message_content = __(':name :message', [
-            'name' => $currentUser->display_name, 
+            'name' => $currentUser->display_name,
             'message' => $message['message']
         ]);
-    
+
         $data = [
-            'id' => $toUserId, 
-            'notifiable_id' => $toUserId, 
+            'id' => $toUserId,
+            'notifiable_id' => $toUserId,
             'event' => 'LikeUser',
             'to' => 'user',
             'name' => $currentUser->display_name,
-            'avatar' => $currentUser->profile_picture ?? '', 
-            'link' => route('user.profile', ['id' => $currentUser->id]), 
+            'avatar' => $currentUser->profile_picture ?? '',
+            'link' => url()->previous() . '#Post-' . $postId,
             'type' => 'like',
             'message' => $message_content
         ];
-    
+
         $toUser->notify(new PrivateChannelServices($data));
     }
-    
+
 
     public function storeComment(Request $request, $id)
     {
         $idUser = Auth::id();
-    
+
         $request->validate([
             'comment' => 'required',
         ]);
-    
+
         $post = UserPost::find($id);
         if (!$post) {
             return redirect()->back()->with('error', 'Post not found');
         }
-    
+
         $comment = new PostComment();
         $comment->post_id = $id;
         $comment->user_id = $idUser;
         $comment->comment = $request->input('comment');
         $comment->save();
-    
+
         $messageData = [
-            'id' => $post->user_id, 
+            'id' => $post->user_id,
             'message' => 'Commented on your post',
         ];
-    
-        $this->notifyUserComeent($post->user_id, $messageData);
-    
+
+        $this->notifyUserComeent($post->user_id, $messageData, $id);
+
         return redirect()->to(url()->previous() . '#Post-' . $id);
     }
-    
-    protected function notifyUserComeent($toUserId, $message)
+
+    protected function notifyUserComeent($toUserId, $message, $postId)
     {
         $currentUser = auth()->user();
-        $toUser = User::find($toUserId); 
-    
+        $toUser = User::find($toUserId);
+
         if (!$toUser) return;
-    
+
         $message_content = __(':name :message', [
-            'name' => $currentUser->display_name, 
+            'name' => $currentUser->display_name,
             'message' => $message['message']
         ]);
-    
+
         $data = [
-            'id' => $toUserId, 
-            'notifiable_id' => $toUserId, 
+            'id' => $toUserId,
+            'notifiable_id' => $toUserId,
             'event' => 'CommentUser',
             'to' => 'user',
             'name' => $currentUser->display_name,
-            'avatar' => $currentUser->profile_picture ?? '', 
-            'link' => route('user.profile', ['id' => $currentUser->id]), 
+            'avatar' => $currentUser->profile_picture ?? '',
+            'link' => url()->previous() . '#Post-' . $postId,
             'type' => 'comment',
             'message' => $message_content
         ];
-    
+
         $toUser->notify(new PrivateChannelServices($data));
     }
-    
+
 
     public function destroy($id)
     {
