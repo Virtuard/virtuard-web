@@ -122,3 +122,11 @@ Route::post('midtrans/success/plan', [PlanController::class, 'handleSuccessPayme
 
 Route::get('thankyou/booking', [BookingController::class, 'thanyouController'])->name('booking.success.thankyou');
 
+// Disable API Documentation in Production
+if (app()->environment('local')) {
+    Route::get('/api/documentation', '\L5Swagger\Http\Controllers\SwaggerController@api');
+} else {
+    Route::get('/api/documentation', function () {
+        abort(404);
+    });
+}
