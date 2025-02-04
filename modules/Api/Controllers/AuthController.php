@@ -30,6 +30,7 @@ class AuthController extends Controller
             'except' => [
                 'login',
                 'register',
+                'checkEmailAvailability',
                 'sendResetLinkEmail'
                 ]
         ]);
@@ -173,6 +174,14 @@ class AuthController extends Controller
             $user->assignRole(setting_item('user_role'));
             return $this->sendSuccess(__('Register successfully'));
         }
+    }
+
+    public function checkEmailAvailability(Request $request){
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            return $this->sendError(__('Email is already in use'));
+        }
+        return $this->sendSuccess(__('Email is available'));
     }
 
     /**
