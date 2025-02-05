@@ -174,11 +174,11 @@ function showErrorGeo(error) {
   }
   
 
-// Notification create listing
-window.addEventListener('scroll', function() {
-    if(this.window.scrollY > 515) {
-        $(".notification-container").addClass("active");
-    } else {
-        $(".notification-container").removeClass("active");
-    }
-})
+// // Notification create listing
+// window.addEventListener('scroll', function() {
+//     if(this.window.scrollY > 515) {
+//         $(".notification-container").addClass("active");
+//     } else {
+//         $(".notification-container").removeClass("active");
+//     }
+// })

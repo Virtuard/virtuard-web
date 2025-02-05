@@ -145,6 +145,17 @@
             window.addEventListener('resize', googleTranslateElementInit);
         </script>
     @endif
+
+    <script>
+        // Notification create listing
+        window.addEventListener('scroll', function() {
+            if(this.window.scrollY > 515) {
+                $(".notification-container").addClass("active");
+            } else {
+                $(".notification-container").removeClass("active");
+            }
+        })
+    </script>
 </body>
 
 </html>
