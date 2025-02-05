@@ -19,6 +19,7 @@ use Modules\User\Controllers\PlanController;
 // Route::get('/intro', 'LandingpageController@index');
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/landing', 'HomeController@landing')->name('landing');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 Route::get('/need-reset-password', 'HomeController@needResetPassword');
 Route::get('/need-confirm-email', 'HomeController@needConfirmEmail');

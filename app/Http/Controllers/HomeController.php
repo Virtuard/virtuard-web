@@ -59,6 +59,11 @@ class HomeController extends Controller
         return view('News::frontend.index',$data);
     }
 
+    public function landing()
+    {
+        return view('landing');
+    }
+
     public function checkConnectDatabase(Request $request){
         $connection = $request->input('database_connection');
         config([
