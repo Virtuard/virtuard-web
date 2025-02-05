@@ -77,6 +77,17 @@
 
         @yield('content')
 
+        @if (Request::is('/'))
+            <div class="notification-container">
+                <div class="notification-create-listing">
+                    <p>Ready to share your space? Create a listing now!</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ route('create') }}" class="btn btn-primary">Create Listing</a>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @include('Layout::parts.footer')
     </div>
     @if (!is_demo_mode())

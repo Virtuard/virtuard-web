@@ -347,3 +347,31 @@ li.create-item a:before {
         }
     }
 }
+
+@media (max-width: 992px) {
+    .notification-container {
+        display: flex;
+        justify-content: center;
+        opacity: 1;
+        transition: all .3s;
+        .notification-create-listing {
+            margin: 0 16px;
+            position: fixed;
+            bottom: -150px;
+            max-width: 400px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 32px;
+            border-radius: 8px;
+            transition: all .3s;    
+        }
+        &.active {
+            opacity: 1;
+            .notification-create-listing {
+                bottom: 70px;
+            }
+        }
+    }
+}
