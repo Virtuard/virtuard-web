@@ -172,7 +172,8 @@ class AuthController extends Controller
             } catch (Exception $exception) {
                 Log::warning("SendMailUserRegistered: " . $exception->getMessage());
             }
-            $user->assignRole(setting_item('user_role'));
+            // $user->assignRole(setting_item('user_role'));
+            $user->assignRole(2);
             return $this->sendSuccess(__('Register successfully'));
         }
     }
