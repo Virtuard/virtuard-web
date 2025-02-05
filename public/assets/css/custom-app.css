@@ -348,7 +348,7 @@ li.create-item a:before {
     }
 }
 
-@media (max-width: 992px) {
+/* @media (max-width: 992px) {
     .notification-container {
         display: flex;
         justify-content: center;
@@ -374,4 +374,4 @@ li.create-item a:before {
             }
         }
     }
-}
+} */
