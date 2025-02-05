@@ -57,19 +57,8 @@ class LoginController extends Controller
         }
     }
 
-    public function showLoginForm(Request $request)
+    public function showLoginForm()
     {
-        $token = $request->query('token');
-
-        if ($token) {
-            $user = User::where('api_token', $token)->first();
-    
-            if ($user) {
-                Auth::login($user);
-                return redirect('/');
-            }
-        }
-
         return view('auth.login',['page_title'=> __("Login")]);
     }
 

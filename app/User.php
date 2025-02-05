@@ -73,6 +73,7 @@ use Illuminate\Notifications\Notifiable;
             'confirmation_code',
             'affiliate_plan_user_id',
             'role_id',
+            'api_token',
 //            'vendor_plan_id',
 //            'vendor_plan_enable',
 //            'vendor_plan_start_date',
