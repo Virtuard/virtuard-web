@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtuard Demo</title>
+    <title>Explore 3D & 360 Virtual Tours | Virtual Tours by Virtuard</title>
+
+    <meta name="description" content="Explore 3D & 360 Virtual Tours | Virtual Tours by Virtuard">
+    {{-- <meta name="keywords" content="keyword1, keyword2, keyword3"> --}}
+    {{-- <meta name="author" content="Your Name or Company"> --}}
 
     <!-- favicon -->
-    <link rel="icon" href="/assets/images/virtuard-logo.png" type="image/x-icon">
+    <link rel="icon" href="/images/virtuard-logo.png" type="image/x-icon">
 
     <link rel="stylesheet" href="/assets/css/landing.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
