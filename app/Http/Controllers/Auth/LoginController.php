@@ -13,6 +13,7 @@ use Matrix\Exception;
 use Modules\User\Events\SendMailUserRegistered;
 use \Laravel\Socialite\Facades\Socialite;
 use App\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
@@ -56,8 +57,19 @@ class LoginController extends Controller
         }
     }
 
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        $token = $request->query('token');
+
+        if ($token) {
+            $user = User::where('api_token', $token)->first();
+    
+            if ($user) {
+                Auth::login($user);
+                return redirect('/');
+            }
+        }
+
         return view('auth.login',['page_title'=> __("Login")]);
     }
 
