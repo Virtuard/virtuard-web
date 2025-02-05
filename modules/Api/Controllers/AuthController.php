@@ -164,6 +164,7 @@ class AuthController extends Controller
                 'phone'    => $request->input('phone'),
                 'status'    => 'publish',
                 'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                'role_id' => 2
             ]);
             event(new Registered($user));
             //Auth::loginUsingId($user->id);
@@ -173,7 +174,6 @@ class AuthController extends Controller
                 Log::warning("SendMailUserRegistered: " . $exception->getMessage());
             }
             // $user->assignRole(setting_item('user_role'));
-            $user->assignRole(2);
             return $this->sendSuccess(__('Register successfully'));
         }
     }
