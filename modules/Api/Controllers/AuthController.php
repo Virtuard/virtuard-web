@@ -161,8 +161,9 @@ class AuthController extends Controller
                 'last_name'  => $request->input('last_name'),
                 'email'      => $request->input('email'),
                 'password'   => Hash::make($request->input('password')),
-                'publish'    => $request->input('publish'),
                 'phone'    => $request->input('phone'),
+                'status'    => 'publish',
+                'confirmation_code' => md5(uniqid(mt_rand(), true)),
             ]);
             event(new Registered($user));
             //Auth::loginUsingId($user->id);
