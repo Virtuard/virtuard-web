@@ -111,7 +111,7 @@
                 <div class="notification-create-listing">
                     <p>Ready to share your space? Create a listing now!</p>
                     <div class="d-flex justify-content-center">
-                        <a href="{{ route('create') }}" class="btn btn-primary">Create Listing</a>
+                        <a href="{{ route('create') }}" class="btn btn-primary">Create Listing for Free</a>
                     </div>
                 </div>
             </div>
