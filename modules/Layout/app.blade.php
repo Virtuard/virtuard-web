@@ -62,6 +62,11 @@
     @endif
 
     <style>
+        @media (min-width: 993px) {
+            .notification-container {
+                display: none;
+            }
+        }
         @media (max-width: 992px) {
             .notification-container {
                 display: flex;
