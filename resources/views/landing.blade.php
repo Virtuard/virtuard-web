@@ -469,12 +469,12 @@
                 </div>
                 {{-- <p class="error-message error term hidden"></p> --}}
                 <span class="error-message error error-term"></span>
-                @if(setting_item("user_enable_register_recaptcha"))
+                {{-- @if(setting_item("user_enable_register_recaptcha"))
                     <div class="form-group">
                         {{recaptcha_field($captcha_action ?? 'register')}}
                     </div>
                     <div><span class="error-message error error-g-recaptcha-response"></span></div>
-                @endif
+                @endif --}}
                 <div class="error message-error invalid-feedback"></div>
                 <div>
                     <button type="submit" class="btn btn-primary form-submit">
@@ -563,8 +563,8 @@
                     'X-CSRF-TOKEN': form.find('meta[name="csrf-token"]').attr('content')
                 }
             });
-            console.log(form)
-            console.log(form.find('input[name=email]').val());
+            // console.log(form)
+            // console.log(form.find('input[name=email]').val());
             $.ajax({
                 'url':  '/register',
                 'data': {
@@ -584,7 +584,7 @@
                     $(".form-submit").attr('disabled', true);
                 },
                 success: function (data) {
-                    console.log(data)
+                    // console.log(data)
                     form.find('.loader').removeClass('active');
                     $(".form-submit").attr('disabled', false);
                     if (data.error === true) {
@@ -608,7 +608,7 @@
                     }
                 },
                 error:function (e) {
-                    console.log(e)
+                    // console.log(e)
                     form.find('.loader').removeClass('active');
                     $(".form-submit").attr('disabled', false);
                     if(typeof e.responseJSON !== "undefined" && typeof e.responseJSON.message !='undefined'){
