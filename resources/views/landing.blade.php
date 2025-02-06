@@ -554,19 +554,19 @@
     <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script>
     {{-- <script src="{{ asset('/assets/js/landing-register.js') }}"></script> --}}
     <script>
-        //   document.addEventListener("DOMContentLoaded", function() {
-        //     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+          document.addEventListener("DOMContentLoaded", function() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-        //     // Deteksi jika dibuka dari Instagram atau Facebook
-        //     if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
-        //         // Arahkan ke browser eksternal (Google Chrome di Android)
-        //         window.location.href = "googlechrome://virtuard.com/landing"; 
-        //     }
-        //     else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
-        //         // Arahkan ke Safari di iOS
-        //         window.location.href = "virtuard.com/landing";
-        //     }
-        // });
+            // Deteksi jika dibuka dari Instagram atau Facebook
+            if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
+                // Arahkan ke browser eksternal (Google Chrome di Android)
+                window.location.href = "googlechrome://virtuard.com/landing"; 
+            }
+            else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+                // Arahkan ke Safari di iOS
+                window.location.href = "virtuard.com/landing";
+            }
+        });
   
         $('.register-form [type=submit]').click(function (e) {
             e.preventDefault();
