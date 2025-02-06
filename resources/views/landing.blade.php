@@ -264,7 +264,7 @@
         }
 
         .container .advanced {
-            margin-top: 16px;
+            margin-bottom: 16px;
         }
 
         .btn_login_gg_link {
@@ -425,6 +425,37 @@
             </p>
             <form class="register-form" action="{{route('auth.register.store')}}" method="POST">
                 @csrf
+                @if(setting_item('google_enable'))
+                    <div class="advanced">
+                        {{-- <p class="text-center f14 c-grey">{{__("or continue with")}}</p> --}}
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-4">
+                                <a href="javascript:void(0);" id="btn-google-login" class="btn btn_login_gg_link" data-channel="google">
+                                    <i class="input-icon fa fa-google"></i>
+                                    {{ __('Sign Up With Google') }}
+                                </a>
+                            </div>
+                            
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                            
+                            <script>
+                                var hasAffiliateId = {{ Cookie::has('affiliate_id') ? 'true' : 'false' }};
+                            
+                                document.getElementById('btn-google-login').addEventListener('click', function () {
+                                    if (hasAffiliateId) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Sorry',
+                                            text: 'You are using the affiliate feature, please register without using Google.',
+                                        });
+                                    } else {
+                                        window.location.href = "{{ url('social-login/google') }}";
+                                    }
+                                });
+                            </script>
+                        </div>
+                    </div>
+                @endif
                 <div class="mb-3">
                     <h4 class="sign-up-text">Sign Up for Free</h4>
                 </div>
@@ -484,37 +515,6 @@
                         <button type="button" class="btn btn-secondary">Create Your Listing</button>
                     </a>
                 </div>
-                @if(setting_item('google_enable'))
-                    <div class="advanced">
-                        <p class="text-center f14 c-grey">{{__("or continue with")}}</p>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-4">
-                                <a href="javascript:void(0);" id="btn-google-login" class="btn btn_login_gg_link" data-channel="google">
-                                    <i class="input-icon fa fa-google"></i>
-                                    {{ __('Sign Up With Google') }}
-                                </a>
-                            </div>
-                            
-                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                            
-                            <script>
-                                var hasAffiliateId = {{ Cookie::has('affiliate_id') ? 'true' : 'false' }};
-                            
-                                document.getElementById('btn-google-login').addEventListener('click', function () {
-                                    if (hasAffiliateId) {
-                                        Swal.fire({
-                                            icon: 'error',
-                                            title: 'Sorry',
-                                            text: 'You are using the affiliate feature, please register without using Google.',
-                                        });
-                                    } else {
-                                        window.location.href = "{{ url('social-login/google') }}";
-                                    }
-                                });
-                            </script>
-                        </div>
-                    </div>
-                @endif
             </form>
         </section>
     </main>
