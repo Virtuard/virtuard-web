@@ -469,12 +469,12 @@
                 </div>
                 {{-- <p class="error-message error term hidden"></p> --}}
                 <span class="error-message error error-term"></span>
-                {{-- @if(setting_item("user_enable_register_recaptcha"))
+                @if(setting_item("user_enable_register_recaptcha"))
                     <div class="form-group">
                         {{recaptcha_field($captcha_action ?? 'register')}}
                     </div>
                     <div><span class="error-message error error-g-recaptcha-response"></span></div>
-                @endif --}}
+                @endif
                 <div class="error message-error invalid-feedback"></div>
                 <div>
                     <button type="submit" class="btn btn-primary form-submit">
@@ -563,8 +563,8 @@
                     'X-CSRF-TOKEN': form.find('meta[name="csrf-token"]').attr('content')
                 }
             });
-            console.log(form)
-            console.log(form.find('input[name=email]').val());
+            // console.log(form)
+            // console.log(form.find('input[name=email]').val());
             $.ajax({
                 'url':  '/register',
                 'data': {
@@ -574,7 +574,7 @@
                     'last_name': form.find('input[name=last_name]').val(),
                     'phone': form.find('input[name=phone]').val(),
                     'term': form.find('input[name=term]').is(":checked") ? 1 : '',
-                    'g-recaptcha-response': form.find('[name=g-recaptcha-response]').val(),
+                    // 'g-recaptcha-response': form.find('[name=g-recaptcha-response]').val(),
                     'is_auto_login': true
                 },
                 'type': 'POST',

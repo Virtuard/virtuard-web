@@ -67,7 +67,7 @@
                 'last_name.required'  => __('The last name is required field'),
                 'term.required'       => __('The terms and conditions field is required'),
             ];
-            if (ReCaptchaEngine::isEnable() and setting_item("user_enable_register_recaptcha")) {
+            if (ReCaptchaEngine::isEnable() and setting_item("user_enable_register_recaptcha")  && !isset($request->is_auto_login)) {
                 $codeCapcha = $request->input('g-recaptcha-response');
                 if (!$codeCapcha or !ReCaptchaEngine::verify($codeCapcha)) {
                     $errors = new MessageBag(['message_error' => __('Please verify the captcha')]);
