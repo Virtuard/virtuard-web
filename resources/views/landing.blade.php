@@ -554,10 +554,6 @@
     <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script>
     {{-- <script src="{{ asset('/assets/js/landing-register.js') }}"></script> --}}
     <script>
-        if (navigator.userAgent.includes('Instagram')) {
-            window.location.href = 'https://virtuard.com/landing'; // Memaksa buka di Chrome
-        }
-
         $('.register-form [type=submit]').click(function (e) {
             e.preventDefault();
             let form = $(this).closest('.register-form');
