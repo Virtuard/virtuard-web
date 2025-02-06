@@ -563,8 +563,8 @@
                     'X-CSRF-TOKEN': form.find('meta[name="csrf-token"]').attr('content')
                 }
             });
-            // console.log(form)
-            // console.log(form.find('input[name=email]').val());
+            console.log(form)
+            console.log(form.find('input[name=email]').val());
             $.ajax({
                 'url':  '/register',
                 'data': {
@@ -584,7 +584,7 @@
                     $(".form-submit").attr('disabled', true);
                 },
                 success: function (data) {
-                    // console.log(data)
+                    console.log(data)
                     form.find('.loader').removeClass('active');
                     $(".form-submit").attr('disabled', false);
                     if (data.error === true) {
@@ -608,7 +608,7 @@
                     }
                 },
                 error:function (e) {
-                    // console.log(e)
+                    console.log(e)
                     form.find('.loader').removeClass('active');
                     $(".form-submit").attr('disabled', false);
                     if(typeof e.responseJSON !== "undefined" && typeof e.responseJSON.message !='undefined'){
