@@ -560,7 +560,7 @@
             // Deteksi jika dibuka dari Instagram atau Facebook
             if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
                 // Arahkan ke browser eksternal (Google Chrome di Android)
-                window.location.href = "googlechrome://virtuard.com/landing"; 
+                window.location.href = "googlechrome://landing"; 
             }
             else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
                 // Arahkan ke Safari di iOS
