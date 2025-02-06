@@ -107,9 +107,6 @@
                         }
                     });
                 </script>
-                
-                
-                                
                 @endif
                 @if(setting_item('twitter_enable'))
                     <div class="col-xs-12 col-sm-4">

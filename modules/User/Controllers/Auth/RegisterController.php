@@ -55,7 +55,7 @@
                         ->symbols()
                         ->uncompromised(),
                 ],
-                'phone'       => ['required','unique:users'],
+                'phone'       => ['nullable','unique:users'],
                 'term'       => ['required'],
             ];
             $messages = [
@@ -113,6 +113,7 @@
                 if ($register_confirm_email) {
                     $dataUser['status'] = 'pending';
                 }
+
                 $user = \App\User::create($dataUser);
 
                 $user->assignRole(setting_item('user_role'));
@@ -139,6 +140,10 @@
 
                 if ($register_confirm_email) {
                     $response['redirect'] = '/need-confirm-email';
+                }
+
+                if(isset($request->is_auto_login)) {
+                    Auth::login($user);
                 }
                 
                 return response()->json($response, 200);
