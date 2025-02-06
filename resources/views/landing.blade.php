@@ -13,7 +13,7 @@
     <link rel="icon" href="/images/virtuard-logo.png" type="image/x-icon">
 
     {{-- bootstrap --}}
-    <link rel="stylesheet" href="/assets/css/landing.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/virtual-tour-plugin/index.css" />
@@ -194,8 +194,8 @@
         });
     </script>
 
-    <script src="/libs/jquery-3.6.3.min.js"></script>
-    <script type="module" src="/assets/js/landing.js"></script>
-    <script src="/assets/js/landing-register.js"></script>
+    <script src="{{ asset('/libs/jquery-3.6.3.min.js') }}"></script>
+    <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script>
+    <script src="{{ asset('/assets/js/landing-register.js') }}"></script>
 </body>
 </html>
