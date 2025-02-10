@@ -96,15 +96,15 @@
                     var hasAffiliateId = {{ Cookie::has('affiliate_id') ? 'true' : 'false' }};
                 
                     document.getElementById('btn-google-login').addEventListener('click', function () {
-                        if (hasAffiliateId) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Sorry',
-                                text: 'You are using the affiliate feature, please register without using Google.',
-                            });
-                        } else {
+                        // if (hasAffiliateId) {
+                        //     Swal.fire({
+                        //         icon: 'error',
+                        //         title: 'Sorry',
+                        //         text: 'You are using the affiliate feature, please register without using Google.',
+                        //     });
+                        // } else {
                             window.location.href = "{{ url('social-login/google') }}";
-                        }
+                        // }
                     });
                 </script>
                 @endif
