@@ -507,7 +507,7 @@
                         <a href="/landing?lang=id" class="navbar-link">Indonesian</a>
                     </li>
                     <li class="nav-item">
-                        <a href="/landing/register" class="navbar-link btn btn-first px-4 py-3">Get Started</a>
+                        <a href="/register" class="navbar-link btn btn-first px-4 py-3">Get Started</a>
                     </li>
                 </ul>
             </div>
@@ -600,7 +600,7 @@
                             <h3 class="card-title">Credit card is not required</h3>
                         </div>
                     </div>
-                    <a href="/landing/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a>
+                    <a href="/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a>
                 </div>
             </div>
         </section>
