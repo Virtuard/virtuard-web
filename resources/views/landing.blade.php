@@ -12,8 +12,8 @@
     <!-- favicon -->
     <link rel="icon" href="{{ asset('images/virtuard-logo.png') }}" type="image/x-icon">
 
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}"> --}}
-    <style>
+    <link rel="stylesheet" href="{{ asset('assets/css/landing.css') }}">
+    {{-- <style>
         * {margin: 0; padding: 0;}
         body { font-family: 'Urbanist', arial; }
         #viewer { width: 100vw; height: 100vh; }
@@ -21,6 +21,14 @@
         a {
             text-decoration: none;
             color: #5191FA;
+        }
+
+        #background {
+            background-color: rgba(0,0,0,.4);
+            width: 100%;
+            height: 95vh;
+            position: fixed;
+            z-index: 99;
         }
 
         #main {
@@ -368,8 +376,10 @@
                 min-width: 250px;
             }
         }
-    </style>
+    </style> --}}
     {{-- bootstrap --}}
+    <link href="{{ asset('libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/virtual-tour-plugin/index.css" />
@@ -389,7 +399,7 @@
 </head>
 <body>
     <main id="main">
-        <section class="container">
+        {{-- <section class="container">
             <h1>Virtuard</h1>
             <p class="description first">Create Your Listing and Virtual Tour in Minutes – For Free!</p>
             <p class="description">Want to showcase your property, hotel, restaurant, or shop like never before? With Virtuard, you can create your listing and 360° Virtual Tour on your own – at no cost and with no assistance needed!</p>
@@ -427,7 +437,6 @@
                 @csrf
                 @if(setting_item('google_enable'))
                     <div class="advanced">
-                        {{-- <p class="text-center f14 c-grey">{{__("or continue with")}}</p> --}}
                         <div class="row">
                             <div class="col-xs-12 col-sm-4">
                                 <a href="javascript:void(0);" id="btn-google-login" class="btn btn_login_gg_link" data-channel="google">
@@ -461,45 +470,38 @@
                     <h4 class="sign-up-text">Sign Up for Free</h4>
                 </div>
                 <div class="alert-message hidden error">Registration failed</div>
-                {{-- <div class="alert-message hidden success">Account created successfully</div> --}}
                 <div class="form-grid">
                     <div class="form-group" style="padding-right: 10px;">
                         <label for="first_name" class="form-label required">First Name</label>
                         <input type="text" class="form-control" id="first_name" name="first_name" autocomplete="off" aria-describedby="firstNameHelp" placeholder="{{__("Your first name")}}">
-                        {{-- <p class="error-message error first_name hidden"></p> --}}
                         <span class="error-message error error-first_name"></span>
                     </div>
                     <div class="form-group">
                         <label for="last_name" class="form-label required">Last Name</label>
                         <input type="text" class="form-control" id="last_name" name="last_name" autocomplete="off" aria-describedby="lastNameHelp" placeholder="{{__("Your last name")}}">
-                        {{-- <p class="error-message error last_name hidden"></p> --}}
                         <span class="error-message error error-last_name"></span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="phone" class="form-label">Phone</label>
+                    <label for="phone" class="form-label">Phone (optional)</label>
                     <input type="text" class="form-control" id="phone" name="phone" autocomplete="off" aria-describedby="phoneHelp" placeholder="{{__("Your phone number")}}">
-                    {{-- <p class="error-message error phone hidden"></p> --}}
                     <span class="error-message error error-phone"></span>
                 </div>
                 <div class="form-group">
                     <label for="email" class="form-label required">Email address</label>
                     <input type="text" class="form-control" id="email" name="email" autocomplete="off" aria-describedby="emailHelp" placeholder="{{__("Your email address")}}">
-                    {{-- <p class="error-message error email hidden"></p> --}}
                     <span class="error-message error error-email"></span>
                 </div>
                 <div class="form-group password-group">
                     <label for="password" class="form-label required">Password</label>
                     <input type="password" class="form-control" id="password" name="password" autocomplete="off" placeholder="{{__("Your password")}}">
                     <span class="input-icon icofont-eye" id="toggle-password-register"></span>
-                    {{-- <p class="error-message error password hidden"></p> --}}
                 </div>
                 <span class="error-message error error-password"></span>
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" name="term" id="privacyPolicyCheck">
                     <label class="form-check-label" for="privacyPolicyCheck">I have read and accept the <a href="https://virtuard.com/page/terms-and-conditions-for-virtuard-ltd" target="_blank">Terms and Privacy Policy</a></label>
                 </div>
-                {{-- <p class="error-message error term hidden"></p> --}}
                 <span class="error-message error error-term"></span>
                 @if(setting_item("user_enable_register_recaptcha"))
                     <div class="form-group">
@@ -517,7 +519,131 @@
                     </a>
                 </div>
             </form>
+        </section> --}}
+        <nav class="navbar container">
+            <a href="/" class="navbar-brand">
+                <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
+            </a>
+            <ul>
+                <li class="nav-item language">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-.899.156-1.762.431-2.569L6 11l2 2v2l2 2 1 1v1.931C7.061 19.436 4 16.072 4 12zm14.33 4.873C17.677 16.347 16.687 16 16 16v-1a2 2 0 0 0-2-2h-4v-3a2 2 0 0 0 2-2V7h1a2 2 0 0 0 2-2v-.411C17.928 5.778 20 8.65 20 12a7.947 7.947 0 0 1-1.67 4.873z"></path></svg>
+                    <a href="/landing?lang=id" class="navbar-link">Indonesian</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/landing/register" class="navbar-link btn btn-first px-4 py-3">Get Started</a>
+                </li>
+            </ul>
+        </nav>
+        <header id="header" class="container">
+            <div class="header-content">
+                <h1 class="title">Explore 3D & 360 <br> <span>Virtual Tours</span></h1>
+                <p class="description">Want to showcase your property, hotel, restaurant, or shop like never before? With Virtuard, you can create your listing and 360° Virtual Tour on your own – at no cost and with no assistance needed!</p>
+                <button class="btn btn-second" id="btn-demo">Virtual Tour Demo</button>
+
+                <div class="mouse-container">
+                    <div class="mouse"></div>
+                </div>
+            </div>
+        </header>
+        <section class="container">
+            <div>
+                <div class="text-center mb-5 text-white section-header">
+                    <h2 class="title">Our Locations</h2>
+                    <p class="description">Discover properties, hotels, restaurants, and shops from various locations with Virtuard. Whether you're exploring a new city or showcasing your space, our platform offers an immersive 360° virtual experience to bring every location to life</p>
+                </div>
+                <div class="card card-explore">
+                    <div id="map-loading" class="text-center" style="
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            z-index: 1000;
+                            display: none;
+                            background-color: rgba(255, 255, 255, 0.1);
+                            padding: 10px;
+                            border-radius: 5px;
+                        ">
+                            <div class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    <div id="gmap"></div>
+                </div>
+            </div>
         </section>
+        <section class="container">
+            <div class="text-center mb-5 text-white section-header">
+                <h2 class="title">Get Started for Free</h2>
+                <p class="description">Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.</p>
+                <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <img width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
+                </div>
+                <div class="col mt-5">
+                    <div class="card-feature">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Free Registration</h3>
+                        </div>
+                    </div>
+                    <div class="card-feature">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">1-month free trial, no commitment</h3>
+                        </div>
+                    </div>
+                    <div class="card-feature">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Create your Virtual Tour in just a few clicks</h3>
+                        </div>
+                    </div>
+                    <div class="card-feature">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Showcase your space in an innovative and engaging way</h3>
+                        </div>
+                    </div>
+                    <div class="card-feature">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">Credit card is not required</h3>
+                        </div>
+                    </div>
+                    <a href="/landing/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a>
+                </div>
+            </div>
+        </section>
+        <footer>
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div class="footer-logo">
+                        <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
+                    </div>
+                    <div class="flex">
+                        <a href="mailto:info@virtuard.com" class="d-flex align-items-center text-white">
+                            <svg class="mr-1" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M20 4H4c-1.103 0-2 .897-2 2v12c0 1.103.897 2 2 2h16c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 2v.511l-8 6.223-8-6.222V6h16zM4 18V9.044l7.386 5.745a.994.994 0 0 0 1.228 0L20 9.044 20.002 18H4z"></path></svg>
+                            info@virtuard.com
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p class="footer-text text-center">Copyright © Virtuard Ltd. Company nr 14235775, registered in England and Walsses.</p>
+                </div>
+            </div>
+        </footer>
     </main>
 
     <div id="viewer"></div>
@@ -536,36 +662,36 @@
     </script>
 
     <script>
-        document.getElementById('toggle-password-register').addEventListener('click', function () {
-            var passwordField = document.getElementById('password'); 
-            var passwordType = passwordField.type === 'password' ? 'text' : 'password';
-            passwordField.type = passwordType;
+        // document.getElementById('toggle-password-register').addEventListener('click', function () {
+        //     var passwordField = document.getElementById('password'); 
+        //     var passwordType = passwordField.type === 'password' ? 'text' : 'password';
+        //     passwordField.type = passwordType;
     
-            if (passwordType === 'password') {
-                this.classList.remove('icofont-eye-blocked'); 
-                this.classList.add('icofont-eye'); 
-            } else {
-                this.classList.remove('icofont-eye'); 
-                this.classList.add('icofont-eye-blocked'); 
-            }
-        });
+        //     if (passwordType === 'password') {
+        //         this.classList.remove('icofont-eye-blocked'); 
+        //         this.classList.add('icofont-eye'); 
+        //     } else {
+        //         this.classList.remove('icofont-eye'); 
+        //         this.classList.add('icofont-eye-blocked'); 
+        //     }
+        // });
     </script>
 
     <script src="{{ asset('/libs/jquery-3.6.3.min.js') }}"></script>
+    <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
+    
     <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script>
     {{-- <script src="{{ asset('/assets/js/landing-register.js') }}"></script> --}}
-    <script>
-            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    {{-- <script>
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
-            // Deteksi jika dibuka dari Instagram atau Facebook
-            if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
-                // Arahkan ke browser eksternal (Google Chrome di Android)
-                window.location.href = "googlechrome://virtuard.com/landing"; 
-                // window.location.href = "intent://virtuard.com/landing#Intent;scheme=https;package=com.android.chrome;end";
-            }
-
-        //   document.addEventListener("DOMContentLoaded", function() {
-        // });
+        // Deteksi jika dibuka dari Instagram atau Facebook
+        if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
+            // Arahkan ke browser eksternal (Google Chrome di Android)
+            window.location.href = "googlechrome://virtuard.com/landing"; 
+            // window.location.href = "intent://virtuard.com/landing#Intent;scheme=https;package=com.android.chrome;end";
+        }
   
         $('.register-form [type=submit]').click(function (e) {
             e.preventDefault();
@@ -635,6 +761,6 @@
                 }
             });
         })
-    </script>
+    </script> --}}
 </body>
 </html>
