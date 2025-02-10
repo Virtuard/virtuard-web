@@ -571,17 +571,17 @@
                 </div>
             </div>
         </section>
-        <section class="container">
+        <section class="container get-started-container">
             <div class="text-center mb-5 text-white section-header">
                 <h2 class="title">Get Started for Free</h2>
                 <p class="description">Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.</p>
                 <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p>
             </div>
             <div class="row">
-                <div class="col">
+                <div class="col-md-6 col-12 d-md-block d-none">
                     <img width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
                 </div>
-                <div class="col mt-5">
+                <div class="col-md-6 col-12 mt-md-5 mt-0">
                     <div class="card-feature">
                         <div class="card-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
