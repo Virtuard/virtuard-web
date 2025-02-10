@@ -137,194 +137,194 @@ const viewer = new Viewer({
 });
 
 // Function to handle fullscreen change
-function handleFullscreenChange() {
-    const mainElement = document.getElementById('main');
-    if (document.fullscreenElement) {
-        mainElement.style.zIndex = '0';
-        viewer.setOptions({ navbar: ['fullscreen'] });
-    } else {
-        mainElement.style.zIndex = '99';
-        viewer.setOptions({ navbar: [] });
-    }
-}
+// function handleFullscreenChange() {
+//     const mainElement = document.getElementById('main');
+//     if (document.fullscreenElement) {
+//         mainElement.style.zIndex = '0';
+//         viewer.setOptions({ navbar: ['fullscreen'] });
+//     } else {
+//         mainElement.style.zIndex = '99';
+//         viewer.setOptions({ navbar: [] });
+//     }
+// }
 
-// Add event listeners for fullscreen change
-document.addEventListener('fullscreenchange', handleFullscreenChange);
-document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
-document.addEventListener('mozfullscreenchange', handleFullscreenChange);
-document.addEventListener('MSFullscreenChange', handleFullscreenChange);
-
-
-document.getElementById("btn-demo").addEventListener("click", function () {
-    let viewer = document.getElementById("viewer");
-
-    if (viewer.requestFullscreen) {
-        viewer.requestFullscreen();
-    } else if (viewer.mozRequestFullScreen) { // Firefox
-        viewer.mozRequestFullScreen();
-    } else if (viewer.webkitRequestFullscreen) { // Chrome, Safari, Opera
-        viewer.webkitRequestFullscreen();
-    } else if (viewer.msRequestFullscreen) { // IE/Edge
-        viewer.msRequestFullscreen();
-    }
-});
-
-var listMaps = [];
-let map, markerCluster, currentInfoWindow;
-let mapMarkers = [];
-let clusterConfig = {
-    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-    gridSize: 60,
-    minimumClusterSize: 4,
-    styles: [
-        {
-            textColor: 'white',
-            url: '/icon/circle-24.png',
-            height: 24,
-            width: 24,
-            textSize: 12,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: 'red'
-        }
-    ]
-};
+// // Add event listeners for fullscreen change
+// document.addEventListener('fullscreenchange', handleFullscreenChange);
+// document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+// document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+// document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
 
-function initMap() {
-    // Initialize the autocomplete
-    // initAutocomplete();
+// document.getElementById("btn-demo").addEventListener("click", function () {
+//     let viewer = document.getElementById("viewer");
 
-    map = new google.maps.Map(document.getElementById('gmap'), {
-        center: { lat: 0, lng: 0 },
-        zoom: 3,
-    });
+//     if (viewer.requestFullscreen) {
+//         viewer.requestFullscreen();
+//     } else if (viewer.mozRequestFullScreen) { // Firefox
+//         viewer.mozRequestFullScreen();
+//     } else if (viewer.webkitRequestFullscreen) { // Chrome, Safari, Opera
+//         viewer.webkitRequestFullscreen();
+//     } else if (viewer.msRequestFullscreen) { // IE/Edge
+//         viewer.msRequestFullscreen();
+//     }
+// });
 
-    // add merker to map
-    // addMarkersToMap(listMaps);
-}
+// var listMaps = [];
+// let map, markerCluster, currentInfoWindow;
+// let mapMarkers = [];
+// let clusterConfig = {
+//     imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+//     gridSize: 60,
+//     minimumClusterSize: 4,
+//     styles: [
+//         {
+//             textColor: 'white',
+//             url: '/icon/circle-24.png',
+//             height: 24,
+//             width: 24,
+//             textSize: 12,
+//             backgroundPosition: 'center',
+//             backgroundRepeat: 'no-repeat',
+//             backgroundColor: 'red'
+//         }
+//     ]
+// };
 
-function fetchMap(attr) {
-    $('#map-loading').show();
 
-    $.ajax({
-        type: "POST",
-        url: "/explore/map/search",
-        data: attr,
-        success: function(data) {
-            let maps = data.data;
+// function initMap() {
+//     // Initialize the autocomplete
+//     // initAutocomplete();
 
-            resetMarkers();
-            addMarkersToMap(maps);
+//     map = new google.maps.Map(document.getElementById('gmap'), {
+//         center: { lat: 0, lng: 0 },
+//         zoom: 3,
+//     });
 
-            $('#map-loading').hide();
-        },
-        error: function(xhr) {
-            $('#map-loading').hide();
-        }
-    });
-}
+//     // add merker to map
+//     // addMarkersToMap(listMaps);
+// }
 
-function resetMarkers() {
-    if(markerCluster){
-        markerCluster.clearMarkers();
-        mapMarkers.forEach(marker => marker.setMap(null));
-        mapMarkers = [];
-    }
+// function fetchMap(attr) {
+//     $('#map-loading').show();
 
-    const mapCenter = getCenterMarker([])
-    map.setCenter(mapCenter)
-}
+//     $.ajax({
+//         type: "POST",
+//         url: "/explore/map/search",
+//         data: attr,
+//         success: function(data) {
+//             let maps = data.data;
 
-function onFetchData(attr) {
-    fetchMap(attr);
-}
+//             resetMarkers();
+//             addMarkersToMap(maps);
 
-function getCenterMarker(mdata) {
-    let map_lat = $('#explore_map_lat').val() ?? 0;
-    let map_lgn = $('#explore_map_lgn').val() ?? 0;
+//             $('#map-loading').hide();
+//         },
+//         error: function(xhr) {
+//             $('#map-loading').hide();
+//         }
+//     });
+// }
 
-    if (mdata.length !== 0) {
-        let mdata_lat = mdata[0].map_lat ?? 0;
-        let mdata_lgn = mdata[0].map_lgn ?? 0;
+// function resetMarkers() {
+//     if(markerCluster){
+//         markerCluster.clearMarkers();
+//         mapMarkers.forEach(marker => marker.setMap(null));
+//         mapMarkers = [];
+//     }
 
-        if (mdata_lat) {
-            map_lat = mdata_lat
-        }
-        if (mdata_lgn) {
-            map_lat = mdata_lgn
-        }
-    }
+//     const mapCenter = getCenterMarker([])
+//     map.setCenter(mapCenter)
+// }
 
-    let center = {
-        lat: Number(map_lat),
-        lng: Number(map_lgn)
-    };
+// function onFetchData(attr) {
+//     fetchMap(attr);
+// }
 
-    return center;
-}
+// function getCenterMarker(mdata) {
+//     let map_lat = $('#explore_map_lat').val() ?? 0;
+//     let map_lgn = $('#explore_map_lgn').val() ?? 0;
 
-function addMarkersToMap(markerData) {
-    markerData.forEach((data) => {
-        const lat = Number(data.map_lat);
-        const lng = Number(data.map_lng);
-        const newMarker = new google.maps.Marker({
-            position: { lat, lng },
-            map: map,
-            title: data.title,
-            icon: data.icon,
-        });
+//     if (mdata.length !== 0) {
+//         let mdata_lat = mdata[0].map_lat ?? 0;
+//         let mdata_lgn = mdata[0].map_lgn ?? 0;
 
-        let contentString = getPopupMarker(data);
+//         if (mdata_lat) {
+//             map_lat = mdata_lat
+//         }
+//         if (mdata_lgn) {
+//             map_lat = mdata_lgn
+//         }
+//     }
 
-        const infowindow = new google.maps.InfoWindow({
-            content: contentString,
-        });
+//     let center = {
+//         lat: Number(map_lat),
+//         lng: Number(map_lgn)
+//     };
 
-        newMarker.addListener("click", () => {
-            if (currentInfoWindow != null) {
-                currentInfoWindow.close();
-            } 
+//     return center;
+// }
 
-            infowindow.open(map, newMarker);
+// function addMarkersToMap(markerData) {
+//     markerData.forEach((data) => {
+//         const lat = Number(data.map_lat);
+//         const lng = Number(data.map_lng);
+//         const newMarker = new google.maps.Marker({
+//             position: { lat, lng },
+//             map: map,
+//             title: data.title,
+//             icon: data.icon,
+//         });
 
-            currentInfoWindow = infowindow; 
-        });
+//         let contentString = getPopupMarker(data);
 
-        mapMarkers.push(newMarker);
-    });
+//         const infowindow = new google.maps.InfoWindow({
+//             content: contentString,
+//         });
 
-    // map setCenter
-    const mapCenter = getCenterMarker(markerData);
-    map.setCenter(mapCenter);
+//         newMarker.addListener("click", () => {
+//             if (currentInfoWindow != null) {
+//                 currentInfoWindow.close();
+//             } 
 
-    // Create the MarkerClusterer
-    markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
-}
+//             infowindow.open(map, newMarker);
 
-function getPopupMarker(data) {
-    const contentString =
-        `
-            <div class="card" style="overflow: hidden;">
-                <div class="card card-custom card-has-bg click-col" style="background-image: url(${data.banner_image_id}); width: 250px;">
-                    <div class="card-img-overlay d-flex align-items-end">
-                        <div>
-                            <h5 class="card-title mt-0 mb-0" style="text-overflow: ellipsis; overflow:hidden; font-size: 16px;">
-                                <a class="text-white" href="${data.url}">${data.title}</a>
-                            </h5>
-                            <span class="text-white"> <i class="fa fa-map-marker"></i> ${data.address}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
+//             currentInfoWindow = infowindow; 
+//         });
 
-    return contentString;
-}
+//         mapMarkers.push(newMarker);
+//     });
 
-initMap()
-addMarkersToMap(listMaps)
-onFetchData()
+//     // map setCenter
+//     const mapCenter = getCenterMarker(markerData);
+//     map.setCenter(mapCenter);
+
+//     // Create the MarkerClusterer
+//     markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
+// }
+
+// function getPopupMarker(data) {
+//     const contentString =
+//         `
+//             <div class="card" style="overflow: hidden;">
+//                 <div class="card card-custom card-has-bg click-col" style="background-image: url(${data.banner_image_id}); width: 250px;">
+//                     <div class="card-img-overlay d-flex align-items-end">
+//                         <div>
+//                             <h5 class="card-title mt-0 mb-0" style="text-overflow: ellipsis; overflow:hidden; font-size: 16px;">
+//                                 <a class="text-white" href="${data.url}">${data.title}</a>
+//                             </h5>
+//                             <span class="text-white"> <i class="fa fa-map-marker"></i> ${data.address}</span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//             `;
+
+//     return contentString;
+// }
+
+// initMap()
+// addMarkersToMap(listMaps)
+// onFetchData()
 
 // window.onscroll = () => {
 //     if(window.scrollY > 100) {
