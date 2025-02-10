@@ -36,11 +36,25 @@ ul li {
 }
 
 #main .navbar {
+    /* position: fixed;
+    right: 0;
+    left: 0; */
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
+    z-index: 999;
+    transition: .3s;
+}
+
+#main .navbar.active {
+    background: rgba(0, 0, 0, 0.29);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.2px);
+    -webkit-backdrop-filter: blur(7.2px);
+    border: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 #main .navbar .nav-item.language {

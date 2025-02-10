@@ -325,3 +325,11 @@ function getPopupMarker(data) {
 initMap()
 addMarkersToMap(listMaps)
 onFetchData()
+
+// window.onscroll = () => {
+//     if(window.scrollY > 100) {
+//         $(".navbar").addClass("active");
+//     } else {
+//         $(".navbar").removeClass("active");
+//     }
+// }
