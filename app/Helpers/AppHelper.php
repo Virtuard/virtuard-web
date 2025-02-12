@@ -1240,11 +1240,11 @@ if (!function_exists('menu_listing')) {
             'space', //property
             'business',
             // 'boat', //vehicles
-            'car', //vehicles
-            'event',
-            'natural',
-            'cultural',
-            'art',
+            // 'car', //vehicles
+            // 'event',
+            // 'natural',
+            // 'cultural',
+            // 'art',
         ];
 
         return $data;
