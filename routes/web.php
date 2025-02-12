@@ -122,3 +122,4 @@ Route::post('midtrans/success/plan', [PlanController::class, 'handleSuccessPayme
 
 Route::get('thankyou/booking', [BookingController::class, 'thanyouController'])->name('booking.success.thankyou');
 
+Route::post('midtrans/callback', [BookingController::class, 'midtransCallback'])->name('midtrans.callback');

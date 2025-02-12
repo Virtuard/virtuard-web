@@ -4,6 +4,7 @@ namespace Modules\Api\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\Booking\Models\Service;
 use Modules\Flight\Controllers\FlightController;
 
@@ -72,39 +73,36 @@ class SearchController extends Controller
      * )
      */
 
-    public function search($type = '')
-    {
-        $type = $type ? $type : request()->get('type');
-        if (empty($type)) {
-            return $this->sendError(__("Type is required"));
-        }
-
-        $class = get_bookable_service_by_id($type);
-        if (empty($class) or !class_exists($class)) {
-            return $this->sendError(__("Type does not exists"));
-        }
-
-        if (!empty(request()->query('limit'))) {
-            $limit = request()->query('limit');
-        } else {
-            $limit = !empty(setting_item($type . "_page_limit_item")) ? setting_item($type . "_page_limit_item") : 9;
-        }
-
-        $query = new $class();
-        $rows = $query->search(request()->input())->paginate($limit);
-
-        $total = $rows->total();
-        return $this->sendSuccess(
-            [
-                'total' => $total,
-                'total_pages' => $rows->lastPage(),
-                'data' => $rows->map(function ($row) {
-                    return $row->dataForApi();
-                }),
-            ]
-        );
-    }
-
+     public function search($type = '')
+     {
+         $type = $type ?: request()->get('type');
+         
+         if (empty($type)) {
+             return $this->sendError(__("Type is required"));
+         }
+     
+         $class = get_bookable_service_by_id($type);
+         
+         if (empty($class) || !class_exists($class)) {
+             return $this->sendError(__("Type does not exist"));
+         }
+     
+         $limit = request()->query('limit', setting_item($type . "_page_limit_item") ?: 9);
+         $query = new $class();
+     
+         $rows = $query->search(request()->input())->paginate($limit);
+     
+         return $this->sendSuccess([
+             'total' => $rows->total(),
+             'per_page' => $rows->perPage(),
+             'current_page' => $rows->currentPage(),
+             'last_page' => $rows->lastPage(),
+             'next_page_url' => $rows->nextPageUrl(),
+             'prev_page_url' => $rows->previousPageUrl(),
+             'data' => $rows->map(fn($row) => $row->dataForApi()),
+         ]);
+     }
+     
     public function searchByAuthor(Request $request)
     {
         $author_id = $request->query('author_id');
@@ -268,26 +266,51 @@ class SearchController extends Controller
     }
 
     public function checkAvailability(Request $request, $type = '', $id = '')
-    {
-        if (empty($type)) {
-            return $this->sendError(__("Resource is not available"));
-        }
-        if (empty($id)) {
-            return $this->sendError(__("Resource ID is not available"));
-        }
-        $class = get_bookable_service_by_id($type);
-        if (empty($class) or !class_exists($class)) {
-            return $this->sendError(__("Type does not exists"));
-        }
-        $classAvailability = $class::getClassAvailability();
-        $classAvailability = app()->make($classAvailability);
-        $request->merge(['id' => $id]);
-        if ($type == "hotel") {
-            $request->merge(['hotel_id' => $id]);
-            return $classAvailability->checkAvailability($request);
-        }
-        return $classAvailability->loadDates($request);
+{
+    if (empty($type)) {
+        return $this->sendError(__("Resource is not available"));
     }
+    if (empty($id)) {
+        return $this->sendError(__("Resource ID is not available"));
+    }
+
+    $class = get_bookable_service_by_id($type);
+    if (empty($class) or !class_exists($class)) {
+        return $this->sendError(__("Type does not exist"));
+    }
+
+    $classAvailability = $class::getClassAvailability();
+    $classAvailability = app()->make($classAvailability);
+
+    $request->merge(['id' => $id]);
+
+    if ($type == "hotel") {
+        $request->merge(['hotel_id' => $id]);
+
+        $availabilityResponse = $classAvailability->checkAvailability($request);
+        
+        $availabilityData = $availabilityResponse->getData(true);
+
+        $roomIds = collect($availabilityData['rooms'] ?? [])->pluck('id');
+
+        $rooms = DB::table('bravo_hotel_rooms')
+            ->whereIn('id', $roomIds) 
+            ->get()
+            ->keyBy('id'); 
+
+        if (!empty($availabilityData['rooms'])) {
+            foreach ($availabilityData['rooms'] as &$room) {
+                $roomId = $room['id']; 
+                $room['priceDay'] = $rooms[$roomId]->price ?? 0; 
+            }
+        }
+
+        return $this->sendSuccess($availabilityData);
+    }
+
+    return $classAvailability->loadDates($request);
+}
+
 
     public function checkBoatAvailability(Request $request, $id = '')
     {

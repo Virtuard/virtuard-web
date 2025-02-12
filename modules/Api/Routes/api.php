@@ -41,8 +41,11 @@ Route::group(['middleware' => 'api'],function(){
     Route::get('messages/fetch/{id}', [ChatController::class, 'idFetchData']);
     Route::get('messages/detail', [ChatController::class, 'fetch']);
     Route::post('messages/send', [ChatController::class, 'send']);
+    // Route::post('booking/form','BookingController@bookingMidtrans')->name('api.booking.form');
+
 });
 
+Route::middleware(['auth:sanctum'])->post('booking/form', 'BookingController@bookingMidtrans')->name('api.booking.form');
 
 
 

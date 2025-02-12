@@ -1024,4 +1024,33 @@ class BookingController extends \App\Http\Controllers\Controller
         return view('Booking::frontend/thankyou');
     }
 
+    public function midtransCallback(Request $request)
+    {
+        $serverKey = config('midtrans.server_key');
+        $payload = $request->getContent();
+        $hashedKey = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+
+        if ($hashedKey !== $request->signature_key) {
+            return response()->json(['message' => 'Invalid signature key'], 403);
+        }
+
+        $notification = json_decode($payload);
+        $orderId = $notification->order_id;
+        $transactionStatus = $notification->transaction_status;
+        $booking = Booking::where('code', $orderId)->first();
+        if (!$booking) {
+            return response()->json(['message' => 'Booking not found'], 404);
+        }
+        if ($transactionStatus == 'capture' || $transactionStatus == 'settlement') {
+            $booking->status = Booking::PAID;
+            $booking->paid = $booking->total;
+        } elseif ($transactionStatus == 'pending') {
+            $booking->status = Booking::DRAFT;
+        } elseif ($transactionStatus == 'deny' || $transactionStatus == 'expire' || $transactionStatus == 'cancel') {
+            $booking->status = Booking::CANCELLED;
+        }
+        $booking->save();
+        return response()->json(['message' => 'Success']);
+    }
+
 }
