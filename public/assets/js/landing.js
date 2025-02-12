@@ -10,15 +10,6 @@ const baseUrl2 = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 const container = document.createElement('section'); 
 const caption = 'Deep Blue Villa New <br> <b>&copy; virtuard.com</b>';
 
-// const markerLighthouse = {
-//     id: 'marker-1',
-//     image: baseUrl2 + 'pictos/pin-red.png',
-//     tooltip: 'Cape Florida Light, Key Biscayne',
-//     size: { width: 32, height: 32 },
-//     anchor: 'bottom center',
-//     gps: [-80.155973, 25.666601, 29 + 3],
-// };
-
 const nodes = [
     {
         id: '1',
