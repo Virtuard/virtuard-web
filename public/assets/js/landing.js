@@ -109,7 +109,9 @@ const viewer = new Viewer({
     defaultPitch: 0,
     defaultZoomLvl: 20,
     fisheye: true,
-    navbar: [],
+    navbar: [
+        "fullscreen"
+    ],
     plugins: [
         [MarkersPlugin, {
             markers: [
@@ -134,7 +136,7 @@ const viewer = new Viewer({
             startNodeId: '1',   
         }],
     ],
-});
+}); 
 
 // Function to handle fullscreen change
 // function handleFullscreenChange() {

@@ -16,8 +16,9 @@
     <style>
         * {margin: 0; padding: 0;}
 
-        body { 
+        body, html { 
             font-family: 'Urbanist', arial; 
+            min-height: 100vh;
         }
 
         #viewer { width: 100vw; height: 100vh; position: fixed; }
@@ -46,9 +47,19 @@
         #main {
             position: absolute;
             z-index: 99;
+            /* background-color: rgba(0,0,0,.5); */
+            width: 100%;
+            height: 100%;
+        }
+
+        .bg-overlay {
             background-color: rgba(0,0,0,.5);
             width: 100%;
-            height: 325%;
+            height: 100%;
+        }
+
+        nav {
+            background-color: rgba(0,0,0,.5);
         }
 
         #main .navbar {
@@ -58,8 +69,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
+            /* margin-top: 20px;
+            margin-bottom: 20px; */
             z-index: 999;
             transition: .3s;
         }
@@ -132,11 +143,11 @@
         }
 
         #header {
-            margin-top: 80px;
-            margin-bottom: 80px;
+            padding-top: 80px;
+            /* margin-bottom: 80px; */
             display: flex;
             justify-content: center;
-            height: 90vh;
+            /* height: 90vh; */
         }
 
         #header .header-content {
@@ -214,7 +225,7 @@
         }
 
         .get-started-container {
-            margin-top: 150px;
+            padding-top: 150px;
         }
 
         .section-header {
@@ -327,10 +338,6 @@
             margin-bottom: 100px;
         }
 
-        footer {
-            border-top: 1px solid rgba(255,255,255,.2);
-        }
-
         .footer-text {
             color: #ddd;
             font-size: 14px;
@@ -348,6 +355,10 @@
         }
 
         @media (max-width: 420px) {
+            .header-content .title {
+                font-size: 44px !important;
+            }
+
             .card-custom {
                 min-height: 250px;
             }
@@ -502,111 +513,125 @@
                     <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
                 </a>
                 <ul class="mt-3">
-                    <li class="nav-item language">
+                    {{-- <li class="nav-item language">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-.899.156-1.762.431-2.569L6 11l2 2v2l2 2 1 1v1.931C7.061 19.436 4 16.072 4 12zm14.33 4.873C17.677 16.347 16.687 16 16 16v-1a2 2 0 0 0-2-2h-4v-3a2 2 0 0 0 2-2V7h1a2 2 0 0 0 2-2v-.411C17.928 5.778 20 8.65 20 12a7.947 7.947 0 0 1-1.67 4.873z"></path></svg>
                         <a href="/landing?lang=id" class="navbar-link">Indonesian</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item">
                         <a href="/register" class="navbar-link btn btn-first px-4 py-3">Get Started</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <header id="header" class="container">
-            <div class="header-content">
-                <h1 class="title">Explore 3D & 360 <br> <span>Virtual Tours</span></h1>
-                <p class="description">Want to showcase your property, hotel, restaurant, or shop like never before? With Virtuard, you can create your listing and 360° Virtual Tour on your own – at no cost and with no assistance needed!</p>
-                <button class="btn btn-second" id="btn-demo">Virtual Tour Demo</button>
-
-                <div class="mouse-container">
-                    <div class="mouse"></div>
+        <div class="bg-overlay">
+            <header id="header" class="container">
+                <div class="header-content">
+                    <h1 class="title">Explore 3D & 360 <br> <span>Virtual Tours</span></h1>
+                    <p class="description">Want to showcase your property, hotel, restaurant, or shop like never before? With Virtuard, you can create your listing and 360° Virtual Tour on your own – at no cost and with no assistance needed!</p>
+                    <button class="btn btn-second" id="btn-demo">Virtual Tour Demo</button>
+    
+                    <div class="mouse-container">
+                        <div class="mouse"></div>
+                    </div>
                 </div>
-            </div>
-        </header>
-        <section class="container">
-            <div>
+            </header>
+        </div>
+        <div class="bg-overlay">
+            <section class="container">
+                <div>
+                    <div class="text-center mb-5 text-white section-header">
+                        <h2 class="title">Our Locations</h2>
+                        <p class="description">Discover properties, hotels, restaurants, and shops from various locations with Virtuard. Whether you're exploring a new city or showcasing your space, our platform offers an immersive 360° virtual experience to bring every location to life</p>
+                    </div>
+                    <div class="card card-explore">
+                        <div id="map-loading" class="text-center" style="
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                z-index: 1000;
+                                display: none;
+                                background-color: rgba(255, 255, 255, 0.1);
+                                padding: 10px;
+                                border-radius: 5px;
+                            ">
+                                <div class="spinner-border" role="status">
+                                <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        <div id="gmap"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="bg-overlay">
+            <section class="container get-started-container">
                 <div class="text-center mb-5 text-white section-header">
-                    <h2 class="title">Our Locations</h2>
-                    <p class="description">Discover properties, hotels, restaurants, and shops from various locations with Virtuard. Whether you're exploring a new city or showcasing your space, our platform offers an immersive 360° virtual experience to bring every location to life</p>
+                    <h2 class="title">Get Started for Free</h2>
+                    <p class="description">Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.</p>
+                    <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p>
                 </div>
-                <div class="card card-explore">
-                    <div id="map-loading" class="text-center" style="
-                            position: absolute;
-                            top: 50%;
-                            left: 50%;
-                            transform: translate(-50%, -50%);
-                            z-index: 1000;
-                            display: none;
-                            background-color: rgba(255, 255, 255, 0.1);
-                            padding: 10px;
-                            border-radius: 5px;
-                        ">
-                            <div class="spinner-border" role="status">
-                            <span class="sr-only">Loading...</span>
+                <div class="row">
+                    <div class="col-md-6 col-12 d-md-block d-none">
+                        <img width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
+                    </div>
+                    <div class="col-md-6 col-12 mt-md-5 mt-0">
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Free Registration</h3>
                             </div>
                         </div>
-                    <div id="gmap"></div>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Post your ad for free</h3>
+                            </div>
+                        </div>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">You can connect the calendar with other booking systems to avoid overbooking thanks to iCal.</h3>
+                            </div>
+                        </div>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Create your Virtual Tour in just a few clicks</h3>
+                            </div>
+                        </div>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Showcase your space in an innovative and engaging way</h3>
+                            </div>
+                        </div>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Credit card is not required</h3>
+                            </div>
+                        </div>
+                        <a href="/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a>
+                    </div>
                 </div>
-            </div>
-        </section>
-        <section class="container get-started-container">
-            <div class="text-center mb-5 text-white section-header">
-                <h2 class="title">Get Started for Free</h2>
-                <p class="description">Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.</p>
-                <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p>
-            </div>
-            <div class="row">
-                <div class="col-md-6 col-12 d-md-block d-none">
-                    <img width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
-                </div>
-                <div class="col-md-6 col-12 mt-md-5 mt-0">
-                    <div class="card-feature">
-                        <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">Free Registration</h3>
-                        </div>
-                    </div>
-                    <div class="card-feature">
-                        <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">1-month free trial, no commitment</h3>
-                        </div>
-                    </div>
-                    <div class="card-feature">
-                        <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">Create your Virtual Tour in just a few clicks</h3>
-                        </div>
-                    </div>
-                    <div class="card-feature">
-                        <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">Showcase your space in an innovative and engaging way</h3>
-                        </div>
-                    </div>
-                    <div class="card-feature">
-                        <div class="card-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
-                        </div>
-                        <div class="card-body">
-                            <h3 class="card-title">Credit card is not required</h3>
-                        </div>
-                    </div>
-                    <a href="/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a>
-                </div>
-            </div>
-        </section>
-        <footer>
-            <div class="container">
-                <div class="d-flex align-items-center justify-content-between">
+            </section>
+        </div>
+        <div class="bg-overlay">
+            <footer class="container" style="padding-top: 380px;">
+                <div class="d-flex align-items-center justify-content-between" style="border-top: 1px solid rgba(255,255,255,.2);">
                     <div class="footer-logo">
                         <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
                     </div>
@@ -620,8 +645,8 @@
                 <div class="footer-bottom">
                     <p class="footer-text text-center">Copyright © Virtuard Reality Design. Company nr AHU-0175648.AH.01.11, registered in Gianyar, Bali, Indonesia.</p>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        </div>
     </main>
 
     <div id="viewer"></div>
@@ -660,8 +685,12 @@
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
     
     <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script>
-    {{-- <script src="{{ asset('/assets/js/landing-register.js') }}"></script> --}}
+
     <script>
+        // window.onload = function () {
+        //     $("#main").css("height", document.body.scrollHeight + "px");
+        // };
+
         function handleFullscreenChange() {
             const mainElement = document.getElementById('main');
             if (document.fullscreenElement) {
