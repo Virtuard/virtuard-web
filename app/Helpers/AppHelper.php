@@ -1236,8 +1236,8 @@ function generate_timezone_list()
 if (!function_exists('menu_listing')) {
     function menu_listing() {
         $data = [
-            'hotel', //accomodation
-            'space', //property
+            'hotel', //accomodation // rent
+            'space', //property // sell
             'business',
             // 'boat', //vehicles
             // 'car', //vehicles
@@ -1255,10 +1255,12 @@ if (!function_exists('menu_listing_as')) {
     function menu_listing_as($str) {
         switch($str) {
             case 'hotel':
-                $str = 'accomodation';
+                // $str = 'accomodation';
+                $str = 'rent';
                 break;
             case 'space':
-                $str = 'property';
+                // $str = 'property';
+                $str = 'sell';
                 break;
             case 'boat':
                 $str = 'vehicle';
@@ -1280,10 +1282,12 @@ if (!function_exists('get_attribute_listing')) {
 
         switch ($key) {
             case 'hotel':
-                $data['new_key'] = 'accomodation';
+                // $data['new_key'] = 'accomodation';
+                $data['new_key'] = 'rent';
                 break;
             case 'space':
-                $data['new_key'] = 'property';
+                // $data['new_key'] = 'property';
+                $data['new_key'] = 'sell';
                 break;
             case 'boat':
                 $data['new_key'] = 'vehicle';
@@ -1515,14 +1519,18 @@ if (!function_exists('get_attr_listing')) {
                 $data['route_as'] = 'business';
                 $data['svg'] = 'icon/shopping-bag.svg';
                 break;
-            case 'accomodation':
-            case 'accomodations':
+            // case 'accomodation':
+            // case 'accomodations':
+            case 'rent':
+            case 'rents':
             case 'hotel':
                 $data['route_as'] = 'hotel';
                 $data['svg'] = 'icon/building.svg';
                 break;
-            case 'property':
-            case 'properties':
+            // case 'property':
+            // case 'properties':
+            case 'sell':
+            case 'sells':
             case 'space' :
                 $data['route_as'] = 'space';
                 $data['svg'] = 'icon/house-user.svg';
@@ -1652,11 +1660,13 @@ if (!function_exists('get_explore_service')) {
 
             switch ($list) {
                 case 'hotel':
-                    $data['title'] = __('Accomodation');
+                    // $data['title'] = __('Accomodation');
+                    $data['title'] = __('Rent');
                     $data['icon'] = '<i class="fa fa-sm mr-2 fa-building"></i>';
                     break;
                 case 'space':
-                    $data['title'] = __('Property');
+                    // $data['title'] = __('Property');
+                    $data['title'] = __('Sell');
                     $data['icon'] = '<i class="fa fa-sm mr-2 fa-home"></i>';
                     break;
                 case 'business':

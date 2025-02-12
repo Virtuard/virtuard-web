@@ -83,12 +83,12 @@ class ListAllService extends BaseBlock
     {
         $list = [
             [
-                'name' => __('Accomodation'),
+                'name' => __('Rent'),
                 'image' => 'uploads/images/accomodation.webp',
                 'link' => route('hotel.search'),
             ],
             [
-                'name' => __('Property'),
+                'name' => __('Sell'),
                 'image' => 'uploads/images/property.webp',
                 'link' => route('space.search'),
             ],
@@ -97,36 +97,36 @@ class ListAllService extends BaseBlock
                 'image' => 'uploads/images/business.webp',
                 'link' => route('business.search'),
             ],
-            [
-                'name' => __('Car'),
-                'image' => 'uploads/demo/car/car-2.jpg',
-                'link' => route('car.search'),
-            ],
-            [
-                'name' => __('hide'),
-                'image' => '/uploads/images/virtuard.png',
-                'link' => '/',
-            ],
-            [
-                'name' => __('Event'),
-                'image' => 'uploads/images/event.webp',
-                'link' => route('event.search'),
-            ],
-            [
-                'name' => __('Cultural'),
-                'image' => 'uploads/images/cultural.webp',
-                'link' => route('cultural.search'),
-            ],
-            [
-                'name' => __('Natural'),
-                'image' => 'uploads/images/natural.webp',
-                'link' => route('natural.search'),
-            ],
-            [
-                'name' => __('Rendering'),
-                'image' => 'uploads/images/art.webp',
-                'link' => route('art.search'),
-            ],
+            // [
+            //     'name' => __('Car'),
+            //     'image' => 'uploads/demo/car/car-2.jpg',
+            //     'link' => route('car.search'),
+            // ],
+            // [
+            //     'name' => __('hide'),
+            //     'image' => '/uploads/images/virtuard.png',
+            //     'link' => '/',
+            // ],
+            // [
+            //     'name' => __('Event'),
+            //     'image' => 'uploads/images/event.webp',
+            //     'link' => route('event.search'),
+            // ],
+            // [
+            //     'name' => __('Cultural'),
+            //     'image' => 'uploads/images/cultural.webp',
+            //     'link' => route('cultural.search'),
+            // ],
+            // [
+            //     'name' => __('Natural'),
+            //     'image' => 'uploads/images/natural.webp',
+            //     'link' => route('natural.search'),
+            // ],
+            // [
+            //     'name' => __('Rendering'),
+            //     'image' => 'uploads/images/art.webp',
+            //     'link' => route('art.search'),
+            // ],
         ];
 
         $data = [
