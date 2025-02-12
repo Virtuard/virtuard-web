@@ -12,12 +12,14 @@
             <div class="list-item">
                 <div class="row">
                     @foreach($rows as $key=>$row)
-                        <?php
-                        $size_col = 4;
-                        ?>
-                        <div class="col-lg-{{$size_col}} col-md-6">
-                            @include('Template::frontend.blocks.list-all-service.loop')
-                        </div>
+                        @if ($row['name'] == 'Accomodation' || $row['name'] == 'Property' || $row['name'] == 'Business')
+                            <?php
+                            $size_col = 4;
+                            ?>
+                            <div class="col-lg-{{$size_col}} col-md-6">
+                                @include('Template::frontend.blocks.list-all-service.loop')
+                            </div>
+                        @endif
                     @endforeach
                 </div>
             </div>
