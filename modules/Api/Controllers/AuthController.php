@@ -30,6 +30,7 @@ class AuthController extends Controller
             'except' => [
                 'login',
                 'register',
+                'checkEmailAvailability',
                 'sendResetLinkEmail'
                 ]
         ]);
@@ -103,12 +104,17 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
+        $token = $user->createToken($request->device_name)->plainTextToken;
+
+        $user->api_token = $token;
+        $user->save();
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->sendError(__("Password is not correct"), ['code' => 'invalid_credentials'])->setStatusCode(401);;
         }
 
         return [
-            'token' => $user->createToken($request->device_name)->plainTextToken,
+            'token' => $token,
             'user' => new UserResource($user),
             'status' => 1
         ];
@@ -160,8 +166,10 @@ class AuthController extends Controller
                 'last_name'  => $request->input('last_name'),
                 'email'      => $request->input('email'),
                 'password'   => Hash::make($request->input('password')),
-                'publish'    => $request->input('publish'),
                 'phone'    => $request->input('phone'),
+                'status'    => 'publish',
+                'confirmation_code' => md5(uniqid(mt_rand(), true)),
+                'role_id' => 2
             ]);
             event(new Registered($user));
             //Auth::loginUsingId($user->id);
@@ -170,9 +178,17 @@ class AuthController extends Controller
             } catch (Exception $exception) {
                 Log::warning("SendMailUserRegistered: " . $exception->getMessage());
             }
-            $user->assignRole(setting_item('user_role'));
+            // $user->assignRole(setting_item('user_role'));
             return $this->sendSuccess(__('Register successfully'));
         }
+    }
+
+    public function checkEmailAvailability(Request $request){
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            return $this->sendError(__('Email is already in use'));
+        }
+        return $this->sendSuccess(__('Email is available'));
     }
 
     /**

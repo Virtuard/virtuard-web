@@ -9,6 +9,7 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
@@ -52,8 +53,17 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
 
-        Fortify::loginView(function () {
+        Fortify::loginView(function (Request $request) {
+            $token = $request->query('token');
 
+            if ($token) {
+                $user = User::where('api_token', $token)->first();
+        
+                if ($user) {
+                    Auth::login($user);
+                    return redirect('/');
+                }
+            }
             return view('auth.login');
         });
 

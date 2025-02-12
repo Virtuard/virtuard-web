@@ -61,6 +61,40 @@
         {!! setting_item_with_lang_raw('head_scripts') !!}
     @endif
 
+    <style>
+        @media (min-width: 993px) {
+            .notification-container {
+                display: none;
+            }
+        }
+        @media (max-width: 992px) {
+            .notification-container {
+                display: flex;
+                justify-content: center;
+                opacity: 1;
+                transition: all .3s;
+                .notification-create-listing {
+                    margin: 0 16px;
+                    position: fixed;
+                    bottom: -150px;
+                    max-width: 400px;
+                    border: 1px solid rgba(0, 0, 0, 0.1);
+                    z-index: 99;
+                    background-color: #fff;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    padding: 20px 32px;
+                    border-radius: 8px;
+                    transition: all .3s;    
+                }
+                &.active {
+                    opacity: 1;
+                    .notification-create-listing {
+                        bottom: 70px;
+                    }
+                }
+            }
+        }
+    </style>
 </head>
 
 <body
@@ -76,6 +110,17 @@
         @endif
 
         @yield('content')
+
+        @if (Request::is('/'))
+            <div class="notification-container">
+                <div class="notification-create-listing">
+                    <p>Ready to share your space? Create a listing now!</p>
+                    <div class="d-flex justify-content-center">
+                        <a href="{{ route('create') }}" class="btn btn-primary">Create Listing for Free</a>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @include('Layout::parts.footer')
     </div>
@@ -105,6 +150,17 @@
             window.addEventListener('resize', googleTranslateElementInit);
         </script>
     @endif
+
+    <script>
+        // Notification create listing
+        window.addEventListener('scroll', function() {
+            if(this.window.scrollY > 515) {
+                $(".notification-container").addClass("active");
+            } else {
+                $(".notification-container").removeClass("active");
+            }
+        })
+    </script>
 </body>
 
 </html>

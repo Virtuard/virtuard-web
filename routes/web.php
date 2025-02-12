@@ -19,6 +19,7 @@ use Modules\User\Controllers\PlanController;
 // Route::get('/intro', 'LandingpageController@index');
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/landing', 'HomeController@landing')->middleware('guest')->name('landing');
 Route::post('/install/check-db', 'HomeController@checkConnectDatabase');
 Route::get('/need-reset-password', 'HomeController@needResetPassword');
 Route::get('/need-confirm-email', 'HomeController@needConfirmEmail');
@@ -123,3 +124,12 @@ Route::post('midtrans/success/plan', [PlanController::class, 'handleSuccessPayme
 Route::get('thankyou/booking', [BookingController::class, 'thanyouController'])->name('booking.success.thankyou');
 
 Route::post('midtrans/callback', [BookingController::class, 'midtransCallback'])->name('midtrans.callback');
+
+// Disable API Documentation in Production
+if (app()->environment('local')) {
+    Route::get('/api/documentation', '\L5Swagger\Http\Controllers\SwaggerController@api');
+} else {
+    Route::get('/api/documentation', function () {
+        abort(404);
+    });
+}

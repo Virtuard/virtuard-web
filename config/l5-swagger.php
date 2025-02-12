@@ -50,6 +50,7 @@ return [
             /*
              * Route for accessing parsed swagger annotations.
              */
+            // 'docs' => 'docs',
             'docs' => 'docs',
 
             /*
