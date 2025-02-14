@@ -49,7 +49,7 @@
     </script>
     
     <div class="form-group">
-        <label for="term">
+        <label for="term" class="term-label">
             <input id="term" type="checkbox" name="term" class="mr5">
             {!! __("I have read and accept the <a href=':link' target='_blank'>Terms and Privacy Policy</a>",['link'=>get_page_url(setting_item('booking_term_conditions'))]) !!}
             <span class="checkmark fcheckbox"></span>

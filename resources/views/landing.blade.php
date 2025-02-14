@@ -664,22 +664,6 @@
         }
     </script>
 
-    <script>
-        // document.getElementById('toggle-password-register').addEventListener('click', function () {
-        //     var passwordField = document.getElementById('password'); 
-        //     var passwordType = passwordField.type === 'password' ? 'text' : 'password';
-        //     passwordField.type = passwordType;
-    
-        //     if (passwordType === 'password') {
-        //         this.classList.remove('icofont-eye-blocked'); 
-        //         this.classList.add('icofont-eye'); 
-        //     } else {
-        //         this.classList.remove('icofont-eye'); 
-        //         this.classList.add('icofont-eye-blocked'); 
-        //     }
-        // });
-    </script>
-
     <script src="{{ asset('/libs/jquery-3.6.3.min.js') }}"></script>
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
