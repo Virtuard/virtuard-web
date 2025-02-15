@@ -671,23 +671,16 @@
     {{-- <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script> --}}
 
     <script type="module">
-        // window.onload = function () {
-        //     $("#main").css("height", document.body.scrollHeight + "px");
-        // };
-
-        function isInstagramBrowser() {
-            var ua = navigator.userAgent || navigator.vendor || window.opera;
-            return ua.toLowerCase().indexOf('instagram') > -1;
-            }
-
-            // Redirect to Google Chrome if Instagram browser is detected
-            window.onload = function () {
-            if (isInstagramBrowser()) {
-                window.location.href = "intent://virtuard.com/#Intent;scheme=https;package=com.android.chrome;end";
-            } else {
-                window.location.href = "https://virtuard.com";
-            }
-        };
+        if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
+            // Arahkan ke browser eksternal (Google Chrome di Android)
+            window.location.href = "googlechrome://https://virtuard.com/landing"; 
+            window.location.href = "googlechrome://virtuard.com/landing"; 
+            // window.location.href = "intent://virtuard.com/landing#Intent;scheme=https;package=com.android.chrome;end";
+        }
+        else if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) {
+            // Arahkan ke Safari di iOS
+            window.location.href = "https://virtuard.com/landing";
+        }
 
 
         import { Viewer } from '@photo-sphere-viewer/core';
