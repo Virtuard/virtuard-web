@@ -315,7 +315,7 @@ class BookingController extends \Modules\Booking\Controllers\BookingController
 
     $start_date = Carbon::parse($request->start_date);
     $end_date   = Carbon::parse($request->end_date);
-    $jumlah_hari = $start_date->diffInDays($end_date) + 1; 
+    $jumlah_hari = $start_date->diffInDays($end_date); 
 
     $total      = $request->fee * $jumlah_hari;
     $commission = ($total * 10) / 100;
