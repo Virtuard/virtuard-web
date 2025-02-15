@@ -17,7 +17,7 @@
             <div class="sub-heading">{{$sub_title}}</div>
             @if(empty($hide_form_search))
                 <div class="g-form-control">
-                    <ul class="nav nav-tabs" role="tablist" style="display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <ul class="nav nav-tabs mb-2" role="tablist" style="display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 20px;">
                         @if(!empty($service_types))
                             @php $number = 0; @endphp
                             @foreach ($service_types as $service_type)
