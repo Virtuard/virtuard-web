@@ -309,6 +309,7 @@ class UserController extends FrontendController
             ->where('user_id', $user->id)
             ->count();
             $profileUrl = url('/profile/' . $user->user_name);
+            $referralUrl = url('/affiliate-' . $user->id . '_' . $user->user_name);
 
             $followers = DB::table('follow_member')
             ->join('users', 'users.id', '=', 'follow_member.user_id')
@@ -349,6 +350,7 @@ class UserController extends FrontendController
             'followerCount' => $followerCount,
             'followingCount' => $followingCount,
             'profileUrl' => $profileUrl,
+            'referralUrl' => $referralUrl,
             'avatarUrl' => $findUser->getAvatarUrl(),
             'followers' => $followers,
             'following' => $following,

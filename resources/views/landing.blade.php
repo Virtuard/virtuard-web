@@ -675,6 +675,21 @@
         //     $("#main").css("height", document.body.scrollHeight + "px");
         // };
 
+        function isInstagramBrowser() {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            return ua.toLowerCase().indexOf('instagram') > -1;
+            }
+
+            // Redirect to Google Chrome if Instagram browser is detected
+            window.onload = function () {
+            if (isInstagramBrowser()) {
+                window.location.href = "intent://virtuard.com/#Intent;scheme=https;package=com.android.chrome;end";
+            } else {
+                window.location.href = "https://virtuard.com";
+            }
+        };
+
+
         import { Viewer } from '@photo-sphere-viewer/core';
         import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
         import { AutorotatePlugin } from '@photo-sphere-viewer/autorotate-plugin';

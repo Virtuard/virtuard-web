@@ -64,6 +64,7 @@ class ProfileController extends FrontendController
         }
 
         $profileUrl = url('/profile/' . $user->user_name);
+        $referralUrl = url('/affiliate-' . $user->id . '_' . $user->user_name);
         $avatarUrl = $user->getAvatarUrl();
 
         $data['user'] = $user;
@@ -71,6 +72,7 @@ class ProfileController extends FrontendController
         $data['followerCount'] = $followerCount;
         $data['followingCount'] = $followingCount;
         $data['profileUrl'] = $profileUrl;
+        $data['referralUrl'] = $referralUrl;
         $data['avatarUrl'] = $avatarUrl;
         $data['followers'] = $followers;
         $data['following'] = $following;
