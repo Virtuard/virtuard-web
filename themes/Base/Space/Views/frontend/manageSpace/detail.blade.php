@@ -17,9 +17,9 @@
                     <a data-toggle="tab" href="#nav-tour-pricing" aria-selected="false">{{__("3. Pricing")}}</a>
                     @if(is_default_lang())
                         <a data-toggle="tab" href="#nav-attribute" aria-selected="false">{{__("4. Attributes")}}</a>
-                        <a data-toggle="tab" href="#nav-ical" aria-selected="false">{{__("5. Ical")}}</a>
+                        {{-- <a data-toggle="tab" href="#nav-ical" aria-selected="false">{{__("5. Ical")}}</a> --}}
                     @endif
-                    <a data-toggle="tab" href="#nav-seo" aria-selected="false">{{__("6. Seo")}}</a>
+                    <a data-toggle="tab" href="#nav-seo" aria-selected="false">{{__("5. Seo")}}</a>
                 </div>
                 <div class="tab-content" id="nav-tabContent">
                     <div class="tab-pane fade show active" id="nav-tour-content">
@@ -66,9 +66,9 @@
                         <div class="tab-pane fade" id="nav-attribute">
                             @include('Space::admin/space/attributes')
                         </div>
-                        <div class="tab-pane fade" id="nav-ical">
+                        {{-- <div class="tab-pane fade" id="nav-ical">
                             @include('Space::admin/space/ical')
-                        </div>
+                        </div> --}}
                         <div class="tab-pane fade" id="nav-seo">
                             @include('Core::admin/seo-meta/seo-meta')
                        </div>

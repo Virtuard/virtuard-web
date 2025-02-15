@@ -27,7 +27,8 @@
                     @if(is_default_lang())
                         <a data-toggle="tab" href="#nav-tour-pricing" aria-selected="false">{{__("3. Pricing")}}</a>
                         <a data-toggle="tab" href="#nav-attribute" aria-selected="false">{{__("4. Attributes")}}</a>
-                        <a data-toggle="tab" href="#nav-seo" aria-selected="false">{{__("5. Seo")}}</a>
+                        <a data-toggle="tab" href="#nav-ical" aria-selected="false">{{__("5. Ical")}}</a>
+                        <a data-toggle="tab" href="#nav-seo" aria-selected="false">{{__("6. Seo")}}</a>
                     @endif
                 </div>
                 <div class="tab-content" id="nav-tabContent">
@@ -50,6 +51,9 @@
                         </div>
                         <div class="tab-pane fade" id="nav-attribute">
                             @include('Hotel::admin/hotel/attributes')
+                        </div>
+                        <div class="tab-pane fade" id="nav-ical">
+                            @include('Hotel::admin/hotel/ical')
                         </div>
                        <div class="tab-pane fade" id="nav-seo">
                             @include('Core::admin/seo-meta/seo-meta')
