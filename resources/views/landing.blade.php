@@ -671,6 +671,8 @@
     {{-- <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script> --}}
 
     <script type="module">
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
         if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
             // Arahkan ke browser eksternal (Google Chrome di Android)
             window.location.href = "googlechrome://https://virtuard.com/landing"; 
