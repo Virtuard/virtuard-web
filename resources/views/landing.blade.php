@@ -922,7 +922,7 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tour for 1 month') }}</p>
                                 </div>
-                                <div class="d-flex align-items-start" style="margin-bottom: 35px;">
+                                <div class="d-flex align-items-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Booking management') }}</p>
                                 </div>
@@ -944,10 +944,6 @@
                                 <div class="d-flex align-items-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Up to 3 iPanorama (360° virtual tours)') }}</p>
-                                </div>
-                                <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
-                                    <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tour for 1 month') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
