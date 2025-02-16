@@ -143,6 +143,9 @@
                 }
 
                 if(isset($request->is_auto_login)) {
+                    $user->last_login_at = now();
+                    $user->save();
+                    
                     Auth::login($user);
                 }
                 

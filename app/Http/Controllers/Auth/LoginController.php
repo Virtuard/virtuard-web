@@ -140,6 +140,7 @@ class LoginController extends Controller
                 $realUser->first_name = $user->getName();
                 $realUser->user_name = generate_user_name($user->getName());
                 $realUser->status = 'publish';
+                $realUser->last_login_at = Carbon::now();
                 $realUser->email_verified_at = Carbon::now();
 
                 $realUser->save();
@@ -172,6 +173,7 @@ class LoginController extends Controller
                     return redirect()->route('login')->with('error', __('Your account has been blocked'));
                 }
 
+                $existUser->last_login_at = now();
                 $existUser->need_update_pw = 0;
                 $existUser->save();
 
