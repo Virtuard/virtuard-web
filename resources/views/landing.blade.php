@@ -361,6 +361,30 @@
             margin-bottom: 100px;
         }
 
+        .how-it-works .item-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 999px;
+        }
+
+        .how-it-works .item-number p {
+            border: 1px solid #5191FA;
+            padding: 2px 10px;
+            margin-top: 12px; 
+            font-size: 18px;
+            border-radius: 999px;
+            color: #5191FA;
+            font-weight: 700;
+        }
+
         .footer-text {
             color: #ddd;
             font-size: 14px;
@@ -423,7 +447,7 @@
                         @include('Language::frontend.switcher')
                     @endif --}}
                     <li class="nav-item">
-                        <a href="/register" class="navbar-link btn btn-first px-4 py-3">Get Started</a>
+                        <a href="/register" class="navbar-link btn btn-first px-4 py-3">{{ __('Get Started') }}</a>
                     </li>
                 </ul>
             </div>
@@ -431,9 +455,9 @@
         <div class="bg-overlay">
             <header id="header" class="container">
                 <div class="header-content">
-                    <h1 class="title">Explore Virtuard: Your Gateway <span>to Immersive Virtual Tours</span></h1>
-                    <p class="description">Virtuard is a cutting-edge platform that empowers users to upload and explore virtual tours with integrated booking services. Supporting various tour formats, Virtuard features eight distinct categories: Real Estate, Hotels, Commercial Activities.</p>
-                    <button class="btn btn-second" id="btn-demo">Virtual Tour Demo</button>
+                    <h1 class="title">{!! __('Explore Virtuard: Your Gateway to <span>Immersive Virtual Tours</span>') !!}</h1>
+                    <p class="description">{{ __('Virtuard is a cutting-edge platform that empowers users to upload and explore virtual tours with integrated booking services. Supporting various tour formats, Virtuard features eight distinct categories: Real Estate, Hotels, Commercial Activities.') }}</p>
+                    <button class="btn btn-second" id="btn-demo">{{ __('Virtuard Tour Demo') }}</button>
     
                     <div class="mouse-container">
                         <div class="mouse"></div>
@@ -445,8 +469,8 @@
             <section class="container">
                 <div>
                     <div class="text-center mb-5 text-white section-header">
-                        <h2 class="title">Our Locations</h2>
-                        <p class="description">Discover properties, hotels, restaurants, and shops from various locations with Virtuard. Whether you're exploring a new city or showcasing your space, our platform offers an immersive 360° virtual experience to bring every location to life</p>
+                        <h2 class="title">{{ __('Our Locations') }}</h2>
+                        <p class="description">{{ __("Discover properties, hotels, restaurants, and shops from various locations with Virtuard. Whether you're exploring a new city or showcasing your space, our platform offers an immersive 360° virtual experience to bring every location to life") }}</p>
                     </div>
                     <div class="card card-explore">
                         <div id="map-loading" class="text-center" style="
@@ -473,28 +497,28 @@
         <div class="bg-overlay">
             <section class="container get-started-container">
                 <div class="text-center mb-5 text-white section-header">
-                    <h2 class="title">Categories</h2>
+                    <h2 class="title">{{ __('Categories') }}</h2>
                 </div>
                 <div class="row">
                     <div class="col-md-4 col-12 p-2">
                         <div class="bg-white rounded px-4 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"></path></svg>
-                            <h4 class="card-title mt-3 text-primary font-weight-bold">Real Estate</h4>
-                            <p class="card-meta">Experience virtual tours and book residential and commercial properties seamlessly.</p>
+                            <h4 class="card-title mt-3 text-primary font-weight-bold">{{ __('Real Estate') }}</h4>
+                            <p class="card-meta">{{ __('Experience virtual tours and book residential and commercial properties seamlessly.') }}</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-12 p-2">
                         <div class="bg-white rounded px-4 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M18 2H6c-1.103 0-2 .897-2 2v17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4c0-1.103-.897-2-2-2zm0 18H6V4h12v16z"></path><path d="M8 6h3v2H8zm5 0h3v2h-3zm-5 4h3v2H8zm5 .031h3V12h-3zM8 14h3v2H8zm5 0h3v2h-3z"></path></svg>
-                            <h4 class="card-title mt-3 text-primary font-weight-bold">Hotels</h4>
-                            <p class="card-meta">Explore and book rooms, suites, and facilities at your convenience.</p>
+                            <h4 class="card-title mt-3 text-primary font-weight-bold">{{ __('Hotels') }}</h4>
+                            <p class="card-meta">{{ __('Explore and book rooms, suites, and facilities at your convenience.') }}</p>
                         </div>
                     </div>
                     <div class="col-md-4 col-12 p-2">
                         <div class="bg-white rounded px-4 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M5 22h14c1.103 0 2-.897 2-2V9a1 1 0 0 0-1-1h-3V7c0-2.757-2.243-5-5-5S7 4.243 7 7v1H4a1 1 0 0 0-1 1v11c0 1.103.897 2 2 2zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v1H9V7zm-4 3h2v2h2v-2h6v2h2v-2h2l.002 10H5V10z"></path></svg>
-                            <h4 class="card-title mt-3 text-primary font-weight-bold">Commercial Activities</h4>
-                            <p class="card-meta">Take virtual tours and make bookings for shops, restaurants, and offices.</p>
+                            <h4 class="card-title mt-3 text-primary font-weight-bold">{{ __('Commercial Activities') }}</h4>
+                            <p class="card-meta">{{ __('Take virtual tours and make bookings for shops, restaurants, and offices.') }}</p>
                         </div>
                     </div>
                 </div>
@@ -504,14 +528,14 @@
         <div class="bg-overlay">
             <section class="container get-started-container adventages">
                 <div class="text-center mb-5 text-white section-header">
-                    <h2 class="title">Adventages</h2>
-                    <p class="description">Here are the Virtual Tour benefits for Accommodation, Real Estate, and Shops:</p>
+                    <h2 class="title">{{ __('Adventages') }}</h2>
+                    <p class="description">{{ __('Here are the Virtual Tour benefits for Accommodation, Real Estate, and Shops:') }}</p>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-12 p-2">
                         <div class="bg-white rounded px-4 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M3 13h1v7c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2v-7h1a1 1 0 0 0 .707-1.707l-9-9a.999.999 0 0 0-1.414 0l-9 9A1 1 0 0 0 3 13zm7 7v-5h4v5h-4zm2-15.586 6 6V15l.001 5H16v-5c0-1.103-.897-2-2-2h-4c-1.103 0-2 .897-2 2v5H6v-9.586l6-6z"></path></svg>
-                            <h4 class="card-title mt-3 text-primary font-weight-bold">Hospitality</h4>
+                            <h4 class="card-title mt-3 text-primary font-weight-bold">{{ __('Hospitality') }}</h4>
                             <hr>
                             <div class="d-block">
                                 <div class="d-flex align-items-start">
@@ -528,8 +552,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Increased bookings</h6>
-                                        <p style="font-size: 14px;">Builds customer trust, reducing doubts and boosting conversion rates.</p>
+                                        <h6>{{ __('Increased bookings') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Builds customer trust, reducing doubts and boosting conversion rates.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -537,8 +561,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Competitive advantage</h6>
-                                        <p style="font-size: 14px;">Offering a Virtual Tour makes the property more modern and transparent.</p>
+                                        <h6>{{ __('Competitive advantage') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Offering a Virtual Tour makes the property more modern and transparent.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -546,8 +570,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Fewer customer inquiries</h6>
-                                        <p style="font-size: 14px;">Clients can explore the space without needing to contact customer service.</p>
+                                        <h6>{{ __('Fewer customer inquiries') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Clients can explore the space without needing to contact customer service.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -555,8 +579,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Perfect for marketing</h6>
-                                        <p style="font-size: 14px;">Virtual Tours can be integrated into websites, social media, and Google Street View to increase visibility.</p>
+                                        <h6>{{ __('Perfect for marketing') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Virtual Tours can be integrated into websites, social media, and Google Street View to increase visibility.') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -565,7 +589,7 @@
                     <div class="col-lg-4 col-12 p-2">
                         <div class="bg-white rounded px-4 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M18 2H6c-1.103 0-2 .897-2 2v17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4c0-1.103-.897-2-2-2zm0 18H6V4h12v16z"></path><path d="M8 6h3v2H8zm5 0h3v2h-3zm-5 4h3v2H8zm5 .031h3V12h-3zM8 14h3v2H8zm5 0h3v2h-3z"></path></svg>
-                            <h4 class="card-title mt-3 text-primary font-weight-bold">Real Estate</h4>
+                            <h4 class="card-title mt-3 text-primary font-weight-bold">{{ __('Real Estate') }}</h4>
                             <hr>
                             <div class="d-block">
                                 <div class="d-flex align-items-start">
@@ -573,8 +597,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>24/7 virtual visits</h6>
-                                        <p style="font-size: 14px;">Potential buyers can explore properties anytime without scheduling physical appointments.</p>
+                                        <h6>{{ __('24/7 virtual visits') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Potential buyers can explore properties anytime without scheduling physical appointments.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -582,8 +606,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Better client selection</h6>
-                                        <p style="font-size: 14px;">Only genuinely interested buyers will request in-person visits, saving agents time.</p>
+                                        <h6>{{ __('Better client selection') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Only genuinely interested buyers will request in-person visits, saving agents time.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -591,8 +615,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Higher engagement</h6>
-                                        <p style="font-size: 14px;">Listings with Virtual Tours receive more views and interactions than static images.</p>
+                                        <h6>{{ __('Higher engagement') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Listings with Virtual Tours receive more views and interactions than static images.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -600,8 +624,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Ideal for remote investors</h6>
-                                        <p style="font-size: 14px;">Perfect for those looking to purchase properties without traveling.</p>
+                                        <h6>{{ __('Ideal for remote investors') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Perfect for those looking to purchase properties without traveling.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -609,8 +633,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Enhanced property showcase</h6>
-                                        <p style="font-size: 14px;">A well-made tour highlights every corner of the property, offering a more accurate perception.</p>
+                                        <h6>{{ __('Enhanced property showcase') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('A well-made tour highlights every corner of the property, offering a more accurate perception.') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -619,7 +643,7 @@
                     <div class="col-lg-4 col-12 p-2">
                         <div class="bg-white rounded px-4 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M5 22h14c1.103 0 2-.897 2-2V9a1 1 0 0 0-1-1h-3V7c0-2.757-2.243-5-5-5S7 4.243 7 7v1H4a1 1 0 0 0-1 1v11c0 1.103.897 2 2 2zM9 7c0-1.654 1.346-3 3-3s3 1.346 3 3v1H9V7zm-4 3h2v2h2v-2h6v2h2v-2h2l.002 10H5V10z"></path></svg>
-                            <h4 class="card-title mt-3 text-primary font-weight-bold">Retail</h4>
+                            <h4 class="card-title mt-3 text-primary font-weight-bold">{{ __('Retail') }}</h4>
                             <hr>
                             <div class="d-block">
                                 <div class="d-flex align-items-start">
@@ -627,8 +651,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Improved shopping experience</h6>
-                                        <p style="font-size: 14px;">Customers can explore the store online and decide what to buy before visiting in person.</p>
+                                        <h6>{{ __('Improved shopping experience') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Customers can explore the store online and decide what to buy before visiting in person.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -636,8 +660,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>More in-store traffic</h6>
-                                        <p style="font-size: 14px;">A Virtual Tour attracts local customers interested in what the store offers.</p>
+                                        <h6>{{ __('More in-store traffic') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('A Virtual Tour attracts local customers interested in what the store offers.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -645,8 +669,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>E-commerce integration</h6>
-                                        <p style="font-size: 14px;">Possibility to link the tour to online purchases for an omnichannel experience.</p>
+                                        <h6>{{ __('E-commerce integration') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Possibility to link the tour to online purchases for an omnichannel experience.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -654,8 +678,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Innovative marketing</h6>
-                                        <p style="font-size: 14px;">Shareable on social media, Google Maps, and websites to boost brand visibility.</p>
+                                        <h6>{{ __('Innovative marketing') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Shareable on social media, Google Maps, and websites to boost brand visibility.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -663,8 +687,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Better Google ranking</h6>
-                                        <p style="font-size: 14px;">Businesses with Virtual Tours tend to rank higher in local search results.</p>
+                                        <h6>{{ __('Better Google ranking') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Businesses with Virtual Tours tend to rank higher in local search results.') }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -677,8 +701,8 @@
         <div class="bg-overlay">
             <section class="container get-started-container feature">
                 <div class="text-center mb-5 text-white section-header">
-                    <h2 class="title">Key Features</h2>
-                    <p class="description">Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.</p>
+                    <h2 class="title">{{ __('Key Features') }}</h2>
+                    <p class="description">{{ __("Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.") }}</p>
                     {{-- <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p> --}}
                 </div>
                 <div class="row">
@@ -691,7 +715,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Self-Upload Virtual Tours</h3>
+                                <h3 class="card-title">{{ __('Self-Upload Virtual Tours') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -699,7 +723,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">User-Friendly Interface: Easily create and upload tours.</h3>
+                                <h3 class="card-title">{{ __('User-Friendly Interface: Easily create and upload tours.') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -707,7 +731,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Support for Panoramic Images and Videos: Enhance your virtual tour experience.</h3>
+                                <h3 class="card-title">{{ __('Support for Panoramic Images and Videos: Enhance your virtual tour experience.') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -715,7 +739,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Integrated Editing Tools: Add interactive elements and refine your tours.</h3>
+                                <h3 class="card-title">{{ __('Integrated Editing Tools: Add interactive elements and refine your tours.') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -723,7 +747,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Integrated Booking System</h3>
+                                <h3 class="card-title">{{ __('Integrated Booking System') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -731,7 +755,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Direct Booking: Book directly through virtual tours.</h3>
+                                <h3 class="card-title">{{ __('Direct Booking: Book directly through virtual tours.') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -739,7 +763,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Real-Time Availability Calendar: Check availability instantly.</h3>
+                                <h3 class="card-title">{{ __('Real-Time Availability Calendar: Check availability instantly.') }}</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -747,7 +771,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Secure Payment Options: Choose from credit cards and PayPal.</h3>
+                                <h3 class="card-title">{{ __('Secure Payment Options: Choose from credit cards and PayPal.') }}</h3>
                             </div>
                         </div>
                         {{-- <a href="/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a> --}}
@@ -759,7 +783,7 @@
         <div class="bg-overlay">
             <section class="container get-started-container additional-features">
                 <div class="text-center mb-5 text-white section-header">
-                    <h2 class="title">Additional Features</h2>
+                    <h2 class="title">{{ __('Additional Features') }}</h2>
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-12 mt-md-5 mt-0">
@@ -768,8 +792,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M10 18a7.952 7.952 0 0 0 4.897-1.688l4.396 4.396 1.414-1.414-4.396-4.396A7.952 7.952 0 0 0 18 10c0-4.411-3.589-8-8-8s-8 3.589-8 8 3.589 8 8 8zm0-14c3.309 0 6 2.691 6 6s-2.691 6-6 6-6-2.691-6-6 2.691-6 6-6z"></path></svg>
                             </div>
                             <div class="card-body" style="margin-top: -30px;">
-                                <h1 class="card-title">Advanced Search</h1>
-                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">Filter by category, location, price, and availability to find your perfect virtual tour.</p>
+                                <h1 class="card-title">{{ __('Advanced Search') }}</h1>
+                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">{{ __('Filter by category, location, price, and availability to find your perfect virtual tour.') }}</p>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -777,8 +801,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M16 14h.5c.827 0 1.5-.673 1.5-1.5v-9c0-.827-.673-1.5-1.5-1.5h-13C2.673 2 2 2.673 2 3.5V18l5.333-4H16zm-9.333-2L4 14V4h12v8H6.667z"></path><path d="M20.5 8H20v6.001c0 1.1-.893 1.993-1.99 1.999H8v.5c0 .827.673 1.5 1.5 1.5h7.167L22 22V9.5c0-.827-.673-1.5-1.5-1.5z"></path></svg>
                             </div>
                             <div class="card-body" style="margin-top: -30px;">
-                                <h1 class="card-title">Reviews and Ratings</h1>
-                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">Benefit from user feedback to improve your experience and service quality.</p>
+                                <h1 class="card-title">{{ __('Reviews and Ratings') }}</h1>
+                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">{{ __('Benefit from user feedback to improve your experience and service quality.') }}</p>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -786,8 +810,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M12 2C6.486 2 2 6.486 2 12v4.143C2 17.167 2.897 18 4 18h1a1 1 0 0 0 1-1v-5.143a1 1 0 0 0-1-1h-.908C4.648 6.987 7.978 4 12 4s7.352 2.987 7.908 6.857H19a1 1 0 0 0-1 1V18c0 1.103-.897 2-2 2h-2v-1h-4v3h6c2.206 0 4-1.794 4-4 1.103 0 2-.833 2-1.857V12c0-5.514-4.486-10-10-10z"></path></svg>
                             </div>
                             <div class="card-body" style="margin-top: -30px;">
-                                <h1 class="card-title">Customer Support</h1>
-                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">Enjoy 24/7 support via live chat, email, and phone for any queries or assistance.</p>
+                                <h1 class="card-title">{{ __('Customer Support') }}</h1>
+                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">{{ __('Enjoy 24/7 support via live chat, email, and phone for any queries or assistance.') }}</p>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -795,8 +819,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M19 3c-1.654 0-3 1.346-3 3 0 .502.136.968.354 1.385l-1.116 1.302A3.976 3.976 0 0 0 13 8c-.739 0-1.425.216-2.02.566L9.566 7.152A3.449 3.449 0 0 0 10 5.5C10 3.57 8.43 2 6.5 2S3 3.57 3 5.5 4.57 9 6.5 9c.601 0 1.158-.166 1.652-.434L9.566 9.98A3.972 3.972 0 0 0 9 12c0 .997.38 1.899.985 2.601l-1.692 1.692.025.025A2.962 2.962 0 0 0 7 16c-1.654 0-3 1.346-3 3s1.346 3 3 3 3-1.346 3-3c0-.476-.121-.919-.318-1.318l.025.025 1.954-1.954c.421.15.867.247 1.339.247 2.206 0 4-1.794 4-4a3.96 3.96 0 0 0-.439-1.785l1.253-1.462c.364.158.764.247 1.186.247 1.654 0 3-1.346 3-3s-1.346-3-3-3zM7 20a1 1 0 1 1 0-2 1 1 0 0 1 0 2zM5 5.5C5 4.673 5.673 4 6.5 4S8 4.673 8 5.5 7.327 7 6.5 7 5 6.327 5 5.5zm8 8.5c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2zm6-7a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"></path></svg>
                             </div>
                             <div class="card-body" style="margin-top: -30px;">
-                                <h1 class="card-title">Social Media Integration</h1>
-                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">Easily share your tours on social networks for a wider reach.</p>
+                                <h1 class="card-title">{{ __('Social Media Integration') }}</h1>
+                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">{{ __('Easily share your tours on social networks for a wider reach.') }}</p>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -804,8 +828,8 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M14.844 20H6.5C5.121 20 4 18.879 4 17.5S5.121 15 6.5 15h7c1.93 0 3.5-1.57 3.5-3.5S15.43 8 13.5 8H8.639a9.812 9.812 0 0 1-1.354 2H13.5c.827 0 1.5.673 1.5 1.5s-.673 1.5-1.5 1.5h-7C4.019 13 2 15.019 2 17.5S4.019 22 6.5 22h9.593a10.415 10.415 0 0 1-1.249-2zM5 2C3.346 2 2 3.346 2 5c0 3.188 3 5 3 5s3-1.813 3-5c0-1.654-1.346-3-3-3zm0 4.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 5 6.5z"></path><path d="M19 14c-1.654 0-3 1.346-3 3 0 3.188 3 5 3 5s3-1.813 3-5c0-1.654-1.346-3-3-3zm0 4.5a1.5 1.5 0 1 1 .001-3.001A1.5 1.5 0 0 1 19 18.5z"></path></svg>
                             </div>
                             <div class="card-body" style="margin-top: -30px;">
-                                <h1 class="card-title">Discover Unique Experiences with Virtuard</h1>
-                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">Virtuard offers a powerful solution for exploring and booking unique experiences through immersive virtual tours. Dive into the world of Virtuard and unlock the potential of virtual exploration and booking today!</p>
+                                <h1 class="card-title">{{ __('Discover Unique Experiences with Virtuard') }}</h1>
+                                <p style="color: rgba(255,255,255,.8); margin-top: -10px;">{{ __('Virtuard offers a powerful solution for exploring and booking unique experiences through immersive virtual tours. Dive into the world of Virtuard and unlock the potential of virtual exploration and booking today!') }}</p>
                             </div>
                         </div>
                     </div>
@@ -815,6 +839,131 @@
                 </div>
             </section>
         </div>
+
+        <div class="bg-overlay">
+            <section class="container get-started-container how-it-works">
+                <div class="text-center mb-5 text-white section-header">
+                    <h2 class="title">{{ __('How It Works') }}</h2>
+                    <p class="description">{{ __('📍 Simple, fast, and no technical skills required!') }}</p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6 col-12 p-2 mb-lg-0 mb-4">
+                        <div class="bg-white rounded px-4 py-3 position-relative">
+                            <div class="item-number">
+                                <p>1</p>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('images/how-it-works/1.png') }}" width="70%" alt="">
+                            </div>
+                            <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Upload your images of your property, hotel, or business.') }}</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-12 p-2 mb-lg-0 mb-4">
+                        <div class="bg-white rounded px-4 py-3 position-relative">
+                            <div class="item-number">
+                                <p>2</p>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('images/how-it-works/2.png') }}" width="70%" alt="">
+                            </div>
+                            <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Create up to 3 iPanorama (360° virtual tours) to enhance the experience.') }}</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-12 p-2 mb-lg-0 mb-4">
+                        <div class="bg-white rounded px-4 py-3 position-relative">
+                            <div class="item-number">
+                                <p>3</p>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('images/how-it-works/3.png') }}" width="70%" alt="">
+                            </div>
+                            <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Manage bookings directly from the platform.') }}</h6>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-12 p-2 mb-lg-0 mb-4">
+                        <div class="bg-white rounded px-4 py-3 position-relative">
+                            <div class="item-number">
+                                <p>4</p>
+                            </div>
+                            <div class="d-flex justify-content-center">
+                                <img src="{{ asset('images/how-it-works/4.png') }}" width="70%" alt="">
+                            </div>
+                            <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Publish your listing for 1 month or 1 year (with an annual plan).') }}</h6>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="bg-overlay">
+            <section class="container get-started-container adventages">
+                <div class="text-center mb-5 text-white section-header">
+                    <h2 class="title">{{ __('Plans & Pricing') }}</h2>
+                    <p class="description">{{ __('🎉 Free Trial – 1 Month FREE') }}</p>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-12 px-2 py-4">
+                        <div class="bg-white rounded px-4 py-3">
+                            <h5 class="card-title font-weight-semi-bold">{{ __('Monthly Plan') }}</h5>
+                            <div class="d-flex align-items-end">
+                                <h1 class="text-primary">10$</h1>
+                                <p class="text-muted" style="position: relative; top: 5px;">/month</p>
+                            </div>
+                            <div class="d-block mt-2">
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Unlimited Listings (create as many listings as you want)') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Up to 3 iPanorama (360° virtual tours)') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tour for 1 month') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start" style="margin-bottom: 35px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Booking management') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12 px-2 py-4">
+                        <div class="bg-white rounded px-4 py-3">
+                            <h5 class="card-title font-weight-semi-bold">{{ __('Annual Plan') }}</h5>
+                            <div class="d-flex align-items-end">
+                                <h1 class="text-primary">99$</h1>
+                                <p class="text-muted" style="position: relative; top: 5px;">/year</p>
+                            </div>
+                            <div class="d-block mt-2">
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Unlimited Listings (create as many listings as you want)') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Up to 3 iPanorama (360° virtual tours)') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tour for 1 month') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Booking management') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tours for 1 year') }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <div class="bg-overlay">
             <footer class="container" style="padding-top: 100px;">
                 <div class="d-flex align-items-center justify-content-between" style="border-top: 1px solid rgba(255,255,255,.2);">
@@ -829,7 +978,7 @@
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p class="footer-text text-center">Copyright © Virtuard Reality Design. Company nr AHU-0175648.AH.01.11, registered in Gianyar, Bali, Indonesia.</p>
+                    <p class="footer-text text-center">{{ __('Copyright © Virtuard Reality Design. Company nr AHU-0175648.AH.01.11, registered in Gianyar, Bali, Indonesia.') }}</p>
                 </div>
             </footer>
         </div>
