@@ -155,26 +155,6 @@ function addMarkersToMap(markerData) {
     markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
 }
 
-function getPopupMarker(data) {
-    const contentString =
-        `
-            <div class="card" style="overflow: hidden; height: 100px;">
-                <div class="card card-custom card-has-bg click-col" style="background-image: url(${data.banner_image_id}); width: 250px; background-position: center;">
-                    <div class="card-img-overlay d-flex align-items-start">
-                        <div>
-                            <h5 class="card-title mt-0 mb-0" style="text-overflow: ellipsis; overflow:hidden; font-size: 16px;">
-                                <a class="text-white" href="${data.url}">${data.title}</a>
-                            </h5>
-                            <span class="text-white"> <i class="fa fa-map-marker"></i> ${data.address}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            `;
-
-    return contentString;
-}
-
 function filterMarkers(condition) {
     resetMarkers();
 
