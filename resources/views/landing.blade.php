@@ -151,7 +151,7 @@
         }
 
         #header .header-content {
-            max-width: 700px;
+            max-width: 1000px;
             text-align: center;
             color: #fff;
         }
@@ -169,6 +169,11 @@
         .section-header .title {
             font-size: 40px;
             font-weight: 700;
+        }
+
+        .header-content .description {
+            max-width: 900px;
+            margin: 20px auto;
         }
 
         .description {
@@ -526,8 +531,8 @@
         <div class="bg-overlay">
             <header id="header" class="container">
                 <div class="header-content">
-                    <h1 class="title">Explore 3D & 360 <br> <span>Virtual Tours</span></h1>
-                    <p class="description">Want to showcase your property, hotel, restaurant, or shop like never before? With Virtuard, you can create your listing and 360° Virtual Tour on your own – at no cost and with no assistance needed!</p>
+                    <h1 class="title">Explore Virtuard: Your Gateway <span>to Immersive Virtual Tours</span></h1>
+                    <p class="description">Virtuard is a cutting-edge platform that empowers users to upload and explore virtual tours with integrated booking services. Supporting various tour formats, Virtuard features eight distinct categories: Real Estate, Hotels, Commercial Activities.</p>
                     <button class="btn btn-second" id="btn-demo">Virtual Tour Demo</button>
     
                     <div class="mouse-container">
