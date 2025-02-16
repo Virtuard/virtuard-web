@@ -222,9 +222,12 @@
                 @endif
             </ul>
             <ul class="multi-lang">
-                @if(setting_item('google_translate_enable'))
+                {{-- @if(setting_item('google_translate_enable'))
                     <div id="gtranslate-mobile" style="margin-left: 20px;"></div>
                 @else
+                    @include('Language::frontend.switcher')
+                @endif --}}
+                @if (is_enable_multi_lang())
                     @include('Language::frontend.switcher')
                 @endif
             </ul>
