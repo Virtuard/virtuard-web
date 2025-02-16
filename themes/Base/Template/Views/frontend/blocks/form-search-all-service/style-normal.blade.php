@@ -1,3 +1,25 @@
+@push('css')
+    <style>
+        .nav.nav-tabs {
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media(max-width: 400px) {
+            .nav.nav-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width: 350px) {
+            .nav.nav-tabs {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
+@endpush
+
 @if(!empty($style) and $style == "carousel" and !empty($list_slider))
     <div class="effect">
         <div class="owl-carousel">
@@ -17,7 +39,7 @@
             <div class="sub-heading">{{$sub_title}}</div>
             @if(empty($hide_form_search))
                 <div class="g-form-control">
-                    <ul class="nav nav-tabs mb-2" role="tablist" style="display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                    <ul class="nav nav-tabs mb-2" role="tablist">
                         @if(!empty($service_types))
                             @php $number = 0; @endphp
                             @foreach ($service_types as $service_type)
