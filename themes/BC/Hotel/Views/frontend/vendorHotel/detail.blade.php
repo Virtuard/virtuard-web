@@ -86,6 +86,28 @@
     <script type="text/javascript" src="{{ asset('js/condition.js?_ver='.config('app.asset_version')) }}"></script>
     {!! App\Helpers\MapEngine::scripts() !!}
     <script>
+        $(".accomodation-title").on("input",function(){
+            $(".meta-title-input").val($(this).val())
+        })
+
+        tinymce.init({
+            selector: '.accomodation-content',
+            setup: function (editor) {
+                editor.on('input', function () {
+                    var content = editor.getContent(); 
+                    var plainText = $('<div>').html(content).text();
+                    $(".meta-description-input").val(plainText);
+                });
+            }
+        });
+
+        // $('input[name="banner_image_id"]').on('change', function () {
+        //     console.log("tes")
+        //     let bannerImageId = $(this).val(); // Get the uploaded image ID
+        //     console.log(bannerImageId)
+        //     $('input[name="seo_image"]').val(bannerImageId).trigger('change'); // Set it to SEO image
+        // });
+
         jQuery(function ($) {
             new BravoMapEngine('map_content', {
                 fitBounds: true,

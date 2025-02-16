@@ -4,12 +4,12 @@
         <div class="form-group">
             <label>{{ __('Title') }} <span class="text-danger">*</span></label>
             <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Name of the accomodation') }}"
-                name="title" class="form-control" required>
+                name="title" class="form-control accomodation-title" required>
         </div>
         <div class="form-group">
             <label class="control-label">{{ __('Content') }}</label>
             <div class="">
-                <textarea name="content" class="d-none has-ckeditor" data-fullurl="true" cols="30" rows="10">{{ $translation->content }}</textarea>
+                <textarea name="content" class="d-none has-ckeditor accomodation-content" data-fullurl="true" cols="30" rows="10">{{ $translation->content }}</textarea>
             </div>
         </div>
         @if (is_default_lang())

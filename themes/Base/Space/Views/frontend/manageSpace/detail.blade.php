@@ -87,6 +87,21 @@
     <script type="text/javascript" src="{{url('module/core/js/map-engine.js?_ver='.config('app.asset_version'))}}"></script>
     {!! App\Helpers\MapEngine::scripts() !!}
     <script>
+        $(".space-title").on("input",function(){
+            $(".meta-title-input").val($(this).val())
+        })
+
+        tinymce.init({
+            selector: '.space-content',
+            setup: function (editor) {
+                editor.on('input', function () {
+                    var content = editor.getContent(); 
+                    var plainText = $('<div>').html(content).text();
+                    $(".meta-description-input").val(plainText);
+                });
+            }
+        });
+
         jQuery(function ($) {
             new BravoMapEngine('map_content', {
                 fitBounds: true,

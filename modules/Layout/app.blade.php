@@ -152,6 +152,14 @@
     @endif
 
     <script>
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        // Deteksi jika dibuka dari Instagram atau Facebook
+        if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
+            // Arahkan ke browser eksternal (Google Chrome di Android)
+            window.location.href = "googlechrome://virtuard.com"; 
+        }
+
         // Notification create listing
         window.addEventListener('scroll', function() {
             if(this.window.scrollY > 515) {

@@ -38,11 +38,11 @@ $seo_share = $meta_seo['seo_share'] ?? false;
             <div class="tab-pane active" id="seo_1">
                 <div class="form-group" >
                     <label class="control-label">{{__("Seo Title")}}</label>
-                    <input type="text" name="seo_title" class="form-control" placeholder="{{ $row->title ?? $row->name ?? __("Leave blank to use service title")}}" value="{{ $meta_seo['seo_title'] ?? ""}}">
+                    <input type="text" name="seo_title" class="form-control meta-title-input" placeholder="{{ $row->title ?? $row->name ?? __("Leave blank to use service title")}}" value="{{ $meta_seo['seo_title'] ?? ""}}">
                 </div>
                 <div class="form-group">
                     <label class="control-label">{{__("Seo Description")}}</label>
-                    <textarea name="seo_desc" rows="3" class="form-control" placeholder="{{$row->short_desc ?? __("Enter description...")}}">{{$meta_seo['seo_desc'] ?? ""}}</textarea>
+                    <textarea name="seo_desc" rows="3" class="form-control meta-description-input" placeholder="{{$row->short_desc ?? __("Enter description...")}}">{{$meta_seo['seo_desc'] ?? ""}}</textarea>
                 </div>
                 @if(is_default_lang())
                     <div class="form-group form-group-image">
