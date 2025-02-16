@@ -176,11 +176,12 @@ class ListSpace extends BaseBlock
         if (!empty($model['custom_ids'])) {
             $model_space->whereIn("bravo_spaces.id", $model['custom_ids']);
         }
-        $model_space->orderBy("bravo_spaces." . $model['order'], $model['order_by']);
         $model_space->orderByDesc("review_score");
+        $model_space->orderBy("bravo_spaces." . $model['order'], $model['order_by']);
         $model_space->where("bravo_spaces.status", "publish");
         $model_space->with('location');
         $model_space->groupBy("bravo_spaces.id");
+
         return $model_space->limit($model['number'])->get();
     }
 }
