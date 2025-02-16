@@ -63,7 +63,7 @@
     <form method="GET" action="{{ route('hotel.search') }}">
         <div class="row align-items-center">
             <div class="col-md-2">
-                <label for="service_name" class="form-label">{{ __('Service Name') }}</label>
+                <label for="service_name" class="form-label">{{ __('Service name') }}</label>
                 <input type="text" class="form-control" name="service_name" placeholder="Service name">
             </div>
             <div class="col-md-2">
