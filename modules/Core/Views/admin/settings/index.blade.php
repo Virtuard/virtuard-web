@@ -37,6 +37,7 @@
                             @include ('Core::admin.settings.groups.'.$current_group)
                         @else
                             @include ($group['view'])
+                            {{-- @include('Natural::admin.settings.natural') --}}
                         @endif
                     </div>
 

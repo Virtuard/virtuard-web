@@ -24,9 +24,10 @@
                     <label class="" >{{__("Layout Search")}}</label>
                     <div class="form-controls">
                         <select name="natural_layout_search" class="form-control" >
-                            @foreach(config('natural.layouts',['normal'=>__("Normal Layout"))]) as $id=>$name))
+                            <option value="normal" {{ ($settings['natural_layout_search'] ?? '') == 'normal' ? 'selected' : ''  }}>{{__("Normal Layout")}}</option>
+                            {{-- @foreach(config('natural.layouts',['normal'=>__("Normal Layout"))]) as $id=>$name))
                                 <option value="{{$id}}" {{ setting_item('natural_layout_search','normal') == $id ? 'selected' : ''  }}>{{$name}}</option>
-                            @endforeach
+                            @endforeach --}}
                         </select>
                     </div>
                 </div>
