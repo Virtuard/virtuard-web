@@ -227,12 +227,12 @@
                 @else
                     @include('Language::frontend.switcher')
                 @endif --}}
-                @if (is_enable_multi_lang())
-                    @include('Language::frontend.switcher')
-                @endif
             </ul>
             {{-- //tes --}}
             <ul class="multi-lang">
+                @if (is_enable_multi_lang())
+                    @include('Language::frontend.switcher')
+                @endif
                 @include('Core::frontend.currency-switcher')
             </ul>
         </div>
