@@ -273,26 +273,6 @@ jQuery(function ($) {
         })
     });
 
-    $(".bravo-list-hotel").each(function () {
-        $(this).find(".owl-carousel").owlCarousel({
-            items: 3,
-            loop: false,
-            margin: 15,
-            nav: false,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                768: {
-                    items: 2
-                },
-                1000: {
-                    items: 3
-                }
-            }
-        })
-    });
-
     $(".bravo-list-car").each(function () {
         $(this).find(".owl-carousel").owlCarousel({
             items: 4,
