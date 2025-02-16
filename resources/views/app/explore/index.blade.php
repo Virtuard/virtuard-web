@@ -341,4 +341,26 @@
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
     <script src="{{ asset('assets/js/explore.js') }}"></script>
+    <script>
+        function fetchMap(attr) {
+            $('#map-loading').show();
+
+            $.ajax({
+                type: "POST",
+                url: "/explore/map/search",
+                data: attr,
+                success: function(data) {
+                    let maps = data.data.filter((item) => item.category == 'business' || item.category == 'hotel' || item.category == 'space');
+                    console.log(maps)
+                    resetMarkers();
+                    addMarkersToMap(maps);
+
+                    $('#map-loading').hide();
+                },
+                error: function(xhr) {
+                    $('#map-loading').hide();
+                }
+            });
+        }
+    </script>
 @endpush

@@ -347,27 +347,6 @@ function onFetchData(attr) {
     fetchMap(attr);
 }
 
-function fetchMap(attr) {
-    $('#map-loading').show();
-
-    $.ajax({
-        type: "POST",
-        url: "/explore/map/search",
-        data: attr,
-        success: function(data) {
-            let maps = data.data.filter((item) => item.category == 'business' || item.category == 'hotel' || item.category == 'space');
-            console.log(maps)
-            resetMarkers();
-            addMarkersToMap(maps);
-
-            $('#map-loading').hide();
-        },
-        error: function(xhr) {
-            $('#map-loading').hide();
-        }
-    });
-}
-
 function fetchService(attr = {}) {
     isLoadingScroll = true;
     $('#service-loading').show();
