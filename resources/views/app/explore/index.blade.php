@@ -351,7 +351,7 @@
                 data: attr,
                 success: function(data) {
                     let maps = data.data.filter((item) => item.category == 'business' || item.category == 'hotel' || item.category == 'space');
-                    console.log(maps)
+
                     resetMarkers();
                     addMarkersToMap(maps);
 
