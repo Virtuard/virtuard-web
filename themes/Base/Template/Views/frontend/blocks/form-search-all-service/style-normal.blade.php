@@ -8,15 +8,15 @@
 
         @media(max-width: 400px) {
             .nav.nav-tabs {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media(max-width: 350px) {
-            .nav.nav-tabs {
                 grid-template-columns: repeat(1, 1fr);
             }
         }
+
+        /* @media(max-width: 350px) {
+            .nav.nav-tabs {
+                grid-template-columns: repeat(1, 1fr);
+            }
+        } */
     </style>
 @endpush
 
