@@ -522,6 +522,9 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-.899.156-1.762.431-2.569L6 11l2 2v2l2 2 1 1v1.931C7.061 19.436 4 16.072 4 12zm14.33 4.873C17.677 16.347 16.687 16 16 16v-1a2 2 0 0 0-2-2h-4v-3a2 2 0 0 0 2-2V7h1a2 2 0 0 0 2-2v-.411C17.928 5.778 20 8.65 20 12a7.947 7.947 0 0 1-1.67 4.873z"></path></svg>
                         <a href="/landing?lang=id" class="navbar-link">Indonesian</a>
                     </li> --}}
+                    {{-- @if (is_enable_multi_lang())
+                        @include('Language::frontend.switcher')
+                    @endif --}}
                     <li class="nav-item">
                         <a href="/register" class="navbar-link btn btn-first px-4 py-3">Get Started</a>
                     </li>
@@ -572,9 +575,9 @@
         <div class="bg-overlay">
             <section class="container get-started-container">
                 <div class="text-center mb-5 text-white section-header">
-                    <h2 class="title">Get Started for Free</h2>
+                    <h2 class="title">Key Features</h2>
                     <p class="description">Virtuard offers a range of features to help you create and explore 3D & 360° Virtual Tours. Whether you're a property owner, real estate agent, or business owner, our platform provides the tools you need to showcase your space and attract customers.</p>
-                    <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p>
+                    {{-- <p class="description">Don’t miss the chance to stand out from the competition! 🚀</p> --}}
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-12 d-md-block d-none">
@@ -586,7 +589,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Free Registration</h3>
+                                <h3 class="card-title">Self-Upload Virtual Tours</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -594,7 +597,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Post your ad for free</h3>
+                                <h3 class="card-title">User-Friendly Interface: Easily create and upload tours.</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -602,7 +605,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">You can connect the calendar with other booking systems to avoid overbooking thanks to iCal.</h3>
+                                <h3 class="card-title">Support for Panoramic Images and Videos: Enhance your virtual tour experience.</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -610,7 +613,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Create your Virtual Tour in just a few clicks</h3>
+                                <h3 class="card-title">Integrated Editing Tools: Add interactive elements and refine your tours.</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -618,7 +621,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Showcase your space in an innovative and engaging way</h3>
+                                <h3 class="card-title">Integrated Booking System</h3>
                             </div>
                         </div>
                         <div class="card-feature">
@@ -626,10 +629,26 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
                             </div>
                             <div class="card-body">
-                                <h3 class="card-title">Credit card is not required</h3>
+                                <h3 class="card-title">Direct Booking: Book directly through virtual tours.</h3>
                             </div>
                         </div>
-                        <a href="/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Real-Time Availability Calendar: Check availability instantly.</h3>
+                            </div>
+                        </div>
+                        <div class="card-feature">
+                            <div class="card-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm-1.999 14.413-3.713-3.705L7.7 11.292l2.299 2.295 5.294-5.294 1.414 1.414-6.706 6.706z"></path></svg>
+                            </div>
+                            <div class="card-body">
+                                <h3 class="card-title">Secure Payment Options: Choose from credit cards and PayPal.</h3>
+                            </div>
+                        </div>
+                        {{-- <a href="/register" class="mt-5 btn btn-second px-4 py-3">Get Started</a> --}}
                     </div>
                 </div>
             </section>

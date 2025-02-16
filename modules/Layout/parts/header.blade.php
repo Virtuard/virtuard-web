@@ -23,12 +23,15 @@
                 <?php $header_right_menu = true ?>
                 @if(!empty($header_right_menu))
                     <ul class="topbar-items">
-                        @if(setting_item('google_translate_enable'))
+                        {{-- @if(setting_item('google_translate_enable'))
                         <li class="menu-hr">
                             <div id="gtranslate-web"></div>
                         </li>
                         @else
                         @include('Language::frontend.switcher')
+                        @endif --}}
+                        @if (is_enable_multi_lang())
+                            @include('Language::frontend.switcher')
                         @endif
                         {{-- @include('Core::frontend.currency-switcher') --}}
                         @if(!Auth::check())
