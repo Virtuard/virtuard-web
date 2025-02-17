@@ -902,7 +902,37 @@
                     <p class="description">{{ __('🎉 Free Trial – 1 Month FREE') }}</p>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6 col-12 px-2 py-4">
+                    <div class="col-lg-4 col-md-6 col-12 px-2 py-4">
+                        <div class="bg-white rounded px-4 py-3">
+                            <h5 class="card-title font-weight-semi-bold">{{ __('Free Plan') }}</h5>
+                            <div class="d-flex align-items-end">
+                                <h1 class="text-primary">0$</h1>
+                                <p class="text-muted" style="position: relative; top: 5px;">/30 day</p>
+                            </div>
+                            <div class="d-block mt-2">
+                                <div class="d-flex align-items-start">
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Create and publish your listing (hotel, property, or business)') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Generate 1 Virtual Tour (iPanorama) valid for 1 month. (If you don’t subscribe after the first month, your listing will remain active, but the Virtual Tour will be deactivated)') }}</p>
+                                </div>
+                                <div class="d-flex align-items-start">
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
+                                    <p class="ml-1" style="font-size: 14px;">{{ __('Booking hotels') }}</p>
+                                </div>
+                                <a href="/plan" class="navbar-link btn btn-first px-4 py-3" style="width: 100%;">{{ __('Select') }}</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-12 px-2 py-4">
                         <div class="bg-white rounded px-4 py-3">
                             <h5 class="card-title font-weight-semi-bold">{{ __('Monthly Plan') }}</h5>
                             <div class="d-flex align-items-end">
@@ -911,25 +941,34 @@
                             </div>
                             <div class="d-block mt-2">
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Unlimited Listings (create as many listings as you want)') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Up to 3 iPanorama (360° virtual tours)') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tour for 1 month') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Booking management') }}</p>
                                 </div>
+                                <a href="/plan" class="navbar-link btn btn-first px-4 py-3" style="width: 100%;">{{ __('Select') }}</a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-12 px-2 py-4">
+                    <div class="col-lg-4 col-md-6 col-12 px-2 py-4">
                         <div class="bg-white rounded px-4 py-3">
                             <h5 class="card-title font-weight-semi-bold">{{ __('Annual Plan') }}</h5>
                             <div class="d-flex align-items-end">
@@ -938,21 +977,30 @@
                             </div>
                             <div class="d-block mt-2">
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Unlimited Listings (create as many listings as you want)') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Up to 3 iPanorama (360° virtual tours)') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Booking management') }}</p>
                                 </div>
                                 <div class="d-flex align-items-start">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    <div style="margin-top: -4px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="m10 15.586-3.293-3.293-1.414 1.414L10 18.414l9.707-9.707-1.414-1.414z"></path></svg>
+                                    </div>
                                     <p class="ml-1" style="font-size: 14px;">{{ __('Publish the tours for 1 year') }}</p>
                                 </div>
+                                <a href="/plan" class="navbar-link btn btn-first px-4 py-3" style="width: 100%;">{{ __('Select') }}</a>
                             </div>
                         </div>
                     </div>
