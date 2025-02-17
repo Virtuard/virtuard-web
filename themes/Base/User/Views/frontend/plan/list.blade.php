@@ -52,22 +52,26 @@
                                     {!! clean($translate->content) !!}
                                 </div>
                                 <div class="table-footer">
-                                    @if($user and $user_plan = $user->user_plan and $user_plan->plan_id == $plan->id)
-                                        @if($user_plan->is_valid)
-                                            <div class="d-flex text-center">
-                                                <a href="{{ route('user.plan') }}" class="theme-btn btn-style-one mr-2">{{__("Current Plan")}}</a>
-                                                @if(setting_item_with_lang('enable_multi_user_plans'))
-                                                @if(!is_plan_free($plan))
-                                                    <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
-                                                @endif
-                                                @endif
-                                            </div>
-                                        @else
-                                            @if(!is_plan_free($plan))
-                                            <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                    @if (count($user))
+                                        @if($user and $user_plan = $user->user_plan and $user_plan->plan_id == $plan->id)
+                                            @if($user_plan->is_valid)
+                                                <div class="d-flex text-center">
+                                                    <a href="{{ route('user.plan') }}" class="theme-btn btn-style-one mr-2">{{__("Current Plan")}}</a>
+                                                    @if(setting_item_with_lang('enable_multi_user_plans'))
+                                                    @if(!is_plan_free($plan))
+                                                        <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                                    @endif
+                                                    @endif
+                                                </div>
                                             @else
-                                            <a href="{{ route('user.plan') }}" class="btn btn-danger">{{__("Expired")}}</a>
+                                                @if(!is_plan_free($plan))
+                                                <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                                @else
+                                                <a href="{{ route('user.plan') }}" class="btn btn-danger">{{__("Expired")}}</a>
+                                                @endif
                                             @endif
+                                        @else
+                                            <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-primary">{{__('Select')}}</a>
                                         @endif
                                     @else
                                         <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-primary">{{__('Select')}}</a>
@@ -106,16 +110,20 @@
                                     {!! clean($plan->content) !!}
                                 </div>
                                 <div class="table-footer">
-                                    @if($user and $user_plan = $user->user_plan and $user_plan->plan_id == $plan->id)
-                                        @if($user_plan->is_valid)
-                                            <div class="d-flex text-center">
-                                                <a href="{{ route('user.plan') }}" class="theme-btn btn-style-one mr-2">{{__("Current Plan")}}</a>
-                                                @if(setting_item_with_lang('enable_multi_user_plans'))
-                                                    <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
-                                                @endif
-                                            </div>
+                                    @if (count($user))
+                                        @if($user and $user_plan = $user->user_plan and $user_plan->plan_id == $plan->id)
+                                            @if($user_plan->is_valid)
+                                                <div class="d-flex text-center">
+                                                    <a href="{{ route('user.plan') }}" class="theme-btn btn-style-one mr-2">{{__("Current Plan")}}</a>
+                                                    @if(setting_item_with_lang('enable_multi_user_plans'))
+                                                        <a href="{{route('user.plan.buy',['id'=>$plan->id])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <a href="{{route('user.plan.buy',['id'=>$plan->id,'annual'=>1])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                            @endif
                                         @else
-                                            <a href="{{route('user.plan.buy',['id'=>$plan->id,'annual'=>1])}}" class="btn btn-warning">{{__('Repurchase')}}</a>
+                                            <a href="{{route('user.plan.buy',['id'=>$plan->id,'annual'=>1])}}" class="btn btn-primary">{{__('Select')}}</a>
                                         @endif
                                     @else
                                         <a href="{{route('user.plan.buy',['id'=>$plan->id,'annual'=>1])}}" class="btn btn-primary">{{__('Select')}}</a>

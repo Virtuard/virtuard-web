@@ -25,34 +25,44 @@ class PlanController extends FrontendController
             return redirect('/');
         }
         if (!auth()->check()) {
-            return redirect(route('login'));
-        }
+            // return redirect(route('login'));
+            $plans = Plan::query()
+                ->whereStatus('publish')
+                ->get();
 
-        $user = auth()->user();
-
-        $hasValidUserPlan = DB::table('bravo_booking_payments')
-            ->where('create_user', $user->id)
-            ->whereNotNull('affiliate_id')
-            ->where('status', 'completed')
-            ->exists();
-
-        if ($hasValidUserPlan) {
-            $hasAffiliatePlan =  false;
+            $data = [
+                'page_title' => __('Pricing Packages'),
+                'plans' => $plans,
+                'user' => collect(),
+                'hasAffiliatePlan' => collect()
+            ];
         } else {
-            $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+            $user = auth()->user();
+
+            $hasValidUserPlan = DB::table('bravo_booking_payments')
+                ->where('create_user', $user->id)
+                ->whereNotNull('affiliate_id')
+                ->where('status', 'completed')
+                ->exists();
+
+            if ($hasValidUserPlan) {
+                $hasAffiliatePlan =  false;
+            } else {
+                $hasAffiliatePlan = !empty($user->affiliate_plan_user_id);
+            }
+
+            $plans = Plan::query()
+                ->where('role_id', $user->role_id)
+                ->whereStatus('publish')
+                ->get();
+
+            $data = [
+                'page_title' => __('Pricing Packages'),
+                'plans' => $plans,
+                'user' => $user,
+                'hasAffiliatePlan' => $hasAffiliatePlan
+            ];
         }
-
-        $plans = Plan::query()
-            ->where('role_id', $user->role_id)
-            ->whereStatus('publish')
-            ->get();
-
-        $data = [
-            'page_title' => __('Pricing Packages'),
-            'plans' => $plans,
-            'user' => $user,
-            'hasAffiliatePlan' => $hasAffiliatePlan
-        ];
 
         return view('User::frontend.plan.index', $data);
     }
