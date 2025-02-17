@@ -142,12 +142,12 @@
                     $response['redirect'] = '/need-confirm-email';
                 }
 
-                if(isset($request->is_auto_login)) {
+                // if(isset($request->is_auto_login)) {
                     $user->last_login_at = now();
                     $user->save();
                     
                     Auth::login($user);
-                }
+                // }
                 
                 return response()->json($response, 200);
             }
