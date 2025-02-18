@@ -167,10 +167,10 @@ class UserController extends FrontendController
                 'alpha_dash',
                 Rule::unique('users')->ignore($user->id)
             ],
-            'phone' => [
-                'required',
-                Rule::unique('users')->ignore($user->id)
-            ],
+            // 'phone' => [
+            //     'required',
+            //     Rule::unique('users')->ignore($user->id)
+            // ],
         ], $messages);
         $input = $request->except('bio');
         $user->fill($input);

@@ -658,14 +658,16 @@
             <a href="#social-share-modal" data-toggle="modal" class="btn ig-share-btn">
                 <i class="icofont-share"></i> <span>{{ __('Share') }}</span>
             </a>
-            <div class="position-relative">
-                <a href="#referral-share-modal" data-toggle="modal" class="btn ig-share-btn text-nowrap">
-                    <i class="icofont-share"></i> <span>{{ __('Referral Link') }}</span>
-                </a>
-                <a href="#referral-information-modal" data-toggle="modal" class="position-absolute" style="right: -10px; top: -10px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
-                </a>
-            </div>
+            @if (auth()->id() == $user->id)
+                <div class="position-relative">
+                    <a href="#referral-share-modal" data-toggle="modal" class="btn ig-share-btn text-nowrap">
+                        <i class="icofont-share"></i> <span>{{ __('Referral Link') }}</span>
+                    </a>
+                    <a href="#referral-information-modal" data-toggle="modal" class="position-absolute" style="right: -10px; top: -10px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 </div>
