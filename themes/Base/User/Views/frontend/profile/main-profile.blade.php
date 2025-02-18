@@ -771,95 +771,97 @@
     </div>
 </div>
 
-<div class="modal fade referral-share-modal" id="referral-share-modal" tabindex="-1" role="dialog" aria-modal="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="quick-listing-actions-share-social">
-                    <ul class="share-options d-flex flex-wrap justify-content-center">
-                        <li>
-                            <a class="facebook"
-                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($referralUrl) }}&amp;"
-                                target="_blank" rel="noopener" original-title="{{ __('Facebook') }}">
-                                <i class="fa fa-facebook fa-lg"></i>
-                                <p>{{ __('Facebook') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="xtwitter" href="https://x.com/share?url={{ urlencode($referralUrl) }}&amp;"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-times"></i>
-                                <p>{{ __('X-Twitter') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="whatsapp"
-                                href="https://api.whatsapp.com/send?text={{ urlencode($referralUrl) }}"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-whatsapp fa-lg"></i>
-                                <p>{{ __('Whatsapp') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="telegram" href="https://telegram.me/share/url?url={{ urlencode($referralUrl) }}"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-telegram fa-lg"></i>
-                                <p>{{ __('Telegram') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="pinterest"
-                                href="https://pinterest.com/pin/create/button/?url={{ urlencode($referralUrl) }}"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-pinterest fa-lg"></i>
-                                <p>{{ __('Pinterest') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="linkedin"
-                                href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode($referralUrl) }}"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-linkedin fa-lg"></i>
-                                <p>{{ __('Linkedin') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="tumblr"
-                                href="https://www.tumblr.com/share?v=3&amp;u={{ urlencode($referralUrl) }}"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-tumblr fa-lg"></i>
-                                <p>{{ __('Tumblr') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="vk" href="http://vk.com/share.php?url={{ urlencode($referralUrl) }}"
-                                target="_blank" rel="noopener">
-                                <i class="fa fa-vk fa-lg"></i>
-                                <p>{{ __('VKontakte') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="email" href="mailto:?subject={{ urlencode($referralUrl) }}" target="_blank"
-                                rel="noopener">
-                                <i class="fa fa-envelope fa-lg"></i>
-                                <p>{{ __('Email') }}</p>
-                            </a>
-                        </li>
-                        <li>
-                            <span id="referral-copy-text" class="d-none">{{ $referralUrl }}</span>
-                            <a id="referral-copy-btn" data-toggle="tooltip" data-placement="top"
-                                title="Copy to clipboard" onclick="copyToClipboard('referral-copy-text')"
-                                onmouseout="outCopyFunc()" href="javascript:void(0)">
-                                <i class="fa fa-copy fa-lg"></i>
-                            </a>
-                            <span>{{ __('Copy link') }}</span>
-                        </li>
-                    </ul>
+@if ($referralUrl)
+    <div class="modal fade referral-share-modal" id="referral-share-modal" tabindex="-1" role="dialog" aria-modal="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="quick-listing-actions-share-social">
+                        <ul class="share-options d-flex flex-wrap justify-content-center">
+                            <li>
+                                <a class="facebook"
+                                    href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode($referralUrl) }}&amp;"
+                                    target="_blank" rel="noopener" original-title="{{ __('Facebook') }}">
+                                    <i class="fa fa-facebook fa-lg"></i>
+                                    <p>{{ __('Facebook') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="xtwitter" href="https://x.com/share?url={{ urlencode($referralUrl) }}&amp;"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-times"></i>
+                                    <p>{{ __('X-Twitter') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="whatsapp"
+                                    href="https://api.whatsapp.com/send?text={{ urlencode($referralUrl) }}"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-whatsapp fa-lg"></i>
+                                    <p>{{ __('Whatsapp') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="telegram" href="https://telegram.me/share/url?url={{ urlencode($referralUrl) }}"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-telegram fa-lg"></i>
+                                    <p>{{ __('Telegram') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="pinterest"
+                                    href="https://pinterest.com/pin/create/button/?url={{ urlencode($referralUrl) }}"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-pinterest fa-lg"></i>
+                                    <p>{{ __('Pinterest') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="linkedin"
+                                    href="http://www.linkedin.com/shareArticle?mini=true&amp;url={{ urlencode($referralUrl) }}"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-linkedin fa-lg"></i>
+                                    <p>{{ __('Linkedin') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="tumblr"
+                                    href="https://www.tumblr.com/share?v=3&amp;u={{ urlencode($referralUrl) }}"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-tumblr fa-lg"></i>
+                                    <p>{{ __('Tumblr') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="vk" href="http://vk.com/share.php?url={{ urlencode($referralUrl) }}"
+                                    target="_blank" rel="noopener">
+                                    <i class="fa fa-vk fa-lg"></i>
+                                    <p>{{ __('VKontakte') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="email" href="mailto:?subject={{ urlencode($referralUrl) }}" target="_blank"
+                                    rel="noopener">
+                                    <i class="fa fa-envelope fa-lg"></i>
+                                    <p>{{ __('Email') }}</p>
+                                </a>
+                            </li>
+                            <li>
+                                <span id="referral-copy-text" class="d-none">{{ $referralUrl }}</span>
+                                <a id="referral-copy-btn" data-toggle="tooltip" data-placement="top"
+                                    title="Copy to clipboard" onclick="copyToClipboard('referral-copy-text')"
+                                    onmouseout="outCopyFunc()" href="javascript:void(0)">
+                                    <i class="fa fa-copy fa-lg"></i>
+                                </a>
+                                <span>{{ __('Copy link') }}</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+@endif
 
 <div class="modal fade referral-information-modal" id="referral-information-modal" tabindex="-1" role="dialog" aria-modal="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
