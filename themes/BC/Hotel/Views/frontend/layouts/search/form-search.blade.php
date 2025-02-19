@@ -64,7 +64,7 @@
         <div class="row align-items-center">
             <div class="col-md-2">
                 <label for="service_name" class="form-label">{{ __('Service name') }}</label>
-                <input type="text" class="form-control" name="service_name" placeholder="Service name">
+                <input type="text" class="form-control" name="service_name" placeholder="{{ __('Service name') }}">
             </div>
             <div class="col-md-2">
                 @include('partials.search.fields.location')
