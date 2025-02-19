@@ -398,7 +398,7 @@
             background: #eee;
             border-radius: 4px;
             padding: 12px 16px;
-            bottom: -100px;
+            bottom: -120px;
             transform: translateY(-1000px);
             opacity: 0;
             transition: .3s opacity;

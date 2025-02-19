@@ -41,7 +41,7 @@ $theme = \Modules\Theme\ThemeManager::currentProvider();
                 @foreach($languages as $language)
                     @php if($language->locale == $locale) continue; @endphp
 
-                    <a class="dropdown-item" href="{{route('language.set-admin-lang',['locale'=>$language->locale])}}">
+                    <a class="dropdown-item" href="{{route('language.set-lang',['locale'=>$language->locale])}}">
                         @if($language->flag)
                             <span class="flag-icon flag-icon-{{$language->flag}}"></span>
                         @endif
