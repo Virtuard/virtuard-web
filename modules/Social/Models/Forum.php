@@ -20,7 +20,7 @@ class Forum extends BaseModel
 
     public function getIconHtmlAttribute(){
         if($this->icon_image){
-            return sprintf("<img src='%s' class='bravo-icon-img' alt='%s'>",get_image_tag($this->icon_image,'thumb'),e($this->name));
+            return sprintf("<img loading='lazy'src='%s' class='bravo-icon-img' alt='%s'>",get_image_tag($this->icon_image,'thumb'),e($this->name));
         }else{
             return sprintf("<i class='%s bravo-icon'></i>",$this->icon);
         }

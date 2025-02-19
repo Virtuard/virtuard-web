@@ -4,7 +4,7 @@
             <div class="card card-custom card-has-bg click-col"
                 style="background-image: url({{ $list['banner_image_id'] }}); height: 250px;">
                 <div class="card-img-overlay d-flex align-items-end">
-                    <img src="{{ asset($list['image']) }}" alt=""
+                    <img loading='lazy'src="{{ asset($list['image']) }}" alt=""
                         style="width:50px; height:50px;border-radius:50%">
                     <div class="ml-2">
                         <h5 class="card-title mt-0 mb-0"
@@ -19,7 +19,7 @@
             <div class="card-footer">
                 <div class="d-flex justify-content-between">
                     <div class="d-flex align-items-center">
-                        <img src="{{ $list['author']['image'] }}" alt=""
+                        <img loading='lazy'src="{{ $list['author']['image'] }}" alt=""
                             style="width:25px; height:25px;border-radius:50%; font-size: 12px;">
                         <div class="ml-2">
                             <p class="card-title mt-0 mb-0 text-dark">{{ $list['author']['name'] }}</p>

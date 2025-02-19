@@ -80,7 +80,7 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-3">
                                 <div class="image" @click="showGallery($event,room.id,room.gallery)">
-                                    <img :src="room.image" alt="">
+                                    <img loading='lazy':src="room.image" alt="">
                                     <div class="count-gallery" v-if="typeof room.gallery !='undefined' && room.gallery && room.gallery.length > 1">
                                         <i class="fa fa-picture-o"></i>
                                         @{{room.gallery.length}}
@@ -93,7 +93,7 @@
                                                 <h5 class="modal-title">@{{ room.title }}</h5>
                                                 <span class="c-pointer" data-dismiss="modal" aria-label="Close">
                                                     <i class="input-icon field-icon fa">
-                                                        <img src="{{asset('images/ico_close.svg')}}" alt="close">
+                                                        <img loading='lazy'src="{{asset('images/ico_close.svg')}}" alt="close">
                                                     </i>
                                                 </span>
                                             </div>

@@ -17,7 +17,7 @@
         <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl($include_param ?? true)}}">
             @if($row->image_url)
                 @if(!empty($disable_lazyload))
-                    <img src="{{$row->image_url}}" class="img-responsive" alt="{{$location->name ?? ''}}">
+                    <img loading='lazy'src="{{$row->image_url}}" class="img-responsive" alt="{{$location->name ?? ''}}">
                 @else
                     {!! get_image_tag($row->image_id,'medium',['class'=>'img-responsive','alt'=>$row->title]) !!}
                 @endif
@@ -68,7 +68,7 @@
         <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}">
             @if($row->image_url)
                 @if(!empty($disable_lazyload))
-                    <img src="{{$row->image_url}}" class="img-responsive" alt="">
+                    <img loading='lazy'src="{{$row->image_url}}" class="img-responsive" alt="">
                 @else
                     {!! get_image_tag($row->image_id,'medium',['class'=>'img-responsive','alt'=>$translation->title]) !!}
                 @endif

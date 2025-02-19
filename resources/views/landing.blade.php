@@ -473,7 +473,7 @@
         <nav>
             <div class="navbar container">
                 <a href="/" class="navbar-brand">
-                    <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
+                    <img loading='lazy'src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
                 </a>
                 <ul class="mt-3">
                     {{-- <li class="nav-item language">
@@ -768,7 +768,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-12 d-md-block d-none">
-                        <img width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
+                        <img loading='lazy'width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
                     </div>
                     <div class="col-md-6 col-12 mt-md-5 mt-0">
                         <div class="card-feature">
@@ -895,7 +895,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-12 d-md-block d-none">
-                        <img width="100%" src="{{ asset('images/additional-features.png') }}" alt="">
+                        <img loading='lazy'width="100%" src="{{ asset('images/additional-features.png') }}" alt="">
                     </div>
                 </div>
             </section>
@@ -914,7 +914,7 @@
                                 <p>1</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img src="{{ asset('images/how-it-works/1.png') }}" width="70%" alt="">
+                                <img loading='lazy'src="{{ asset('images/how-it-works/1.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Upload your images of your property, hotel, or business.') }}</h6>
                         </div>
@@ -925,7 +925,7 @@
                                 <p>2</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img src="{{ asset('images/how-it-works/2.png') }}" width="70%" alt="">
+                                <img loading='lazy'src="{{ asset('images/how-it-works/2.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Create up to 3 iPanorama (360° virtual tours) to enhance the experience.') }}</h6>
                         </div>
@@ -936,7 +936,7 @@
                                 <p>3</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img src="{{ asset('images/how-it-works/3.png') }}" width="70%" alt="">
+                                <img loading='lazy'src="{{ asset('images/how-it-works/3.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Manage bookings directly from the platform.') }}</h6>
                         </div>
@@ -947,7 +947,7 @@
                                 <p>4</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img src="{{ asset('images/how-it-works/4.png') }}" width="70%" alt="">
+                                <img loading='lazy'src="{{ asset('images/how-it-works/4.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Publish your listing for 1 month or 1 year (with an annual plan).') }}</h6>
                         </div>
@@ -1073,7 +1073,7 @@
             <footer class="container" style="padding-top: 100px;">
                 <div class="d-flex align-items-center justify-content-between" style="border-top: 1px solid rgba(255,255,255,.2);">
                     <div class="footer-logo">
-                        <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
+                        <img loading='lazy'src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
                     </div>
                     <div class="flex">
                         <a href="mailto:info@virtuard.com" class="d-flex align-items-center text-white">

@@ -101,7 +101,7 @@ import BookingCoreAdaterPlugin from './ckeditor/uploadAdapter'
             onSelect: function (files) {
                 let path = (files[0].edit_path !== undefined) ? files[0].edit_path : files[0].max_large_size;
                 p.addClass('active');
-                p.find('.attach-demo').html('<img src="' + files[0].thumb_size + '"/>');
+                p.find('.attach-demo').html('<img loading='lazy'src="' + files[0].thumb_size + '"/>');
                 p.attr('data-val',files[0].id);
                 p.find('input').val(files[0].id);
                 p.find('.edit-img').attr('data-file', path);
@@ -146,7 +146,7 @@ import BookingCoreAdaterPlugin from './ckeditor/uploadAdapter'
                 if (edit_type === 'multiple'){
                     $this.closest('.image-item').find('.image-preview').attr('src',canvas);
                 } else {
-                    p.find('.attach-demo').html('<img src="' + canvas + '" alt="image-responsive" style="max-width: 150px">');
+                    p.find('.attach-demo').html('<img loading='lazy'src="' + canvas + '" alt="image-responsive" style="max-width: 150px">');
                 }
 
                 $.ajax({
@@ -183,7 +183,7 @@ import BookingCoreAdaterPlugin from './ckeditor/uploadAdapter'
                         html += '<div class="image-item">' +
                             '<div class="inner">';
                         html += '<a class="edit-img btn btn-sm btn-primary edit-multiple" data-id="'+files[i].id+'" data-file="'+path+'"><i class="fa fa-edit"></i></a>'
-                        html += '<span class="delete btn btn-sm btn-danger"><i class="fa fa-trash"></i></span><div class="img-preview"><img class="image-responsive image-preview w-100" src="' + files[i].thumb_size + '"/></div>' +
+                        html += '<span class="delete btn btn-sm btn-danger"><i class="fa fa-trash"></i></span><div class="img-preview"><img loading='lazy'class="image-responsive image-preview w-100" src="' + files[i].thumb_size + '"/></div>' +
                             '</div>' +
                             '</div>'
                     }

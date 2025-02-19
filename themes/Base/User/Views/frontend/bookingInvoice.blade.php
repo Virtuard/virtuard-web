@@ -69,7 +69,7 @@
             <tr>
                 <th width="50%">
                     @if( !empty($logo = setting_item('logo_invoice_id') ?? setting_item('logo_id') ))
-                        <img style="max-width: 200px;" src="{{get_file_url( $logo ,"full")}}" alt="{{setting_item("site_title")}}">
+                        <img loading='lazy'style="max-width: 200px;" src="{{get_file_url( $logo ,"full")}}" alt="{{setting_item("site_title")}}">
                     @endif
                     <div class="invoice-company-info">
                         {!! setting_item_with_lang("invoice_company_info") !!}

@@ -12,7 +12,7 @@
                             <a href="{{$item->getDetailUrl(false)}}">
                                 @if($item->image_url)
                                     @if(!empty($disable_lazyload))
-                                        <img src="{{$item->image_url}}" class="img-responsive" alt="{{$translation_item->title}}">
+                                        <img loading='lazy'src="{{$item->image_url}}" class="img-responsive" alt="{{$translation_item->title}}">
                                     @else
                                         {!! get_image_tag($item->image_id,'thumb',['class'=>'img-responsive','alt'=>$translation_item->title]) !!}
                                     @endif

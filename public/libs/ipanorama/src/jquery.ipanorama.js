@@ -711,7 +711,7 @@
 							style = style + "'";
 							
 							var $data = $("<div class='ipnrm-hotspot-image'></div>");
-							hotSpot.$image = $("<img src='" + hotSpot.imageUrl + "' alt=''" + style + ">");
+							hotSpot.$image = $("<img loading='lazy'src='" + hotSpot.imageUrl + "' alt=''" + style + ">");
 							hotSpot.$el.append($data.append(hotSpot.$image));
 						}
 						
@@ -1149,7 +1149,7 @@
 							$sceneThumb.attr("data-sceneid", sceneId);
 							
 							if(scene.thumbImage) {
-								$sceneThumb.append("<img class='ipnrm-scene-thumb-img' src='" + scene.thumbImage + "' alt=''>")
+								$sceneThumb.append("<img loading='lazy'class='ipnrm-scene-thumb-img' src='" + scene.thumbImage + "' alt=''>")
 							}
 							
 							this.controls.$sceneThumbsInner.append($sceneThumb);

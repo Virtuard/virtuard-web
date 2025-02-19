@@ -93,7 +93,7 @@ $theme = \Modules\Theme\ThemeManager::currentProvider();
                                         <div class="media-left">
                                               <div class="media-object">
                                                   @if($avatar)
-                                                    <img class="image-responsive" src="{{$avatar}}" alt="{{$name}}">
+                                                    <img loading='lazy'class="image-responsive" src="{{$avatar}}" alt="{{$name}}">
                                                   @else
                                                       <span class="avatar-text">{{ucfirst($name[0])}}</span>
                                                   @endif

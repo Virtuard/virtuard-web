@@ -135,10 +135,10 @@
     <div class="text-center mb-1"><span class="role-name  badge badge-primary">{{ $user->role_name }}</span></div>
     <h3 class="display-name">{{ $user->getDisplayName() }}
         @if ($user->is_verified)
-            <img data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-vefified-1.svg') }}"
+            <img loading='lazy'data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-vefified-1.svg') }}"
                 title="{{ __('Verified') }}" alt="ico-vefified-1">
         @else
-            <img data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-not-vefified-1.svg') }}"
+            <img loading='lazy'data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-not-vefified-1.svg') }}"
                 title="{{ __('Not verified') }}" alt="ico-vefified-1">
         @endif
     </h3>
@@ -315,9 +315,9 @@ onclick="showModalLogin()" @endguest>
                 @foreach ($user->verification_fields as $field)
                     <li> <span class="left-icon">
                             @if ($field['is_verified'])
-                                <img src="{{ asset('icon/success.svg') }}" alt="success">
+                                <img loading='lazy'src="{{ asset('icon/success.svg') }}" alt="success">
                             @else
-                                <img src="{{ asset('icon/x.svg') }}" alt="success">
+                                <img loading='lazy'src="{{ asset('icon/x.svg') }}" alt="success">
                             @endif
                         </span> <span>{{ $field['name'] }}</span>
 

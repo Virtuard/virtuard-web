@@ -12,7 +12,7 @@
                     @endphp
                     @if($logo_id)
                         <?php $logo = get_file_url($logo_id,'full') ?>
-                        <img src="{{$logo}}" alt="{{setting_item("site_title")}}">
+                        <img loading='lazy'src="{{$logo}}" alt="{{setting_item("site_title")}}">
                     @endif
                 </a>
                 <div class="bravo-menu">
@@ -56,7 +56,7 @@
                             <li class="login-item dropdown">
                                 <a href="#" data-toggle="dropdown" class="is_login">
                                     @if($avatar_url = Auth::user()->getAvatarUrl())
-                                        <img class="avatar" src="{{$avatar_url}}" alt="{{ Auth::user()->getDisplayName()}}">
+                                        <img loading='lazy'class="avatar" src="{{$avatar_url}}" alt="{{ Auth::user()->getDisplayName()}}">
                                     @else
                                         <span class="avatar-text">{{ucfirst( Auth::user()->getDisplayName()[0])}}</span>
                                     @endif

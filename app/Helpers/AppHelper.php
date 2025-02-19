@@ -180,7 +180,7 @@ function get_image_tag($image_id,$size = 'thumb',$options = []){
         }else{
             $attr.=" src='".e($url)."' ";
         }
-        return sprintf("<img class='%s' %s alt='%s'>",e($class),$attr,e($alt));
+        return sprintf("<img loading='lazy'class='%s' %s alt='%s'>",e($class),$attr,e($alt));
     }
 }
 function get_date_format(){

@@ -123,7 +123,7 @@
                 <div class="d-flex justify-content-between">
                     <div class="d-flex flex-grow-1 align-items-center">
                         <div>
-                            <img src="/icon/folder.png" width="20px" height="auto" class="mr-2 flex-shrink-0" alt="">
+                            <img loading='lazy'src="/icon/folder.png" width="20px" height="auto" class="mr-2 flex-shrink-0" alt="">
                         </div>
                         <div class="text-center font-weight-medium" v-if="!folder.onEdit">@{{folder.name}}</div>
                         <div class="" v-if="folder.onEdit">

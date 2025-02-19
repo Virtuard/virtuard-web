@@ -78,7 +78,7 @@ class FileHelper
         } else {
             $file = (new MediaFile())->findById($fileId);
         }
-        return sprintf("<img src='%' align='%s'>", static::url($file, $size), $file->file_name);
+        return sprintf("<img loading='lazy'src='%' align='%s'>", static::url($file, $size), $file->file_name);
     }
 
     protected static function maybeResize($fileObj, $size = '',$resize = true)
@@ -281,7 +281,7 @@ class FileHelper
             </div>
             <div class="attach-demo" title="Change file">
                 <?php if (!empty($file)) {
-                    printf('<img src="%s" class="image-responsive">', FileHelper::url($oldValue, 'thumb'));
+                    printf('<img loading="lazy"src="%s" class="image-responsive">', FileHelper::url($oldValue, 'thumb'));
                 } ?>
             </div>
             <div class="upload-actions justify-content-between" v-show="value">
@@ -318,7 +318,7 @@ class FileHelper
                                 if (!empty($file)){$oldPath = $file->getEditPath();}
                                 ?>
                                 <a class="edit-img btn btn-sm btn-primary edit-multiple" data-id="<?php echo $id ?>"  data-file="<?php echo $oldPath ?>"><i class="fa fa-edit"></i></a>
-                                <span class="delete btn btn-sm btn-danger"><i class="fa fa-trash"></i></span><img src="<?php echo FileHelper::url($file, 'thumb') ?>" class="image-responsive image-preview">
+                                <span class="delete btn btn-sm btn-danger"><i class="fa fa-trash"></i></span><img loading='lazy'src="<?php echo FileHelper::url($file, 'thumb') ?>" class="image-responsive image-preview">
                             </div>
                         </div>
                         <?php

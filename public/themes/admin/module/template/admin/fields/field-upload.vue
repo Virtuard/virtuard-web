@@ -57,7 +57,7 @@
             </div>
         </div>
         <div class="attach-demo" title="Change file" @click="openUploader">
-            <img v-show="value" :src="bookingCore.url+'/media/preview/'+value" class="image-responsive">
+            <img loading='lazy'v-show="value" :src="bookingCore.url+'/media/preview/'+value" class="image-responsive">
         </div>
         <div class="upload-actions justify-content-between" v-show="value">
             <a href="#" @click="value = ''">Remove</a>

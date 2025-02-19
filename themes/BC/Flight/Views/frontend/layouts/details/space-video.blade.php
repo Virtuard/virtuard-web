@@ -5,7 +5,7 @@
     <!-- Video Block -->
     <div id="youTubeVideoPlayer" class="u-video-player rounded-sm">
         <!-- Cover Image -->
-        <img class="img-fluid u-video-player__preview rounded-sm" src="{{ $row->getBannerImageUrlAttribute('full')}} " alt="Image">
+        <img loading='lazy'class="img-fluid u-video-player__preview rounded-sm" src="{{ $row->getBannerImageUrlAttribute('full')}} " alt="Image">
         <!-- End Cover Image -->
         <!-- Play Button -->
         <a class="travel-inline-video-player u-video-player__btn u-video-player__centered" href="javascript:;"

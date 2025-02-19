@@ -21,7 +21,7 @@
                             @endphp
                             <div class="item">
                                 <a href="{{ $page_search }}">
-                                    <img src="{{$image_url}}" alt="{{ $translate->name }}">
+                                    <img loading='lazy'src="{{$image_url}}" alt="{{ $translate->name }}">
                                     <span class="text-title">{{ $translate->name }}</span>
                                 </a>
                             </div>

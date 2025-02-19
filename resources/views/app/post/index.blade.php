@@ -72,7 +72,7 @@
                             <hr>
 
                             <div class="d-flex align-items-center">
-                                <img class="mr-4"
+                                <img loading='lazy'class="mr-4"
                                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                     alt="">
@@ -176,7 +176,7 @@
                         @foreach ($posts as $post)
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
-                                    <img class="mr-4"
+                                    <img loading='lazy'class="mr-4"
                                         src="{{ $post->user->getAvatarUrl() }}"
                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                         alt="">
@@ -201,7 +201,7 @@
                             @if ($post->ipanorama && $post->ipanorama->status == 'publish')
                                 <div class="card-file">
                                         <div class="g-ipanorama">
-                                            <img id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
+                                            <img loading='lazy'id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
                                             class="thumb-panorama preview-panorama cursor-pointer"
                                             data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}"
                                             data-user_id="{{ $post->ipanorama->user_id }}"
@@ -252,7 +252,7 @@
                                         style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                                         @foreach ($comments as $comment)
                                             <div style="display: flex; align-items: center;">
-                                                <img class="mr-4"
+                                                <img loading='lazy'class="mr-4"
                                                     src="{{ $comment->user->getAvatarUrl() }}"
                                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                                     alt="">
@@ -286,10 +286,10 @@
                                 
                                 <div class="d-flex mt-4">
                                     <div class="d-flex">
-                                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                        <img loading='lazy'src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                                             style="width: 20px; height: 20px; object-fit: cover; border-radius: 100px;"
                                             alt="">
-                                        <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                        <img loading='lazy'src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
                                             style="width: 20px; height: 20px; object-fit: cover; border-radius: 100px;margin-left: -5px;">
                                     </div>
 
@@ -404,7 +404,7 @@
                         <div class="grid-container">
                             @foreach ($feeds as $feed)
                                 <div class="grid-item">
-                                    <img src="{{ asset('uploads/' . $feed->media) }}" alt="">
+                                    <img loading='lazy'src="{{ asset('uploads/' . $feed->media) }}" alt="">
                                 </div>
                             @endforeach
                         </div>

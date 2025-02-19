@@ -20,7 +20,7 @@ class PusherNotificationAdminEvent implements ShouldBroadcast
     public function __construct($idNotification, $data, $user)
     {
         if($user->avatar_url){
-            $avatar = '<img class="image-responsive" src="'.$user->avatar_url.'" alt="'.$user->getDisplayName().'">';
+            $avatar = '<img loading="lazy"class="image-responsive" src="'.$user->avatar_url.'" alt="'.$user->getDisplayName().'">';
         }else{
             $avatar = '<span class="avatar-text">'.ucfirst($user->getDisplayName()[0]).'</span>';
         }

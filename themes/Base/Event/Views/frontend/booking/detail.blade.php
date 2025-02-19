@@ -17,7 +17,7 @@
                 </div>
                 <div>
                     @if($image_url = $service->getImageUrl())
-                        <img src="{{$image_url}}" alt="{!! clean($service_translation->title) !!}">
+                        <img loading='lazy'src="{{$image_url}}" alt="{!! clean($service_translation->title) !!}">
                     @endif
                 </div>
                 @php $vendor = $service->author; @endphp

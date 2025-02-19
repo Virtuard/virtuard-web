@@ -45,7 +45,7 @@
                 <div class="contact-info">
                     <div class="info-bg">
                         @if($bg = get_file_url(setting_item("page_contact_image"),"full"))
-                            <img src="{{$bg}}" class="img-responsive" alt="{{ setting_item_with_lang("page_contact_title") }}">
+                            <img loading='lazy'src="{{$bg}}" class="img-responsive" alt="{{ setting_item_with_lang("page_contact_title") }}">
                         @endif
                     </div>
                     <div class="info-content">

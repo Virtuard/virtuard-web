@@ -485,10 +485,10 @@
             {{ $user->getDisplayName() }}
             <div class="ml-2">
                 @if ($user->is_verified)
-                    <img data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-vefified-1.svg') }}"
+                    <img loading='lazy'data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-vefified-1.svg') }}"
                         title="{{ __('Verified') }}" alt="ico-vefified-1">
                 @else
-                    <img data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-not-vefified-1.svg') }}"
+                    <img loading='lazy'data-toggle="tooltip" data-placement="top" src="{{ asset('icon/ico-not-vefified-1.svg') }}"
                         title="{{ __('Not verified') }}" alt="ico-vefified-1">
                 @endif
             </div>
@@ -540,7 +540,7 @@
                                 <li class="list-group-item d-flex align-items-center"
                                     data-name="{{ strtolower($follower->name) }}">
                                     <div class="avatar-info d-flex align-items-center w-100">
-                                        <img src="{{ $follower->avatar_url }}" alt="{{ $follower->name }}'s avatar"
+                                        <img loading='lazy'src="{{ $follower->avatar_url }}" alt="{{ $follower->name }}'s avatar"
                                             class="avatar rounded-circle">
 
                                         <a href="{{ url('profile/' . $follower->user_name) }}"
@@ -588,7 +588,7 @@
                                 <li class="list-group-item d-flex align-items-center"
                                     data-name="{{ strtolower($follow->name) }}">
                                     <div class="avatar-info d-flex align-items-center w-100">
-                                        <img src="{{ $follow->avatar_url }}" alt="{{ $follow->name }}'s avatar"
+                                        <img loading='lazy'src="{{ $follow->avatar_url }}" alt="{{ $follow->name }}'s avatar"
                                             class="avatar rounded-circle">
                                         <a href="{{ url('profile/' . $follow->user_name) }}"
                                             style="color: black; text-decoration: none;"

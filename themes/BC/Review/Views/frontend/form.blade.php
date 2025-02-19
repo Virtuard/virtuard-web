@@ -54,7 +54,7 @@
                                 <div class="media-left">
                                     @if($avatar_url = $userInfo->getAvatarUrl())
                                     <a href="{{ $userInfo->id ? route('user.profile', $userInfo->id) : '' }}">
-                                        <img class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
+                                        <img loading='lazy'class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
                                     </a>
                                     @else
                                     <a href="{{ $userInfo->id ? route('user.profile', $userInfo->id) : '' }}">
