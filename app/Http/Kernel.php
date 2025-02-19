@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\RequireChangePassword;
 use App\Http\Middleware\SetCurrentCurrency;
 use App\Http\Middleware\SetLanguageForAdmin;
+use App\Http\Middleware\SetLanguageForPublic;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -44,7 +45,8 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\HideDebugbar::class,
             SetCurrentCurrency::class,
             SetLanguageForAdmin::class,
-            RequireChangePassword::class
+            RequireChangePassword::class,
+            SetLanguageForPublic::class
         ],
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,

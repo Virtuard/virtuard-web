@@ -61,7 +61,9 @@ class HomeController extends Controller
 
     public function landing()
     {
-        return view('landing');
+        $languages = \Modules\Language\Models\Language::getActive();
+
+        return view('landing', compact('languages'));
     }
 
     public function checkConnectDatabase(Request $request){

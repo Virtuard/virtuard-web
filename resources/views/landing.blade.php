@@ -106,6 +106,9 @@
         #main .navbar .nav-item:hover .navbar-link {
             color: #5191FA;
         }
+        #main .navbar .nav-item.multi-lang:hover .navbar-link {
+            color: #fff;
+        }
         #main .navbar .nav-item:hover svg {
             fill: #5191FA;
         }
@@ -390,6 +393,37 @@
             font-size: 14px;
         }
 
+        .multi-lang .dropdown {
+            position: absolute;
+            background: #eee;
+            border-radius: 4px;
+            padding: 12px 16px;
+            bottom: -100px;
+            transform: translateY(-1000px);
+            opacity: 0;
+            transition: .3s opacity;
+        }
+
+        .multi-lang .dropdown .navbar-link {
+            color: #222 !important;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .multi-lang .dropdown-icon {
+            transition: .3s;
+        }
+
+        .multi-lang.active .dropdown-icon {
+            transform: rotate(180deg);
+        }
+
+        .multi-lang.active .dropdown {
+            transform: translateY(0);
+            opacity: 100;
+        }
+
 
         @media (max-width: 768px) {
             .card-custom {
@@ -423,6 +457,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
+    {{-- css --}}
+    <link rel="stylesheet" href="{{ asset('libs/flags/css/flag-icon.css') }}">
+
     {{-- icons --}}
     <link href="{{ asset('libs/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
     <link href="{{ asset('libs/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
@@ -443,9 +480,33 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zM4 12c0-.899.156-1.762.431-2.569L6 11l2 2v2l2 2 1 1v1.931C7.061 19.436 4 16.072 4 12zm14.33 4.873C17.677 16.347 16.687 16 16 16v-1a2 2 0 0 0-2-2h-4v-3a2 2 0 0 0 2-2V7h1a2 2 0 0 0 2-2v-.411C17.928 5.778 20 8.65 20 12a7.947 7.947 0 0 1-1.67 4.873z"></path></svg>
                         <a href="/landing?lang=id" class="navbar-link">Indonesian</a>
                     </li> --}}
-                    {{-- @if (is_enable_multi_lang())
-                        @include('Language::frontend.switcher')
-                    @endif --}}
+                    @if (is_enable_multi_lang())
+                        <li class="nav-item multi-lang position-relative mr-3 d-flex">
+                            @foreach ($languages as $lang)
+                                @if ($lang->locale === app()->getLocale())
+                                    <a href="#" class="navbar-link">
+                                        @if($lang->flag)
+                                            <span class="flag-icon flag-icon-{{$lang->flag}}"></span>
+                                        @endif
+                                        {{$lang->name}}
+                                    </a>
+                                    <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(255, 255, 255, 1);transform: ;msFilter:;"><path d="M16.293 9.293 12 13.586 7.707 9.293l-1.414 1.414L12 16.414l5.707-5.707z"></path></svg>
+                                @endif
+                            @endforeach
+                            <div class="dropdown">
+                                @foreach ($languages as $lang)
+                                    @if ($lang->locale !== app()->getLocale())
+                                        <a href="{{ route('language.set-lang', $lang->locale) }}" class="navbar-link">
+                                            @if($lang->flag)
+                                                <span class="flag-icon flag-icon-{{$lang->flag}}"></span>
+                                            @endif
+                                            {{$lang->name}}
+                                        </a>
+                                    @endif
+                                @endforeach
+                            </div>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <a href="/register" class="navbar-link btn btn-first px-4 py-3">{{ __('Get Started') }}</a>
                     </li>
@@ -1058,6 +1119,10 @@
             window.location.href = "googlechrome://virtuard.com/landing"; 
             // window.location.href = "intent://virtuard.com/landing#Intent;scheme=https;package=com.android.chrome;end";
         }
+
+        $('.nav-item.multi-lang').click(function() {
+            $(this).toggleClass('active');
+        })
 
 
         import { Viewer } from '@photo-sphere-viewer/core';

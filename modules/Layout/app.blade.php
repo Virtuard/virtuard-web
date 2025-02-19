@@ -111,7 +111,7 @@
 
         @yield('content')
 
-        @if (Request::is('/'))
+        @if (Request::is('/') || Request::is('/' . app()->getLocale()))
             <div class="notification-container">
                 <div class="notification-create-listing">
                     <p>Ready to share your space? Create a listing now!</p>
@@ -162,12 +162,21 @@
 
         // Notification create listing
         window.addEventListener('scroll', function() {
-            if(this.window.scrollY > 515) {
+            let scrollTop = window.scrollY;
+            let windowHeight = window.innerHeight;
+            let documentHeight = document.body.scrollHeight;
+
+            if (scrollTop + windowHeight >= documentHeight - 300) {
+                // Jika pengguna telah mencapai bagian bawah halaman, hapus class "active"
+                $(".notification-container").removeClass("active");
+            } else if (scrollTop > 515) {
+                // Tambahkan class "active" jika pengguna menggulir lebih dari 515px
                 $(".notification-container").addClass("active");
             } else {
                 $(".notification-container").removeClass("active");
             }
-        })
+        });
+
     </script>
 </body>
 

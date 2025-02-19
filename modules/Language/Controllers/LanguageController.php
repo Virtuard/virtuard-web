@@ -7,6 +7,7 @@
  */
 namespace Modules\Language\Controllers;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Modules\FrontendController;
@@ -14,22 +15,26 @@ use Modules\Language\Models\Language;
 
 class LanguageController extends FrontendController
 {
-    public function setLang(\Illuminate\Http\Request $request,$locale){
-
-        $oldLocale = \App::getLocale();
-
+    public function setLang(\Illuminate\Http\Request $request, $locale)
+    {
+        $oldLocale = App::getLocale();
         $path = $request->query('path');
 
+        // Simpan bahasa ke dalam session
+        session(['locale' => $locale]);
+        
         $this->setLocale($locale, $request);
 
-        if(empty($path)){
-            return redirect('/');
-        }
+        return back();
+        // if (empty($path)) {
+        //     return redirect('/' . $locale);
+        // }
 
-        if(strpos($path,$oldLocale) === 0){
-            return redirect(str_replace($oldLocale,$locale,$path));
-        }
-        return redirect($locale.'/'.$path);
+        // if (strpos($path, $oldLocale) === 0) {
+        //     return redirect(str_replace($oldLocale, $locale, $path));
+        // }
+
+        // return redirect($locale . '/' . $path);
     }
 
     public function setAdminLang(\Illuminate\Http\Request $request,$locale){

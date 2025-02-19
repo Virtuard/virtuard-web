@@ -1135,6 +1135,7 @@ class Hotel extends Bookable
                 });
         }
 
+        $model_hotel->orderByDesc("ipanorama_id");
         $model_hotel->orderByDesc("review_score");
 
         $orderby = $request["orderby"] ?? "";
@@ -1165,7 +1166,7 @@ class Hotel extends Bookable
         }
 
         $model_hotel->groupBy("bravo_hotels.id");
-
+        
         return $model_hotel->with(['location','hasWishList','translation','termsByAttributeInListingPage']);
     }
 

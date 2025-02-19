@@ -20,7 +20,13 @@
             @foreach($languages as $language)
                 @if($locale != $language->locale)
                     <li>
-                        <a href="{{get_lang_switcher_url($language->locale)}}" class="is_login">
+                        {{-- <a href="{{get_lang_switcher_url($language->locale)}}" class="is_login">
+                            @if($language->flag)
+                                <span class="flag-icon flag-icon-{{$language->flag}}"></span>
+                            @endif
+                            {{$language->name}}
+                        </a> --}}
+                        <a href="{{ route('language.set-lang', $language->locale) }}" class="is_login">
                             @if($language->flag)
                                 <span class="flag-icon flag-icon-{{$language->flag}}"></span>
                             @endif

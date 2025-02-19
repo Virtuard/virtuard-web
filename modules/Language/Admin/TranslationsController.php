@@ -81,6 +81,7 @@ class TranslationsController extends AdminController
                 ],
             ]
         ];
+        
         $this->setActiveMenu(route('core.admin.tool.index'));
         return view('Language::translations.detail', $data);
     }

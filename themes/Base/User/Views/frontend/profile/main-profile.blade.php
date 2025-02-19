@@ -773,7 +773,7 @@
     </div>
 </div>
 
-@if ($referralUrl)
+@if (isset($referralUrl))
     <div class="modal fade referral-share-modal" id="referral-share-modal" tabindex="-1" role="dialog" aria-modal="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">

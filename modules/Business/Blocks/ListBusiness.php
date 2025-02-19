@@ -176,6 +176,8 @@ class ListBusiness extends BaseBlock
         if (!empty($model['custom_ids'])) {
             $model_business->whereIn("bravo_businesses.id", $model['custom_ids']);
         }
+
+        $model_business->orderByDesc("ipanorama_id");
         $model_business->orderByDesc("review_score");
         $model_business->orderBy("bravo_businesses." . $model['order'], $model['order_by']);
         $model_business->where("bravo_businesses.status", "publish");

@@ -6,7 +6,7 @@
 
         @media(max-width: 768px) {
             .bravo-form-search-all {
-                height: 120vh;
+                height: 120% !important;
             }
         }
     </style>    

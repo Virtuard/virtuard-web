@@ -1,5 +1,5 @@
 <div class="container">
-    <div class="bravo-list-locations @if(!empty($layout)) {{ $layout }} @endif">
+    <div class="bravo-list-locations mt-5 @if(!empty($layout)) {{ $layout }} @endif">
         <div class="title">
             {{$title}}
         </div>

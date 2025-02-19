@@ -3,7 +3,7 @@
     <div class="{{$container_class ?? 'container'}}">
         <div class="content justify-content-between">
             <div class="header-left">
-                <a href="{{url(app_get_locale(false,'/'))}}" class="bravo-logo">
+                <a href="/" class="bravo-logo">
                     @php
                         $logo_id = setting_item("logo_id");
                         if(!empty($row->custom_logo)){
