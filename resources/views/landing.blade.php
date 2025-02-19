@@ -473,7 +473,7 @@
         <nav>
             <div class="navbar container">
                 <a href="/" class="navbar-brand">
-                    <img loading='lazy'src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
+                    <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
                 </a>
                 <ul class="mt-3">
                     {{-- <li class="nav-item language">
@@ -604,8 +604,8 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" style="fill: #5191FA;"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8z"></path><path d="M11 11h2v6h-2zm0-4h2v2h-2z"></path></svg>
                                     </div>
                                     <div style="margin-top: 4px; margin-left: 8px;">
-                                        <h6>Immersive experience</h6>
-                                        <p style="font-size: 14px;">Guests can explore rooms and common areas realistically before booking.</p>
+                                        <h6>{{ __('Immersive experience') }}</h6>
+                                        <p style="font-size: 14px;">{{ __('Guests can explore rooms and common areas realistically before booking.') }}</p>
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-start">
@@ -768,7 +768,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6 col-12 d-md-block d-none">
-                        <img loading='lazy'width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
+                        <img width="100%" src="{{ asset('images/benefit-img.png') }}" alt="">
                     </div>
                     <div class="col-md-6 col-12 mt-md-5 mt-0">
                         <div class="card-feature">
@@ -895,7 +895,7 @@
                         </div>
                     </div>
                     <div class="col-md-6 col-12 d-md-block d-none">
-                        <img loading='lazy'width="100%" src="{{ asset('images/additional-features.png') }}" alt="">
+                        <img width="100%" src="{{ asset('images/additional-features.png') }}" alt="">
                     </div>
                 </div>
             </section>
@@ -914,7 +914,7 @@
                                 <p>1</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img loading='lazy'src="{{ asset('images/how-it-works/1.png') }}" width="70%" alt="">
+                                <img src="{{ asset('images/how-it-works/1.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Upload your images of your property, hotel, or business.') }}</h6>
                         </div>
@@ -925,7 +925,7 @@
                                 <p>2</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img loading='lazy'src="{{ asset('images/how-it-works/2.png') }}" width="70%" alt="">
+                                <img src="{{ asset('images/how-it-works/2.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Create up to 3 iPanorama (360° virtual tours) to enhance the experience.') }}</h6>
                         </div>
@@ -936,7 +936,7 @@
                                 <p>3</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img loading='lazy'src="{{ asset('images/how-it-works/3.png') }}" width="70%" alt="">
+                                <img src="{{ asset('images/how-it-works/3.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Manage bookings directly from the platform.') }}</h6>
                         </div>
@@ -947,7 +947,7 @@
                                 <p>4</p>
                             </div>
                             <div class="d-flex justify-content-center">
-                                <img loading='lazy'src="{{ asset('images/how-it-works/4.png') }}" width="70%" alt="">
+                                <img src="{{ asset('images/how-it-works/4.png') }}" width="70%" alt="">
                             </div>
                             <h6 class="card-title mt-3 font-weight-semi-bold">{{ __('Publish your listing for 1 month or 1 year (with an annual plan).') }}</h6>
                         </div>
@@ -960,7 +960,7 @@
             <section class="container get-started-container adventages">
                 <div class="text-center mb-5 text-white section-header">
                     <h2 class="title">{{ __('Plans & Pricing') }}</h2>
-                    <p class="description">{{ __('🎉 Free Trial – 1 Month FREE') }}</p>
+                    <p class="description">🎉 {{ __('Free Trial – 1 Month FREE') }}</p>
                 </div>
                 <div class="row">
                     <div class="col-lg-4 col-md-6 col-12 px-2 py-4">
@@ -1073,7 +1073,7 @@
             <footer class="container" style="padding-top: 100px;">
                 <div class="d-flex align-items-center justify-content-between" style="border-top: 1px solid rgba(255,255,255,.2);">
                     <div class="footer-logo">
-                        <img loading='lazy'src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
+                        <img src="{{ asset('images/virtuard-logo.png') }}" alt="Virtuard Logo" width="80">
                     </div>
                     <div class="flex">
                         <a href="mailto:info@virtuard.com" class="d-flex align-items-center text-white">
