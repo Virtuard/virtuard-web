@@ -11,7 +11,7 @@
                     {{-- <div class="widget-title text-right">
                         <a href="{{ route('plan') }}" class="btn btn-dark mb-3">List Plan</a>
                     </div> --}}
-                    <div class="widget-content">
+                    <div class="widget-content table-responsive">
                         @php
                             $user_plans = $user->userPlans;
                         @endphp
