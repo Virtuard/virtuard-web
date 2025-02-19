@@ -114,9 +114,9 @@
         @if (Request::is('/') || Request::is('/' . app()->getLocale()))
             <div class="notification-container">
                 <div class="notification-create-listing">
-                    <p>Ready to share your space? Create a listing now!</p>
+                    <p>{{ __("Ready to share your space? Create a listing now!") }}</p>
                     <div class="d-flex justify-content-center">
-                        <a href="{{ route('create') }}" class="btn btn-primary">Create Listing for Free</a>
+                        <a href="{{ route('create') }}" class="btn btn-primary">{{ __('Create Listing for Free') }}</a>
                     </div>
                 </div>
             </div>
