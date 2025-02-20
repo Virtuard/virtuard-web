@@ -79,18 +79,18 @@ function initAutocompleteByCategory() {
 
 }
 
-function initMap() {
-    // Initialize the autocomplete
-    // initAutocomplete();
+// function initMap() {
+//     // Initialize the autocomplete
+//     // initAutocomplete();
 
-    map = new google.maps.Map(document.getElementById('gmap'), {
-        center: { lat: 0, lng: 0 },
-        zoom: 3,
-    });
+//     map = new google.maps.Map(document.getElementById('gmap'), {
+//         center: { lat: 0, lng: 0 },
+//         zoom: 3,
+//     });
 
-    // add merker to map
-    // addMarkersToMap(listMaps);
-}
+//     // add merker to map
+//     // addMarkersToMap(listMaps);
+// }
 
 function getCenterMarker(mdata) {
     let map_lat = $('#explore_map_lat').val() ?? 0;
