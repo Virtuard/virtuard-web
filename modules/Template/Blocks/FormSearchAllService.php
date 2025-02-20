@@ -129,7 +129,7 @@ class FormSearchAllService extends BaseBlock
         $model['list_slider'] = $model['list_slider'] ?? "";
         $model['modelBlock'] = $model;
         $model['seatType'] =  SeatType::get();
-        $model['get_hotel'] = Hotel::where('ipanorama_id', '!=', null)->first();
+        $model['get_hotel'] = Hotel::where('ipanorama_id', '!=', null)->orderByDesc('review_score')->first();
 
         return $this->view('Template::frontend.blocks.form-search-all-service.index', $model);
     }

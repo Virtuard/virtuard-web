@@ -1,13 +1,13 @@
 @push('css')
     <style>
         .bravo-form-search-all {
-            height: 80vh;
+            height: 110vh;
         }
         
-        .mypanorama-preview {
+        #mypanorama {
             border: none !important;
-            filter: brightness(0.7);
-            height: 80vh;
+            filter: brightness(0.6);
+            height: 110vh;
             pointer-events: none;
             position: absolute !important;
             top: 90px !important;
@@ -19,15 +19,16 @@
         }
 
         @media(max-width: 768px) {
-            .bravo-form-search-all, .mypanorama-preview {
-                height: 120% !important;
-                margin-bottom: 250px;
+            .bravo-form-search-all, #mypanorama {
+                height: 130vh !important;
+                /* margin-bottom: 250px; */
             }
         }
 
         @media(max-width: 400px) {
-            .bravo-form-search-all, .mypanorama-preview {
-                margin-bottom: 150px;
+            .bravo-form-search-all, #mypanorama {
+                height: 150vh !important;
+                /* margin-bottom: 150px; */
             }
         }
     </style>    
@@ -72,7 +73,7 @@
             panoramaCode.popover = false;
             panoramaCode.title = false;
             panoramaCode.minFov = 0;
-            console.log(panoramaCode)
+            // console.log(panoramaCode)
             panoramaCode = JSON.stringify(panoramaCode);
             panoramaCode = panoramaCode.replaceAll(`upload/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);
             panoramaCode = panoramaCode.replaceAll(`/uploads/ipanoramaBuilder/upload/${userId}/${userId}/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);

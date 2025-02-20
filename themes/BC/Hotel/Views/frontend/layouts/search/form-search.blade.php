@@ -56,9 +56,6 @@
 
 -->
 
-
-
-
 <div class="search-form p-3 bg-white shadow rounded">
     <form method="GET" action="{{ route('hotel.search') }}">
         <div class="row align-items-center">

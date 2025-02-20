@@ -18,6 +18,9 @@
             }
         } */
     </style>
+
+    <!-- iPanorama -->
+    {{-- @include('partials.ipanorama.ipanorama-css') --}}
 @endpush
 
 @if(!empty($style) and $style == "carousel" and !empty($list_slider))
@@ -37,6 +40,19 @@
         <div class="col-lg-12">
             <h1 class="text-heading">{{$title}}</h1>
             <div class="sub-heading">{{$sub_title}}</div>
+
+            {{-- Ipanorama preview --}}
+            <div>
+                <input type="hidden" id="data-panorama2" data-code="{{ $get_hotel->ipanorama->code }}"
+                data-user_id="{{ $get_hotel->ipanorama->user_id }}">
+        
+                <div id="mypanorama2" class="mypanorama-preview"></div>
+            </div>
+
+            <a href="{{ route('user.virtuard-360.index') }}" class="btn btn-primary w-100 mt-2">
+                <i class="bi bi-search"></i> {{ __('Create your own for free!') }}
+            </a>
+
             @if(empty($hide_form_search))
                 <div class="g-form-control">
                     <ul class="nav nav-tabs mb-2" role="tablist">
@@ -79,3 +95,31 @@
         </div>
     </div>
 </div>
+
+@push('js')
+    {{-- @include('partials.ipanorama.ipanorama-js-no-jquery') --}}
+    <script>
+        $(document).ready(function() {
+            previewPanorama2();
+        });
+
+        function previewPanorama2() {
+            let panoramaCode = $('#data-panorama2').data('code');
+            let userId = $('#data-panorama2').data('user_id');
+            panoramaCode.auto_rotate = true;
+            panoramaCode.autoRotate = true;
+            // panoramaCode.showFullscreenCtrl = false;
+            // panoramaCode.showZoomCtrl = false;
+            // panoramaCode.showSceneNextPrevCtrl = false;
+            // panoramaCode.hotSpotBelowPopover = false;
+            // panoramaCode.popover = false;
+            panoramaCode.title = false;
+
+            panoramaCode = JSON.stringify(panoramaCode);
+            panoramaCode = panoramaCode.replaceAll(`upload/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);
+            panoramaCode = panoramaCode.replaceAll(`/uploads/ipanoramaBuilder/upload/${userId}/${userId}/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);
+            panoramaCode = JSON.parse(panoramaCode)
+            $(`#mypanorama2`).ipanorama(panoramaCode);
+        }
+    </script>
+@endpush
