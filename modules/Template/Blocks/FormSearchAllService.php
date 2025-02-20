@@ -2,6 +2,7 @@
 namespace Modules\Template\Blocks;
 
 use Modules\Flight\Models\SeatType;
+use Modules\Hotel\Models\Hotel;
 use Modules\Template\Blocks\BaseBlock;
 use Modules\Location\Models\Location;
 use Modules\Media\Helpers\FileHelper;
@@ -128,6 +129,8 @@ class FormSearchAllService extends BaseBlock
         $model['list_slider'] = $model['list_slider'] ?? "";
         $model['modelBlock'] = $model;
         $model['seatType'] =  SeatType::get();
+        $model['get_hotel'] = Hotel::where('ipanorama_id', '!=', null)->first();
+
         return $this->view('Template::frontend.blocks.form-search-all-service.index', $model);
     }
 

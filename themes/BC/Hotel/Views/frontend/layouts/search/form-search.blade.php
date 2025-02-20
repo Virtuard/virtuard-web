@@ -63,8 +63,8 @@
     <form method="GET" action="{{ route('hotel.search') }}">
         <div class="row align-items-center">
             <div class="col-md-2">
-                <label for="service_name" class="form-label">{{ __('Service name') }}</label>
-                <input type="text" class="form-control" name="service_name" placeholder="{{ __('Service name') }}">
+                <label for="service_name" class="form-label">{{ __('What are you looking for?') }}</label>
+                <input type="text" class="form-control" name="service_name" placeholder="{{ __('Find what you need...') }}">
             </div>
             <div class="col-md-2">
                 @include('partials.search.fields.location')
