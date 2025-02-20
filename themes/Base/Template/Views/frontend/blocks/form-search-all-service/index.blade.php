@@ -20,14 +20,14 @@
 
         @media(max-width: 768px) {
             .bravo-form-search-all, #mypanorama {
-                height: 130vh !important;
+                height: 140% !important;
                 /* margin-bottom: 250px; */
             }
         }
 
         @media(max-width: 400px) {
             .bravo-form-search-all, #mypanorama {
-                height: 150vh !important;
+                height: 150% !important;
                 /* margin-bottom: 150px; */
             }
         }
