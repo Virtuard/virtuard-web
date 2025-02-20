@@ -1311,17 +1311,48 @@
 
 
         function initMap() {
-            // Initialize the autocomplete
-            // initAutocomplete();
+            // Default location if geolocation fails
+            const defaultLocation = { lat: 0, lng: 0 };
 
+            // Initialize map centered at default location
             map = new google.maps.Map(document.getElementById('gmap'), {
-                center: { lat: 0, lng: 0 },
-                zoom: 3,
-                mapTypeId: 'satellite'
+                center: defaultLocation,
+                zoom: 10,
             });
 
-            // add merker to map
-            // addMarkersToMap(listMaps);
+            // Try HTML5 geolocation
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+
+                        // Set map center to user's current location
+                        map.setCenter(userLocation);
+
+                        // Add marker for user's location
+                        // new google.maps.Marker({
+                        //     position: userLocation,
+                        //     map: map,
+                        //     title: "You are here!"
+                        // });
+
+                        // Update hidden input fields if needed
+                        $('#explore_map_lat').val(userLocation.lat);
+                        $('#explore_map_lgn').val(userLocation.lng);
+                    },
+                    () => {
+                        console.warn("Geolocation failed or was denied. Using default location.");
+                        map.setCenter(defaultLocation);
+                    }
+                );
+            } else {
+                // Browser doesn't support Geolocation
+                console.error("Your browser doesn't support geolocation.");
+                map.setCenter(defaultLocation);
+            }
         }
 
         function fetchMap(attr) {

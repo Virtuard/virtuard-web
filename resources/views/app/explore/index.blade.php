@@ -369,7 +369,7 @@
             // Initialize map centered at default location
             map = new google.maps.Map(document.getElementById('gmap'), {
                 center: defaultLocation,
-                zoom: 5,
+                zoom: 10,
             });
 
             // Try HTML5 geolocation
