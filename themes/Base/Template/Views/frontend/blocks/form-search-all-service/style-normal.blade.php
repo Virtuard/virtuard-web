@@ -53,6 +53,12 @@
                 <i class="bi bi-search"></i> {{ __('Create your own for free!') }}
             </a>
 
+            <p class="text-center mt-2 text-white" style="font-size: 16px;">Or</p>
+
+            <button type="button" class="btn btn-info w-100" id="searchButton">
+                <i class="bi bi-search"></i> {{ __('Search') }}
+            </button>
+
             @if(empty($hide_form_search))
                 <div class="g-form-control">
                     <ul class="nav nav-tabs mb-2" role="tablist">
@@ -83,7 +89,7 @@
                                     if(empty($allServices[$service_type])) continue;
                                     $module = new $allServices[$service_type];
                                 @endphp
-                                <div role="tabpanel" class="tab-pane @if($number == 0) active @endif" id="bravo_{{$service_type}}" style="max-width: 100%;">
+                                <div role="tabpanel" id="scrollTarget" class="tab-pane @if($number == 0) active @endif" id="bravo_{{$service_type}}" style="max-width: 100%;">
                                     @include(ucfirst($service_type).'::frontend.layouts.search.form-search')
                                 </div>
                                 @php $number++; @endphp
@@ -101,6 +107,12 @@
     <script>
         $(document).ready(function() {
             previewPanorama2();
+
+            $('#searchButton').on('click', function() {
+                $('html, body').animate({
+                    scrollTop: $('#scrollTarget').offset().top
+                }, 300); // 800ms for smooth scroll
+            });
         });
 
         function previewPanorama2() {
