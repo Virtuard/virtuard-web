@@ -265,6 +265,31 @@ class SearchController extends Controller
         ]);
     }
 
+    public function getIpanorama($type, $id)
+    {
+        if ($type !== 'hotel') {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        $idipanorama_id = DB::table('bravo_hotels')
+            ->where('id', $id)
+            ->value('ipanorama_id');
+
+        if (!$idipanorama_id) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
+        $ipanorama = DB::table('ipanoramas')
+            ->where('id', $idipanorama_id)
+            ->get();
+
+        if (!$ipanorama) {
+            return response()->json(['message' => "Not Found"], 404);
+        }
+
+        return response()->json($ipanorama);
+    }
+
     public function checkAvailability(Request $request, $type = '', $id = '')
 {
     if (empty($type)) {

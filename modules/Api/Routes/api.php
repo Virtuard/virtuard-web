@@ -29,6 +29,8 @@ Route::get('/search-by-author/{type?}', [SearchController::class, 'searchByAutho
 Route::get('{type}/detail/{id}','SearchController@detail')->name('api.detail');
 Route::get('{type}/availability/{id}','SearchController@checkAvailability')->name('api.service.check_availability');
 Route::get('boat/availability-booking/{id}','SearchController@checkBoatAvailability')->name('api.service.checkBoatAvailability');
+Route::get('{type}/ipanorama/{id}','SearchController@getIpanorama')->name('api.getPanorama');
+
 
 Route::get('{type}/filters','SearchController@getFilters')->name('api.service.filter');
 Route::get('{type}/form-search','SearchController@getFormSearch')->name('api.service.form');
