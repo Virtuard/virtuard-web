@@ -14,12 +14,12 @@
                 </div>
                 <div class="form-group">
                     <label>{{__("New Password")}}</label>
-                    <input type="password" required name="new-password" minlength="8" placeholder="{{__("New Password")}}" class="form-control">
+                    <input type="password" required name="new-password" placeholder="{{__("New Password")}}" class="form-control">
                     <p><i>{{__("* Require at least one uppercase, one lowercase letter, one number and one symbol.")}}</i></p>
                </div>
                 <div class="form-group">
                     <label>{{__("New Password Again")}}</label>
-                    <input type="password" required name="new-password_confirmation" minlength="8" placeholder="{{__("New Password Again")}}" class="form-control">
+                    <input type="password" required name="new-password_confirmation" placeholder="{{__("New Password Again")}}" class="form-control">
                 </div>
             </div>
             <div class="col-md-12">
