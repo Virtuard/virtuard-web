@@ -4,6 +4,7 @@ use \Illuminate\Support\Facades\Route;
 Route::group(['prefix'=>config('hotel.hotel_route_prefix')],function(){
     Route::get('/','HotelController@index')->name('hotel.search'); // Search
     Route::get('/{slug}','HotelController@detail')->name('hotel.detail');// Detail
+    Route::get('/panorama-view/{slug}','HotelController@panoramaView')->name('hotel.panoramaView');// panorama
 });
 
 Route::group(['prefix'=>'user/'.config('hotel.hotel_route_prefix'),'middleware' => ['auth','verified']],function(){

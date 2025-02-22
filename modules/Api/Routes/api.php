@@ -31,6 +31,8 @@ Route::get('{type}/availability/{id}','SearchController@checkAvailability')->nam
 Route::get('boat/availability-booking/{id}','SearchController@checkBoatAvailability')->name('api.service.checkBoatAvailability');
 Route::get('{type}/ipanorama/{id}','SearchController@getIpanorama')->name('api.getPanorama');
 
+Route::get('/panoramaView', [SearchController::class, 'panoramaView']);
+
 
 Route::get('{type}/filters','SearchController@getFilters')->name('api.service.filter');
 Route::get('{type}/form-search','SearchController@getFormSearch')->name('api.service.form');

@@ -173,6 +173,52 @@ class HotelController extends Controller
         return view('Hotel::frontend.detail', $data);
     }
 
+    public function panoramaView(Request $request, $slug)
+    {
+        $row = $this->hotelClass::where('slug', $slug)->with(['location', 'translation', 'hasWishList'])->first();;
+        if (empty($row) or !$row->hasPermissionDetailView()) {
+            return redirect('/');
+        }
+
+        if (!empty($request['preview_panorama'])) {
+            return view_panorama('hotel', $row);
+        }
+
+        $translation = $row->translate();
+        $hotel_related = [];
+        $location_id = $row->location_id;
+        if (!empty($location_id)) {
+            $hotel_related = $this->hotelClass::where('location_id', $location_id)->where("status", "publish")->take(4)->whereNotIn('id', [$row->id])->with(['location', 'translation', 'hasWishList'])->get();
+        }
+        $review_list = $row->getReviewList();
+
+        $data = [
+            'row'          => $row,
+            'translation'       => $translation,
+            'hotel_related' => $hotel_related,
+            'location_category' => $this->locationCategoryClass::where("status", "publish")->with('location_category_translations')->get(),
+            'booking_data' => $row->getBookingData(),
+            'review_list'  => $review_list,
+            'seo_meta'  => $row->getSeoMetaWithTranslation(app()->getLocale(), $translation),
+            'body_class' => 'is_single',
+            'breadcrumbs'       => [
+                [
+                    'name'  => __('Hotel'),
+                    'url'  => route('hotel.search'),
+                ],
+            ],
+        ];
+        $data['breadcrumbs'] = array_merge($data['breadcrumbs'], $row->locationBreadcrumbs());
+        $data['breadcrumbs'][] = [
+            'name'  => $translation->title,
+            'class' => 'active'
+        ];
+
+        $this->setActiveMenu($row);
+
+        return view('Hotel::frontend.panoramaView', $data);
+    }
+
     public function checkAvailability()
     {
         $hotel_id = \request('hotel_id');

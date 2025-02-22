@@ -73,36 +73,36 @@ class SearchController extends Controller
      * )
      */
 
-     public function search($type = '')
-     {
-         $type = $type ?: request()->get('type');
-         
-         if (empty($type)) {
-             return $this->sendError(__("Type is required"));
-         }
-     
-         $class = get_bookable_service_by_id($type);
-         
-         if (empty($class) || !class_exists($class)) {
-             return $this->sendError(__("Type does not exist"));
-         }
-     
-         $limit = request()->query('limit', setting_item($type . "_page_limit_item") ?: 9);
-         $query = new $class();
-     
-         $rows = $query->search(request()->input())->paginate($limit);
-     
-         return $this->sendSuccess([
-             'total' => $rows->total(),
-             'per_page' => $rows->perPage(),
-             'current_page' => $rows->currentPage(),
-             'last_page' => $rows->lastPage(),
-             'next_page_url' => $rows->nextPageUrl(),
-             'prev_page_url' => $rows->previousPageUrl(),
-             'data' => $rows->map(fn($row) => $row->dataForApi()),
-         ]);
-     }
-     
+    public function search($type = '')
+    {
+        $type = $type ?: request()->get('type');
+
+        if (empty($type)) {
+            return $this->sendError(__("Type is required"));
+        }
+
+        $class = get_bookable_service_by_id($type);
+
+        if (empty($class) || !class_exists($class)) {
+            return $this->sendError(__("Type does not exist"));
+        }
+
+        $limit = request()->query('limit', setting_item($type . "_page_limit_item") ?: 9);
+        $query = new $class();
+
+        $rows = $query->search(request()->input())->paginate($limit);
+
+        return $this->sendSuccess([
+            'total' => $rows->total(),
+            'per_page' => $rows->perPage(),
+            'current_page' => $rows->currentPage(),
+            'last_page' => $rows->lastPage(),
+            'next_page_url' => $rows->nextPageUrl(),
+            'prev_page_url' => $rows->previousPageUrl(),
+            'data' => $rows->map(fn($row) => $row->dataForApi()),
+        ]);
+    }
+
     public function searchByAuthor(Request $request)
     {
         $author_id = $request->query('author_id');
@@ -291,50 +291,50 @@ class SearchController extends Controller
     }
 
     public function checkAvailability(Request $request, $type = '', $id = '')
-{
-    if (empty($type)) {
-        return $this->sendError(__("Resource is not available"));
-    }
-    if (empty($id)) {
-        return $this->sendError(__("Resource ID is not available"));
-    }
-
-    $class = get_bookable_service_by_id($type);
-    if (empty($class) or !class_exists($class)) {
-        return $this->sendError(__("Type does not exist"));
-    }
-
-    $classAvailability = $class::getClassAvailability();
-    $classAvailability = app()->make($classAvailability);
-
-    $request->merge(['id' => $id]);
-
-    if ($type == "hotel") {
-        $request->merge(['hotel_id' => $id]);
-
-        $availabilityResponse = $classAvailability->checkAvailability($request);
-        
-        $availabilityData = $availabilityResponse->getData(true);
-
-        $roomIds = collect($availabilityData['rooms'] ?? [])->pluck('id');
-
-        $rooms = DB::table('bravo_hotel_rooms')
-            ->whereIn('id', $roomIds) 
-            ->get()
-            ->keyBy('id'); 
-
-        if (!empty($availabilityData['rooms'])) {
-            foreach ($availabilityData['rooms'] as &$room) {
-                $roomId = $room['id']; 
-                $room['priceDay'] = $rooms[$roomId]->price ?? 0; 
-            }
+    {
+        if (empty($type)) {
+            return $this->sendError(__("Resource is not available"));
+        }
+        if (empty($id)) {
+            return $this->sendError(__("Resource ID is not available"));
         }
 
-        return $this->sendSuccess($availabilityData);
-    }
+        $class = get_bookable_service_by_id($type);
+        if (empty($class) or !class_exists($class)) {
+            return $this->sendError(__("Type does not exist"));
+        }
 
-    return $classAvailability->loadDates($request);
-}
+        $classAvailability = $class::getClassAvailability();
+        $classAvailability = app()->make($classAvailability);
+
+        $request->merge(['id' => $id]);
+
+        if ($type == "hotel") {
+            $request->merge(['hotel_id' => $id]);
+
+            $availabilityResponse = $classAvailability->checkAvailability($request);
+
+            $availabilityData = $availabilityResponse->getData(true);
+
+            $roomIds = collect($availabilityData['rooms'] ?? [])->pluck('id');
+
+            $rooms = DB::table('bravo_hotel_rooms')
+                ->whereIn('id', $roomIds)
+                ->get()
+                ->keyBy('id');
+
+            if (!empty($availabilityData['rooms'])) {
+                foreach ($availabilityData['rooms'] as &$room) {
+                    $roomId = $room['id'];
+                    $room['priceDay'] = $rooms[$roomId]->price ?? 0;
+                }
+            }
+
+            return $this->sendSuccess($availabilityData);
+        }
+
+        return $classAvailability->loadDates($request);
+    }
 
 
     public function checkBoatAvailability(Request $request, $id = '')
@@ -347,5 +347,15 @@ class SearchController extends Controller
         $classAvailability = app()->make($classAvailability);
         $request->merge(['id' => $id]);
         return $classAvailability->availabilityBooking($request);
+    }
+
+    public function panoramaView(){
+        //saya ingin membuat fungsi untuk menampilkan panorama view
+        //dari alamat url https://virtuard.com/hotel/tropical-oasis-villa 
+        //untuk mengambil element id mypanorama dan tampilkan di halaman web
+        //dan tampilkan saja, tanpa mempengaruhi fungsi javascript yang lain
+        //intinya seperti url diatas, tetapi yang ditampilkan hanya di element id mypanorama
+        //dan tidak mempengaruhi fungsi javascript yang lain
+        //silahkan buat fungsi untuk menampilkan panorama view dari url diatas
     }
 }
