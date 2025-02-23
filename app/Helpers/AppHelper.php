@@ -1504,7 +1504,7 @@ if (!function_exists('getUserPosts')) {
 
 if (!function_exists('getUserPanoramas')) {
     function getUserPanoramas($id) {
-        $data = Ipanorama::where('user_id', $id)->get();
+        $data = Ipanorama::where('user_id', $id)->where('status', 'publish')->get();
         return $data;
     }
 }
