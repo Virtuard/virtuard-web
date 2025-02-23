@@ -2,10 +2,9 @@
 <div class="container">
     <div class="row mt-2">
         @foreach ($userPosts as $post)
-            @if ($post->ipanorama)
+            {{-- @if ($post->ipanorama)
                 <div class="col-4 mb-2">
                     <div class="gallery-item">
-                        {{-- Tombol Delete --}}
                         @if (auth()->check() && auth()->user()->id == $post->user_id)
                             <form action="{{ route('post.destroy', $post->id) }}" method="POST"
                                 class="delete-btn-wrapper">
@@ -24,7 +23,7 @@
                         </a>
                     </div>
                 </div>
-            @endif
+            @endif --}}
 
             @foreach ($post->medias as $media)
                 <div class="col-4 mb-2">
@@ -53,11 +52,9 @@
     </div>
 </div>
 
-
-
-<section class="section-modal">
+{{-- <section class="section-modal">
     @include('vendor.ipanorama.demo.includes.ipanorama-modal')
-</section>
+</section> --}}
 
 <style>
     .delete-btn-wrapper {
@@ -78,7 +75,7 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.3s ease-in-out;
+        transition: all 0.3s ease-in-out;   
         font-size: 16px;
     }
 

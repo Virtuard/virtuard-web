@@ -10,6 +10,9 @@ $list_service = [];
             <li class="nav-item">
                 <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">Profile</a>
             </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link" data-toggle="tab" data-target="#profile_360">Virtual Tour</a>
+            </li>
             @foreach($types as $type=>$moduleClass)
                 @php
                     if(!in_array($type, menu_listing()))  continue;
@@ -31,9 +34,14 @@ $list_service = [];
         </ul>
     </div>
     <div class="tab-content">
-        @php $i = 0; @endphp
+        @php 
+            $i = 0; 
+        @endphp
         <div class="tab-pane fade @if(!$i) show active @endif" id="profile" role="tabpanel" aria-labelledby="pills-home-tab">
             @include('User::frontend.profile.gallery', ['userPosts' => getUserPosts($user->id)])
+        </div>
+        <div class="tab-pane fade" id="profile_360" role="tabpanel" aria-labelledby="pills-home-tab">
+            @include('User::frontend.profile.gallery_360', ['userPanoramas' => getUserPanoramas($user->id)])
         </div>
         @foreach($types as $type=>$moduleClass)
             @php
@@ -50,7 +58,6 @@ $list_service = [];
         @endforeach
     </div>
 </div>
-
 
 <style>
     .nav-tabs {

@@ -40,6 +40,7 @@
             $('.preview-panorama').click(function() {
                 let panoramaCode = $(this).data('code');
                 let userId = $(this).data('user_id');
+                
                 panoramaCode = JSON.stringify(panoramaCode);
                 panoramaCode = panoramaCode.replaceAll(`upload/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);
                 panoramaCode = panoramaCode.replaceAll(`/uploads/ipanoramaBuilder/upload/${userId}/${userId}/`, `/uploads/ipanoramaBuilder/upload/${userId}/`);
