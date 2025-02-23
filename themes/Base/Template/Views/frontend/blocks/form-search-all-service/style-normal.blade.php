@@ -50,17 +50,17 @@
             </div>
 
             <a href="{{ route('user.virtuard-360.index') }}" class="btn btn-primary w-100 mt-2">
-                <i class="bi bi-search"></i> {{ __('Create your own for free!') }}
+                <i class="bi bi-search"></i> {{ __('Create your virtual tour for free!') }}
             </a>
 
             <p class="text-center mt-2 text-white" style="font-size: 16px;">Or</p>
 
-            <button type="button" class="btn btn-info w-100" id="searchButton">
-                <i class="bi bi-search"></i> {{ __('Search') }}
-            </button>
+            <a href="/create" class="btn btn-info w-100">
+                <i class="bi bi-search"></i> {{ __('Create your listing') }}
+            </a>
 
             @if(empty($hide_form_search))
-                <div class="g-form-control">
+                <div class="g-form-control" id="scrollTarget">
                     <ul class="nav nav-tabs mb-2" role="tablist">
                         @if(!empty($service_types))
                             @php $number = 0; @endphp
@@ -110,7 +110,7 @@
 
             $('#searchButton').on('click', function() {
                 $('html, body').animate({
-                    scrollTop: $('#scrollTarget').offset().top
+                    scrollTop: $('#scrollTarget').offset().top - 30
                 }, 300); // 800ms for smooth scroll
             });
         });
