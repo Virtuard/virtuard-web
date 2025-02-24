@@ -21,12 +21,12 @@
 
 	<!-- prettyprint -->
 	<link rel="stylesheet" type="text/css" href="assets/js/lib/google-code-prettify/prettify.css">
-	<script type="text/javascript" src="assets/js/lib/google-code-prettify/prettify.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<!-- /end prettyprint -->
 
 	<!-- Sweetalert -->
 	<link href="https://cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 
     <style>
@@ -55,27 +55,238 @@
     </style>
 </head>
 <body>
-<!-- ipnrm-ui-app -->
+	<!-- ipnrm-ui-app -->
 <div id="ipnrm-ui-app" x-ng-controller="ngiPanoramaAppController">
+	<style>
+		#overlay {
+			width: 0;
+			height: 0;
+			background-color: rgba(0, 0, 0, 0.4);
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 990;
+		}
+		#overlay.active {
+			width: 100%;
+			height: 100%;
+		}
+		.active-step {
+			z-index: 999;
+			background-color: #fff;
+			border-radius: 4px;
+		}
+		.popup {
+			display: none;
+			position: absolute;
+			bottom: 0;
+			right: -180px;
+			background-color: #fff;
+			padding: 0 10px;
+			border-radius: 4px;
+			z-index: 999;
+			color: #222;
+		}
+		.popup.active {
+			display: block;
+		}
+		.popup h4, .popup p {
+			z-index: 999;
+		}
+		.popup h4 {
+			border-bottom: 1px solid rgba(0,0,0,.05);
+			padding-bottom: 10px;
+			margin-bottom: -5px;
+			font-size: 16px;
+		}
+		.popup p {
+			font-size: 14px;
+		}
+		.popup button {
+			background-color: #0073aa;
+			color: #fff;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 4px;
+			cursor: pointer;
+			margin-bottom: 10px;
+			transition: .3s;
+		}
+		.popup button:hover {
+			opacity: 80;
+		}
+		.popup.left {
+			bottom: -70%;
+		}
+		#popup-step-9,
+		#popup-step-15 {
+			right: -290px;
+			bottom: -30px !important;
+		}
+		#popup-step-10 {
+			right: 200px;
+			bottom: -110px;
+		}
+		#popup-step-11 {
+			left: 100px;
+			right: 100px;
+			bottom: 0;
+		}
+		#popup-step-11.popup.left::before {
+			top: 50%;
+			left: -10px;
+			margin-left: -15px;
+			margin-top: -15px;
+		}
+		#popup-step-12,
+		#popup-step-17,
+		#popup-step-19 {
+			right: 30%;
+			bottom: -90px;
+		}
+		#popup-step-18,
+		#popup-step-21 {
+			right: 30%;
+			bottom: -110px;
+		}
+		#popup-step-20,
+		#popup-step-21 {
+			right: 40%;
+			bottom: -140px;
+		}
+		#popup-step-21 {
+			left: -20%;
+		}
+		#popup-step-13 {
+			right: 30%;
+			top: -150px;
+			height: 180%;
+		}
+		#popup-step-14 {
+			right: -200px;
+			bottom: -20px;
+		}
+		#popup-step-16 {
+			right: -190px;
+		}
+		#popup-step-22 {
+			bottom: -20px;
+		}
+		#popup-step-23 {
+			bottom: -55px;
+			left: 130px;
+		}
+		.popup.left::before {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: -25px;
+			margin-left: -15px;
+			border-width: 15px;
+			border-style: solid;
+			border-color: transparent white transparent transparent;
+			z-index: 998;
+		}
+		.popup.top::before {
+			content: "";
+			position: absolute;
+			top: -15px;
+			left: 50%;
+			margin-top: -10px;
+			margin-left: -15px;
+			border-width: 15px;
+			border-style: solid;
+			border-color: transparent transparent white transparent;
+			z-index: 998;
+		}
+		.popup.bottom::before {
+			content: "";
+			position: absolute;
+			bottom: -15px;
+			left: 50%;
+			margin-top: -10px;
+			margin-left: -15px;
+			border-width: 15px;
+			border-style: solid;
+			transform: rotate(180deg);
+			border-color: transparent transparent white transparent;
+			z-index: 998;
+		}
+		#popup-step-8.popup.left::before,
+		#popup-step-9.popup.left::before,
+		#popup-step-14.popup.left::before,
+		#popup-step-15.popup.left::before,
+		#popup-step-16.popup.left::before,
+		#popup-step-22.popup.left::before,
+		#popup-step-23.popup.left::before {
+			content: "";
+			position: absolute;
+			top: 40%;
+			left: -25px;
+			margin-left: 0;
+			border-width: 15px;
+			border-style: solid;
+			border-color: transparent white transparent transparent;
+			z-index: 998;
+		}
+	</style>
+	<div id="overlay"></div>
 	<div id="ipnrm-ui-loading" class="ipnrm-ui-loading-main">
 		<div class="ipnrm-ui-loading-progress"></div>
 	</div>
 	<div id="ipnrm-ui-workspace" class="ipnrm-ui-clearfix" x-workspace x-init="appData.fn.workspace.init">
-		<div id="ipnrm-ui-screen">
-			<div id="ipnrm-ui-canvas" x-ng-class="{'ipnrm-ui-target-tool': appData.targetTool}"></div>
+		<div id="ipnrm-ui-screen" style="position: relative;">
+			<div id="ipnrm-ui-canvas" class="" x-ng-class="{'ipnrm-ui-target-tool': appData.targetTool}"></div>
 			<div class="ipnrm-ui-value-info" x-ng-if="appData.scene.selected">
 				<div class="ipnrm-ui-value-yaw">yaw: {{appData.scene.selected.yaw}}</div>
 				<div class="ipnrm-ui-value-pitch">pitch: {{appData.scene.selected.pitch}}</div>
 				<div class="ipnrm-ui-value-zoom">zoom: {{appData.scene.selected.zoom}}</div>
 			</div>
+			<div id="popup-step-12" class="popup top">
+				<h4>12 - Set Yaw and Pitch Scene</h4>
+				<p>Click image and drag to set your image position</p>
+				<div style="display: flex; justify-content: flex-end;">
+					<button>Next</button>	
+				</div>
+			</div>
 		</div>
 		<div id="ipnrm-ui-tabs">
 			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.general.isActive}" x-tab-panel-item x-id="general" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-cog"></i>General</div>
-			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.scenes.isActive}" x-tab-panel-item x-id="scenes" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-picture-o"></i>Scenes<div class="ipnrm-ui-label">{{appData.config.scenes.length}}</div></div>
-			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.hotspots.isActive, 'ipnrm-ui-hide': !appData.scene.selected}" x-tab-panel-item x-id="hotspots" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-dot-circle-o"></i>Hotspots<div class="ipnrm-ui-label">{{appData.scene.selected.config.hotspots.length}}</div></div>
+			<div class="ipnrm-ui-tab tab-scenes" style="position: relative;" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.scenes.isActive}" x-tab-panel-item x-id="scenes" id="scenes" x-init="appData.fn.tabPanelItemInit">
+				<i class="fa fa-fw fa-picture-o"></i>
+				Scenes
+				<div class="ipnrm-ui-label">{{appData.config.scenes.length}}</div>
+				<div id="popup-step-8" class="popup left">
+					<h4>8 - Open Scenes</h4>
+					<p>Click on tab <b>Scenes</b></p>
+				</div>
+			</div>
+			<div class="ipnrm-ui-tab tab-hotspots" style="position: relative;" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.hotspots.isActive, 'ipnrm-ui-hide': !appData.scene.selected}" x-tab-panel-item x-id="hotspots" x-init="appData.fn.tabPanelItemInit">
+				<i class="fa fa-fw fa-dot-circle-o"></i>Hotspots<div class="ipnrm-ui-label">{{appData.scene.selected.config.hotspots.length}}
+				</div>
+				<div id="popup-step-14" class="popup left">
+					<h4>14 - Open Hotspots</h4>
+					<p>Click tab <b>Hotspots</b></p>
+				</div>
+			</div>
             <div id="iprm-ui-tabs-separator"></div>
-			<div class="ipnrm-ui-cmd-preview" x-ng-click="appData.fn.preview(appData);">Preview</div>
-			<div class="ipnrm-ui-cmd-getcode" x-ng-click="appData.fn.getCode(appData, appData.config, false);">Save</div>
+			<div class="preview-btn" style="position: relative;">
+				<div class="ipnrm-ui-cmd-preview preview-btn" style="position: absolute; top: -35px;" x-ng-click="appData.fn.preview(appData);">
+				Preview
+				<div id="popup-step-23" class="popup left">
+					<h4>23 - Preview Virtual Tour</h4>
+					<p>Click <b>Preview</b> button to show the virtual tour you have made it.</p>
+				</div>
+			</div></div>
+			<div class="save-button" style="position: relative;">
+				<div class="ipnrm-ui-cmd-getcode" style="position: absolute; top: -35px;" x-ng-click="appData.fn.getCode(appData, appData.config, false);">
+					Save
+				</div>
+				<div id="popup-step-22" class="popup left">
+					<h4>22 - Save Project</h4>
+					<p>After your setting the all scenes and hotspots, click <b>Save</b> button</p>
+				</div>
+			</div>
 			<div class="ipnrm-ui-cmd-load" x-ng-click="appData.fn.storage.loadFromFile(appData);">Load File</div> 
 			<!-- <div class="ipnrm-ui-cmd-save" x-ng-click="appData.fn.storage.saveToFile(appData);">Save To File</div> -->
 			<input id="ipnrm-ui-load-from-file" type="file" style="display:none;" />
@@ -474,7 +685,13 @@
 			<div class="ipnrm-ui-section" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.scenes.isActive}">
 				<div class="ipnrm-ui-item-list-wrap">
 					<div class="ipnrm-ui-item-commands">
-						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.scenes.add(appData)"><i class="fa fa-fw fa-plus-square"></i></div>
+						<div class="ipnrm-ui-item-command add-scene-button" style="position: relative;" id="btn-add-scene" x-ng-click="appData.fn.scenes.add(appData)">
+							<i class="fa fa-fw fa-plus-square"></i>
+							<div id="popup-step-9" class="popup left">
+								<h4>9 - Open Scenes</h4>
+								<p>Click add button <b>"+"</b> to open scenes form</p>
+							</div>
+						</div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.scenes.copySelected(appData)"><i class="fa fa-fw fa-clone"></i></div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.scenes.upSelected(appData)"><i class="fa fa-fw fa-arrow-up"></i></div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.scenes.downSelected(appData)"><i class="fa fa-fw fa-arrow-down"></i></div>
@@ -497,9 +714,16 @@
 								<div class="ipnrm-ui-state"></div>
 							</div>
 							<div class="ipnrm-ui-block-data">
-								<div class="ipnrm-ui-control">
+								<div class="ipnrm-ui-control" style="position: relative;">
 									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set title for selected scene.</div></div>
 									<input class="ipnrm-ui-text ipnrm-ui-long" type="text" placeholder="Scene title" x-ng-model="appData.scene.selected.config.title">
+									<div id="popup-step-10" class="popup top">
+										<h4>10 - Set Scenes</h4>
+										<p>Type the title for the scene</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>
+										</div>
+									</div>
 								</div>
 								
 								<div class="ipnrm-ui-accordion">
@@ -536,14 +760,22 @@
 									<div class="ipnrm-ui-label">Texture count</div><br>
 								</div>
 								
-								<div class="ipnrm-ui-control">
-									<div class="ipnrm-ui-image" x-ng-class="{'ipnrm-ui-active': appData.scene.selected.config.imageFront.url}" x-ng-click="appData.fn.selectImage(appData, appData.scene.selected.config.imageFront);">
+								<div class="ipnrm-ui-control" style="position: relative;">
+									<div class="ipnrm-ui-image upload-scene-image" x-ng-class="{'ipnrm-ui-active': appData.scene.selected.config.imageFront.url}" x-ng-click="appData.fn.selectImage(appData, appData.scene.selected.config.imageFront);">
 										<div class="ipnrm-ui-image-data" x-ng-style="{'background-image': 'url(' + appData.fn.getImageUrl(appData, appData.scene.selected.config.imageFront) + ')'}"></div>
 										<div class="ipnrm-ui-image-edit" x-ng-click="appData.fn.setImageUrlConfirm(appData, appData.scene.selected.config.imageFront);$event.stopPropagation();"></div>
 										<div class="ipnrm-ui-image-clear" x-ng-click="appData.scene.selected.config.imageFront.url=null;$event.stopPropagation();"></div>
 										<div class="ipnrm-ui-image-label">Front</div>
 									</div>
 									
+									<div id="popup-step-11" class="popup left">
+										<h4>11 - Set Scenes</h4>
+										<p>Select the image for the scene</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>
+										</div>
+									</div>
+
 									<span x-ng-class="{'ipnrm-ui-image-hide': appData.scene.selected.config.type != 'cube' || appData.scene.selected.config.cubeTextureCount != 'six'}">
 										<div class="ipnrm-ui-image" x-ng-class="{'ipnrm-ui-active': appData.scene.selected.config.imageBack.url}" x-ng-click="appData.fn.selectImage(appData, appData.scene.selected.config.imageBack);">
 											<div class="ipnrm-ui-image-data" x-ng-style="{'background-image': 'url(' + appData.fn.getImageUrl(appData, appData.scene.selected.config.imageBack) + ')'}"></div>
@@ -657,7 +889,7 @@
 									<div class="ipnrm-ui-label">Right limit (degree)</div>
 								</div>
 								
-								<div class="ipnrm-ui-control">
+								<div class="ipnrm-ui-control" style="position: relative;">
 									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set the panorama's starting yaw and pitch position in degrees, and the zoom parameter.</div></div>
 									
 									<div class="ipnrm-ui-inline-group">
@@ -679,6 +911,14 @@
 										<div class="ipnrm-ui-control">
 											<input class="ipnrm-ui-number" type="number" step="any" x-ng-model="appData.scene.selected.config.zoom">
 											<div class="ipnrm-ui-indicator"><div class="ipnrm-ui-indicator-btn" x-ng-click="appData.scene.selected.config.zoom=appData.scene.selected.zoom"></div>{{appData.scene.selected.zoom}}</div>
+										</div>
+									</div>
+
+									<div id="popup-step-13" class="popup bottom">
+										<h4>13 - Set Yaw and Pitch Scene</h4>
+										<p>Click arrow button to copy coordinat "Yaw" and "Pitch"</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>	
 										</div>
 									</div>
 								</div>
@@ -705,18 +945,31 @@
 			<div class="ipnrm-ui-section" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.hotspots.isActive}">
 				<div class="ipnrm-ui-item-list-wrap">
 					<div class="ipnrm-ui-item-commands">
-						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.hotspots.add(appData)"><i class="fa fa-fw fa-plus-square"></i></div>
+						<div class="ipnrm-ui-item-command add-hotspot-button" style="position: relative;" x-ng-click="appData.fn.hotspots.add(appData)">
+							<i class="fa fa-fw fa-plus-square"></i>
+							<div id="popup-step-15" class="popup left">
+								<h4>15 - Set Hotspots</h4>
+								<p>Click add button <b>"+"</b> to open hotspots form</p>
+							</div>
+						</div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.hotspots.copySelected(appData)"><i class="fa fa-fw fa-clone"></i></div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.hotspots.upSelected(appData)"><i class="fa fa-fw fa-arrow-up"></i></div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.hotspots.downSelected(appData)"><i class="fa fa-fw fa-arrow-down"></i></div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.hotspots.removeSelected(appData)"><i class="fa fa-fw fa-trash"></i></div>
 					</div>
-					<ul class="ipnrm-ui-item-list">
-						<li class="ipnrm-ui-item" x-ng-repeat="hotspot in appData.scene.selected.config.hotspots track by hotspot.id" x-ng-class="{'ipnrm-ui-active': hotspot.isSelected}" x-ng-click="appData.fn.hotspots.select(appData, hotspot)">
+					<ul class="ipnrm-ui-item-list" style="position: relative;">
+						<li class="ipnrm-ui-item select-scene-btn" x-ng-repeat="hotspot in appData.scene.selected.config.hotspots track by hotspot.id" x-ng-class="{'ipnrm-ui-active': hotspot.isSelected}" x-ng-click="appData.fn.hotspots.select(appData, hotspot)">
 							<span class="ipnrm-ui-icon"><i class="fa fa-thumb-tack"></i></span>
 							<span class="ipnrm-ui-name">{{hotspot.id}}<span x-ng-if="hotspot.config.title"> | <i>{{hotspot.config.title}}</i></sapn></span>
 							<span class="ipnrm-ui-visible" x-ng-click="hotspot.isVisible=!hotspot.isVisible;appData.hotspot.dirty=true" x-ng-class="{'ipnrm-ui-off': !hotspot.isVisible}"></span>
 						</li>
+						<div id="popup-step-16" class="popup left">
+							<h4>16 - Open Hotspots</h4>
+							<p>Select scene</p>
+							<div style="display: flex; justify-content: flex-end;">
+								<button>Next</button>	
+							</div>
+						</div>
 					</ul>
 				</div>
 				<div class="ipnrm-ui-config">
@@ -735,13 +988,17 @@
 					</div>
 					<div x-ng-class="{'ipnrm-ui-hide': !appData.hotspot.selected}">
 						<div class="ipnrm-ui-block" x-ng-class="{'ipnrm-ui-folded': appData.config.foldedSections.hotspotLocation}">
-							<div class="ipnrm-ui-block-header" x-ng-click="appData.config.foldedSections.hotspotLocation = !appData.config.foldedSections.hotspotLocation;">
+							<div class="ipnrm-ui-block-header accordion-hotspot-location" style="position: relative;" x-ng-click="appData.config.foldedSections.hotspotLocation = !appData.config.foldedSections.hotspotLocation;">
 								<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set a hotspot location.</div></div>
 								<div class="ipnrm-ui-title">Hotspot Location</div>
 								<div class="ipnrm-ui-state"></div>
+								<div id="popup-step-17" class="popup top">
+									<h4>17 - Set Hotspots</h4>
+									<p>Expand the <b>Hotspot Location</b> accordion</p>
+								</div>
 							</div>
 							<div class="ipnrm-ui-block-data">
-								<div class="ipnrm-ui-control">
+								<div class="ipnrm-ui-control" style="position: relative;">
 									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set the hotspot's starting yaw and pitch position in degrees.<br><br>Note:<br>If you want to change the location of the selected hotspot, just click on the panorama together with Ctrl Key (for Mac with Meta Key).</div></div>
 									
 									<div class="ipnrm-ui-inline-group">
@@ -756,40 +1013,58 @@
 											<input class="ipnrm-ui-number" type="number" step="any" x-ng-model="appData.hotspot.selected.config.pitch" x-ng-change="appData.hotspot.dirty=true">
 										</div>
 									</div>
+
+									<div id="popup-step-18" class="popup top active">
+										<h4>18 - Set Hotspots</h4>
+										<p>Set <b>Yaw</b> and <b>Pitch</b> to get the position of hotspot</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>	
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
 						
 						<div class="ipnrm-ui-block" x-ng-class="{'ipnrm-ui-folded': appData.config.foldedSections.hotspotSettings}">
-							<div class="ipnrm-ui-block-header" x-ng-click="appData.config.foldedSections.hotspotSettings = !appData.config.foldedSections.hotspotSettings;">
+							<div class="ipnrm-ui-block-header accordion-hotspot-settings" style="position: relative;" x-ng-click="appData.config.foldedSections.hotspotSettings = !appData.config.foldedSections.hotspotSettings;">
 								<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set common hotspot settings.</div></div>
 								<div class="ipnrm-ui-title">Hotspot Settings</div>
 								<div class="ipnrm-ui-state"></div>
+								<div id="popup-step-19" class="popup top">
+									<h4>19 - Set Hotspots</h4>
+									<p>Expand the <b>Hotspot Settings</b> accordion</p>
+								</div>
 							</div>
 							<div class="ipnrm-ui-block-data">
-								<div class="ipnrm-ui-control">
+								<div class="ipnrm-ui-control" style="position: relative;">
 									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set title for selected hotspot.</div></div>
 									<input class="ipnrm-ui-text ipnrm-ui-long" type="text" placeholder="Hotspot title" x-ng-model="appData.hotspot.selected.config.title" x-ng-change="appData.hotspot.dirty=true">
+									<div id="popup-step-20" class="popup top">
+										<h4>20 - Set Hotspots</h4>
+										<p>Type the title for hotspot</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>	
+										</div>
+									</div>
 								</div>
 								
-								<div class="ipnrm-ui-control">
+								<div class="ipnrm-ui-control" style="position: relative;">
 									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Specify the ID of the scene to link to.</div></div>
 									<select class="ipnrm-ui-select" x-ng-model="appData.hotspot.selected.config.sceneId">
 										<option value="none">none</option>
 										<option x-ng-repeat="scene in appData.config.scenes track by scene.id" value="{{appData.fn.getSceneKeyById(scene.id)}}">{{scene.id}} {{appData.fn.trunc(scene.config.title, 25)}}</option>
 									</select>
 									<div class="ipnrm-ui-label">Go to the scene</div>
+									<div id="popup-step-21" class="popup top">
+										<h4>21 - Set Hotspots</h4>
+										<p>Select the target of scene</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>	
+										</div>
+									</div>
 								</div>
 								
-								<div class="ipnrm-ui-control">
-									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set a hotspot image, otherwise the plugin uses a theme icon.</div></div>
-									<div class="ipnrm-ui-image" x-ng-class="{'ipnrm-ui-active': appData.hotspot.selected.config.image.url}" x-ng-click="appData.fn.selectImage(appData, appData.hotspot.selected.config.image);">
-											<div class="ipnrm-ui-image-data" x-ng-style="{'background-image': 'url(' + appData.fn.getImageUrl(appData, appData.hotspot.selected.config.image) + ')'}"></div>
-											<div class="ipnrm-ui-image-edit" x-ng-click="appData.fn.setImageUrlConfirm(appData, appData.hotspot.selected.config.image);$event.stopPropagation();"></div>
-											<div class="ipnrm-ui-image-clear" x-ng-click="appData.hotspot.selected.config.image.url=null;$event.stopPropagation();"></div>
-											<div class="ipnrm-ui-image-label">Image</div>
-										</div>
-								</div>
+								
 								
 								<div x-ng-if="(appData.hotspot.selected.config.image.url ? true : false)">
 									<div class="ipnrm-ui-inline-group">
@@ -939,6 +1214,107 @@
 <script type="text/javascript" src="assets/js/lib/three.min.js"></script>
 <script type="text/javascript" src="assets/lib/jquery.ipanorama.min.js"></script>
 <script type="text/javascript" src="assets/js/app.min.js"></script>
+<script type="text/javascript" src="assets/js/lib/google-code-prettify/prettify.js"></script>
+<script type="text/javascript" src="assets/js/custom.js"></script>
+<script>
+	const urlParams = new URLSearchParams(window.location.search);
+	const page = urlParams.get('page');
+	const wstep = urlParams.get('wstep');
+
+	function loadWizardStep() {
+		$("#overlay").addClass("active")
+		$("#popup-step-8").addClass("active").parent().addClass("active-step")
+		
+		$(".tab-scenes").click(function() {
+			$("#popup-step-8").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-9").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".add-scene-button").click(function() {
+			$("#popup-step-9").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-10").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-10 button").click(function() {
+			$("#popup-step-10").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-11").addClass("active")
+			$(".upload-scene-image").addClass("active-step")
+		})
+
+		$("#popup-step-11 button").click(function() {
+			$("#popup-step-11").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-12").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-12 button").click(function() {
+			$("#popup-step-12").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-13").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-13 button").click(function() {
+			$("#popup-step-13").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-14").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".tab-hotspots").click(function() {
+			$("#popup-step-14").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-15").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".add-hotspot-button").click(function() {
+			$("#popup-step-15").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-16").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-16 button").click(function() {
+			$("#popup-step-16").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-17").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".accordion-hotspot-location").click(function() {
+			$("#popup-step-17").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-18").addClass("active").parent().addClass("active-step")
+		})
+		
+		$("#popup-step-18 button").click(function() {
+			$("#popup-step-18").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-19").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".accordion-hotspot-settings").click(function() {
+			$("#popup-step-19").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-20").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-20 button").click(function() {
+			$("#popup-step-20").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-21").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-21 button").click(function() {
+			$("#popup-step-21").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-22").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".save-button").click(function() {
+			$("#popup-step-22").removeClass("active").parent().removeClass("active-step")
+		})
+
+		/* $(".submit-panorama-btn").click(function() {
+			$("#popup-step-23").addClass("active").parent().addClass("active-step")
+		}) */
+
+		$(".preview-btn").click(function() {
+			$("#popup-step-23").removeClass("active").parent().removeClass("active-step")
+			$("#overlay").removeClass("active")
+		})
+	}
+
+	if(page == 'edit' && wstep == 4) {
+		loadWizardStep()
+	}
+</script>
 <!-- /end scripts -->
+
 </body>
 </html>

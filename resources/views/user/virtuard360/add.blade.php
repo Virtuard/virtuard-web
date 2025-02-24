@@ -1,4 +1,25 @@
 @extends('layouts.user')
+
+@push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@latest/dist/css/shepherd.css">
+    <script src="https://cdn.jsdelivr.net/npm/shepherd.js@latest/dist/js/shepherd.min.js"></script>
+
+    <style>
+        .shepherd-header {
+            background: none !important;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .shepherd-element {
+                max-width: 80%;
+                font-size: 14px;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
 
     <h2 class="title-bar no-border-bottom">
@@ -10,8 +31,11 @@
             <b>You must first create a title for your Virtuard 360!</b>
         </div>
 
-        <form action="{{ route('user.virtuard-360.add-new-service') }}" method="POST">
+        <form id="form-add-title" action="{{ route('user.virtuard-360.add-new-service') }}" method="POST">
         @csrf
+
+            <input type="hidden" name="page" value="">
+            <input type="hidden" name="wstep" value="">
 
             <div class="card p-4">
                 <div class="row">
@@ -21,7 +45,7 @@
                         </div>
                     </div>
                     <div class="col-md-2 p-0">
-                        <button class="btn btn-primary w-100">
+                        <button type="submit" class="btn btn-primary w-100">
                             Submit
                         </button>
                     </div>
@@ -118,19 +142,47 @@
 @endpush
 @push('js')
     <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                page: params.get('page'),
+                wstep: parseInt(params.get('wstep'), 10)
+            };
+        }
+
+        const { page, wstep } = getQueryParams();
+        
+        $(document).on('click', '.shepherd-header .shepherd-cancel-icon', function() {
+            const isCanceled = confirm('Are you sure you want to exit the tour creation wizard?');
+            if (isCanceled) {
+                window.location.href = '/user/virtuard-360/add';
+            }
+        });
+
+        const tour = new Shepherd.Tour({
+            useModalOverlay: true,
+            defaultStepOptions: {
+                cancelIcon: { 
+                    enabled: true,
+                },
+                classes: 'shadow-md bg-white',
+                scrollTo: { behavior: 'smooth', block: 'center' }
+            },
+        });
+
         function load360Tutorial() {
-            const tour = new Shepherd.Tour({
-                defaultStepOptions: {
-                    cancelIcon: {
-                        enabled: true
-                    },
-                    classes: 'shepherd-theme-dark',
-                    scrollTo: {
-                        behavior: 'smooth',
-                        block: 'center'
-                    }
-                }
-            });
+            // const tour = new Shepherd.Tour({
+            //     defaultStepOptions: {
+            //         cancelIcon: {
+            //             enabled: true
+            //         },
+            //         classes: 'shepherd-theme-dark',
+            //         scrollTo: {
+            //             behavior: 'smooth',
+            //             block: 'center'
+            //         }
+            //     }
+            // });
 
             tour.addStep({
                 title: 'Add 360 Images',
@@ -255,7 +307,57 @@
                 }
             });
         }
+
+        function load360WizardTutorial() {
+            tour.addStep({
+                id: 'step-2',
+                title: '2 - Creating a Title For Your Virtuard 360',
+                text: 'Type your virtuard title on the <b>Input Title</b>',
+                attachTo: {
+                    element: '#form-add-title input[name="title"]',
+                    on: 'bottom'
+                },
+                buttons: [
+                    {
+                        text: 'Next',
+                        action: function() {
+                            const titleInput = document.querySelector('#form-add-title input[name="title"]');
+                            if (titleInput && titleInput.value.trim() !== '') {
+                                tour.next();
+                            } else {
+                                alert('Please fill in the title before proceeding!');
+                            }
+                        }
+                    }
+                ]
+            });
+
+            tour.addStep({
+                id: 'step-3',
+                title: '3 - Creating a New Tour',
+                text: 'Click on button <b>Submit</b>',
+                attachTo: {
+                    element: '#form-add-title button[type="submit"]',
+                    on: 'right'
+                },
+                // buttons: [
+                //     {
+                //         text: 'Next',
+                //         action: tour.next()
+                //     }
+                // ]
+            });
+
+            tour.start();
+            tour.show(wstep);
+        }
         
+        if (page === 'add' && !isNaN(wstep)) {
+            $('#form-add-title input[name="page"]').val('edit');
+            $('#form-add-title input[name="wstep"]').val(3);
+            
+            load360WizardTutorial();
+        }
         @if(request()->has('id'))
             load360Tutorial();
         @endif

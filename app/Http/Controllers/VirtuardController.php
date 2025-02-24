@@ -96,6 +96,8 @@ class VirtuardController extends Controller
         $urlWithId = route('user.virtuard-360.edit', [
             'id' => $ipanorama->id,
             'user_id' => $idUser,
+            'page' => $request->input('page'),
+            'wstep' => $request->input('wstep'),
         ]);
         return redirect($urlWithId)->with('success', 'Insert successfully');
     }
@@ -104,31 +106,38 @@ class VirtuardController extends Controller
     public function addNewImageVirtuard360(Request $request)
     {
         $this->validate($request, [
-            'image' => 'required|mimes:jpeg,png,webp',
+            'images.*' => 'required|mimes:jpeg,png,webp',
         ]);
 
-        $proofImage = $request->file('image');
+        $proofImage = $request->file('images');
         $title = $request->input('title');
 
-        $path = "/ipanoramaBuilder/upload/" . $request['user_id'];
-        if ($proofImage) {
-            $extension = $proofImage->getClientOriginalExtension();
-            $newFileName = Str::slug($title) . '.' . $extension;
-            $filePath = $path . '/' . $newFileName;
-            
-            // if ($extension == 'webp') {
-                $proofImage->storeAs($path, $newFileName);
-            // } else {
-            //     $newFileName = Str::slug($title) . '.webp';
-            //     $filePath = $path . '/' . $newFileName;
+        foreach($proofImage as $image){
+            $path = "/ipanoramaBuilder/upload/" . $request['user_id'] . "/" . $request->panorama_id;
+            if ($image) {
+                // $extension = $image->getClientOriginalExtension();
+                $newFileName = now()->format('ymd') . '-' . $request->panorama_id . '-' . $request->user_id . '-' . $image->getClientOriginalName();
+                // $filePath = $path . '/' . $newFileName;
                 
-            //     $img = Image::make($proofImage);
-            //     $img->save(Storage::disk('uploads')->path($filePath));
-            // }
+                // if ($extension == 'webp') {
+                    $image->storeAs($path, $newFileName);
+                // } else {
+                //     $newFileName = Str::slug($title) . '.webp';
+                //     $filePath = $path . '/' . $newFileName;
+                    
+                //     $img = Image::make($proofImage);
+                //     $img->save(Storage::disk('uploads')->path($filePath));
+                // }
 
+            }
         }
-
-        return back()->with('success', 'Insert successfully');
+        
+        return redirect()->route('user.virtuard-360.edit', [
+            'id' => $request->panorama_id, 
+            'user_id' => $request->user_id,
+            'page' => $request->page ? $request->page : '',
+            'wstep' => $request->wstep ? $request->wstep+1 : ''
+        ])->with('success', 'Insert successfully');
     }
 
     public function vendorVirtuardAddApi(Request $request)

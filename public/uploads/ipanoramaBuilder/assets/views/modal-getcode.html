@@ -60,7 +60,7 @@ $(document).ready(function() {
 			</div>
 		</div>
 		<div class="ipnrm-ui-modal-footer">
-			<div class="ipnrm-ui-modal-btn" onclick="submitData()">Submit</div>
+			<div class="ipnrm-ui-modal-btn submit-panorama-btn" onclick="submitData()">Submit</div>
 			<div class="ipnrm-ui-modal-btn ipnrm-ui-modal-btn-close" x-ng-click="modalData.deferred.resolve('close');">Close</div>
 		</div>
 	</div>
@@ -108,6 +108,16 @@ $(document).ready(function() {
 			Swal.fire('Saved!', '', 'success');
             setTimeout(() => {
                 Swal.close();
+				$("#popup-step-23").addClass("active").parent().addClass("active-step")
+				// const currentUrl = new URL(window.location.href);
+				// const params = new URLSearchParams(currentURL.search);
+
+				// params.delete('page');
+				// params.delete('wstep');
+
+				// currentUrl.search = params.toString();
+
+				// window.location.href = currentUrl.toString();
             }, 1500);
 		})
 		.catch(function(error) {

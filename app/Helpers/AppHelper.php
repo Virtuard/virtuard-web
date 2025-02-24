@@ -1489,7 +1489,7 @@ if (!function_exists('getThumbPanorama')) {
         $json_data = json_decode($data->json_data);
         $filename = $json_data->config->scenes[0]->config->imageFront->url ?? '';
         if($filename != '') {
-            $result = "/uploads/ipanoramaBuilder/upload/$data->user_id/$filename";
+            $result = "/uploads/ipanoramaBuilder/upload/$data->user_id/$data->id/$filename";
         }
         return $result;
     }

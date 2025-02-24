@@ -1,4 +1,22 @@
 @extends('layouts.user')
+
+@push('css')
+    <style>
+        .shepherd-header {
+            background: none !important;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .shepherd-element {
+                max-width: 80%;
+                font-size: 14px;
+            }
+        }
+    </style>
+@endpush
+
 @section('content')
     <h2 class="title-bar no-border-bottom">
         Virtuard 360
@@ -8,7 +26,8 @@
     {{-- @if(auth()->user()->checkUserPlan()) --}}
         <div class="container">
             <div class="text-right mt-4">
-                <a class="btn btn-info btn-sm btn-add-item" href="{{ route('user.virtuard-360.add') }}"><i class="icon ion-ios-add-circle-outline"></i> Add 360 Image</a>
+                <a class="btn btn-warning btn-sm mr-2" href="{{ route('user.virtuard-360.index', ['page' => 'index', 'wstep' => '1']) }}"><i class="icon ion-ios-walk"></i> {{ __('Start Tour Creation Wizard') }}</a>
+                <a class="btn btn-info btn-sm btn-add-item" id="add-360-btn" href="{{ route('user.virtuard-360.add') }}"><i class="icon ion-ios-add-circle-outline"></i> Add 360 Image</a>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -57,3 +76,62 @@
         </div>
     {{-- @endif --}}
 @endsection
+
+@push('js')
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                page: params.get('page'),
+                wstep: parseInt(params.get('wstep'), 10)
+            };
+        }
+
+        const { page, wstep } = getQueryParams();
+
+        $(document).on('click', '.shepherd-header .shepherd-cancel-icon', function() {
+            const isCanceled = confirm('Are you sure you want to exit the tour creation wizard?');
+            if (isCanceled) {
+                window.location.href = '/user/virtuard-360';
+            }
+        });
+
+        if(page == 'index' && !isNaN(wstep)) {
+            $("#add-360-btn").attr('href', '/user/virtuard-360/add?page=add&wstep=2');
+        } else {
+            $("#add-360-btn").attr('href', '/user/virtuard-360/add');
+        }
+
+        const tour = new Shepherd.Tour({
+            useModalOverlay: true,
+            defaultStepOptions: {
+                cancelIcon: { 
+                    enabled: true,
+                },
+                classes: 'shadow-md bg-white',
+                scrollTo: { behavior: 'smooth', block: 'center' }
+            },
+        });
+
+        tour.addStep({
+            id: 'step-1',
+            title: '1 - Creating a New Tour',
+            text: 'Click on the button <b>Add 360 Image</b>',
+            attachTo: {
+                element: '#add-360-btn',
+                on: 'right'
+            },
+            // buttons: [
+            //     {
+            //         text: 'Next',
+            //         action: tour.next
+            //     }
+            // ]
+        });
+
+        if (page === 'index' && !isNaN(wstep)) {
+            tour.start();
+            tour.show(wstep);
+        }
+    </script>
+@endpush

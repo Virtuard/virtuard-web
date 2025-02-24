@@ -1,0 +1,11 @@
+LINES 784
+
+<div class="ipnrm-ui-control">
+    <div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set a hotspot image, otherwise the plugin uses a theme icon.</div></div>
+    <div class="ipnrm-ui-image" x-ng-class="{'ipnrm-ui-active': appData.hotspot.selected.config.image.url}" x-ng-click="appData.fn.selectImage(appData, appData.hotspot.selected.config.image);">
+            <div class="ipnrm-ui-image-data" x-ng-style="{'background-image': 'url(' + appData.fn.getImageUrl(appData, appData.hotspot.selected.config.image) + ')'}"></div>
+            <div class="ipnrm-ui-image-edit" x-ng-click="appData.fn.setImageUrlConfirm(appData, appData.hotspot.selected.config.image);$event.stopPropagation();"></div>
+            <div class="ipnrm-ui-image-clear" x-ng-click="appData.hotspot.selected.config.image.url=null;$event.stopPropagation();"></div>
+            <div class="ipnrm-ui-image-label">Image</div>
+        </div>
+</div>

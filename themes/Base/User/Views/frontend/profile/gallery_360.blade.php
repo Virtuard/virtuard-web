@@ -6,14 +6,19 @@
                 <div class="gallery-item">
                     {{-- Tombol Delete --}}
                     @if (auth()->check() && auth()->user()->id == $panorama->user_id)
-                        <form action="{{ route('post.destroy', $panorama->id) }}" method="POST"
+                        {{-- <form action="{{ route('post.destroy', $panorama->id) }}" method="POST"
                             class="delete-btn-wrapper">
                             @csrf
                             @method('delete')
                             <button type="submit" class="delete-btn">
                                 <i class="fa fa-trash"></i>
                             </button>
-                        </form>
+                        </form> --}}
+                        <a href="{{ route("user.virtuard-360.bulk_edit",[$panorama->id,'action' => "make-hide"]) }}" class="delete-btn-wrapper">
+                            <button class="delete-btn">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </a>
                     @endif
 
                     <a class="preview-panorama cursor-pointer" data-id="{{ $panorama->id }}"

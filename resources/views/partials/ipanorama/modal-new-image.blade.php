@@ -12,20 +12,24 @@
                 enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
+                    <input type="hidden" name="panorama_id" value="{{ $panorama->id }}">
                     <input type="hidden" name="user_id" value="{{ $user_id }}">
+                    <input type="hidden" name="page" value="edit">
+                    <input type="hidden" name="wstep" value="3">
+                    
                     <div class="form-group title-image">
                         <label>Title</label>
-                        <input type="text" name="title" class="form-control" required>
+                        <input type="text" id="image-title" name="title" class="form-control" required>
                     </div>
                     <div class="form-group">
-                        <label>Image</label>
-                        <input type="file" name="image" class="form-control-file" id="image" accept="image/jpeg, image/png, image/webp" required>
+                        <label>Upload Images (can upload multiple images)</label>
+                        <input type="file" multiple id="image-files" name="images[]" class="form-control-file" id="image" accept="image/jpeg, image/png, image/webp" required>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal"
                         id="modal-close">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" id="image-submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>

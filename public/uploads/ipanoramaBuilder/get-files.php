@@ -10,8 +10,10 @@
 // settings
 $directory = 'upload';
 $user_id = $_GET['user_id'];
+$panorama_id = $_GET['id'];
+
 if ($user_id) {
-    $directory = "upload/$user_id";
+  $directory = "upload/$user_id/$panorama_id";
 }
 $result = array();
 
