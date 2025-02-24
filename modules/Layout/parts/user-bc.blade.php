@@ -2,23 +2,24 @@
 [$notifications,$countUnread] = getNotify();
 
 ?>
-@if(!empty($breadcrumbs))
 <div class="breadcrumb-page-bar" aria-label="breadcrumb">
     <ul class="page-breadcrumb">
         <li class="">
             <a href="{{url('/')}}"><i class='fa fa-home'></i> {{__('Home')}}</a>
             <i class="fa fa-angle-right"></i>
         </li>
-        @foreach($breadcrumbs as $breadcrumb)
-            <li class=" {{$breadcrumb['class'] ?? ''}}">
-                @if(!empty($breadcrumb['url']))
-                    <a href="{{ $breadcrumb['url'] }}">{{$breadcrumb['name']}}</a>
-                    <i class="fa fa-angle-right"></i>
-                @else
-                    {{$breadcrumb['name']}}
-                @endif
-            </li>
-        @endforeach
+        @if(!empty($breadcrumbs))
+            @foreach($breadcrumbs as $breadcrumb)
+                <li class=" {{$breadcrumb['class'] ?? ''}}">
+                    @if(!empty($breadcrumb['url']))
+                        <a href="{{ $breadcrumb['url'] }}">{{$breadcrumb['name']}}</a>
+                        <i class="fa fa-angle-right"></i>
+                    @else
+                        {{$breadcrumb['name']}}
+                    @endif
+                </li>
+            @endforeach
+        @endif
     </ul>
     <div class="dropdown dropdown-notifications float-right" style="min-width: 0">
         <a data-toggle="dropdown" class="user-dropdown d-flex align-items-center" aria-haspopup="true" aria-expanded="false">
@@ -87,4 +88,3 @@
         <i class="icofont-settings"></i>
     </div>
 </div>
-@endif

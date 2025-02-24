@@ -119,62 +119,80 @@
 			bottom: -70%;
 		}
 		#popup-step-9,
-		#popup-step-15 {
+		#popup-step-14 {
 			right: -290px;
 			bottom: -30px !important;
 		}
-		#popup-step-10 {
+		#popup-step-10,
+		#popup-step-15 {
 			right: 200px;
-			bottom: -110px;
+			bottom: -150px;
 		}
-		#popup-step-11 {
+		#popup-step-11,
+		#popup-step-16 {
 			left: 100px;
 			right: 100px;
 			bottom: 0;
 		}
-		#popup-step-11.popup.left::before {
+		#popup-step-11.popup.left::before,
+		#popup-step-16.popup.left::before {
 			top: 50%;
 			left: -10px;
 			margin-left: -15px;
 			margin-top: -15px;
 		}
 		#popup-step-12,
-		#popup-step-17,
-		#popup-step-19 {
+		#popup-step-17 {
 			right: 30%;
 			bottom: -90px;
 		}
-		#popup-step-18,
-		#popup-step-21 {
-			right: 30%;
-			bottom: -110px;
+		#popup-step-19 {
+			right: -200px;
+			bottom: -20px;
 		}
-		#popup-step-20,
+		/* #popup-step-18, */
 		#popup-step-21 {
-			right: 40%;
-			bottom: -140px;
+			width: 100%;
+			right: -280px;
+			bottom: -40px;
 		}
-		#popup-step-21 {
-			left: -20%;
-		}
-		#popup-step-13 {
+		#popup-step-13,
+		#popup-step-18 {
 			right: 30%;
 			top: -150px;
 			height: 180%;
 		}
-		#popup-step-14 {
-			right: -200px;
+		#popup-step-22,
+		#popup-step-23,
+		#popup-step-24,
+		#popup-step-25 {
+			right: 40%;
+			bottom: -100px;
+		}
+		#popup-step-23,
+		#popup-step-25 {
+			bottom: -140px;
+		}
+
+		#popup-step-26 {
+			right: 40%;
+			bottom: -140px;
+		}
+
+		#popup-step-20 {
+			bottom: -30px;
+			right: -300px;
+		}
+		#popup-step-27 {
+			width: 250px;
 			bottom: -20px;
+			/* left: 130px; */
+			/* right: -20%; */
 		}
-		#popup-step-16 {
-			right: -190px;
-		}
-		#popup-step-22 {
-			bottom: -20px;
-		}
-		#popup-step-23 {
+		#popup-step-28 {
+			width: 250px;
 			bottom: -55px;
-			left: 130px;
+			right: 80px;
 		}
 		.popup.left::before {
 			content: "";
@@ -215,10 +233,15 @@
 		#popup-step-8.popup.left::before,
 		#popup-step-9.popup.left::before,
 		#popup-step-14.popup.left::before,
-		#popup-step-15.popup.left::before,
-		#popup-step-16.popup.left::before,
+		/* #popup-step-18.popup.left::before, */
+		#popup-step-19.popup.left::before,
+		#popup-step-20.popup.left::before,
+		#popup-step-21.popup.left::before,
 		#popup-step-22.popup.left::before,
-		#popup-step-23.popup.left::before {
+		#popup-step-23.popup.left::before,
+		#popup-step-26.popup.left::before,
+		#popup-step-27.popup.left::before,
+		#popup-step-28.popup.left::before {
 			content: "";
 			position: absolute;
 			top: 40%;
@@ -249,6 +272,13 @@
 					<button>Next</button>	
 				</div>
 			</div>
+			<div id="popup-step-17" class="popup top">
+				<h4>17 - Set Yaw and Pitch Scene</h4>
+				<p>Click image and drag to set your image position</p>
+				<div style="display: flex; justify-content: flex-end;">
+					<button>Next</button>	
+				</div>
+			</div>
 		</div>
 		<div id="ipnrm-ui-tabs">
 			<div class="ipnrm-ui-tab" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.general.isActive}" x-tab-panel-item x-id="general" x-init="appData.fn.tabPanelItemInit"><i class="fa fa-fw fa-cog"></i>General</div>
@@ -264,26 +294,30 @@
 			<div class="ipnrm-ui-tab tab-hotspots" style="position: relative;" x-ng-class="{'ipnrm-ui-active': appData.config.tabPanel.hotspots.isActive, 'ipnrm-ui-hide': !appData.scene.selected}" x-tab-panel-item x-id="hotspots" x-init="appData.fn.tabPanelItemInit">
 				<i class="fa fa-fw fa-dot-circle-o"></i>Hotspots<div class="ipnrm-ui-label">{{appData.scene.selected.config.hotspots.length}}
 				</div>
-				<div id="popup-step-14" class="popup left">
-					<h4>14 - Open Hotspots</h4>
+				<div id="popup-step-19" class="popup left">
+					<h4>19 - Open Hotspots</h4>
 					<p>Click tab <b>Hotspots</b></p>
 				</div>
 			</div>
             <div id="iprm-ui-tabs-separator"></div>
-			<div class="preview-btn" style="position: relative;">
+			<div style="position: relative;">
 				<div class="ipnrm-ui-cmd-preview preview-btn" style="position: absolute; top: -35px;" x-ng-click="appData.fn.preview(appData);">
-				Preview
-				<div id="popup-step-23" class="popup left">
-					<h4>23 - Preview Virtual Tour</h4>
-					<p>Click <b>Preview</b> button to show the virtual tour you have made it.</p>
+					Preview
 				</div>
-			</div></div>
+				<div id="popup-step-28" class="popup left">
+					<h4>28 - Preview Virtual Tour</h4>
+					<p>Click <b>Preview</b> button to show the virtual tour you have made it.</p>
+					<div style="display: flex; justify-content: flex-end;">
+						<button class="close-btn">Close</button>
+					</div>
+				</div>
+			</div>
 			<div class="save-button" style="position: relative;">
 				<div class="ipnrm-ui-cmd-getcode" style="position: absolute; top: -35px;" x-ng-click="appData.fn.getCode(appData, appData.config, false);">
 					Save
 				</div>
-				<div id="popup-step-22" class="popup left">
-					<h4>22 - Save Project</h4>
+				<div id="popup-step-27" class="popup left">
+					<h4>27 - Save Project</h4>
 					<p>After your setting the all scenes and hotspots, click <b>Save</b> button</p>
 				</div>
 			</div>
@@ -691,6 +725,10 @@
 								<h4>9 - Open Scenes</h4>
 								<p>Click add button <b>"+"</b> to open scenes form</p>
 							</div>
+							<div id="popup-step-14" class="popup left">
+								<h4>14 - Create Second Scenes</h4>
+								<p>Click add button <b>"+"</b> to open scenes form</p>
+							</div>
 						</div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.scenes.copySelected(appData)"><i class="fa fa-fw fa-clone"></i></div>
 						<div class="ipnrm-ui-item-command" x-ng-click="appData.fn.scenes.upSelected(appData)"><i class="fa fa-fw fa-arrow-up"></i></div>
@@ -719,6 +757,13 @@
 									<input class="ipnrm-ui-text ipnrm-ui-long" type="text" placeholder="Scene title" x-ng-model="appData.scene.selected.config.title">
 									<div id="popup-step-10" class="popup top">
 										<h4>10 - Set Scenes</h4>
+										<p>Type the title for the scene</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>
+										</div>
+									</div>
+									<div id="popup-step-15" class="popup top">
+										<h4>15 - Create Second Scenes</h4>
 										<p>Type the title for the scene</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button>Next</button>
@@ -761,7 +806,7 @@
 								</div>
 								
 								<div class="ipnrm-ui-control" style="position: relative;">
-									<div class="ipnrm-ui-image upload-scene-image" x-ng-class="{'ipnrm-ui-active': appData.scene.selected.config.imageFront.url}" x-ng-click="appData.fn.selectImage(appData, appData.scene.selected.config.imageFront);">
+									<div class="ipnrm-ui-image upload-scene-image upload-scene-image-2 " x-ng-class="{'ipnrm-ui-active': appData.scene.selected.config.imageFront.url}" x-ng-click="appData.fn.selectImage(appData, appData.scene.selected.config.imageFront);">
 										<div class="ipnrm-ui-image-data" x-ng-style="{'background-image': 'url(' + appData.fn.getImageUrl(appData, appData.scene.selected.config.imageFront) + ')'}"></div>
 										<div class="ipnrm-ui-image-edit" x-ng-click="appData.fn.setImageUrlConfirm(appData, appData.scene.selected.config.imageFront);$event.stopPropagation();"></div>
 										<div class="ipnrm-ui-image-clear" x-ng-click="appData.scene.selected.config.imageFront.url=null;$event.stopPropagation();"></div>
@@ -770,6 +815,14 @@
 									
 									<div id="popup-step-11" class="popup left">
 										<h4>11 - Set Scenes</h4>
+										<p>Select the image for the scene</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>
+										</div>
+									</div>
+
+									<div id="popup-step-16" class="popup left">
+										<h4>16 - Set Second Scenes</h4>
 										<p>Select the image for the scene</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button>Next</button>
@@ -921,6 +974,13 @@
 											<button>Next</button>	
 										</div>
 									</div>
+									<div id="popup-step-18" class="popup bottom">
+										<h4>18 - Set Yaw and Pitch Scene</h4>
+										<p>Click arrow button to copy coordinat "Yaw" and "Pitch"</p>
+										<div style="display: flex; justify-content: flex-end;">
+											<button>Next</button>	
+										</div>
+									</div>
 								</div>
 								
 								<div class="ipnrm-ui-control">
@@ -947,8 +1007,8 @@
 					<div class="ipnrm-ui-item-commands">
 						<div class="ipnrm-ui-item-command add-hotspot-button" style="position: relative;" x-ng-click="appData.fn.hotspots.add(appData)">
 							<i class="fa fa-fw fa-plus-square"></i>
-							<div id="popup-step-15" class="popup left">
-								<h4>15 - Set Hotspots</h4>
+							<div id="popup-step-20" class="popup left">
+								<h4>20 - Set Hotspots</h4>
 								<p>Click add button <b>"+"</b> to open hotspots form</p>
 							</div>
 						</div>
@@ -963,8 +1023,8 @@
 							<span class="ipnrm-ui-name">{{hotspot.id}}<span x-ng-if="hotspot.config.title"> | <i>{{hotspot.config.title}}</i></sapn></span>
 							<span class="ipnrm-ui-visible" x-ng-click="hotspot.isVisible=!hotspot.isVisible;appData.hotspot.dirty=true" x-ng-class="{'ipnrm-ui-off': !hotspot.isVisible}"></span>
 						</li>
-						<div id="popup-step-16" class="popup left">
-							<h4>16 - Open Hotspots</h4>
+						<div id="popup-step-21" class="popup left">
+							<h4>21 - Open Hotspots</h4>
 							<p>Select scene</p>
 							<div style="display: flex; justify-content: flex-end;">
 								<button>Next</button>	
@@ -992,8 +1052,8 @@
 								<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set a hotspot location.</div></div>
 								<div class="ipnrm-ui-title">Hotspot Location</div>
 								<div class="ipnrm-ui-state"></div>
-								<div id="popup-step-17" class="popup top">
-									<h4>17 - Set Hotspots</h4>
+								<div id="popup-step-22" class="popup top">
+									<h4>22 - Set Hotspots</h4>
 									<p>Expand the <b>Hotspot Location</b> accordion</p>
 								</div>
 							</div>
@@ -1014,8 +1074,8 @@
 										</div>
 									</div>
 
-									<div id="popup-step-18" class="popup top active">
-										<h4>18 - Set Hotspots</h4>
+									<div id="popup-step-23" class="popup top active">
+										<h4>23 - Set Hotspots</h4>
 										<p>Set <b>Yaw</b> and <b>Pitch</b> to get the position of hotspot</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button>Next</button>	
@@ -1030,8 +1090,8 @@
 								<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set common hotspot settings.</div></div>
 								<div class="ipnrm-ui-title">Hotspot Settings</div>
 								<div class="ipnrm-ui-state"></div>
-								<div id="popup-step-19" class="popup top">
-									<h4>19 - Set Hotspots</h4>
+								<div id="popup-step-24" class="popup top">
+									<h4>24 - Set Hotspots</h4>
 									<p>Expand the <b>Hotspot Settings</b> accordion</p>
 								</div>
 							</div>
@@ -1039,8 +1099,8 @@
 								<div class="ipnrm-ui-control" style="position: relative;">
 									<div class="ipnrm-ui-helper"><div class="ipnrm-ui-tooltip">Set title for selected hotspot.</div></div>
 									<input class="ipnrm-ui-text ipnrm-ui-long" type="text" placeholder="Hotspot title" x-ng-model="appData.hotspot.selected.config.title" x-ng-change="appData.hotspot.dirty=true">
-									<div id="popup-step-20" class="popup top">
-										<h4>20 - Set Hotspots</h4>
+									<div id="popup-step-25" class="popup top">
+										<h4>25 - Set Hotspots</h4>
 										<p>Type the title for hotspot</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button>Next</button>	
@@ -1055,8 +1115,8 @@
 										<option x-ng-repeat="scene in appData.config.scenes track by scene.id" value="{{appData.fn.getSceneKeyById(scene.id)}}">{{scene.id}} {{appData.fn.trunc(scene.config.title, 25)}}</option>
 									</select>
 									<div class="ipnrm-ui-label">Go to the scene</div>
-									<div id="popup-step-21" class="popup top">
-										<h4>21 - Set Hotspots</h4>
+									<div id="popup-step-26" class="popup top">
+										<h4>26 - Set Hotspots</h4>
 										<p>Select the target of scene</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button>Next</button>	
@@ -1231,8 +1291,13 @@
 		})
 
 		$(".add-scene-button").click(function() {
-			$("#popup-step-9").removeClass("active").parent().removeClass("active-step")
-			$("#popup-step-10").addClass("active").parent().addClass("active-step")
+			if($("#popup-step-9").hasClass("active")) {
+				$("#popup-step-9").removeClass("active").parent().removeClass("active-step")
+				$("#popup-step-10").addClass("active").parent().addClass("active-step")
+			} else if($("#popup-step-14").hasClass("active")) {
+				$("#popup-step-14").removeClass("active").parent().removeClass("active-step")
+				$("#popup-step-15").addClass("active").parent().addClass("active-step")
+			}
 		})
 
 		$("#popup-step-10 button").click(function() {
@@ -1256,14 +1321,15 @@
 			$("#popup-step-14").addClass("active").parent().addClass("active-step")
 		})
 
-		$(".tab-hotspots").click(function() {
+		$(".add-scene-button-2").click(function() {
 			$("#popup-step-14").removeClass("active").parent().removeClass("active-step")
 			$("#popup-step-15").addClass("active").parent().addClass("active-step")
 		})
 
-		$(".add-hotspot-button").click(function() {
+		$("#popup-step-15 button").click(function() {
 			$("#popup-step-15").removeClass("active").parent().removeClass("active-step")
-			$("#popup-step-16").addClass("active").parent().addClass("active-step")
+			$("#popup-step-16").addClass("active")
+			$(".upload-scene-image-2").addClass("active-step")
 		})
 
 		$("#popup-step-16 button").click(function() {
@@ -1271,22 +1337,22 @@
 			$("#popup-step-17").addClass("active").parent().addClass("active-step")
 		})
 
-		$(".accordion-hotspot-location").click(function() {
+		$("#popup-step-17 button").click(function() {
 			$("#popup-step-17").removeClass("active").parent().removeClass("active-step")
 			$("#popup-step-18").addClass("active").parent().addClass("active-step")
 		})
-		
+
 		$("#popup-step-18 button").click(function() {
 			$("#popup-step-18").removeClass("active").parent().removeClass("active-step")
 			$("#popup-step-19").addClass("active").parent().addClass("active-step")
 		})
 
-		$(".accordion-hotspot-settings").click(function() {
+		$(".tab-hotspots").click(function() {
 			$("#popup-step-19").removeClass("active").parent().removeClass("active-step")
 			$("#popup-step-20").addClass("active").parent().addClass("active-step")
 		})
 
-		$("#popup-step-20 button").click(function() {
+		$(".add-hotspot-button").click(function() {
 			$("#popup-step-20").removeClass("active").parent().removeClass("active-step")
 			$("#popup-step-21").addClass("active").parent().addClass("active-step")
 		})
@@ -1296,8 +1362,33 @@
 			$("#popup-step-22").addClass("active").parent().addClass("active-step")
 		})
 
-		$(".save-button").click(function() {
+		$(".accordion-hotspot-location").click(function() {
 			$("#popup-step-22").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-23").addClass("active").parent().addClass("active-step")
+		})
+		
+		$("#popup-step-23 button").click(function() {
+			$("#popup-step-23").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-24").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".accordion-hotspot-settings").click(function() {
+			$("#popup-step-24").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-25").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-25 button").click(function() {
+			$("#popup-step-25").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-26").addClass("active").parent().addClass("active-step")
+		})
+
+		$("#popup-step-26 button").click(function() {
+			$("#popup-step-26").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-27").addClass("active").parent().addClass("active-step")
+		})
+
+		$(".save-button").click(function() {
+			$("#popup-step-27").removeClass("active").parent().removeClass("active-step")
 		})
 
 		/* $(".submit-panorama-btn").click(function() {
@@ -1305,7 +1396,12 @@
 		}) */
 
 		$(".preview-btn").click(function() {
-			$("#popup-step-23").removeClass("active").parent().removeClass("active-step")
+			$("#popup-step-28").removeClass("active").parent().removeClass("active-step")
+			$("#overlay").removeClass("active")
+		})
+
+		$(".close-btn").click(function() {
+			$("#popup-step-28").removeClass("active").parent().removeClass("active-step")
 			$("#overlay").removeClass("active")
 		})
 	}
