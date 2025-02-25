@@ -48,8 +48,8 @@
         @endif
     </div>
 
-    <input type="hidden" id="data-panorama" data-code="{{ $get_hotel->ipanorama->code }}"
-    data-user_id="{{ $get_hotel->ipanorama->user_id }}">
+    <input type="hidden" id="data-panorama" data-code="{{ $get_panorama->code }}"
+    data-user_id="{{ $get_panorama->user_id }}">
 
     <div id="mypanorama" class="mypanorama-preview"></div>
 </div>

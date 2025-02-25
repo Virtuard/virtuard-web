@@ -43,8 +43,8 @@
 
             {{-- Ipanorama preview --}}
             <div>
-                <input type="hidden" id="data-panorama2" data-code="{{ $get_hotel->ipanorama->code }}"
-                data-user_id="{{ $get_hotel->ipanorama->user_id }}">
+                <input type="hidden" id="data-panorama2" data-code="{{ $get_panorama->code }}"
+                data-user_id="{{ $get_panorama->user_id }}">
         
                 <div id="mypanorama2" class="mypanorama-preview"></div>
             </div>

@@ -1,6 +1,7 @@
 <?php
 namespace Modules\Template\Blocks;
 
+use App\Models\Ipanorama;
 use Modules\Flight\Models\SeatType;
 use Modules\Hotel\Models\Hotel;
 use Modules\Template\Blocks\BaseBlock;
@@ -129,7 +130,16 @@ class FormSearchAllService extends BaseBlock
         $model['list_slider'] = $model['list_slider'] ?? "";
         $model['modelBlock'] = $model;
         $model['seatType'] =  SeatType::get();
-        $model['get_hotel'] = Hotel::where('ipanorama_id', '!=', null)->orderByDesc('review_score')->first();
+
+        $get_panorama = Ipanorama::find(174);
+        
+        if(isset($get_panorama)){
+            $model['get_panorama'] = $get_panorama;
+        } else {
+            // $model['get_panorama'] = Hotel::where('ipanorama_id', '!=', null)->orderByDesc('review_score')->first();
+            $model['get_panorama'] = Ipanorama::where('status', 'publish')->first();
+        }
+        
         $model['all_panorama_hotels'] = Hotel::where('ipanorama_id', '!=', null)
                                             ->where('ipanorama_id', '!=', 0)
                                             ->orderByDesc('review_score')
