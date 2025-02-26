@@ -14,8 +14,8 @@
                 <div class="modal-body">
                     <input type="hidden" name="panorama_id" value="{{ $panorama->id }}">
                     <input type="hidden" name="user_id" value="{{ $user_id }}">
-                    <input type="hidden" name="page" value="edit">
-                    <input type="hidden" name="wstep" value="3">
+                    <input type="hidden" name="page" value="{{ request('page') }}">
+                    <input type="hidden" name="wstep" value="{{ request('wstep') }}">
                     
                     <div class="form-group title-image">
                         <label>Title</label>
