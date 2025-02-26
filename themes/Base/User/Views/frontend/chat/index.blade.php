@@ -10,5 +10,5 @@
         </a>
     @endif
 </div>
-    <iframe id="chat-iframe" width="100%" style="height: 80vh" src="{{route(config('chatify.path'),['user_id'=>request('user_id')])}}" frameborder="0"></iframe>
+    <iframe id="chat-iframe" width="100%" style="height: 85vh" src="{{route(config('chatify.path'),['user_id'=>request('user_id')])}}" frameborder="0"></iframe>
 @endsection
