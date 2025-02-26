@@ -400,6 +400,234 @@
                             {{ $posts->links() }}
                         </div>
                     </div>
+                    <div id="content_virtual_tour_post" style="display: none;">
+                        @foreach ($panorama_posts as $post)
+                            <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
+                                <div style="display: flex; align-items: center;">
+                                    <img loading='lazy'class="mr-4"
+                                        src="{{ $post->user->getAvatarUrl() }}"
+                                        style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
+                                        alt="">
+                                    <div>
+                                        <a href="{{ route('user.profile', $post->user_id) }}">
+                                            <p class="m-0" style="font-weight: 600;">
+                                                {{ $post->user->name }}
+                                            </p>
+                                        </a>
+                                        <p class="m-0" style="font-size: 0.7rem; font-weight: 500; color: #9b9b9b;">
+                                            {{ $post->created_at->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <hr>
+
+                                @php
+                                    $galleries = $post->medias->where('type', 'image');
+                                    $videos = $post->medias->where('type', 'video');
+                                @endphp
+
+                            @if ($post->ipanorama && $post->ipanorama->status == 'publish')
+                            {{-- @dd($post->ipanorama) --}}
+                                <div class="card-file">
+                                        <div class="g-ipanorama">
+                                            <img loading='lazy'id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 
+                                            class="thumb-panorama preview-panorama cursor-pointer"
+                                            data-id="{{ $post->ipanorama->id }}"  data-code="{{ $post->ipanorama->code }}"
+                                            data-user_id="{{ $post->ipanorama->user_id }}"
+                                            >
+                                        </div>
+                                </div>
+
+                                <div class="section-modal">
+                                    @include('vendor.ipanorama.demo.includes.ipanorama-modal')
+                                </div>
+                            @endif      
+
+                                @if(count($galleries) > 0)
+                                <div class="g-gallery">
+                                    <div class="fotorama" data-width="100%" data-thumbwidth="135" data-thumbheight="135" data-thumbmargin="15" data-nav="thumbs" data-allowfullscreen="true">
+                                        @foreach($galleries as $img)
+                                            <a href="{{url('uploads/'.$img['media'])}}" data-thumb="{{url('uploads/'.$img['media'])}}" data-alt="{{ __("Media") }}"></a>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
+                                                              
+
+                                @if(count($videos) > 0)
+                                <div class="card-file">
+                                    <div class="g-video">
+                                        @foreach ($videos as $vid)
+                                            <video controls>
+                                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/mp4">
+                                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/ogg">
+                                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/mkv">
+                                            </video>
+                                        @endforeach
+                                    </div>
+                                </div>
+                                @endif
+
+                                <p class="mt-3" style="font-size: 0.9rem; font-weight: 500; color: #9b9b9b;">
+                                    {{ $post->message }}
+                                </p>
+                                <hr>
+                                @php
+                                    $comments = $post->comments;
+                                @endphp
+                                {{-- COMMENT --}}
+                                @if ($comments->count() > 0)
+                                    <div class="w-100 mt-3"
+                                        style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                                        @foreach ($comments as $comment)
+                                            <div style="display: flex; align-items: center;">
+                                                <img loading='lazy'class="mr-4"
+                                                    src="{{ $comment->user->getAvatarUrl() }}"
+                                                    style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
+                                                    alt="">
+                                                <div>
+                                                    <a href="{{ route('user.profile', $comment->user_id) }}">
+                                                    <p class="m-0" style="font-weight: 600;">
+                                                        {{ $comment->user->name }}
+                                                    </p>
+                                                    </a>
+                                                    <p class="m-0"
+                                                        style="font-size: 0.7rem; font-weight: 500; color: #9b9b9b;">
+                                                        {{ $comment->created_at->diffForHumans() }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <hr>
+
+                                            <p class="mt-3"
+                                                style="
+                                            font-size: 0.9rem;
+                                            font-weight: 500;
+                                            color: #9b9b9b;
+                                        ">
+                                                {{ $comment->comment }}
+                                            </p>
+                                            <hr />
+                                        @endforeach
+                                    </div>
+                                @endif
+                                {{-- END COMMENT --}}
+                                
+                                <div class="d-flex mt-4">
+                                    <div class="d-flex">
+                                        <img loading='lazy'src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                            style="width: 20px; height: 20px; object-fit: cover; border-radius: 100px;"
+                                            alt="">
+                                        <img loading='lazy'src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                            style="width: 20px; height: 20px; object-fit: cover; border-radius: 100px;margin-left: -5px;">
+                                    </div>
+
+                                    <p class="m-0 ml-2" style="color: #9b9b9b;">and
+                                        {{ $post->likes->count() }} Like This</p>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-around align-items-center">
+                                    @php
+                                        $liked = \App\Models\PostLike::where('post_id', $post->id)->where('user_id', Auth::id());
+                                    @endphp
+
+                                    @auth
+                                        @if ($liked->count() > 0)
+                                            <a href="{{ route('post.like', ['id' => $post->id]) }}"
+                                                class="cursor-pointer" style="color: pink;">
+                                                <i class="fa fa-heart"></i> Liked
+                                            </a>
+                                        @else
+                                            <a href="{{ route('post.like', ['id' => $post->id]) }}"
+                                                class="cursor-pointer" style="color: #9b9b9b;">
+                                                <i class="fa fa-heart-o"></i> Like
+                                            </a>
+                                        @endif
+                                    @else
+                                        @if ($liked->count() > 0)
+                                            <a class="cursor-pointer" style="color: pink;" onclick="alert('You need to login to like this post');">
+                                                <i class="fa fa-heart"></i> Liked
+                                            </a>
+                                        @else
+                                            <a class="cursor-pointer" style="color: #9b9b9b;" onclick="alert('You need to login to like this post');">
+                                                <i class="fa fa-heart-o"></i> Like
+                                            </a>
+                                        @endif
+                                    @endauth
+                                    <a class="cursor-pointer" style="color: #9b9b9b;"
+                                        onclick="toggleCommentInput({{ $post->id }})"><i
+                                            class="fa fa-commenting-o"></i>
+                                        Comment</a>
+                                    <div class="btn-group">
+                                        <button type="button" class="btn" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false" style="color: #9b9b9b;">
+                                            <i class="fa fa-share-square-o"></i> Share
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item"
+                                                href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url(route('post.index').'#Post-'.$post->id)) }}"
+                                                target="_blank">
+                                                <i class="fa fa-facebook"></i> Facebook
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="https://api.whatsapp.com/send?text={{ urlencode(route('post.index') . '#Post-' . $post->id)}}"
+                                                target="_blank">
+                                                <i class="fa fa-whatsapp"></i> Whatsapp
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="https://www.instagram.com/sharer/sharer.php?u={{ urlencode(url(route('post.index').'#Post-'.$post->id)) }}"
+                                                target="_blank">
+                                                <i class="fa fa-instagram"></i> Instagram
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="https://www.x.com/intent/post?url={{ urlencode(url(route('post.index').'#Post-'.$post->id)) }}"
+                                                target="_blank">
+                                                <i class="fa fa-times"></i> X
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    @if(auth()->check() && auth()->user()->id == $post->user_id)
+                                        <form action="{{ route('post.destroy', $post->id) }}" class="mb-0" method="POST">
+                                            @csrf
+                                            @method('delete')
+                                                <button type="submit" class="cursor-pointer" style="color: red; border: 0; background: unset;">
+                                                    <i class="fa fa-trash"></i> Delete
+                                                </button>
+                                        </form>
+                                    @endif
+
+                                </div>
+                                @auth
+                                    <div id="commentInput_{{ $post->id }}" style="display:none;" class="mt-2">
+                                        <form action="{{ route('post.comment.store', ['id' => $post->id]) }}" method="POST">
+                                            @csrf
+                                            <div class="form-group" style="display: flex;">
+                                                <textarea class="form-control" name="comment" placeholder="Write your comment here" rows="3"
+                                                    style="flex: 1;"></textarea>
+                                                <button type="submit" class="btn btn-primary btn-submit">Comment</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @else
+                                    <div id="commentInput_{{ $post->id }}" style="display:none;" class="mt-2">
+                                        <form id="commentForm">
+                                            <div class="form-group" style="display: flex;">
+                                                <textarea class="form-control" name="comment" rows="3" style="flex: 1;"
+                                                    placeholder="You need to log in to comment" disabled></textarea>
+                                                <button type="button" class="btn btn-primary" onclick="submitComment()"
+                                                    disabled>Comment</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                @endauth
+                            </div>
+                        @endforeach
+
+                        <div>
+                            {{ $panorama_posts->links() }}
+                        </div>
+                    </div>
                     <div id="content_feed_post" class="w-100 mt-3"
                         style="background: #FFF; border-radius: 8px; display: none; padding: 23px 35px;">
                         <div class="grid-container">
@@ -445,7 +673,7 @@
                         </div>
                     </div>
                     <hr class="mx-4"> --}}
-                    <div class="w-100" onclick="feedShow()" id="feed_post"
+                    <div class="w-100 mb-2" onclick="feedShow()" id="feed_post"
                         style="cursor: pointer; background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div>
                             <p class="m-0">
@@ -454,7 +682,16 @@
                             </p>
                         </div>
                     </div>
-                    <div class="w-100" onclick="statusShow()" id="status_post"
+                    <div class="w-100 mb-2" onclick="virtualTourShow()" id="virtual_tour_post"
+                        style="cursor: pointer; background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                        <div>
+                            <p class="m-0">
+                                <i class="fa fa-picture-o mr-2"></i>
+                                {{ __('Virtual Tour') }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="w-100 mb-2" onclick="statusShow()" id="status_post"
                         style="cursor: pointer; background: #FFF; border-radius: 8px; padding: 23px 35px; display: none;">
                         <div>
                             <p class="m-0">
@@ -677,17 +914,30 @@
     <script type="text/javascript" src="{{asset('libs/fotorama/fotorama.js')}}"></script>
     <script>
         function feedShow() {
-            document.getElementById('content_status_post').style.display = "none"
             document.getElementById('feed_post').style.display = "none"
             document.getElementById('status_post').style.display = "block"
+            document.getElementById('virtual_tour_post').style.display = "block"
+            document.getElementById('content_status_post').style.display = "none"
+            document.getElementById('content_virtual_tour_post').style.display = "none"
             document.getElementById('content_feed_post').style.display = "grid"
         }
 
+        function virtualTourShow() {
+            document.getElementById('virtual_tour_post').style.display = "none"
+            document.getElementById('feed_post').style.display = "block"
+            document.getElementById('status_post').style.display = "block"
+            document.getElementById('content_status_post').style.display = "none"
+            document.getElementById('content_virtual_tour_post').style.display = "block"
+            document.getElementById('content_feed_post').style.display = "none"
+        }
+
         function statusShow() {
+            document.getElementById('feed_post').style.display = "block"
+            document.getElementById('virtual_tour_post').style.display = "block"
+            document.getElementById('status_post').style.display = "none"
             document.getElementById('content_status_post').style.display = "block"
             document.getElementById('content_feed_post').style.display = "none"
-            document.getElementById('feed_post').style.display = "block"
-            document.getElementById('status_post').style.display = "none"
+            document.getElementById('content_virtual_tour_post').style.display = "none"
         }
 
         function auto_grow(element) {

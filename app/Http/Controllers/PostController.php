@@ -64,6 +64,25 @@ class PostController extends Controller
             ->paginate(20)
             ->withQueryString();
 
+        $panorama_posts = $this->userPost    
+            ->with(['ipanorama', 'medias', 'likes', 'comments'])
+            ->when(isset($request->filter), function ($q) use ($request) {
+                if (auth()->check()) {
+                    if ($request->filter == 'me') {
+                        $q->where('user_id', auth()->user()->id);
+                    } elseif ($request->filter == 'friend') {
+                        $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
+                        $follwer_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
+                        $ids = array_merge($following_ids, $follwer_ids);
+                        $q->whereIn('user_id', $ids);
+                    }
+                }
+            })
+            ->where('ipanorama_id', '!=', null)
+            ->orderBy('id', 'desc')
+            ->paginate(20)
+            ->withQueryString();
+
         $memberCount = User::count();
         $idUser = Auth::id();
         $dataIpanorama = Ipanorama::where([
@@ -89,6 +108,7 @@ class PostController extends Controller
 
         $data = [
             'posts' => $posts,
+            'panorama_posts' => $panorama_posts,
             'memberCount' => $memberCount,
             'dataIpanorama' => $dataIpanorama,
             'feeds' => $feeds,
