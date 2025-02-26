@@ -1137,7 +1137,7 @@ class Hotel extends Bookable
                 });
         }
 
-        dd($model_hotel->get());
+        // dd($model_hotel->get());
 
         $orderby = $request["orderby"] ?? "";
         switch ($orderby){
