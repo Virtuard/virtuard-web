@@ -1003,6 +1003,8 @@ class Hotel extends Bookable
     {
         $model_hotel = parent::query()->select("bravo_hotels.*");
         $model_hotel->where("bravo_hotels.status", "publish");
+        $model_hotel->orderByDesc("ipanorama_id");
+        $model_hotel->orderByDesc("review_score");
         
         if (!empty($category_id = $request['category_id'] ?? "")) {
             $model_hotel->where('category_id', $category_id)->get();
@@ -1134,9 +1136,6 @@ class Hotel extends Bookable
                     }
                 });
         }
-
-        $model_hotel->orderByDesc("ipanorama_id");
-        // $model_hotel->orderByDesc("review_score");
 
         // dd($model_hotel->get());
 
