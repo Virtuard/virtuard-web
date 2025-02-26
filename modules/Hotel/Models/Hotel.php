@@ -1136,7 +1136,7 @@ class Hotel extends Bookable
         }
 
         $model_hotel->orderByDesc("ipanorama_id");
-        $model_hotel->orderByDesc("review_score");
+        // $model_hotel->orderByDesc("review_score");
 
         // dd($model_hotel->get());
 
