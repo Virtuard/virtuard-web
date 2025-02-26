@@ -142,35 +142,35 @@ class ExploreController extends Controller
             case 'business':
                 $searchs = ['business' => $this->business->search($req)];
                 break;
-            case 'boat':
-                $searchs = ['boat' => $this->boat->search($req)];
-                break;
-            case 'car':
-                $searchs = ['car' => $this->car->search($req)];
-                break;
-            case 'event':
-                $searchs = ['event' => $this->event->search($req)];
-                break;
-            case 'natural':
-                $searchs = ['natural' => $this->natural->search($req)];
-                break;
-            case 'cultural':
-                $searchs = ['cultural' => $this->cultural->search($req)];
-                break;
-            case 'art':
-                $searchs = ['art' => $this->art->search($req)];
-                break;
+            // case 'boat':
+            //     $searchs = ['boat' => $this->boat->search($req)];
+            //     break;
+            // case 'car':
+            //     $searchs = ['car' => $this->car->search($req)];
+            //     break;
+            // case 'event':
+            //     $searchs = ['event' => $this->event->search($req)];
+            //     break;
+            // case 'natural':
+            //     $searchs = ['natural' => $this->natural->search($req)];
+            //     break;
+            // case 'cultural':
+            //     $searchs = ['cultural' => $this->cultural->search($req)];
+            //     break;
+            // case 'art':
+            //     $searchs = ['art' => $this->art->search($req)];
+            //     break;
             default:
                 $searchs = [
                     'business' => $this->business->search($req),
                     'space' => $this->space->search($req),
                     'hotel' => $this->hotel->search($req),
                     // 'boat' => $this->boat->search($req),
-                    'car' => $this->car->search($req),
-                    'event' => $this->event->search($req),
-                    'natural' => $this->natural->search($req),
-                    'cultural' => $this->cultural->search($req),
-                    'art' => $this->art->search($req),
+                    // 'car' => $this->car->search($req),
+                    // 'event' => $this->event->search($req),
+                    // 'natural' => $this->natural->search($req),
+                    // 'cultural' => $this->cultural->search($req),
+                    // 'art' => $this->art->search($req),
                 ];
         }
 

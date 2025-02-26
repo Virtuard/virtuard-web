@@ -199,6 +199,7 @@
                                 @endphp
 
                             @if ($post->ipanorama && $post->ipanorama->status == 'publish')
+                            {{-- @dd($post->ipanorama) --}}
                                 <div class="card-file">
                                         <div class="g-ipanorama">
                                             <img loading='lazy'id="thumb-panorama-{{ $post->ipanorama->id }}" src='{{ getThumbPanorama($post->ipanorama) }}' alt="" 

@@ -108,7 +108,14 @@ $(document).ready(function() {
 			Swal.fire('Saved!', '', 'success');
             setTimeout(() => {
                 Swal.close();
-				$("#popup-step-28").addClass("active").parent().addClass("active-step")
+
+				const urlParams = new URLSearchParams(window.location.search);
+				const page = urlParams.get('page');
+				const wstep = urlParams.get('wstep');
+
+				if(page == 'edit' && wstep == 4) {
+					$("#popup-step-32").addClass("active").parent().addClass("active-step")
+				}
 				// const currentUrl = new URL(window.location.href);
 				// const params = new URLSearchParams(currentURL.search);
 
