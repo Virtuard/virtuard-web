@@ -125,12 +125,21 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'message' => 'required',
             'media_user.*' => 'nullable|mimes:jpeg,png,mp4|max:20000',
         ], [
             'media_user.*.mimes' => 'File extention denied',
             'media_user.*.max' => 'Maximum upload file 20MB'
         ]);
+
+        if(isset($request->media_user) || $request->ipanorama_id){
+            $this->validate($request, [
+                'message' => 'nullable',
+            ]);
+        } else {
+            $this->validate($request, [
+                'message' => 'required',
+            ]);
+        }
 
         DB::beginTransaction();
         try {
@@ -164,7 +173,7 @@ class PostController extends Controller
             }
 
             DB::commit();
-            return back()->with('success', 'Updated status');
+            return redirect()->route('post.index')->with('success', 'Updated status');
         } catch (Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Something wrong!');

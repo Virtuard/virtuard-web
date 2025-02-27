@@ -2,6 +2,7 @@
 namespace Modules\User\Controllers;
 
 use App\Models\FollowUser;
+use App\Models\Ipanorama;
 use App\Models\User;
 use App\Models\UserPost;
 use Illuminate\Support\Facades\Log;
@@ -138,6 +139,7 @@ class UserController extends FrontendController
                 ]
             ],
         ];
+        
         return view('User::frontend.profile-setting', $data);
     }
 
@@ -343,9 +345,15 @@ class UserController extends FrontendController
         foreach ($following as $follow) {
             $follow->avatar_url = $follow->file_path ? url('/uploads/' . $follow->file_path) : url('/images/avatar.png');
         }
+
+        $dataIpanorama = Ipanorama::where([
+            ['user_id', $user->id],
+            ['status', 'publish'],
+        ])->get();
         
         $data = [
             'user' => $user,
+            'dataIpanorama' => $dataIpanorama,
             'page_title' => $user->getDisplayName(),
             'followerCount' => $followerCount,
             'followingCount' => $followingCount,

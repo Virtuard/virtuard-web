@@ -1,34 +1,45 @@
 <!-- HTML -->
 <div class="container">
     <div class="row mt-2">
-        @foreach ($userPanoramas as $panorama)
-            <div class="col-4 mb-2">
-                <div class="gallery-item">
-                    {{-- Tombol Delete --}}
-                    @if (auth()->check() && auth()->user()->id == $panorama->user_id)
-                        {{-- <form action="{{ route('post.destroy', $panorama->id) }}" method="POST"
-                            class="delete-btn-wrapper">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="delete-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </form> --}}
-                        <a href="{{ route("user.virtuard-360.bulk_edit",[$panorama->id,'action' => "make-hide"]) }}" class="delete-btn-wrapper">
-                            <button class="delete-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </a>
-                    @endif
+        {{-- @dd($userPanoramas) --}}
+        @foreach ($userPanoramas as $post)
+            @if ($post->ipanorama)
+                <div class="col-4 mb-2">
+                    <div class="gallery-item">
+                        {{-- Tombol Delete --}}
+                        @if (auth()->check() && auth()->user()->id == $post->ipanorama->user_id)
+                            <form action="{{ route('post.destroy', $post->id) }}" method="POST"
+                                class="delete-btn-wrapper">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                            {{-- <a href="{{ route("user.virtuard-360.bulk_edit",[$post->ipanorama->id,'action' => "make-hide"]) }}" class="delete-btn-wrapper">
+                                <button class="delete-btn">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </a> --}}
+                        @endif
 
-                    <a class="preview-panorama cursor-pointer" data-id="{{ $panorama->id }}"
-                        data-code="{{ $panorama->code }}" data-user_id="{{ $panorama->user_id }}">
-                        <img loading='lazy'src="{{ getThumbPanorama($panorama) }}" class="gallery-image thumb-panorama"
-                            alt="image">
-                    </a>
+                        <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
+                            data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->user_id }}">
+                            <img loading='lazy'src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
+                                alt="image">
+                        </a>
+                    </div>
                 </div>
-            </div>
+            @endif
         @endforeach
+        <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
+        data-target="#modalGallery360">
+            <div class="gallery-item">
+                <a href="#" data-lightbox="image-1" class="text-dark">
+                    <i class="fa fa-plus" style="font-size: 40px"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -63,6 +74,64 @@
             </div>
         </div>
     </div>
+    </div>
+
+    <div id="modalGallery360" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('post.store') }}" method="POST"
+            enctype="multipart/form-data" class="modal-content">
+            @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Add 360 Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label for="" class="form-label">Caption</label>
+                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="What's new?"
+                                        oninput="auto_grow(this)"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="panoramaSelect" class="form-label">Select 360 Image</label>
+                        <select id="panoramaSelect" name="ipanorama_id" class="form-control">
+                            <option value="">Select your 360</option>
+                            @foreach ($dataIpanorama as $panorama)
+                                @if ($panorama->code)
+                                    <option value="{{ $panorama->id }}">{{ $panorama->title }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="">
+                        <label for="" class="form-label d-block">Status</label>
+                        <select class="h-100" id="filter-post" name="type_post"
+                            style="
+                            padding: 5px 16px;
+                            background: #f5f5f5;
+                            border: 0;
+                            border-radius: 100px;
+                            font-weight: 600;
+                            outline: none;
+                        ">
+                            <option value="">{{ __('Public') }}</option>
+                            <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
+                            <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
+                        </select>
+                        <a class="cursor-pointer d-none">
+                            <i class="fa fa-lg fa-smile-o ml-3"></i>
+                        </a>
+                        <div class="cursor-pointer d-none" id="toogle-tag" onclick="showSelect()">
+                            <i class="fa fa-lg fa-tags ml-3"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </div>
+            </form>
+        </div>
     </div>
 </section>
 
