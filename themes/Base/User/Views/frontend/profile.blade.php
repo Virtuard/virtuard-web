@@ -56,6 +56,31 @@
                     <i class="fa fa-birthday-cake input-icon"></i>
                 </div>
                 <div class="form-group">
+                    <label>{{__("Website URL")}}</label>
+                    <input type="text" value="{{old('website_url',$dataUser->website_url)}}" name="website_url" placeholder="https://your-website.com" class="form-control">
+                    <i class="fa fa-globe input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <label>{{__("Instagram URL")}}</label>
+                    <input type="text" value="{{old('instagram_url',$dataUser->instagram_url)}}" name="instagram_url" placeholder="https://instagram.com/your-username" class="form-control">
+                    <i class="fa fa-instagram input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <label>{{__("Facebook URL")}}</label>
+                    <input type="text" value="{{old('facebook_url',$dataUser->facebook_url)}}" name="facebook_url" placeholder="https://facebook.com/your-username" class="form-control">
+                    <i class="fa fa-facebook input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <label>{{__("Twitter URL")}}</label>
+                    <input type="text" value="{{old('twitter_url',$dataUser->twitter_url)}}" name="twitter_url" placeholder="https://x.com/your-username" class="form-control">
+                    <i class="fa fa-twitter input-icon"></i>
+                </div>
+                <div class="form-group">
+                    <label>{{__("Linkedin URL")}}</label>
+                    <input type="text" value="{{old('linkedin_url',$dataUser->linkedin_url)}}" name="linkedin_url" placeholder="https://linkedin.com/in/your-username" class="form-control">
+                    <i class="fa fa-linkedin input-icon"></i>
+                </div>
+                <div class="form-group">
                     <label>{{__("About Yourself")}}</label>
                     <textarea name="bio" rows="5" class="form-control">{{old('bio',$dataUser->bio)}}</textarea>
                 </div>

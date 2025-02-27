@@ -523,6 +523,44 @@
             </div>
         </div>
 
+        <div class="follow-stats d-flex justify-content-center justify-content-md-start mt-3">
+            @if ($user->website_url)
+                <a href="{{ $user->website_url }}" target="_blank" class="stat text-center text-dark">
+                    <p>
+                        <i class="fa fa-globe" style="font-size: 20px"></i>
+                    </p>
+                </a>
+            @endif
+            @if ($user->instagram_url)
+                <a href="{{ $user->instagram_url }}" target="_blank" class="stat text-center text-dark">
+                    <p>
+                        <i class="fa fa-instagram" style="font-size: 20px"></i>
+                    </p>
+                </a>
+            @endif
+            @if ($user->facebook_url)
+                <a href="{{ $user->facebook_url }}" target="_blank" class="stat text-center text-dark">
+                    <p>
+                        <i class="fa fa-facebook" style="font-size: 20px"></i>
+                    </p>
+                </a>
+            @endif
+            @if ($user->twitter_url)
+                <a href="{{ $user->twitter_url }}" target="_blank" class="stat text-center text-dark">
+                    <p>
+                        <i class="fa fa-twitter" style="font-size: 20px"></i>
+                    </p>
+                </a>
+            @endif
+            @if ($user->linkedin_url)
+                <a href="{{ $user->linkedin_url }}" target="_blank" class="stat text-center text-dark">
+                    <p>
+                        <i class="fa fa-linkedin" style="font-size: 20px"></i>
+                    </p>
+                </a>
+            @endif
+        </div>
+
         <!-- Followers Modal -->
         <div class="modal fade" id="followersModal" tabindex="-1" role="dialog" aria-labelledby="followersModalLabel"
             aria-hidden="true">
@@ -638,14 +676,16 @@
 
         <div class="ig-buttons d-flex justify-content-between mt-4 flex-wrap">
             @auth
-                <form action="{{ route('member.store') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="action" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
-                    <input type="hidden" name="follower_id" value="{{ $user->id }}">
-                    <button class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} ig-follow-btn">
-                        {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}
-                    </button>
-                </form>
+                @if ($user->id != auth()->id())
+                    <form action="{{ route('member.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="action" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
+                        <input type="hidden" name="follower_id" value="{{ $user->id }}">
+                        <button class="btn btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }} ig-follow-btn">
+                            {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}
+                        </button>
+                    </form>
+                @endif
             @else
                 <button class="btn btn-primary w-100 mb-2" onclick="showModalLogin()">
                     Follow
