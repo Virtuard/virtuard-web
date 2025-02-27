@@ -514,12 +514,12 @@
             <div class="stat text-center">
                 <p class="number cursor-pointer" id="show-followers" data-toggle="modal" data-target="#followersModal">
                     {{ $followerCount }}</p>
-                <p class="label">Followers</p>
+                <p class="label">{{ __("Followers") }}</p>
             </div>
             <div class="stat text-center ml-4">
                 <p class="number cursor-pointer" id="show-following" data-toggle="modal" data-target="#followingModal">
                     {{ $followingCount }}</p>
-                <p class="label">Following</p>
+                <p class="label">{{ __("Following") }}</p>
             </div>
         </div>
 
