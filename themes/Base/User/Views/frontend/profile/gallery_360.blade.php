@@ -32,7 +32,7 @@
                 </div>
             @endif
         @endforeach
-        @if (auth()->check() && auth()->user()->id == $userPanoramas[0]->user_id)
+        @if (auth()->check() && auth()->user()->id == $user->id)
             <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
             data-target="#modalGallery360">
                 <div class="gallery-item">
