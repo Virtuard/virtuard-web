@@ -52,14 +52,14 @@
         <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
         data-target="#modalGallery">
             <div class="gallery-item">
-                <a href="#" data-lightbox="image-1" class="text-dark">
+                <a href="#" class="text-dark">
                     <i class="fa fa-plus" style="font-size: 40px"></i>
                 </a>
             </div>
         </div>
     </div>
 
-    <div id="modalGallery" class="modal">
+    <div id="modalGallery" class="modal fade">
         <div class="modal-dialog modal-dialog-centered">
             <form action="{{ route('post.store') }}" method="POST"
             enctype="multipart/form-data" class="modal-content">

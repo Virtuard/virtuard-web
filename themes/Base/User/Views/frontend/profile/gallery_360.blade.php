@@ -35,7 +35,7 @@
         <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
         data-target="#modalGallery360">
             <div class="gallery-item">
-                <a href="#" data-lightbox="image-1" class="text-dark">
+                <a href="#" class="text-dark">
                     <i class="fa fa-plus" style="font-size: 40px"></i>
                 </a>
             </div>
@@ -44,7 +44,7 @@
 </div>
 
 <!-- panoramaModal -->
-<div class="modal" id="panoramaModal" tabindex="-1" role="dialog" aria-labelledby="panoramaModalLabel"
+<div class="modal fade" id="panoramaModal" tabindex="-1" role="dialog" aria-labelledby="panoramaModalLabel"
 aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -75,7 +75,7 @@ aria-hidden="true">
     </div>
 </div>
 
-<div id="modalGallery360" class="modal">
+<div id="modalGallery360" class="modal fade">
     <div class="modal-dialog modal-dialog-centered">
         <form action="{{ route('post.store') }}" method="POST"
         enctype="multipart/form-data" class="modal-content">
