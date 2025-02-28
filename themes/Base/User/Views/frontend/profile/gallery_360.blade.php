@@ -32,14 +32,16 @@
                 </div>
             @endif
         @endforeach
-        <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
-        data-target="#modalGallery360">
-            <div class="gallery-item">
-                <div class="text-dark">
-                    <i class="fa fa-plus" style="font-size: 40px"></i>
+        @if (auth()->check() && auth()->user()->id == $userPanoramas[0]->user_id)
+            <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
+            data-target="#modalGallery360">
+                <div class="gallery-item">
+                    <div class="text-dark">
+                        <i class="fa fa-plus" style="font-size: 40px"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 
@@ -98,11 +100,13 @@
                         <label for="panoramaSelect" class="form-label">Select 360 Image</label>
                         <select id="panoramaSelect" name="ipanorama_id" class="form-control">
                             <option value="">Select your 360</option>
-                            @foreach ($dataIpanorama as $panorama)
-                                @if ($panorama->code)
-                                    <option value="{{ $panorama->id }}">{{ $panorama->title }}</option>
-                                @endif
-                            @endforeach
+                            @if (isset($dataIpanorama))
+                                @foreach ($dataIpanorama as $panorama)
+                                    @if ($panorama->code)
+                                        <option value="{{ $panorama->id }}">{{ $panorama->title }}</option>
+                                    @endif
+                                @endforeach
+                            @endif
                         </select>
                     </div>
                     <div class="">

@@ -49,14 +49,16 @@
                 </div>
             @endforeach
         @endforeach
-        <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
-        data-target="#modalGallery">
-            <div class="gallery-item">
-                <div class="text-dark">
-                    <i class="fa fa-plus" style="font-size: 40px"></i>
+        @if (auth()->check() && auth()->user()->id == $userPosts[0]->user_id)
+            <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
+            data-target="#modalGallery">
+                <div class="gallery-item">
+                    <div class="text-dark">
+                        <i class="fa fa-plus" style="font-size: 40px"></i>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endif
     </div>
 
     <div id="modalGallery" class="modal fade">
