@@ -54,7 +54,7 @@
             <div class="gallery-item">
                 <div class="text-dark">
                     <i class="fa fa-plus" style="font-size: 40px"></i>
-                </d>
+                </div>
             </div>
         </div>
     </div>

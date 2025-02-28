@@ -43,9 +43,10 @@
     </div>
 </div>
 
-<!-- panoramaModal -->
-<div class="modal fade" id="panoramaModal" tabindex="-1" role="dialog" aria-labelledby="panoramaModalLabel"
-aria-hidden="true">
+<section class="section-modal">
+     <!-- panoramaModal -->
+    <div class="modal fade" id="panoramaModal" tabindex="-1" role="dialog" aria-labelledby="panoramaModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -73,65 +74,66 @@ aria-hidden="true">
             </div>
         </div>
     </div>
-</div>
+    </div>
 
-<div id="modalGallery360" class="modal fade">
-    <div class="modal-dialog modal-dialog-centered">
-        <form action="{{ route('post.store') }}" method="POST"
-        enctype="multipart/form-data" class="modal-content">
-        @csrf
-            <div class="modal-header">
-                <h5 class="modal-title">Add 360 Post</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-4">
-                    <label for="" class="form-label">Caption</label>
-                    <textarea style="width: 100%; padding: 10px;" name="message" placeholder="What's new?"
-                                    oninput="auto_grow(this)"></textarea>
+    <div id="modalGallery360" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('post.store') }}" method="POST"
+            enctype="multipart/form-data" class="modal-content">
+            @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">Add 360 Post</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="mb-4">
-                    <label for="panoramaSelect" class="form-label">Select 360 Image</label>
-                    <select id="panoramaSelect" name="ipanorama_id" class="form-control">
-                        <option value="">Select your 360</option>
-                        @foreach ($dataIpanorama as $panorama)
-                            @if ($panorama->code)
-                                <option value="{{ $panorama->id }}">{{ $panorama->title }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-                <div class="">
-                    <label for="" class="form-label d-block">Status</label>
-                    <select class="h-100" id="filter-post" name="type_post"
-                        style="
-                        padding: 5px 16px;
-                        background: #f5f5f5;
-                        border: 0;
-                        border-radius: 100px;
-                        font-weight: 600;
-                        outline: none;
-                    ">
-                        <option value="">{{ __('Public') }}</option>
-                        <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
-                        <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
-                    </select>
-                    <a class="cursor-pointer d-none">
-                        <i class="fa fa-lg fa-smile-o ml-3"></i>
-                    </a>
-                    <div class="cursor-pointer d-none" id="toogle-tag" onclick="showSelect()">
-                        <i class="fa fa-lg fa-tags ml-3"></i>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label for="" class="form-label">Caption</label>
+                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="What's new?"
+                                        oninput="auto_grow(this)"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="panoramaSelect" class="form-label">Select 360 Image</label>
+                        <select id="panoramaSelect" name="ipanorama_id" class="form-control">
+                            <option value="">Select your 360</option>
+                            @foreach ($dataIpanorama as $panorama)
+                                @if ($panorama->code)
+                                    <option value="{{ $panorama->id }}">{{ $panorama->title }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="">
+                        <label for="" class="form-label d-block">Status</label>
+                        <select class="h-100" id="filter-post" name="type_post"
+                            style="
+                            padding: 5px 16px;
+                            background: #f5f5f5;
+                            border: 0;
+                            border-radius: 100px;
+                            font-weight: 600;
+                            outline: none;
+                        ">
+                            <option value="">{{ __('Public') }}</option>
+                            <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
+                            <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
+                        </select>
+                        <a class="cursor-pointer d-none">
+                            <i class="fa fa-lg fa-smile-o ml-3"></i>
+                        </a>
+                        <div class="cursor-pointer d-none" id="toogle-tag" onclick="showSelect()">
+                            <i class="fa fa-lg fa-tags ml-3"></i>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Post</button>
-            </div>
-        </form>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</section>
 
 @push('js')
 <script>
