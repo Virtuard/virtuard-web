@@ -35,9 +35,9 @@
         <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
         data-target="#modalGallery360">
             <div class="gallery-item">
-                <a href="#" class="text-dark">
+                <div class="text-dark">
                     <i class="fa fa-plus" style="font-size: 40px"></i>
-                </a>
+                </div>
             </div>
         </div>
     </div>
