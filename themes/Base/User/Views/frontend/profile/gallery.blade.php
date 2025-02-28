@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <div id="modalGallery" class="modal fade">
+    <div id="modalGallery" class="modal">
         <div class="modal-dialog modal-dialog-centered">
             <form action="{{ route('post.store') }}" method="POST"
             enctype="multipart/form-data" class="modal-content">
