@@ -4,7 +4,7 @@
         {{-- @dd($userPanoramas) --}}
         @foreach ($userPanoramas as $post)
             @if ($post->ipanorama)
-                <div class="col-4 mb-2">
+                <div class="col-md-4 col-6 mb-2">
                     <div class="gallery-item">
                         {{-- Tombol Delete --}}
                         @if (auth()->check() && auth()->user()->id == $post->ipanorama->user_id)
@@ -33,7 +33,7 @@
             @endif
         @endforeach
         @if (auth()->check() && auth()->user()->id == $user->id)
-            <div class="col-4 mb-2 cursor-pointer" data-toggle="modal"
+            <div class="col-md-4 col-6 mb-2 cursor-pointer" data-toggle="modal"
             data-target="#modalGallery360">
                 <div class="gallery-item">
                     <div class="text-dark">
