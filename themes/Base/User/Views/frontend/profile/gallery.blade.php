@@ -177,19 +177,19 @@
             enctype="multipart/form-data" class="modal-content">
             @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Post</h5>
+                    <h5 class="modal-title">{{ __('Add Post') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-4">
-                        <label for="" class="form-label">Caption</label>
-                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="What's new?"
+                        <label for="" class="form-label">{{ __('Caption') }}</label>
+                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="{{ __('What\'s new?') }}"
                                         oninput="auto_grow(this)"></textarea>
                     </div>
                     <div class="mb-4">
-                        <label for="" class="form-label">Select Media</label>
+                        <label for="" class="form-label">{{ __('Select Media') }}</label>
                         <input type="file" id="fileInput" class="m-0" name="media_user[]"
                             accept="image/*, video/*"
                             multiple>
@@ -215,7 +215,7 @@
                         </label>
                     </div>
                     <div class="">
-                        <label for="" class="form-label d-block">Status</label>
+                        <label for="" class="form-label d-block">{{ __('Status') }}</label>
                         <select class="h-100" id="filter-post" name="type_post"
                             style="
                             padding: 5px 16px;
@@ -238,7 +238,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Post</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Post') }}</button>
                 </div>
             </form>
         </div>

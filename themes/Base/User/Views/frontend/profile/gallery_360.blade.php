@@ -86,20 +86,20 @@
             enctype="multipart/form-data" class="modal-content">
             @csrf
                 <div class="modal-header">
-                    <h5 class="modal-title">Add 360 Post</h5>
+                    <h5 class="modal-title">{{ __('Add 360 Post') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-4">
-                        <label for="" class="form-label">Caption</label>
-                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="What's new?"></textarea>
+                        <label for="" class="form-label">{{ __('Caption') }}</label>
+                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="{{ __('What\'s new?') }}"></textarea>
                     </div>
                     <div class="mb-4">
-                        <label for="panoramaSelect" class="form-label">Select 360 Image</label>
+                        <label for="panoramaSelect" class="form-label">{{ __('Select 360 Image') }}</label>
                         <select id="panoramaSelect" name="ipanorama_id" class="form-control">
-                            <option value="">Select your 360</option>
+                            <option value="">{{ __('Select your 360') }}</option>
                             @if (isset($dataIpanorama))
                                 @foreach ($dataIpanorama as $panorama)
                                     @if ($panorama->code)
@@ -110,7 +110,7 @@
                         </select>
                     </div>
                     <div class="">
-                        <label for="" class="form-label d-block">Status</label>
+                        <label for="" class="form-label d-block">{{ __('Status') }}</label>
                         <select class="h-100" id="filter-post" name="type_post"
                             style="
                             padding: 5px 16px;
@@ -133,7 +133,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Post</button>
+                    <button type="submit" class="btn btn-primary">{{ __('Post') }}</button>
                 </div>
             </form>
         </div>

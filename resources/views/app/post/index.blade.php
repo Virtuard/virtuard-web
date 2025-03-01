@@ -264,7 +264,7 @@
                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                     alt="">
                                 @auth
-                                    <textarea style="width: 100%; border: 0; outline: none;" name="message" placeholder="What's new?"
+                                    <textarea style="width: 100%; border: 0; outline: none;" name="message" placeholder="{{ __('What\'s new?') }}"
                                         oninput="auto_grow(this)"></textarea>
                                 @else
                                     <input style="width: 100%; border: 0; outline: none;" placeholder="Please register or login to write status" onclick="showModalLogin()">
@@ -509,7 +509,7 @@
                                                         fullscreenToggle: true, // Enables fullscreen button
                                                     }
                                                 });
-                                                
+
                                                 @if($vid->is_360_media)
                                                     player{{ $vid->id }}.vr({ 
                                                         projection: "360",
