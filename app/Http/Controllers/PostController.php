@@ -128,7 +128,7 @@ class PostController extends Controller
             'media_user.*' => 'nullable|mimes:jpeg,png,mp4,mov,mkv|max:100000',
         ], [
             'media_user.*.mimes' => 'File extention denied',
-            'media_user.*.max' => 'Maximum upload file 20MB'
+            'media_user.*.max' => 'Maximum upload file 100MB'
         ]);
 
         if(isset($request->media_user) || $request->ipanorama_id){
