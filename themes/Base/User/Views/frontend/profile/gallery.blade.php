@@ -71,7 +71,7 @@
                             </form>
                         @endif
 
-                        <div class="panorama-image" style="width: 500px; height: 400px;" id="panorama-{{ $gallery->id }}"></div>
+                        <div class="panorama-image" style="width: 500px; height: 100%; object-fit: cover;" id="panorama-{{ $gallery->id }}"></div>
                     </div>
                 </div>
             @endforeach
