@@ -323,12 +323,12 @@
                                         <option value="My Profile">My Profile</option>
                                     </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-submit ml-3"
+                                    <button type="submit" class="btn btn-primary text-uppercase btn-submit ml-3"
                                         style="border-radius: 100px; outline: none;"
                                     @guest
                                         disabled
                                     @endguest
-                                    >POST</button>
+                                    >{{ __('Post') }}</button>
                                 </div>
                             </div>
                         </div>
