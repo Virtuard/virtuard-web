@@ -156,7 +156,7 @@ class PostController extends Controller
             if ($request->hasFile('media_user')) {
                 $files = $request->file('media_user');
                 foreach ($files as $file) {
-                    $filename = $file->getClientOriginalName();
+                    $filename = time() . '-' . $file->getClientOriginalName();
                     $extension = $file->getClientOriginalExtension();
                     $type = getMimeTypeFromExtension($extension);
                     $path = $file->storeAs('/media', $filename);
