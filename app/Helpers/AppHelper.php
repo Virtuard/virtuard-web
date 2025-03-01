@@ -1650,6 +1650,7 @@ if (!function_exists('getMimeTypeFromExtension')) {
             case 'svg':
                 return 'image';
             case 'mp4':
+            case 'mov':
             case 'mkv':
                 return 'video';
             default:
