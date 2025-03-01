@@ -26,10 +26,10 @@
             @endif --}}
 
             @php
-                $galleries = $post->medias->where('type', 'image');
+                $galleries = $post->medias->where('type', 'image')->where('is_360_media', false);
                 $galleries_360 = $post->medias->where('type', 'image')->where('is_360_media', true);
 
-                $videos = $post->medias->where('type', 'video');
+                $videos = $post->medias->where('type', 'video')->where('is_360_media', false);
                 $videos_360 = $post->medias->where('type', 'video')->where('is_360_media', true);
             @endphp
 
