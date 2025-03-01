@@ -12,5 +12,6 @@ class PostMedia extends Model
         'post_id',
         'media',
         'type',
+        'is_360_media'
     ];
 }

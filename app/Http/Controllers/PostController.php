@@ -143,8 +143,6 @@ class PostController extends Controller
 
         DB::beginTransaction();
         try {
-
-
             $dataPost = [
                 'user_id' =>  auth()->user()->id,
                 'ipanorama_id' =>  $request->input('ipanorama_id'),
@@ -162,11 +160,12 @@ class PostController extends Controller
                     $extension = $file->getClientOriginalExtension();
                     $type = getMimeTypeFromExtension($extension);
                     $path = $file->storeAs('/media', $filename);
-
+                    
                     $dataMedia = [
                         'post_id' => $post->id,
                         'media' => $path,
                         'type' => $type,
+                        'is_360_media' => $request->is_360_media === 'on',
                     ];
                     $mediaItem = PostMedia::create($dataMedia);
                 }
