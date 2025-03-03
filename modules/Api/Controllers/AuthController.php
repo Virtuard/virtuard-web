@@ -106,7 +106,7 @@ class AuthController extends Controller
 
         $token = $user->createToken($request->device_name)->plainTextToken;
 
-        $user->api_token = $token;
+        // $user->api_token = $token;
         $user->save();
 
         if (!$user || !Hash::check($request->password, $user->password)) {

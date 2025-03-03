@@ -54,16 +54,16 @@ class FortifyServiceProvider extends ServiceProvider
 
 
         Fortify::loginView(function (Request $request) {
-            $token = $request->query('token');
+            // $token = $request->query('token');
 
-            if ($token) {
-                $user = User::where('api_token', $token)->first();
+            // if ($token) {
+            //     $user = User::where('api_token', $token)->first();
         
-                if ($user) {
-                    Auth::login($user);
-                    return redirect('/');
-                }
-            }
+            //     if ($user) {
+            //         Auth::login($user);
+            //         return redirect('/');
+            //     }
+            // }
             return view('auth.login');
         });
 
