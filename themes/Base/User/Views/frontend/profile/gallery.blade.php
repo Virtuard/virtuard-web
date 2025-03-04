@@ -1,6 +1,17 @@
 <!-- HTML -->
 <div class="container">
     <div class="row mt-2">
+        @if (auth()->check() && auth()->user()->id == $user->id)
+            <div class="col-md-4 col-6 mb-2 cursor-pointer" data-toggle="modal"
+            data-target="#modalGallery">
+                <div class="gallery-item">
+                    <div class="text-dark">
+                        <i class="fa fa-plus" style="font-size: 40px"></i>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @foreach ($userPosts as $post)
             {{-- @if ($post->ipanorama)
                 <div class="col-md-4 col-6 mb-2">
@@ -29,7 +40,7 @@
                 $galleries = $post->medias->where('type', 'image')->where('is_360_media', false);
                 $galleries_360 = $post->medias->where('type', 'image')->where('is_360_media', true);
 
-                $videos = $post->medias->where('type', 'video')->where('is_360_media', false);
+                $videos = $post->medias->where('type', 'video');
                 $videos_360 = $post->medias->where('type', 'video')->where('is_360_media', true);
             @endphp
 
@@ -59,7 +70,6 @@
             @foreach ($galleries_360 as $gallery)
                 <div class="col-md-4 col-6 mb-2">
                     <div class="gallery-item">
-                        {{-- Tombol Delete --}}
                         @if (auth()->check() && auth()->user()->id == $post->user_id)
                             <form action="{{ route('post.destroy', $post->id) }}" method="POST"
                                 class="delete-btn-wrapper">
@@ -89,86 +99,75 @@
             </script>
 
             @foreach ($videos as $vid)
-            <div class="col-md-4 col-6 mb-2">
-                <div class="gallery-item">
-                    {{-- Tombol Delete --}}
-                    @if (auth()->check() && auth()->user()->id == $post->user_id)
-                        <form action="{{ route('post.destroy', $post->id) }}" method="POST"
-                            class="delete-btn-wrapper">
-                            @csrf
-                            @method('delete')
-                            <button type="submit" class="delete-btn">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </form>
-                    @endif
+                <div class="col-md-4 col-6 mb-2">
+                    <div class="gallery-item">
+                        
+                        @if (auth()->check() && auth()->user()->id == $post->user_id)
+                            <form action="{{ route('post.destroy', $post->id) }}" method="POST"
+                                class="delete-btn-wrapper">
+                                @csrf
+                                @method('delete')
+                                <button type="submit" class="delete-btn">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        @endif
 
-                    <div class="video-container">
-                        <div class="video-wrapper">
-                            <video controls id="video-{{ $vid->id }}" preload="auto" class="video-js vjs-default-skin">
-                                <source src="{{ url('uploads/' . $vid->media) }}" type="video/mp4">
-                            </video>
+                        <div class="video-container">
+                            <div class="video-wrapper">
+                                <video controls id="video-{{ $vid->id }}" preload="auto" class="video-js vjs-default-skin">
+                                    <source src="{{ url('uploads/' . $vid->media) }}" type="video/mp4">
+                                </video>
+                            </div>
                         </div>
+                        
+                        <button class="custom-fullscreen-btn" data-video="video-{{ $vid->id }}">
+                            ⛶
+                        </button>
                     </div>
-                    <!-- Fullscreen Button -->
-                    <button class="custom-fullscreen-btn" data-video="video-{{ $vid->id }}">
-                        ⛶
-                    </button>
                 </div>
-            </div>
             @endforeach
             <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                @foreach ($videos as $vid)
-                    var player{{ $vid->id }} = videojs("video-{{ $vid->id }}", {
-                        controls: true,
-                        autoplay: false, // Prevents auto-playing issues
-                        fluid: true, // Makes it responsive
-                        controlBar: {
-                            fullscreenToggle: true, // Enables fullscreen button
-                        }
-                    });
+                document.addEventListener("DOMContentLoaded", function() {
+                    @foreach ($videos as $vid)
+                        var player{{ $vid->id }} = videojs("video-{{ $vid->id }}", {
+                            controls: true,
+                            autoplay: false, // Prevents auto-playing issues
+                            fluid: true, // Makes it responsive
+                            controlBar: {
+                                fullscreenToggle: true, // Enables fullscreen button
+                            }
+                        });
 
-                    @if($vid->is_360_media)
-                        player{{ $vid->id }}.vr({ 
-                            projection: "360",
-                        }); // Enable 360° mode
-                    @endif
+                        @if($vid->is_360_media)
+                            player{{ $vid->id }}.vr({ 
+                                projection: "360",
+                            }); // Enable 360° mode
+                        @endif
 
-                    // Fullscreen Mode with Button Click
-                    document.addEventListener("keydown", function(event) {
-                        if (event.key === "f") {
-                            player{{ $vid->id }}.requestFullscreen();
-                        }
-                    });
+                        // Fullscreen Mode with Button Click
+                        document.addEventListener("keydown", function(event) {
+                            if (event.key === "f") {
+                                player{{ $vid->id }}.requestFullscreen();
+                            }
+                        });
 
-                    document.querySelector("[data-video='video-{{ $vid->id }}']").addEventListener("click", function() {
-                        if (player{{ $vid->id }}.requestFullscreen) {
-                            player{{ $vid->id }}.requestFullscreen(); // Standard fullscreen
-                        } else if (player{{ $vid->id }}.webkitEnterFullscreen) {
-                            player{{ $vid->id }}.webkitEnterFullscreen(); // Safari
-                        } else if (player{{ $vid->id }}.mozRequestFullScreen) {
-                            player{{ $vid->id }}.mozRequestFullScreen(); // Firefox
-                        } else if (player{{ $vid->id }}.msRequestFullscreen) {
-                            player{{ $vid->id }}.msRequestFullscreen(); // IE/Edge
-                        }
-                    });
+                        document.querySelector("[data-video='video-{{ $vid->id }}']").addEventListener("click", function() {
+                            if (player{{ $vid->id }}.requestFullscreen) {
+                                player{{ $vid->id }}.requestFullscreen(); // Standard fullscreen
+                            } else if (player{{ $vid->id }}.webkitEnterFullscreen) {
+                                player{{ $vid->id }}.webkitEnterFullscreen(); // Safari
+                            } else if (player{{ $vid->id }}.mozRequestFullScreen) {
+                                player{{ $vid->id }}.mozRequestFullScreen(); // Firefox
+                            } else if (player{{ $vid->id }}.msRequestFullscreen) {
+                                player{{ $vid->id }}.msRequestFullscreen(); // IE/Edge
+                            }
+                        });
 
-                @endforeach
-            });
+                    @endforeach
+                });
             </script>
         @endforeach
-
-        @if (auth()->check() && auth()->user()->id == $user->id)
-            <div class="col-md-4 col-6 mb-2 cursor-pointer" data-toggle="modal"
-            data-target="#modalGallery">
-                <div class="gallery-item">
-                    <div class="text-dark">
-                        <i class="fa fa-plus" style="font-size: 40px"></i>
-                    </div>
-                </div>
-            </div>
-        @endif
     </div>
 
     <div id="modalGallery" class="modal fade">

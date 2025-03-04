@@ -1,6 +1,17 @@
 <!-- HTML -->
 <div class="container">
     <div class="row mt-2">
+        @if (auth()->check() && auth()->user()->id == $user->id)
+            <div class="col-md-4 col-6 mb-2 cursor-pointer" data-toggle="modal"
+            data-target="#modalGallery360">
+                <div class="gallery-item">
+                    <div class="text-dark">
+                        <i class="fa fa-plus" style="font-size: 40px"></i>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
         {{-- @dd($userPanoramas) --}}
         @foreach ($userPanoramas as $post)
             @if ($post->ipanorama)
@@ -32,16 +43,6 @@
                 </div>
             @endif
         @endforeach
-        @if (auth()->check() && auth()->user()->id == $user->id)
-            <div class="col-md-4 col-6 mb-2 cursor-pointer" data-toggle="modal"
-            data-target="#modalGallery360">
-                <div class="gallery-item">
-                    <div class="text-dark">
-                        <i class="fa fa-plus" style="font-size: 40px"></i>
-                    </div>
-                </div>
-            </div>
-        @endif
     </div>
 </div>
 
