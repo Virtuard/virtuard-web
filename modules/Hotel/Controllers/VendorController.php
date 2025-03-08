@@ -21,6 +21,7 @@ use Modules\Hotel\Models\HotelTerm;
 use Modules\Hotel\Models\HotelTranslation;
 use Modules\Location\Models\LocationCategory;
 use Modules\User\Models\Plan;
+use Illuminate\Support\Facades\Validator;
 
 class VendorController extends FrontendController
 {
@@ -194,7 +195,7 @@ class VendorController extends FrontendController
 
         $row->fillByAttr($dataKeys, $request->input());
         $row['image_id'] = resize_feature_image($row->image_id);
-        
+
         $res = $row->saveOriginOrTranslation($request->input('lang'), true);
 
         if ($res) {
@@ -211,6 +212,114 @@ class VendorController extends FrontendController
                 return redirect(route('hotel.vendor.edit', ['id' => $row->id]))->with('success', __('Hotel created'));
             }
         }
+    }
+
+
+    public function storeApi(Request $request, $id = null)
+    {
+        if ($id > 0) {
+            $this->checkPermission('hotel_update');
+            $row = $this->hotelClass::find($id);
+            if (empty($row)) {
+                return response()->json(['message' => 'Hotel not found'], 404);
+            }
+
+            if ($row->author_id != Auth::id() && !$this->hasPermission('hotel_manage_others')) {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+        } else {
+            $this->checkPermission('hotel_create');
+            $row = new $this->hotelClass();
+            $row->status = setting_item('hotel_vendor_create_service_must_approved_by_admin', 0) ? 'pending' : 'publish';
+            $row->author_id = Auth::id();
+        }
+
+        $dataKeys = [
+            'title',
+            'content',
+            'slug',
+            'video',
+            'is_featured',
+            'policy',
+            'location_id',
+            'address',
+            'map_lat',
+            'map_lng',
+            'map_zoom',
+            'star_rate',
+            'price',
+            'sale_price',
+            'check_in_time',
+            'check_out_time',
+            'allow_full_day',
+            'enable_extra_price',
+            'extra_price',
+            'min_day_before_booking',
+            'min_day_stays',
+            'enable_service_fee',
+            'service_fee',
+            'surrounding',
+            'category_id',
+            'room',
+            'chain',
+            'phone',
+            'website',
+            'ipanorama_id'
+        ];
+
+        $row->fillByAttr($dataKeys, $request->input());
+
+        if ($request->hasFile('image_id')) {
+            $file = $request->file('image_id');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('/hotel', $filename);
+            $media = new \Modules\Media\Models\MediaFile();
+            $media->file_name = $file->getClientOriginalName();
+            $media->file_path = $path;
+            $media->file_type = $file->getClientMimeType();
+            $media->file_extension = $file->getClientOriginalExtension();
+            $media->file_size = $file->getSize();
+            $media->driver = config('filesystems.default');
+            $media->save();
+
+            $row->image_id = $media->id;
+        }
+
+        if ($request->hasFile('banner_image_id')) {
+            $banner = $request->file('banner_image_id');
+            $filename = time() . '_' . $banner->getClientOriginalName();
+            $bannerPath = $banner->storeAs('/hotel', $filename);
+
+            $mediaBanner = new \Modules\Media\Models\MediaFile();
+            $mediaBanner->file_name = $banner->getClientOriginalName();
+            $mediaBanner->file_path = $bannerPath;
+            $mediaBanner->file_extension = $banner->getClientOriginalExtension();
+            $mediaBanner->file_type = $banner->getMimeType();
+            $mediaBanner->save();
+
+            $row->banner_image_id = $mediaBanner->id;
+        }
+
+
+        $res = $row->saveOriginOrTranslation($request->input('lang'), true);
+
+        if ($res) {
+            if (!$request->input('lang') || is_default_lang($request->input('lang'))) {
+                $this->saveTerms($row, $request);
+            }
+
+            do_action(Hook::AFTER_SAVING, $row, $request);
+
+            if ($id > 0) {
+                event(new UpdatedServiceEvent($row));
+                return response()->json(['message' => 'Hotel updated', 'data' => $row], 200);
+            } else {
+                event(new CreatedServicesEvent($row));
+                return response()->json(['message' => 'Hotel created', 'data' => $row], 201);
+            }
+        }
+
+        return response()->json(['message' => 'Failed to save hotel'], 500);
     }
 
     public function saveTerms($row, $request)

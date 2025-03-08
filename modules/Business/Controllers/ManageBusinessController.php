@@ -219,6 +219,121 @@ class ManageBusinessController extends FrontendController
         }
     }
 
+    public function storeApi(Request $request, $id = null)
+    {
+        if ($id > 0) {
+            $this->checkPermission('business_update');
+            $row = $this->businessClass::find($id);
+            if (empty($row)) {
+                return response()->json(['message' => 'Business not found'], 404);
+            }
+
+            if ($row->author_id != Auth::id() && !$this->hasPermission('business_manage_others')) {
+                return response()->json(['message' => 'Unauthorized'], 403);
+            }
+        } else {
+            $this->checkPermission('business_create');
+            $row = new $this->businessClass();
+            $row->status = setting_item('business_vendor_create_service_must_approved_by_admin', 0) ? 'pending' : 'publish';
+            $row->author_id = Auth::id();
+        }
+
+        $dataKeys = [
+            'title',
+            'content',
+            'price',
+            'is_instant',
+            'video',
+            'faqs',
+            'image_id',
+            'banner_image_id',
+            'gallery',
+            'bed',
+            'bathroom',
+            'square',
+            'category_id',
+            'location_id',
+            'address',
+            'map_lat',
+            'map_lng',
+            'map_zoom',
+            'default_state',
+            'price',
+            'sale_price',
+            'max_guests',
+            'enable_extra_price',
+            'extra_price',
+            'is_featured',
+            'default_state',
+            'min_day_before_booking',
+            'min_day_stays',
+            'enable_service_fee',
+            'service_fee',
+            'surrounding',
+            'franchising',
+            'phone',
+            'website',
+            'ipanorama_id',
+            'items',
+
+        ];
+
+        $row->fillByAttr($dataKeys, $request->input());
+
+        if ($request->hasFile('image_id')) {
+            $file = $request->file('image_id');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('/business', $filename);
+            $media = new \Modules\Media\Models\MediaFile();
+            $media->file_name = $file->getClientOriginalName();
+            $media->file_path = $path;
+            $media->file_type = $file->getClientMimeType();
+            $media->file_extension = $file->getClientOriginalExtension();
+            $media->file_size = $file->getSize();
+            $media->driver = config('filesystems.default');
+            $media->save();
+
+            $row->image_id = $media->id;
+        }
+
+        if ($request->hasFile('banner_image_id')) {
+            $banner = $request->file('banner_image_id');
+            $filename = time() . '_' . $banner->getClientOriginalName();
+            $bannerPath = $banner->storeAs('/business', $filename);
+
+            $mediaBanner = new \Modules\Media\Models\MediaFile();
+            $mediaBanner->file_name = $banner->getClientOriginalName();
+            $mediaBanner->file_path = $bannerPath;
+            $mediaBanner->file_extension = $banner->getClientOriginalExtension();
+            $mediaBanner->file_type = $banner->getMimeType();
+            $mediaBanner->save();
+
+            $row->banner_image_id = $mediaBanner->id;
+        }
+
+        //kenapa ketika upload banner_image_id dan image_id yang tersave gambar hanya dari image_id saja
+
+
+        $res = $row->saveOriginOrTranslation($request->input('lang'), true);
+
+        if ($res) {
+            if (!$request->input('lang') || is_default_lang($request->input('lang'))) {
+                $this->saveTerms($row, $request);
+            }
+
+            if ($id > 0) {
+                event(new UpdatedServiceEvent($row));
+                return response()->json(['message' => 'Business updated', 'data' => $row], 200);
+            } else {
+                event(new CreatedServicesEvent($row));
+                return response()->json(['message' => 'Business created', 'data' => $row], 201);
+            }
+        }
+
+        return response()->json(['message' => 'Failed to save Business'], 500);
+    }
+
+
     public function saveTerms($row, $request)
     {
         if (empty($request->input('terms'))) {

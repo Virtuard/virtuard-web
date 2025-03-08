@@ -3,11 +3,15 @@
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
 use Modules\Api\Controllers\ChatController;
+use Modules\Api\Controllers\ListingController;
 use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
 use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
 use Modules\Api\Controllers\SearchController;
+use Modules\Business\Controllers\ManageBusinessController;
+use Modules\Hotel\Controllers\VendorController;
+use Modules\Space\Controllers\ManageSpaceController;
 use Modules\User\Controllers\MessagesController as ControllersMessagesController;
 
 /*
@@ -30,6 +34,7 @@ Route::get('{type}/detail/{id}','SearchController@detail')->name('api.detail');
 Route::get('{type}/availability/{id}','SearchController@checkAvailability')->name('api.service.check_availability');
 Route::get('boat/availability-booking/{id}','SearchController@checkBoatAvailability')->name('api.service.checkBoatAvailability');
 Route::get('{type}/ipanorama/{id}','SearchController@getIpanorama')->name('api.getPanorama');
+
 
 Route::get('/panoramaView', [SearchController::class, 'panoramaView']);
 
@@ -123,6 +128,22 @@ Route::get('/profile-user/{id_or_slug}/services', [ProfileController::class, 'al
 /* Media */
 Route::group(['prefix'=>'media','middleware' => 'auth:api'],function(){
     Route::post('/store','MediaController@store')->name("api.media.store");
+});
+
+
+// Route::group(['prefix'=>'listing','middleware' => ['auth:sanctum'],],function(){
+//     Route::post('/hotels/{id?}', [ListingController::class, 'store']);
+// });
+
+Route::middleware('auth:sanctum')->post('/listing-hotels', [ListingController::class, 'store'])->name('api.listing.store');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/hotel/store/{id?}', [VendorController::class, 'storeApi']);
+    Route::post('/space/store/{id?}', [ManageSpaceController::class, 'storeApi']);
+    Route::post('/business/store/{id?}', [ManageBusinessController::class, 'storeApi']);
+    Route::get('/search-author/{type?}', [SearchController::class, 'searchByIdToken']);
+    Route::delete('/del-hotel/{id}', [ListingController::class, 'destroyHotels']);
+    Route::delete('/del-space/{id}', [ListingController::class, 'destroySpaces']);
+    Route::delete('/del-business/{id}', [ListingController::class, 'destroyBussiness']);
 });
 
 /* Post */

@@ -138,26 +138,78 @@ class SearchController extends Controller
         ]);
     }
 
-    public function searchServices()
+
+    public function searchByIdToken(Request $request)
     {
-        if (!empty(request()->query('limit'))) {
-            $limit = request()->query('limit');
-        } else {
-            $limit = 9;
+        $author_id = auth()->id();
+        if (empty($author_id)) {
+            return $this->sendError(__("Author ID is required"));
         }
-        $query = new Service();
-        $rows = $query->search(request()->input())->paginate($limit);
-        $total = $rows->total();
-        return $this->sendSuccess(
-            [
-                'total' => $total,
-                'total_pages' => $rows->lastPage(),
-                'data' => $rows->map(function ($row) {
-                    return $row->dataForApi();
-                }),
-            ]
-        );
+
+        $allServices = get_bookable_services();
+        $mergedData = collect();
+
+        foreach ($allServices as $type => $class) {
+            $query = new $class();
+            $rows = $query->search(['author_id' => $author_id])->get();
+
+            $filteredRows = $rows->filter(function ($item) use ($author_id) {
+                return $item->author->id == $author_id;
+            })->map(function ($item) use ($type) {
+                $data = $item->dataForApi();
+                $data['type'] = $type;
+                return $data;
+            });
+
+            if ($filteredRows->isNotEmpty()) {
+                $mergedData = $mergedData->merge($filteredRows);
+            }
+        }
+
+        $total = $mergedData->count();
+
+        return $this->sendSuccess([
+            'total' => $total,
+            'data' => $mergedData->values(),
+        ]);
     }
+
+    public function searchServices()
+{
+    $limit = request()->query('limit', 9); 
+    $types = ['hotel', 'space', 'business']; 
+    $allData = collect(); 
+
+    foreach ($types as $type) {
+        $class = get_bookable_service_by_id($type);
+        if (!empty($class) && class_exists($class)) {
+            $query = new $class();
+            $rows = $query->search(request()->input())->limit(3)->get();
+            $allData = $allData->merge($rows->map(fn($row) => $row->dataForApi()));
+        }
+    }
+
+    $allData = $allData->shuffle();
+
+    $page = request()->query('page', 1);
+    $paginated = new \Illuminate\Pagination\LengthAwarePaginator(
+        $allData->forPage($page, $limit), 
+        $allData->count(),
+        $limit,
+        $page,
+        ['path' => request()->url(), 'query' => request()->query()]
+    );
+
+    return $this->sendSuccess([
+        'total' => $paginated->total(),
+        'total_pages' => $paginated->lastPage(),
+        'data' => $paginated->items(),
+    ]);
+}
+
+    
+
+    
 
     public function getFilters($type = '')
     {
@@ -349,13 +401,5 @@ class SearchController extends Controller
         return $classAvailability->availabilityBooking($request);
     }
 
-    public function panoramaView(){
-        //saya ingin membuat fungsi untuk menampilkan panorama view
-        //dari alamat url https://virtuard.com/hotel/tropical-oasis-villa 
-        //untuk mengambil element id mypanorama dan tampilkan di halaman web
-        //dan tampilkan saja, tanpa mempengaruhi fungsi javascript yang lain
-        //intinya seperti url diatas, tetapi yang ditampilkan hanya di element id mypanorama
-        //dan tidak mempengaruhi fungsi javascript yang lain
-        //silahkan buat fungsi untuk menampilkan panorama view dari url diatas
-    }
+   
 }

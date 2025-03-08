@@ -21,6 +21,19 @@ class MediaFile extends BaseModel
         return MediaFile::where("file_name", $name)->firstOrFail();
     }
 
+    protected $fillable = [
+        'file_name',
+        'file_path',
+        'file_size',
+        'file_type',
+        'file_extension',
+        'create_user',
+        'update_user',
+        'author_id',
+        'folder_id',
+        'driver'
+    ];
+    
     public function cacheKey()
     {
         return sprintf("%s/%s", $this->getTable(), $this->getKey());
