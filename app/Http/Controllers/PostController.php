@@ -125,7 +125,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'media_user.*' => 'nullable|mimes:jpeg,png,mp4,mov,mkv|max:100000',
+            'media_user.*' => 'nullable|mimes:jpeg,png,mp4,mov,mkv,insv|max:100000',
         ], [
             'media_user.*.mimes' => 'File extention denied',
             'media_user.*.max' => 'Maximum upload file 100MB'
