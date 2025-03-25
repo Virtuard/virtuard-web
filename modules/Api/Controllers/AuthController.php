@@ -104,17 +104,12 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        $token = $user->createToken($request->device_name)->plainTextToken;
-
-        $user->api_token = $token;
-        $user->save();
-
         if (!$user || !Hash::check($request->password, $user->password)) {
             return $this->sendError(__("Password is not correct"), ['code' => 'invalid_credentials'])->setStatusCode(401);;
         }
 
         return [
-            'token' => $token,
+            'token' => $user->createToken($request->device_name)->plainTextToken,
             'user' => new UserResource($user),
             'status' => 1
         ];
