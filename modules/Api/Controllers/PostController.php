@@ -230,6 +230,7 @@ class PostController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Post created failed',
+                'error_message' => $e->getMessage()
             ], 400);
         }
     }
