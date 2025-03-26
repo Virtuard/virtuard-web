@@ -176,9 +176,15 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'message' => 'required',
-        ]);
+        if(isset($request->media_user)){
+            $this->validate($request, [
+                'message' => 'nullable',
+            ]);
+        } else {
+            $this->validate($request, [
+                'message' => 'required',
+            ]);
+        }
 
         DB::beginTransaction();
         try {
@@ -204,6 +210,7 @@ class PostController extends Controller
                         'post_id' => $post->id,
                         'media' => $path,
                         'type' => $type,
+                        'is_360_media' => $request->is_360_media,
                     ];
                     $mediaItem = PostMedia::create($dataMedia);
                 }
