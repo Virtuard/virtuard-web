@@ -129,13 +129,14 @@ class BookingController extends \Modules\Booking\Controllers\BookingController
      * )
      */
 
-    public function getHomeLayout()
+    public function getHomeLayout(Request $request)
     {
         $res = [];
         $template = Template::find(setting_item('api_app_layout'));
+
         if (!empty($template)) {
             $translate = $template->translate();
-            $res = $translate->getProcessedContentAPI();
+            $res = $translate->getProcessedContentAPI($request->user_id);
         }
         return $this->sendSuccess(
             [

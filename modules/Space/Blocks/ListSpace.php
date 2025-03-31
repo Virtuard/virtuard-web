@@ -140,16 +140,16 @@ class ListSpace extends BaseBlock
         return view('Space::frontend.blocks.list-space.index', $data);
     }
 
-    public function contentAPI($model = [])
+    public function contentAPI($model = [], $authorId = null)
     {
-        $rows = $this->query($model);
+        $rows = $this->query($model, $authorId);
         $model['data'] = $rows->map(function ($row) {
             return $row->dataForApi();
         });
         return $model;
     }
 
-    public function query($model)
+    public function query($model, $authorId = null)
     {
         $model_space = Space::select("bravo_spaces.*")->with([
             'location',
@@ -175,6 +175,9 @@ class ListSpace extends BaseBlock
         }
         if (!empty($model['custom_ids'])) {
             $model_space->whereIn("bravo_spaces.id", $model['custom_ids']);
+        }
+        if(isset($authorId)) {
+            $model_space->where('author_id', $authorId);
         }
         $model_space->orderByDesc("ipanorama_id");
         $model_space->orderByDesc("review_score");

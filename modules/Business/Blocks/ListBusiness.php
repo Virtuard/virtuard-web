@@ -140,16 +140,16 @@ class ListBusiness extends BaseBlock
         return view('Business::frontend.blocks.list-business.index', $data);
     }
 
-    public function contentAPI($model = [])
+    public function contentAPI($model = [], $authorId = null)
     {
-        $rows = $this->query($model);
+        $rows = $this->query($model, $authorId);
         $model['data'] = $rows->map(function ($row) {
             return $row->dataForApi();
         });
         return $model;
     }
 
-    public function query($model)
+    public function query($model, $authorId = null)
     {
         $model_business = Business::select("bravo_businesses.*")->with([
             'location',
@@ -175,6 +175,9 @@ class ListBusiness extends BaseBlock
         }
         if (!empty($model['custom_ids'])) {
             $model_business->whereIn("bravo_businesses.id", $model['custom_ids']);
+        }
+        if(isset($authorId)) {
+            $model_business->where('author_id', $authorId);
         }
 
         $model_business->orderByDesc("ipanorama_id");

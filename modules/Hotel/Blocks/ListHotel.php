@@ -145,17 +145,18 @@ class ListHotel extends BaseBlock
         return view('Hotel::frontend.blocks.list-hotel.index', $data);
     }
 
-    public function contentAPI($model = []){
-        $rows = $this->query($model);
+    public function contentAPI($model = [], $authorId = null){
+        $rows = $this->query($model, $authorId);
         $model['data']= $rows->map(function($row){
             return $row->dataForApi();
         });
         return $model;
     }
 
-    public function query($model){
+    public function query($model, $authorId = null){
         $hotelClass = $this->hotelClass->search($model);
         $limit = $model['number'] ?? 5;
+        if(isset($authorId)) $hotelClass->where('author_id', $authorId);
         return $hotelClass->paginate($limit);
     }
 }

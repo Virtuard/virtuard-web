@@ -221,7 +221,7 @@ class Template extends BaseModel
         return $html;
     }
 
-    public function getProcessedContentAPI(){
+    public function getProcessedContentAPI($authorId = null){
         $res = [];
         $blocks = $this->getAllBlocks();
         $items = json_decode($this->content, true);
@@ -237,8 +237,9 @@ class Template extends BaseModel
                 $item["model"] = call_user_func([
                     $blockModel,
                     'contentAPI'
-                ], $item['model']);
+                ], $item['model'], $authorId);
             }
+         
             $res[] = $item;
         }
         return $res;
