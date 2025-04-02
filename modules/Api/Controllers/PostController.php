@@ -68,6 +68,9 @@ class PostController extends Controller
                         }
                     }
                 })
+                ->when(isset($request->user_id), function ($q) use ($request) {
+                    $q->where('user_id', $request->user_id);
+                })
                 ->orderBy('id', 'desc')
                 ->paginate(20)
                 ->withQueryString();
