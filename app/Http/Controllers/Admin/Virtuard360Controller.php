@@ -82,6 +82,7 @@ class Virtuard360Controller extends Controller
     {
         $id = $request->id;
         $row = $this->model->find($id);
+
         $data = [
             'row'               => $row,
             'breadcrumbs'       => [
@@ -96,6 +97,7 @@ class Virtuard360Controller extends Controller
             ],
             'page_title'        => __("Edit Virtuard 360"),
             'user_id'        => $row->user_id,
+            'panorama'        => $row,
         ];
         return view('admin.virtuard360.edit', $data);
     }
