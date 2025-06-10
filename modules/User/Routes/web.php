@@ -72,7 +72,7 @@ Route::post('newsletter/subscribe','UserController@subscribe')->name('newsletter
 
 Route::get('register','Auth\RegisterController@showRegistrationForm')->name('auth.register');
 Route::post('register','Auth\RegisterController@register')->name('auth.register.store');
-Route::get('email/confirm/{email}','Auth\RegisterController@emailConfirmed')->name('auth.email.confirm');
+Route::get('email/confirm/{id}/{code}','Auth\RegisterController@emailConfirmed')->name('auth.email.confirm');
 
 Route::get('/user/my-plan','PlanController@myPlan')->name('user.plan')->middleware(['auth', 'verified']);
 Route::get('/plan','PlanController@index')->name('plan');

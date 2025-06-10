@@ -158,24 +158,29 @@ use App\Models\User;
             }
         }
 
-        public function emailConfirmed($str)
+        public function emailConfirmed($id, $code)
         {
             try {
-                $user = User::where('confirmation_code', $str)->first();
+                $user = User::where([
+                    ['id', $id],
+                    ['confirmation_code', $code]
+                ])->first();
                 
                 if ($user && $user->status == 'pending') {
                     $user->update([
                         'status' => 'publish',
                     ]);
 
+                    Auth::login($user);
+
                     return redirect()
                     ->route('login')
                     ->with('success', 'Thank you for confirmation. Your account actived.');
                 }
 
-                return redirect()->route('login');
+                return redirect()->route('login')->with('error', 'Link expired.');
             } catch (Exception $exception) {
-                return redirect()->route('login');
+                return redirect()->route('login')->with('error', 'Link expired.');
             }
         }
     }
