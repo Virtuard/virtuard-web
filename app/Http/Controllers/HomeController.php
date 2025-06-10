@@ -113,7 +113,7 @@ class HomeController extends Controller
         return redirect()
             ->route('login')
             ->with([
-                'success' => 'Your account has been successfully created. Before login, you must verify email. Please check your email inbox or spam and click button verify',
+                'success' => 'Your account has been successfully created. Before logging in, we need to verify your email. Please check your inbox or spam folder and click the Verify button to proceed.',
             ]);
     }
 }
