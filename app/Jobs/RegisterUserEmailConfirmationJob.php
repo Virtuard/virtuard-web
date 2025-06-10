@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,7 +11,6 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Mail;
-use Modules\User\Events\SendMailUserNeedConfirm;
 
 class RegisterUserEmailConfirmationJob implements ShouldQueue
 {
@@ -36,10 +36,9 @@ class RegisterUserEmailConfirmationJob implements ShouldQueue
     public function handle()
     {
         try {
-            $user = User::find($this->data->id);
-            event(new SendMailUserNeedConfirm($user));
+            event(new Registered($this->data));
         } catch (\Exception $e) {
-            \Log::error($e);
+            \Log::error($e->getMessage());
         }
     }
 }
