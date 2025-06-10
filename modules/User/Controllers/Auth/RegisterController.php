@@ -5,7 +5,8 @@
 
 
 	use App\Helpers\ReCaptchaEngine;
-    use App\Models\User;
+use App\Jobs\RegisterUserEmailConfirmationJob;
+use App\Models\User;
     use Illuminate\Auth\Events\Registered;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\Auth;
@@ -122,7 +123,11 @@
 
                 try {
                     if ($register_confirm_email) {
-                        event(new SendMailUserNeedConfirm($user));
+                        if (setting_item('queue_enable')) {
+                            dispatch(new RegisterUserEmailConfirmationJob($user));
+                        } else {
+                            event(new SendMailUserNeedConfirm($user));
+                        }
                     } else {
                         event(new SendMailUserRegistered($user));
                     }
@@ -142,12 +147,12 @@
                     $response['redirect'] = '/need-confirm-email';
                 }
 
-                // if(isset($request->is_auto_login)) {
+                if(isset($request->is_auto_login)) {
                     $user->last_login_at = now();
                     $user->save();
                     
                     Auth::login($user);
-                // }
+                }
                 
                 return response()->json($response, 200);
             }

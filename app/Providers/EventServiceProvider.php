@@ -40,7 +40,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         SendMailUserNeedConfirm::class => [
             SendMailUserNeedConfirmListen::class,
-            SendNotifyRegisteredListen::class
         ],
         VendorApproved::class=>[
             SendVendorApprovedMail::class,

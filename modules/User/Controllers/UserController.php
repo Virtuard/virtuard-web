@@ -221,7 +221,9 @@ class UserController extends FrontendController
             $a->last_name = $request->input('last_name');
             $a->save();
 
-            event(new UserSubscriberSubmit($a));
+            if (setting_item('subscriber_email_notif')) {
+                event(new UserSubscriberSubmit($a));
+            }
 
             return $this->sendSuccess([], __('Thank you for subscribing'));
         }
