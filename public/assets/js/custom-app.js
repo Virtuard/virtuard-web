@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function (event) {
-    //
+    tooglePassword();
 });
 
 $(function () {
@@ -182,3 +182,20 @@ function showErrorGeo(error) {
 //         $(".notification-container").removeClass("active");
 //     }
 // })
+
+
+const tooglePassword = () => {
+    document.querySelectorAll('.toggle-password').forEach(function (toggle) {
+        toggle.addEventListener('click', function () {
+            var passwordField = this.closest('.form-group').querySelector('.password-input');
+
+            if (!passwordField) return;
+
+            var isPassword = passwordField.type === 'password';
+            passwordField.type = isPassword ? 'text' : 'password';
+
+            this.classList.toggle('icofont-eye');
+            this.classList.toggle('icofont-eye-blocked');
+        });
+    });
+}

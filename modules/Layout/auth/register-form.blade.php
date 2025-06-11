@@ -27,26 +27,10 @@
         <span class="invalid-feedback error error-email"></span>
     </div>
     <div class="form-group">
-        <input type="password" class="form-control" name="password" id="passwordIdRegister" autocomplete="off" placeholder="{{__('Password')}}">
-        <span class="input-icon icofont-eye" id="toggle-password-register" style="cursor: pointer;"></span>
+        <input type="password" class="form-control password-input" name="password" id="passwordIdRegister" autocomplete="off" placeholder="{{__('Password')}}">
+        <span class="toggle-password input-icon icofont-eye-blocked" id="toggle-password-register" style="cursor: pointer;"></span>
         <span class="invalid-feedback error error-password"></span>
     </div>
-    
-    <script>
-        document.getElementById('toggle-password-register').addEventListener('click', function () {
-            var passwordField = document.getElementById('passwordIdRegister'); 
-            var passwordType = passwordField.type === 'password' ? 'text' : 'password';
-            passwordField.type = passwordType;
-    
-            if (passwordType === 'password') {
-                this.classList.remove('icofont-eye-blocked'); 
-                this.classList.add('icofont-eye'); 
-            } else {
-                this.classList.remove('icofont-eye'); 
-                this.classList.add('icofont-eye-blocked'); 
-            }
-        });
-    </script>
     
     <div class="form-group">
         <label for="term" class="term-label">
