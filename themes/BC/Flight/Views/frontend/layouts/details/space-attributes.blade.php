@@ -15,7 +15,7 @@
                         <li class="col-md-4 mb-3 list-group-item item {{$term->slug}} term-{{$term->id}}">
                             @if(!empty($term->image_id))
                                 @php $image_url = get_file_url($term->image_id, 'full'); @endphp
-                                <img loading='lazy'src="{{$image_url}}" class="img-responsive" alt="{{$translate_term->name}}">
+                                <img loading='lazy' src="{{$image_url}}" class="img-responsive" alt="{{$translate_term->name}}">
                             @else
                                 <i class="mr-3 text-primary font-size-24 {{ $term->icon ?? "icofont-check-circled icon-default" }}"></i>
                             @endif

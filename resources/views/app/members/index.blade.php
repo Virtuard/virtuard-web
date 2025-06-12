@@ -54,7 +54,7 @@
                     <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                         <div class="d-flex align-items-center">
                             <div class="image_box">
-                                <img loading='lazy'class="mr-4" src="{{ $user->getAvatarUrl() }}" alt="img" style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;">
+                                <img loading='lazy' class="mr-4" src="{{ $user->getAvatarUrl() }}" alt="img" style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;">
                             </div>
                         
                             <div>
@@ -101,7 +101,7 @@
                         <div class="d-flex align-items-center justify-content-between">
                             <div class="d-flex align-items-center">
                                 <div class="image_box">
-                                    <img loading='lazy'src="{{ $user->getAvatarUrl() }}" alt="img" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+                                    <img loading='lazy' src="{{ $user->getAvatarUrl() }}" alt="img" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
                                 </div>
                                 <div class="ml-3">
                                     <a href="{{ route('user.profile', $user->user_name ?? $user->id) }}" style="text-decoration: none; color: #262626; font-weight: bold;">

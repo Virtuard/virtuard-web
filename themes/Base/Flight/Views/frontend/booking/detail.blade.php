@@ -7,7 +7,7 @@
                 <div>
                     @if($image_url = $service->airline->image_url)
                         @if(!empty($disable_lazyload))
-                            <img loading='lazy'src="{{$image_url}}" class="img-responsive" alt="{!! clean($service->airline->name) !!}">
+                            <img loading='lazy' src="{{$image_url}}" class="img-responsive" alt="{!! clean($service->airline->name) !!}">
                         @else
                             {!! get_image_tag($service->airline->image_id,'medium',['class'=>'img-responsive','alt'=>$service->airline->name]) !!}
                         @endif

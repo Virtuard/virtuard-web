@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6 d-flex align-content-center">
                 @if(!empty($image_url))
-                    <img loading='lazy'class="i" src="{{ $image_url }}" alt="xx">
+                    <img loading='lazy' class="i" src="{{ $image_url }}" alt="xx">
                 @endif
             </div>
             <div class="col-md-6">

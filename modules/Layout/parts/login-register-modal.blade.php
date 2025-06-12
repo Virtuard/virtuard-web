@@ -5,7 +5,7 @@
                 <h4 class="modal-title">{{__('Log In')}}</h4>
                 <span class="c-pointer" data-dismiss="modal" aria-label="Close">
                     <i class="input-icon field-icon fa">
-                        <img loading='lazy'src="{{url('images/ico_close.svg')}}" alt="close">
+                        <img loading='lazy' src="{{url('images/ico_close.svg')}}" alt="close">
                     </i>
                 </span>
             </div>
@@ -22,7 +22,7 @@
                 <h4 class="modal-title">{{__('Sign Up')}}</h4>
                 <span class="c-pointer" data-dismiss="modal" aria-label="Close">
                     <i class="input-icon field-icon fa">
-                        <img loading='lazy'src="{{url('images/ico_close.svg')}}" alt="close">
+                        <img loading='lazy' src="{{url('images/ico_close.svg')}}" alt="close">
                     </i>
                 </span>
             </div>

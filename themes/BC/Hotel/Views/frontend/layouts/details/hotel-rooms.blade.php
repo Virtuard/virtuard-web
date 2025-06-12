@@ -93,7 +93,7 @@
                                                 <h5 class="modal-title">@{{ room.title }}</h5>
                                                 <span class="c-pointer" data-dismiss="modal" aria-label="Close">
                                                     <i class="input-icon field-icon fa">
-                                                        <img loading='lazy'src="{{asset('images/ico_close.svg')}}" alt="close">
+                                                        <img loading='lazy' src="{{asset('images/ico_close.svg')}}" alt="close">
                                                     </i>
                                                 </span>
                                             </div>

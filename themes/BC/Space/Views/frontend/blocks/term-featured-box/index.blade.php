@@ -21,7 +21,7 @@
                         <a href="{{ $page_search }}">
                             <div class="featured-item">
                                 <div class="image">
-                                    <img loading='lazy'src="{{$image_url}}" class="img-responsive" alt="{{$translation->name}}">
+                                    <img loading='lazy' src="{{$image_url}}" class="img-responsive" alt="{{$translation->name}}">
                                 </div>
                                 <h3 class="text">
                                     {{$translation->name}}

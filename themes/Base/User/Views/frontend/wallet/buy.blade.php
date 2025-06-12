@@ -66,7 +66,7 @@
                                         <label class="" data-toggle="collapse" data-target="#gateway_{{$k}}" >
                                             <input type="radio" name="payment_gateway" value="{{$k}}">
                                             @if($logo = $gateway->getDisplayLogo())
-                                                <img loading='lazy'src="{{$logo}}" alt="{{$gateway->getDisplayName()}}">
+                                                <img loading='lazy' src="{{$logo}}" alt="{{$gateway->getDisplayName()}}">
                                             @endif
                                             {{$gateway->getDisplayName()}}
                                         </label>

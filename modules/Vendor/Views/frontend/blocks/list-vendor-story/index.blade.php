@@ -217,7 +217,7 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-body p-0">
-            <img loading='lazy'id="img_story" style="width: 100%;" src="-" alt="">
+            <img loading='lazy' id="img_story" style="width: 100%;" src="-" alt="">
           </div>
         </div>
       </div>
@@ -226,7 +226,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-story" role="document">
             <div class="modal-content p-0" style="position: relative;">
-                <img loading='lazy'id="modalImage" src="" alt="" style="width: 100%; padding: 0;">
+                <img loading='lazy' id="modalImage" src="" alt="" style="width: 100%; padding: 0;">
 
                 <button id="previousButton" class="btn modal-nav-button prev"><i class="fa fa-arrow-left"
                         aria-hidden="true" style="color: white;"></i>
@@ -267,7 +267,7 @@
                             </svg>
                         </div>
                         <div class="image" id="my_self" onclick="showStory()">
-                            <img loading='lazy'src="/images/avatar.png" class="w-100">
+                            <img loading='lazy' src="/images/avatar.png" class="w-100">
                         </div>
                     </div>
 
@@ -294,7 +294,7 @@
                                 $thumb = $story[0]->user->getAvatarUrl();
                             }
                         @endphp
-                        <img loading='lazy'src="{{ $thumb }}" alt="" class="profile-pic">
+                        <img loading='lazy' src="{{ $thumb }}" alt="" class="profile-pic">
                     </div>
                 @endforeach
 
@@ -343,7 +343,7 @@
                                 }
                             @endphp
                                 @if($storyType == 'image')
-                                    <img loading='lazy'src="{{ asset('uploads/'.$story->media) }}" class="story-item" data-id="{{ $story->id }}" data-userId="{{ $story->user_id }}" data-isowner="{{ $isOwner }}" data-type="image" />
+                                    <img loading='lazy' src="{{ asset('uploads/'.$story->media) }}" class="story-item" data-id="{{ $story->id }}" data-userId="{{ $story->user_id }}" data-isowner="{{ $isOwner }}" data-type="image" />
                                 @elseif($storyType == 'video')
                                     <video src="{{ asset('uploads/'.$story->media) }}" class="story-item" data-id="{{ $story->id }}" data-userId="{{ $story->user_id }}" data-iswoner="{{ $isOwner }}" data-type="video"></video>
                                 @endif

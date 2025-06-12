@@ -1,6 +1,6 @@
 <div class="card w-100 shadow-hover-3 mb-4">
 	<a href="#" class="d-block mb-0 mx-1 mt-1 p-3" tabindex="0">
-		<img loading='lazy'class="card-img-top" src="{{$row->airline->image_url}}" alt="{{$row->airline->name}}">
+		<img loading='lazy' class="card-img-top" src="{{$row->airline->image_url}}" alt="{{$row->airline->name}}">
 	</a>
 	<div class="card-body px-3 pt-0 pb-3 my-0 mx-1">
 		<div class="row">

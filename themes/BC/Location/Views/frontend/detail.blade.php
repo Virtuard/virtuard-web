@@ -17,7 +17,7 @@
                     <div class="col-md-12 col-lg-4">
                         @if($row->image_id)
                             <div class="g-thumbnail m-3">
-                                <img loading='lazy'data-src="<?php echo $row->getImageUrl() ?>" class="img-fluid lazy" alt="{{$translation->name}}">
+                                <img loading='lazy' data-src="<?php echo $row->getImageUrl() ?>" class="img-fluid lazy" alt="{{$translation->name}}">
                             </div>
                         @endif
                     </div>

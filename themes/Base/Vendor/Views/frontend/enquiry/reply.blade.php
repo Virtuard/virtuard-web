@@ -37,7 +37,7 @@
                     @foreach($rows as $row)
                         <div class="media text-muted pt-3">
                             <div class="bd-placeholder-img mr-2 rounded">
-                                <img loading='lazy'src="{{$row->author->avatar_url}}" class="bd-placeholder-img mr-2 rounded" width="32" height="32" alt="">
+                                <img loading='lazy' src="{{$row->author->avatar_url}}" class="bd-placeholder-img mr-2 rounded" width="32" height="32" alt="">
                             </div>
                             <div class="d-flex flex-justify-between flex-grow-1">
                                 <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray flex-grow-1">

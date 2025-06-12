@@ -121,7 +121,7 @@
         '<div id="lightbox" tabindex="-1" class="lightbox">' +
         '<div class="lb-outerContainer">' +
         '<div class="lb-container">' +
-        '<img loading="lazy"class="lb-image" src="" alt="Your Image Alt Text"/>' +
+        '<img loading="lazy" class="lb-image" src="" alt="Your Image Alt Text"/>' +
         '<div class="lb-textContainer" style="background-color: rgba(0, 0, 0, 0.5); position: absolute; bottom: 30px; left: 10%; right: 10%; text-align: center; padding: 20px;">' +
         '<a class="lb-text" href="#" style="color:white;"></a>' +
         "</div>" +

@@ -2,7 +2,7 @@
     <div class="header">
         @if($image_url = get_file_url($row->image_id, 'full'))
             <header class="post-header">
-                <img loading='lazy'src="{{ $image_url  }}" alt="{{$translation->title}}">
+                <img loading='lazy' src="{{ $image_url  }}" alt="{{$translation->title}}">
             </header>
             <div class="cate">
                 @php $category = $row->category; @endphp

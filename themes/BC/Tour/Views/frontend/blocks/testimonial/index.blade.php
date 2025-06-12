@@ -8,7 +8,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="item has-matchHeight">
                             <div class="author">
-                                <img loading='lazy'src="{{$avatar_url}}" alt="{{$item['name']}}">
+                                <img loading='lazy' src="{{$avatar_url}}" alt="{{$item['name']}}">
                                 <div class="author-meta">
                                     <h4>{{$item['name']}}</h4>
                                     @if(!empty($item['number_star']))

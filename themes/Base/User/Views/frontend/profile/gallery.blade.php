@@ -29,7 +29,7 @@
 
                         <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
                             data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->ipanorama->user_id }}">
-                            <img loading='lazy'src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
+                            <img loading='lazy' src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
                                 alt="image">
                         </a>
                     </div>
@@ -60,7 +60,7 @@
                         @endif
 
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
-                            <img loading='lazy'class="img-responsive lazy loaded" data-src="{{ asset('uploads/' . $media->media) }}"
+                            <img loading='lazy' class="img-responsive lazy loaded" data-src="{{ asset('uploads/' . $media->media) }}"
                                 alt="image" src="{{ asset('uploads/' . $media->media) }}"
                                 data-was-processed="true" />
                         </a>

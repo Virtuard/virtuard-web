@@ -45,7 +45,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-3">
-                    <h1><a target="_blank" href="{{url('intro')}}"><img loading='lazy'src="{{url('images')}}/logo.svg"
+                    <h1><a target="_blank" href="{{url('intro')}}"><img loading='lazy' src="{{url('images')}}/logo.svg"
                                                                  alt="Booking Core Logo"/></a></h1>
                 </div>
                 <div class="col-xs-9">
@@ -83,7 +83,7 @@
                     {{--Booking.com, Agoda.com, Viator.com, Getyourguide.com..</p>--}}
             </div>
             <div class="col-lg-6 hidden-md hidden-sm hidden-xs">
-                <img loading='lazy'src="{{url('landing/img/header_img.png')}}" class="effectSwing img-rounder"/>
+                <img loading='lazy' src="{{url('landing/img/header_img.png')}}" class="effectSwing img-rounder"/>
             </div>
         </div>
     </div>
@@ -115,7 +115,7 @@
                 @foreach(config('landing.exclusive_features') as $feature)
                     <div class="col-lg-6 col-md-6">
                         <div class="item">
-                            <img loading='lazy'src="{{url('landing')}}/{{$feature['thumb']}}" alt="Plugin"/>
+                            <img loading='lazy' src="{{url('landing')}}/{{$feature['thumb']}}" alt="Plugin"/>
                             <div class="plugin-info">
                                 <h5>{{$feature['name']}}</h5>
                                 <div class="desc">{{$feature['desc']}}</div>
@@ -141,7 +141,7 @@
                             </div>
                         @else
                             <div class="col-pull-left">
-                                <img loading='lazy'src="{{asset('landing/'.$screenshot['thumb'])}}" class="img-responsive"/>
+                                <img loading='lazy' src="{{asset('landing/'.$screenshot['thumb'])}}" class="img-responsive"/>
                             </div>
                         @endif
                     </div>
@@ -152,7 +152,7 @@
                             </div>
                         @else
                             <div class="col-pull-right">
-                                <img loading='lazy'src="{{asset('landing/'.$screenshot['thumb'])}}" class="img-responsive"/>
+                                <img loading='lazy' src="{{asset('landing/'.$screenshot['thumb'])}}" class="img-responsive"/>
                             </div>
                         @endif
                     </div>
@@ -173,12 +173,12 @@
                     <div class="col-lg-4 col-md-6 col-sm-6">
                         @if($item['type'] == 'more')
                         <div class="item more">
-                            <img loading='lazy'src="{{asset('landing/'.$item['thumb'])}}" />
+                            <img loading='lazy' src="{{asset('landing/'.$item['thumb'])}}" />
                             <h5>{{$item['name']}}</h5>
                         </div>
                         @else
                         <div class="item">
-                            <img loading='lazy'src="{{asset('landing/'.$item['thumb'])}}" />
+                            <img loading='lazy' src="{{asset('landing/'.$item['thumb'])}}" />
                             <h5>{{$item['name']}}</h5>
                             <p class="desc">{{$item['desc']}}</p>
                         </div>
@@ -192,9 +192,9 @@
 </div>
 
 <div class="footer">
-<!--<img loading='lazy'src="<?php /*echo $url . '/img/footer-corrner.png'; */?>" class="footer-corrner"/>-->
+<!--<img loading='lazy' src="<?php /*echo $url . '/img/footer-corrner.png'; */?>" class="footer-corrner"/>-->
     <div class="container">
-        <h3>Creating your own Booking<br />System with <span>Booking Core</span> is super<br />fast and easy <img loading='lazy'src="{{url('landing/img/hand.svg')}}" /></h3>
+        <h3>Creating your own Booking<br />System with <span>Booking Core</span> is super<br />fast and easy <img loading='lazy' src="{{url('landing/img/hand.svg')}}" /></h3>
         <a target="_blank"  href="{{config('landing.item_url')}}" class="btn-buynow">BUY NOW</a>
         <div class="social">
             <span>FOLLOW US</span>

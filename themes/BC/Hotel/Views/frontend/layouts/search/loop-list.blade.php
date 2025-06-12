@@ -11,7 +11,7 @@
         <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}">
             @if($row->image_url)
                 @if(!empty($disable_lazyload))
-                    <img loading='lazy'src="{{$row->image_url}}" class="img-responsive" alt="">
+                    <img loading='lazy' src="{{$row->image_url}}" class="img-responsive" alt="">
                 @else
                     {!! get_image_tag($row->image_id,'medium',['class'=>'img-responsive','alt'=>$translation->title]) !!}
                 @endif

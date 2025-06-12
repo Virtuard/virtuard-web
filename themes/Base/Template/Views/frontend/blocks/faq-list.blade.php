@@ -6,7 +6,7 @@
             @foreach($list_item as $item)
                 <div class="col-md-6">
                     <div class="faq-item">
-                        <h3><a><img loading='lazy'class="alignnone wp-image-7754" src="{{asset('images/ico_quest.png')}}" alt="" width="35" height="35"></a>&nbsp; {{$item['title']}}</h3>
+                        <h3><a><img loading='lazy' class="alignnone wp-image-7754" src="{{asset('images/ico_quest.png')}}" alt="" width="35" height="35"></a>&nbsp; {{$item['title']}}</h3>
                         <p>
                             {!! clean($item['sub_title'],'html5-definitions') !!}
                         </p>

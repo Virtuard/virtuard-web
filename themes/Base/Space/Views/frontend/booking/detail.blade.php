@@ -18,7 +18,7 @@
                 <div>
                     @if($image_url = $service->image_url)
                         @if(!empty($disable_lazyload))
-                            <img loading='lazy'src="{{$service->image_url}}" class="img-responsive" alt="{!! clean($service_translation->title) !!}">
+                            <img loading='lazy' src="{{$service->image_url}}" class="img-responsive" alt="{!! clean($service_translation->title) !!}">
                         @else
                             {!! get_image_tag($service->image_id,'medium',['class'=>'img-responsive','alt'=>$service_translation->title]) !!}
                         @endif

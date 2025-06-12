@@ -53,7 +53,7 @@
                             <div class="media">
                                 <div class="media-left">
                                     @if($avatar_url = $userInfo->getAvatarUrl())
-                                        <img loading='lazy'class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
+                                        <img loading='lazy' class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
                                     @else
                                         <span class="avatar-text">{{ucfirst($userInfo->getDisplayName()[0])}}</span>
                                     @endif

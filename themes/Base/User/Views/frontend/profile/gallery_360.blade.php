@@ -36,7 +36,7 @@
 
                         <a class="preview-panorama cursor-pointer" data-id="{{ $post->ipanorama->id }}"
                             data-code="{{ $post->ipanorama->code }}" data-user_id="{{ $post->user_id }}">
-                            <img loading='lazy'src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
+                            <img loading='lazy' src="{{ getThumbPanorama($post->ipanorama) }}" class="gallery-image thumb-panorama"
                                 alt="image">
                         </a>
                     </div>

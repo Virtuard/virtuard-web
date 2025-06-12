@@ -3,14 +3,14 @@
         <ul>
             <li class="my-5">
                 <h6>Add New Image</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/add-image.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/add-image.png') }}" alt="">
                 <ol class="m-3">
                     <li>Click button "Add New Image"</li>
                 </ol>
             </li>
             <li class="my-5">
                 <h6>Submit Image</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/submit-image.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/submit-image.png') }}" alt="">
                 <ol class="m-3">
                     <li>Set title image</li>
                     <li>Choose image</li>
@@ -19,7 +19,7 @@
             </li>
             <li class="mb-5">
                 <h6>Open Scenes</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/section-scenes.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/section-scenes.png') }}" alt="">
                 <ol class="m-3">
                     <li>Click "Tab Scenes"</li>
                     <li>Click add button "+" to open scenes form</li>
@@ -27,7 +27,7 @@
             </li>
             <li class="mb-5">
                 <h6>Set Scenes</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/set-title-scene.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/set-title-scene.png') }}" alt="">
                 <ol class="m-3">
                     <li>Set title scene</li>
                     <li>Select image scene</li>
@@ -35,7 +35,7 @@
             </li>
             <li class="mb-5">
                 <h6>Select Image Scene</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/select-image-scene.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/select-image-scene.png') }}" alt="">
                 <ol class="m-3">
                     <li>Select image scene</li>
                     <li>Click button "Select"</li>
@@ -43,7 +43,7 @@
             </li>
             <li class="mb-5">
                 <h6>Set Yaw and Pitch Scene</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/set-yaw-scene.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/set-yaw-scene.png') }}" alt="">
                 <ol class="m-3">
                     <li>Click image and drag to set your image position</li>
                     <li>Click arrow button to copy coordinat "Yaw" and "Pitch"</li>
@@ -51,7 +51,7 @@
             </li>
             <li class="mb-5">
                 <h6>Open Hotspots</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/section-hotspots.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/section-hotspots.png') }}" alt="">
                 <ol class="m-3">
                     <li>Select scene</li>
                     <li>Click tab "Hotspots"</li>
@@ -59,7 +59,7 @@
             </li>
             <li class="mb-5">
                 <h6>Set Hotspots</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/set-hotspot.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/set-hotspot.png') }}" alt="">
                 <ol class="m-3">
                     <li>After your click tab "Hotspots", then</li>
                     <li>Click add button "+" to open hotspots form</li>
@@ -71,7 +71,7 @@
             </li>
             <li class="mb-5">
                 <h6>Save Project</h6>
-                <img loading='lazy'src="{{ asset('uploads/images/panorama-tutorial/pra-save.png') }}" alt="">
+                <img loading='lazy' src="{{ asset('uploads/images/panorama-tutorial/pra-save.png') }}" alt="">
                 <ol class="m-3">
                     <li>After your setting the all scenes and hotspots, click "Save"</li>
                     <li>If a confirmation popup appears, click "Submit".</li>

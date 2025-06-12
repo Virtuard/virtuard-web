@@ -297,32 +297,32 @@ Vue.component('file-item', {
             },
             getFileThumb(file){
                 if(file.file_type.substr(0,5)=='image'){
-                    return '<img loading="lazy"src="'+file.thumb_size+'">';
+                    return '<img loading="lazy" src="'+file.thumb_size+'">';
                 }
                 if(file.file_type.substr(0,5)=='video'){
-                    return '<img loading="lazy"src="/icon/007-video-file.png">';
+                    return '<img loading="lazy" src="/icon/007-video-file.png">';
                 }
                 if(file.file_type.indexOf('x-zip-compressed')!== -1 || file.file_type.indexOf('/zip')!== -1){
-                    return '<img loading="lazy"src="/icon/005-zip-2.png">';
+                    return '<img loading="lazy" src="/icon/005-zip-2.png">';
                 }
                 if(file.file_type.indexOf('/pdf')!== -1 ){
-                    return '<img loading="lazy"src="/icon/002-pdf-file-format-symbol.png">';
+                    return '<img loading="lazy" src="/icon/002-pdf-file-format-symbol.png">';
                 }
 
                 if(file.file_type.indexOf('/msword')!== -1 || file.file_type.indexOf('wordprocessingml')!== -1){
-                    return '<img loading="lazy"src="/icon/010-word.png">';
+                    return '<img loading="lazy" src="/icon/010-word.png">';
                 }
                 if(file.file_type.indexOf('spreadsheetml')!== -1  || file.file_type.indexOf('excel')!== -1){
-                    return '<img loading="lazy"src="/icon/011-excel-file.png">';
+                    return '<img loading="lazy" src="/icon/011-excel-file.png">';
                 }
                 if(file.file_type.indexOf('presentation')!== -1 ){
-                    return '<img loading="lazy"src="/icon/powerpoint.png">';
+                    return '<img loading="lazy" src="/icon/powerpoint.png">';
                 }
                 if(file.file_type.indexOf('audio/')!== -1 ){
-                    return '<img loading="lazy"src="/icon/006-audio-file.png">';
+                    return '<img loading="lazy" src="/icon/006-audio-file.png">';
                 }
 
-                return '<img loading="lazy"src="/icon/008-file.png">';
+                return '<img loading="lazy" src="/icon/008-file.png">';
 
             },
             humanFileSize:function (bytes, si=false, dp=1) {

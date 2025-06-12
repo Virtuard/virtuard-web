@@ -32,7 +32,7 @@
                         @if(!empty($row->author))
                             <li>
                                 @if($avatar_url = $row->author->getAvatarUrl())
-                                    <img loading='lazy'class="avatar" src="{{$avatar_url}}" alt="{{$row->author->getDisplayName()}}">
+                                    <img loading='lazy' class="avatar" src="{{$avatar_url}}" alt="{{$row->author->getDisplayName()}}">
                                 @else
                                     <span class="avatar-text">{{ucfirst($row->author->getDisplayName()[0])}}</span>
                                 @endif

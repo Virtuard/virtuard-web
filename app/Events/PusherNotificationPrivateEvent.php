@@ -22,7 +22,7 @@ class PusherNotificationPrivateEvent implements ShouldBroadcast
     {
 
         if($user->avatar_url){
-            $avatar = '<img loading="lazy"class="image-responsive" src="'.$user->avatar_url.'" alt="'.$user->getDisplayName().'">';
+            $avatar = '<img loading="lazy" class="image-responsive" src="'.$user->avatar_url.'" alt="'.$user->getDisplayName().'">';
         }else{
             $avatar = '<span class="avatar-text">'.$user->getFirstCharacterDisplayName().'</span>';
         }

@@ -42,7 +42,7 @@
         <div class="container">
             <div class="profile">
                 <div class="profile-image" id="profile-instagram">
-                    <img loading='lazy'class="image-demo"
+                    <img loading='lazy' class="image-demo"
                         src="{{ get_file_url(old('avatar_id', $dataUser->avatar_id)) ?? ($dataUser->getAvatarUrl() ?? '') }}"
                         style="width:152px;" />
                 </div>

@@ -1,7 +1,7 @@
 {{-- ---------------------- Image modal box ---------------------- --}}
 <div id="imageModalBox" class="imageModal">
     <span class="imageModal-close">&times;</span>
-    <img loading='lazy'class="imageModal-content" id="imageModalBoxSrc">
+    <img loading='lazy' class="imageModal-content" id="imageModalBoxSrc">
   </div>
 
   {{-- ---------------------- Delete Modal ---------------------- --}}

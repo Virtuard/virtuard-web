@@ -64,11 +64,11 @@
                     <div class="btn-group">
                         <span class="btn-transparent has-icon bravo-video-popup" @if(!empty($youtube)) data-toggle="modal" @endif data-src="{{ handleVideoUrl($youtube) }}" data-target="#video-register">
                             @if($bg_image)
-                                <img loading='lazy'src="{{get_file_url($bg_image,'full')}}" class="img-fluid" alt="Youtube">
+                                <img loading='lazy' src="{{get_file_url($bg_image,'full')}}" class="img-fluid" alt="Youtube">
                             @endif
                             @if(!empty($youtube))
                                 <div class="play-icon">
-                                    <img loading='lazy'src="{{asset('module/vendor/img/ico-play.svg')}}" alt="Play background" class="img-fluid play-image">
+                                    <img loading='lazy' src="{{asset('module/vendor/img/ico-play.svg')}}" alt="Play background" class="img-fluid play-image">
                                 </div>
                             @endif
                         </span>

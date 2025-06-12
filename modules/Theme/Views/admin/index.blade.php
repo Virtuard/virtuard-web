@@ -11,7 +11,7 @@
             @foreach($rows as $theme_id=>$themeClass)
                 <div class="col-md-4 mb-3">
                     <div class="card">
-                        <img loading='lazy'class="card-img-top" src="{{asset("themes/".$theme_id)}}{{$themeClass::$screenshot}}" alt="">
+                        <img loading='lazy' class="card-img-top" src="{{asset("themes/".$theme_id)}}{{$themeClass::$screenshot}}" alt="">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center">
                                 <h5 class="card-title">{{$themeClass::$name}}</h5>

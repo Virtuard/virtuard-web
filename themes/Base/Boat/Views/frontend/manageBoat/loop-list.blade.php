@@ -9,7 +9,7 @@
             <div class="thumb-image">
                 <a href="{{$row->getDetailUrl()}}" target="_blank">
                     @if($row->image_url)
-                        <img loading='lazy'src="{{$row->image_url}}" class="img-responsive" alt="">
+                        <img loading='lazy' src="{{$row->image_url}}" class="img-responsive" alt="">
                     @endif
                 </a>
                 <div class="service-wishlist {{$row->isWishList()}}" data-id="{{$row->id}}" data-type="{{$row->type}}">

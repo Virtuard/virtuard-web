@@ -16,7 +16,7 @@ $service = $row->service;
                 <div class="thumb-image">
                     <a href="{{$service->getDetailUrl()}}" target="_blank">
                         @if($service->image_url)
-                            <img loading='lazy'src="{{$service->image_url}}" class="img-responsive" alt="">
+                            <img loading='lazy' src="{{$service->image_url}}" class="img-responsive" alt="">
                         @endif
                     </a>
                 </div>

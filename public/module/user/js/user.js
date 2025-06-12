@@ -105,7 +105,7 @@ jQuery(function ($) {
                 if (edit_type === 'multiple'){
                     $this.closest('.image-item').find('.image-preview').attr('src',canvas);
                 } else {
-                    p.find('.attach-demo').html('<img loading="lazy"src="' + canvas + '" alt="image-responsive" style="max-width: 150px">');
+                    p.find('.attach-demo').html('<img loading="lazy" src="' + canvas + '" alt="image-responsive" style="max-width: 150px">');
                 }
 
                 $.ajax({
@@ -134,7 +134,7 @@ jQuery(function ($) {
             onSelect: function (files) {
                 let path = (files[0].edit_path !== undefined) ? files[0].edit_path : files[0].max_large_size;
                 p.addClass('active');
-                p.find('.attach-demo').html('<img loading="lazy"src="' + files[0].thumb_size + '"/>');
+                p.find('.attach-demo').html('<img loading="lazy" src="' + files[0].thumb_size + '"/>');
                 p.attr('data-val',files[0].id);
                 p.find('input').val(files[0].id);
                 p.find('.edit-img').attr('data-file', path);

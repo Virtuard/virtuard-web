@@ -9,7 +9,7 @@
                 <div class="media-left mr-3">
                     <a class="s-user-avatar">
                         @if($avatar_url = $userInfo->getAvatarUrl())
-                            <img loading='lazy'class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
+                            <img loading='lazy' class="avatar" src="{{$avatar_url}}" alt="{{$userInfo->getDisplayName()}}">
                         @else
                             <span class="s-avatar-text">{{ucfirst($userInfo->getDisplayName()[0])}}</span>
                         @endif

@@ -10,7 +10,7 @@
                                 @if(!empty($style) and $style == 'style2')
                                     <span class="number-circle">{{$k+1}}</span>
                                 @else
-                                    <img loading='lazy'src="{{$image_url}}" class="img-fluid" alt="{{$item['title']}}">
+                                    <img loading='lazy' src="{{$image_url}}" class="img-fluid" alt="{{$item['title']}}">
                                 @endif
                             </div>
                             <div class="content">

@@ -16,7 +16,7 @@
 						<div class="row text-center">
 							<div class="col-md-4">
 								<div class="d-block d-lg-flex flex-horizontal-center">
-									<img loading='lazy'class="img-fluid mr-3 mb-3 mb-lg-0" :src="flight.airline.image_url??''" alt="Image-Description">
+									<img loading='lazy' class="img-fluid mr-3 mb-3 mb-lg-0" :src="flight.airline.image_url??''" alt="Image-Description">
 									<div class="font-size-14">@{{flight.title}} | @{{flight.code}}</div>
 								</div>
 							</div>

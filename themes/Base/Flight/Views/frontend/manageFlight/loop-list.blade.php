@@ -4,7 +4,7 @@
             <div class="thumb-image">
                 <a href="#" target="_blank">
                     @if($row->airline->image_url)
-                        <img loading='lazy'src="{{$row->airline->image_url}}" class="img-responsive" alt="">
+                        <img loading='lazy' src="{{$row->airline->image_url}}" class="img-responsive" alt="">
                     @endif
                 </a>
             </div>
