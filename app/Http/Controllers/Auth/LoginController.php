@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Dotenv\Util\Str;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Matrix\Exception;
 use Modules\User\Events\SendMailUserRegistered;
@@ -201,4 +202,139 @@ class LoginController extends Controller
     }
 
 
+    public function handleGoogleAccount(Request $request)
+    {
+        try {
+            $id = $request->input('id');;
+            $email = $request->input('email');
+            $name = $request->input('display_name');
+            $spittedName = explode(" ", $name);
+            $firstName = $spittedName[0];
+            $lastName = null;
+            if(count($spittedName) > 1){
+                $lastName = $spittedName[1];
+            }
+            $user_name = generate_user_name($name);
+            
+            $photoUrl = $request->input('photo_url');
+
+            // Optional: validate the email
+            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json(['error' => 'Invalid or missing email'], 400);
+            }
+
+            $userByEmail = User::query()->where('email', $email)->first();
+            Log::info($userByEmail);
+            if (!empty($userByEmail)) {
+                $provider = 'google';
+                $userByEmail->addMeta('social_' . $provider . '_id', $id);
+                $userByEmail->addMeta('social_' . $provider . '_email', $email);
+                $userByEmail->addMeta('social_' . $provider . '_name', $name);
+                $userByEmail->addMeta('social_' . $provider . '_avatar', $photoUrl);;
+                $userByEmail->addMeta('social_meta_avatar',  $photoUrl);
+
+                $userByEmail->need_update_pw = 0;
+                $userByEmail->save();
+                
+                $token = $userByEmail->createToken('access_token')->plainTextToken;
+                $user = [
+                    'id' => $userByEmail->id,
+                    'first_name' => $userByEmail->first_name,
+                    'last_name' => $userByEmail->last_name,
+                    'email' => $userByEmail->email,
+                    'name' => $userByEmail->name,
+                    'phone' => $userByEmail->phone,
+                    'business_name' => $userByEmail->business_name,
+                    'user_name' => $userByEmail->user_name,
+                ];
+                
+                $responseJson = [
+                    'token' => $token,
+                    'user' => $user,
+                    'status'    => 1,
+                ];
+
+                // Login with user
+                Auth::login($userByEmail);
+                
+                return response()->json($responseJson, 200);
+
+               
+            }
+            
+            
+            $userDto = [
+                'google_user_id' => $id,
+                'name' => $name,
+                'email' => $email,
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $email,
+                'user_name' => $user_name,
+                'photo_profile' => $photoUrl,
+            ];
+            
+            $userResponse = $this->createGoogleUser($userDto);
+            return response()->json([
+                'token' => $userResponse->createToken('access_token')->plainTextToken,
+                'user' => [
+                    'id' => $userResponse->id,
+                    'first_name' => $userResponse->first_name,
+                    'last_name' => $userResponse->last_name,
+                    'email' => $userResponse->email,
+                    'business_name' => $userResponse->business_name,
+                    'name' => $userResponse->name,
+                    'user_name' => $userResponse->user_name,
+                    'phone' => $userResponse->phone,
+                    'photo_profile' => $userResponse->photo_profile,
+                ],
+                'status'    => 1,
+            ], 200);
+            
+            
+
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+    }   
+    
+    
+    public function createGoogleUser($user) {
+        // Create New User
+        $provider = 'google';
+        try{
+            $realUser = new User();
+            $realUser->email = $user['email'];
+            $realUser->password = Hash::make(uniqid() . time());
+            $realUser->name = $user['name'];
+            $realUser->first_name = $user['first_name'];
+            $realUser->last_name = $user['last_name'];
+            $realUser->user_name = $user['user_name'];
+            $realUser->status = 'publish';
+            $realUser->last_login_at = Carbon::now();
+            $realUser->email_verified_at = Carbon::now();
+
+            $realUser->addMeta('social_' . $provider . '_id', $user["google_user_id"]);
+            $realUser->addMeta('social_' . $provider . '_email', $user["email"]);
+            $realUser->addMeta('social_' . $provider . '_name', $user["name"]);
+            $realUser->addMeta('social_' . $provider . '_avatar', $user["photo_profile"]);
+            $realUser->addMeta('social_meta_avatar',  $user["photo_profile"]);
+
+
+            $realUser->save();
+            
+            return $realUser;
+      
+        }catch(exception $e){
+            Log::error($e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+      
+    }
+        
+
+
+
 }
+

@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cookie;
+use Laravel\Socialite\Facades\Socialite;
 use Modules\Booking\Controllers\BookingController;
 use Modules\User\Controllers\PlanController;
 
@@ -133,3 +136,8 @@ if (app()->environment('local')) {
         abort(404);
     });
 }
+
+    
+
+// Google OAuth route  (especially for mobile authentication)
+Route::post('/api/auth/google/account', [LoginController::class, 'handleGoogleAccount'] );
