@@ -8,13 +8,13 @@ use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
 use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
-use Modules\Api\Controllers\ReferralController;
 use Modules\Api\Controllers\SearchController;
 use Modules\Business\Controllers\ManageBusinessController;
 use Modules\Hotel\Controllers\VendorController;
 use Modules\Space\Controllers\ManageSpaceController;
 use Modules\User\Controllers\MessagesController as ControllersMessagesController;
-
+use Modules\Api\Controllers\MemberController;
+use Modules\Api\Controllers\MapController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -156,8 +156,10 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
     Route::delete('{id}','PostController@destroy');
 });
 
-/* Referral */ 
+Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
 
-Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {
-    Route::get('/report', [ReferralController::class, 'getReports']);
+Route::get('/all-members', [MemberController::class, 'allMembers']);
+
+Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
+    Route::post('/update', [ProfileController::class, 'updateProfile']);
 });
