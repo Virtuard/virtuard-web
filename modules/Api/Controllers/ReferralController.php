@@ -32,7 +32,7 @@ class ReferralController extends Controller
             $bookings = $this->bookingPayment::getReferralHistoryAPI(Auth::id())->paginate(10);
         } 
         $data = [
-            'referals'    => !empty($bookings) ? $bookings : [],
+            'referals'    => $bookings,
             'statues'     => config('booking.statuses'),
             'userInfo'    => [
                 'username' => $user->user_name,
