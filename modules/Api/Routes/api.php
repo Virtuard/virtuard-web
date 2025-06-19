@@ -8,6 +8,7 @@ use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
 use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
+use Modules\Api\Controllers\ReferralController;
 use Modules\Api\Controllers\SearchController;
 use Modules\Business\Controllers\ManageBusinessController;
 use Modules\Hotel\Controllers\VendorController;
@@ -153,4 +154,10 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
     Route::post('/','PostController@store');
     Route::post('/{id}/comment','PostController@storeComment');
     Route::delete('{id}','PostController@destroy');
+});
+
+/* Referral */ 
+
+Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {
+    Route::get('/report', [ReferralController::class, 'getReports']);
 });
