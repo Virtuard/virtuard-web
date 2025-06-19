@@ -13,6 +13,8 @@ class ReferralController extends Controller
 {
     protected $bookingClass;
     protected $bookingPayment;
+    
+    protected $bookings;
     public function __construct()
     {
         $this->bookingClass = Booking::class;
@@ -27,12 +29,12 @@ class ReferralController extends Controller
                 'message' => 'Unauthorized'
             ], 401);
         }   
-
+        
         if ($user->role_id == 2) {
-            $bookings = $this->bookingPayment::getReferralHistoryAPI(Auth::id())->paginate(10);
+            $this->bookings = $this->bookingPayment::getReferralHistoryAPI(Auth::id())->paginate(10);
         } 
         $data = [
-            'referals'    => $bookings,
+            'referals'    => $this->bookings,
             'statues'     => config('booking.statuses'),
             'userInfo'    => [
                 'username' => $user->user_name,
