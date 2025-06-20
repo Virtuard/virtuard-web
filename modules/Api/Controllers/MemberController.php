@@ -94,8 +94,6 @@ class MemberController extends Controller
                 return $user;
             });
             
-            Log::info("Data member: " );
-            Log::info($data['users']);;
 
             return response()->json([
                 'status' => true,
@@ -103,7 +101,7 @@ class MemberController extends Controller
                 'data' => $data,
             ]);
         }catch(Exception $exception ) {
-            Log::info("INfo error masseh");
+            Log::info("Error data member:");
             Log::error($exception);
         }
         
