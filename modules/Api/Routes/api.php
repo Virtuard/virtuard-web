@@ -8,6 +8,7 @@ use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
 use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
+use Modules\Api\Controllers\ReferralController;
 use Modules\Api\Controllers\SearchController;
 use Modules\Business\Controllers\ManageBusinessController;
 use Modules\Hotel\Controllers\VendorController;
@@ -162,4 +163,8 @@ Route::get('/all-members', [MemberController::class, 'allMembers']);
 
 Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
     Route::post('/update', [ProfileController::class, 'updateProfile']);
+});
+
+Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {
+    Route::get('/report', [ReferralController::class, 'getReports']);
 });
