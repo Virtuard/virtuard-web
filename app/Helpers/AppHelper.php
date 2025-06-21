@@ -2079,33 +2079,15 @@ if (!function_exists('compress_view_panorama')) {
 if (!function_exists('seo_attributes')) {
     function seo_attributes()
     {
-        $data = [
-            "seo_index" => 1,
-            "seo_title" => null,
-            "seo_desc" => null,
-            "seo_image" => null,
-            "seo_share" => [
-                "facebook" => [
-                "title" => null,
-                "desc" => null,
-                "image" => null,
-                ],
-                "twitter" => [
-                "title" => null,
-                "desc" => null,
-                "image" => null,
-                ]
-            ],
-            "create_user" => 9,
-            "update_user" => null,
-            "origin_id" => null,
-            "lang" => null,
-            "slug" => null,
-            "full_url" => url()->full(),
-            "service_title" => null,
-            "service_desc" => null,
-            "service_image" => null,
-        ];
-        return $data;
+        $seo_meta = [];
+        $home_page_id = setting_item('home_page_id');
+        if($home_page_id && $page = Page::where("id",$home_page_id)->where("status","publish")->first())
+        {
+            $translation = $page->translate();
+            $seo_meta = $page->getSeoMetaWithTranslation(app()->getLocale(), $translation);
+            unset($seo_meta['seo_share']);
+            $seo_meta['full_url'] = url()->full();
+        }
+        return $seo_meta;
     }
 }

@@ -13,7 +13,7 @@
     @endphp
     <title>{{ $page_title }}</title>
     <meta name="description" content="{{$seo_meta['seo_desc'] ?? $seo_meta['service_desc'] ?? setting_item_with_lang("site_desc")}}"/>
-    <meta name="keywords" content="{{$seo_meta['seo_desc'] ?? $seo_meta['service_desc'] ?? setting_item_with_lang("site_desc")}}"/>
+    <meta name="keywords" content="{{$seo_meta['seo_keywords'] ?? setting_item_with_lang("seo_keywords")}}"/>
     <meta name="robots" content="index,follow" />
     {{-- Facebook share --}}
     <meta property="og:url" content="{{$seo_meta['full_url'] ?? ""}}"/>
