@@ -112,6 +112,7 @@ class PostController extends Controller
             'memberCount' => $memberCount,
             'dataIpanorama' => $dataIpanorama,
             'feeds' => $feeds,
+            'seo_meta' => seo_attributes(),
         ];
 
         if (auth()->check()) {

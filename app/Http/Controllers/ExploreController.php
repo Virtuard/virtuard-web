@@ -40,7 +40,10 @@ class ExploreController extends Controller
 
     public function index(Request $request)
     {
-        return view('app.explore.index');
+        $data = [
+            'seo_meta' => seo_attributes(),
+        ];
+        return view('app.explore.index', $data);
     }
 
     public function searchService(Request $request)

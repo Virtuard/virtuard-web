@@ -2075,3 +2075,37 @@ if (!function_exists('compress_view_panorama')) {
         return $panorama;
     }
 }
+
+if (!function_exists('seo_attributes')) {
+    function seo_attributes()
+    {
+        $data = [
+            "seo_index" => 1,
+            "seo_title" => null,
+            "seo_desc" => null,
+            "seo_image" => null,
+            "seo_share" => [
+                "facebook" => [
+                "title" => null,
+                "desc" => null,
+                "image" => null,
+                ],
+                "twitter" => [
+                "title" => null,
+                "desc" => null,
+                "image" => null,
+                ]
+            ],
+            "create_user" => 9,
+            "update_user" => null,
+            "origin_id" => null,
+            "lang" => null,
+            "slug" => null,
+            "full_url" => url()->full(),
+            "service_title" => null,
+            "service_desc" => null,
+            "service_image" => null,
+        ];
+        return $data;
+    }
+}
