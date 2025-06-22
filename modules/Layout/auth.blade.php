@@ -48,7 +48,7 @@
     <link href="{{ asset('dist/frontend/css/app.css?_ver=' . config('app.asset_version')) }}" rel="stylesheet">
     <link href="{{ asset('libs/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('libs/daterange/daterangepicker.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/shepherd.css') }}" />
     <!-- Fonts -->
     <link rel='stylesheet' id='google-font-css-css'
         href='https://fonts.googleapis.com/css?family=Poppins%3A300%2C400%2C500%2C600&display=swap' type='text/css'

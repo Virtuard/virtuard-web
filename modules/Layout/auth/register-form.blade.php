@@ -73,9 +73,7 @@
                         {{ __('Google') }}
                     </a>
                 </div>
-                
-                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                
+            
                 <script>
                     var hasAffiliateId = {{ Cookie::has('affiliate_id') ? 'true' : 'false' }};
                 
