@@ -70,7 +70,7 @@
                                     if(empty($allServices[$service_type])) continue;
                                     $module = new $allServices[$service_type];
                                 @endphp
-                                <li role="bravo_{{$service_type}}" class="text-center">
+                                <li class="text-center">
                                     <a href="#bravo_{{$service_type}}" class="@if($number == 0) active @endif" aria-controls="bravo_{{$service_type}}" role="tab" data-toggle="tab">
                                         <i class="{{ $module->getServiceIconFeatured() }}"></i>
                                         {{ !empty($modelBlock["title_for_".$service_type]) ? $modelBlock["title_for_".$service_type] : $module->getModelName() }}
