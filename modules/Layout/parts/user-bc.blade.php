@@ -84,7 +84,7 @@
             </div>
         </div>
     </div>
-    <div class="bravo-more-menu-user">
+    <div class="bravo-more-menu-user" aria-label="Menu User">
         <i class="icofont-settings"></i>
     </div>
 </div>

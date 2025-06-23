@@ -103,6 +103,6 @@
     @endif
     <div class="c-grey f14 text-center">
        {{__(" Already have an account?")}}
-        <a href="#" data-target="#login" data-toggle="modal">{{__("Log In")}}</a>
+        <a href="#" data-target="#login" data-toggle="modal" aria-label="login">{{__("Log In")}}</a>
     </div>
 </form>

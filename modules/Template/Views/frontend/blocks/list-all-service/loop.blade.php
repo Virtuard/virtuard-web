@@ -6,7 +6,7 @@
         <div class="image" @if($row['image']) style="background: url({{asset($row['image'])}})" @endif >
             <div class="effect"></div>
             <div class="content">
-                <h4 class="title">{{$row['name']}}</h4>
+                <div class="title">{{$row['name']}}</div>
             </div>
         </div>
     @if(!empty($link)) </a> @endif

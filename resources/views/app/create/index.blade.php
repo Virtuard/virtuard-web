@@ -14,6 +14,7 @@
                     <a href="{{ $menu['url'] }}" class="card h-100 text-decoration-none" @guest
                     data-toggle="modal"
                     data-target="#login"
+                    aria-label="login"
                     @endguest>
                         <div class="card-body d-flex align-items-center">
                             <i class="fa fa-lg mr-2 {{ $menu['icon'] }}"></i>

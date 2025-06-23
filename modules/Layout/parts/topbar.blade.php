@@ -14,7 +14,9 @@
                     @if (!Auth::check())
                         <li class="login-item">
                             <a href="#login" data-toggle="modal" data-target="#login"
-                                class="login">{{ __('Login') }}</a>
+                                class="login"
+                                aria-label="login"
+                                >{{ __('Login') }}</a>
                         </li>
                         @if (is_enable_registration())
                             <li class="signup-item">
