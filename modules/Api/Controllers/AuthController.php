@@ -2,11 +2,13 @@
 
 namespace Modules\Api\Controllers;
 
+use App\Models\FollowUser;
 use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
@@ -195,9 +197,10 @@ class AuthController extends Controller
     {
         $user = auth()->user();
     
-        $user['avatar_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id', 'full');
+        $user['avatar_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id ', 'full');
         $user['avatar_thumb_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id');
-    
+        $user['follower_count'] = DB::table('follow_member')->where('user_id', auth()->user()->id)->count();
+        $user['following_count'] = DB::table('follow_member')->where('follower_id', auth()->user()->id)->count();
         return $this->sendSuccess([
             'data' => $user
         ]);
