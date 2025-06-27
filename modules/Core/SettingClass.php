@@ -32,6 +32,7 @@
 					"keys"      => [
                         'site_title',
                         'site_desc',
+                        'site_keywords',
                         'site_favicon',
                         'home_page_id',
                         'topbar_left_text',

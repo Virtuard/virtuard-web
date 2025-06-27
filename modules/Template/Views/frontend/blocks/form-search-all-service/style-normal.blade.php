@@ -19,7 +19,7 @@
             <div class="sub-heading">{{ $sub_title }}</div>
             @if (empty($hide_form_search))
                 <div class="g-form-control">
-                    <ul class="nav nav-tabs" role="tablist">
+                    <ul class="nav nav-tabs">
                         @if (!empty($service_types))
                             @php $number = 0; @endphp
                             @foreach ($service_types as $service_type)

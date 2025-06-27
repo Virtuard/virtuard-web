@@ -41,7 +41,7 @@
     <link href="{{ asset('dist/frontend/css/app.css?_ver=' . config('app.asset_version')) }}" rel="stylesheet">
     <link href="{{ asset('libs/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('libs/daterange/daterangepicker.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/shepherd.css') }}" />
     <!-- Fonts -->
     <link rel='stylesheet' id='google-font-css-css'
         href='https://fonts.googleapis.com/css?family=Poppins%3A300%2C400%2C500%2C600&display=swap' type='text/css'
@@ -129,28 +129,6 @@
         {!! setting_item_with_lang_raw('footer_scripts') !!}
     @endif
     <script src="{{ asset('assets/js/custom-app.js') }}"></script>
-    @if (setting_item('google_translate_enable'))
-        <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-        <script>
-            function googleTranslateElementInit() {
-                if (window.innerWidth >= 768) {
-                    var webTarget = document.getElementById('gtranslate-web');
-                    webTarget.innerHTML = '<div id="google_translate_element"></div>';
-                    new google.translate.TranslateElement({
-                        pageLanguage: 'en'
-                    }, 'google_translate_element');
-                } else {
-                    var mobileTarget = document.getElementById('gtranslate-mobile');
-                    mobileTarget.innerHTML = '<div id="google_translate_element"></div>';
-                    new google.translate.TranslateElement({
-                        pageLanguage: 'en'
-                    }, 'google_translate_element');
-                }
-            }
-            window.addEventListener('resize', googleTranslateElementInit);
-        </script>
-    @endif
-
     <script>
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 

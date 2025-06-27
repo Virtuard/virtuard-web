@@ -705,13 +705,13 @@
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img loading='lazy' class="mr-4"
-                                        src="{{ $post->user->getAvatarUrl() }}"
+                                        src="{{ $post->user?->getAvatarUrl() }}"
                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                         alt="">
                                     <div>
                                         <a href="{{ route('user.profile', $post->user_id) }}">
                                             <p class="m-0" style="font-weight: 600;">
-                                                {{ $post->user->name }}
+                                                {{ $post->user?->name }}
                                             </p>
                                         </a>
                                         <p class="m-0" style="font-size: 0.7rem; font-weight: 500; color: #9b9b9b;">

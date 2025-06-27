@@ -4,15 +4,15 @@ return [
     "media"=>[
         "groups"=>[
             "default"=>[
-                "ext"=>["jpg",'jpeg','png','gif','bmp','docx','JPG','JPEG','PNG'],
-                "mime"=>["image/png","image/jpeg","image/gif","image/bmp",'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+                "ext"=>["jpg",'jpeg','png','gif','bmp','docx','JPG','JPEG','PNG', 'webp', "WEBP", "ico", "ICO"],
+                "mime"=>["image/png","image/jpeg","image/gif","image/bmp", "image/webp", "image/x-icon","image/vnd.microsoft.icon", 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
                 "max_size"=>20000000, // In Bytes, default is 20MB,
                 "max_width"=>env('ALLOW_IMAGE_MAX_WIDTH',4000),
                 "max_height"=>env('ALLOW_IMAGE_MAX_HEIGHT',4000)
             ],
             "image"=>[
-                "ext"=>["jpg",'jpeg','png','gif','bmp','JPG','JPEG','PNG'],
-                "mime"=>["image/png","image/jpeg","image/gif","image/bmp"],
+                "ext"=>["jpg",'jpeg','png','gif','bmp','JPG','JPEG','PNG', 'webp', "WEBP", "ico", "ICO"],
+                "mime"=>["image/png","image/jpeg","image/gif","image/bmp", "image/webp", "image/x-icon", "image/vnd.microsoft.icon",],
                 "max_size"=>20000000, // In Bytes, default is 20MB,
                 "max_width"=>env('ALLOW_IMAGE_MAX_WIDTH',4000),
                 "max_height"=>env('ALLOW_IMAGE_MAX_HEIGHT',4000)

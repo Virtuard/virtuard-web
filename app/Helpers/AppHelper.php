@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Modules\Page\Models\Page;
 
 //include '../../custom/Helpers/CustomHelper.php';
 
@@ -2073,5 +2074,21 @@ if (!function_exists('compress_view_panorama')) {
         $panorama['code'] = json_encode($code);
 
         return $panorama;
+    }
+}
+
+if (!function_exists('seo_attributes')) {
+    function seo_attributes()
+    {
+        $seo_meta = [];
+        $home_page_id = setting_item('home_page_id');
+        if($home_page_id && $page = Page::where("id",$home_page_id)->where("status","publish")->first())
+        {
+            $translation = $page->translate();
+            $seo_meta = $page->getSeoMetaWithTranslation(app()->getLocale(), $translation);
+            unset($seo_meta['seo_share']);
+            $seo_meta['full_url'] = url()->full();
+        }
+        return $seo_meta;
     }
 }

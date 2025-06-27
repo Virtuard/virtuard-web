@@ -84,7 +84,7 @@
         };
     </script>
     <link href="{{ asset('dist/frontend/module/user/css/user.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css"/>
+    <link rel="stylesheet" href="{{ asset('assets/css/shepherd.css') }}" />
     <!-- Styles -->
     @stack('css')
     <style type="text/css">
