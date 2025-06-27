@@ -225,7 +225,6 @@ class LoginController extends Controller
             }
 
             $userByEmail = User::query()->where('email', $email)->first();
-            Log::info($userByEmail);
             if (!empty($userByEmail)) {
                 $provider = 'google';
                 $userByEmail->addMeta('social_' . $provider . '_id', $id);
@@ -238,20 +237,10 @@ class LoginController extends Controller
                 $userByEmail->save();
                 
                 $token = $userByEmail->createToken('access_token')->plainTextToken;
-                $user = [
-                    'id' => $userByEmail->id,
-                    'first_name' => $userByEmail->first_name,
-                    'last_name' => $userByEmail->last_name,
-                    'email' => $userByEmail->email,
-                    'name' => $userByEmail->name,
-                    'phone' => $userByEmail->phone,
-                    'business_name' => $userByEmail->business_name,
-                    'user_name' => $userByEmail->user_name,
-                ];
                 
                 $responseJson = [
                     'token' => $token,
-                    'user' => new UserResource($user),
+                    'user' => new UserResource($userByEmail),
                     'status'    => 1,
                 ];
 
@@ -278,17 +267,7 @@ class LoginController extends Controller
             $userResponse = $this->createGoogleUser($userDto);
             return response()->json([
                 'token' => $userResponse->createToken('access_token')->plainTextToken,
-                'user' => [
-                    'id' => $userResponse->id,
-                    'first_name' => $userResponse->first_name,
-                    'last_name' => $userResponse->last_name,
-                    'email' => $userResponse->email,
-                    'business_name' => $userResponse->business_name,
-                    'name' => $userResponse->name,
-                    'user_name' => $userResponse->user_name,
-                    'phone' => $userResponse->phone,
-                    'photo_profile' => $userResponse->photo_profile,
-                ],
+                'user' => new UserResource($userResponse),
                 'status'    => 1,
             ], 200);
             
