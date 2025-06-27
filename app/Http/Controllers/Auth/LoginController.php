@@ -116,20 +116,20 @@ class LoginController extends Controller
                 $email = $user->getEmail();
                 $email = $email?:$user->getId().'@'.$provider;
 
-                $userByEmail = User::query()->where('email', $email)->first();
-                if (!empty($userByEmail)) {
+                $userResponse = User::query()->where('email', $email)->first();
+                if (!empty($userResponse)) {
 
-                    $userByEmail->addMeta('social_' . $provider . '_id', $user->getId());
-                    $userByEmail->addMeta('social_' . $provider . '_email', $email);
-                    $userByEmail->addMeta('social_' . $provider . '_name', $user->getName());
-                    $userByEmail->addMeta('social_' . $provider . '_avatar', $user->getAvatar());
-                    $userByEmail->addMeta('social_meta_avatar', $user->getAvatar());
+                    $userResponse->addMeta('social_' . $provider . '_id', $user->getId());
+                    $userResponse->addMeta('social_' . $provider . '_email', $email);
+                    $userResponse->addMeta('social_' . $provider . '_name', $user->getName());
+                    $userResponse->addMeta('social_' . $provider . '_avatar', $user->getAvatar());
+                    $userResponse->addMeta('social_meta_avatar', $user->getAvatar());
 
-                    $userByEmail->need_update_pw = 0;
-                    $userByEmail->save();
+                    $userResponse->need_update_pw = 0;
+                    $userResponse->save();
 
                     // Login with user
-                    Auth::login($userByEmail);
+                    Auth::login($userResponse);
 
                     return redirect($redirectTo);
                 }
@@ -224,29 +224,37 @@ class LoginController extends Controller
                 return response()->json(['error' => 'Invalid or missing email'], 400);
             }
 
-            $userByEmail = User::query()->where('email', $email)->first();
-            if (!empty($userByEmail)) {
+            $userResponse = User::query()->where('email', $email)->first();
+            if (!empty($userResponse)) {
                 $provider = 'google';
-                $userByEmail->addMeta('social_' . $provider . '_id', $id);
-                $userByEmail->addMeta('social_' . $provider . '_email', $email);
-                $userByEmail->addMeta('social_' . $provider . '_name', $name);
-                $userByEmail->addMeta('social_' . $provider . '_avatar', $photoUrl);;
-                $userByEmail->addMeta('social_meta_avatar',  $photoUrl);
+                $userResponse->addMeta('social_' . $provider . '_id', $id);
+                $userResponse->addMeta('social_' . $provider . '_email', $email);
+                $userResponse->addMeta('social_' . $provider . '_name', $name);
+                $userResponse->addMeta('social_' . $provider . '_avatar', $photoUrl);;
+                $userResponse->addMeta('social_meta_avatar',  $photoUrl);
 
-                $userByEmail->need_update_pw = 0;
-                $userByEmail->save();
+                $userResponse->need_update_pw = 0;
+                $userResponse->save();
                 
-                $token = $userByEmail->createToken('access_token')->plainTextToken;
-                
+                $token = $userResponse->createToken('access_token')->plainTextToken;
                 $responseJson = [
                     'token' => $token,
-                    'user' => new UserResource($userByEmail),
+                    'user' => [
+                        'id' => $userResponse->id,
+                        'name' =>  $userResponse->name,
+                        'first_name' =>  $userResponse->first_name,
+                        'last_name' =>  $userResponse->last_name,
+                        'email' =>  $userResponse->email,
+                        'phone' =>  $userResponse->phone,
+                        'business_name' =>  $userResponse->business_name,
+                        'user_name' =>  $userResponse->user_name,
+                        'photo_profile' =>  $userResponse->avatar_url
+                    ],
                     'status'    => 1,
                 ];
 
                 // Login with user
-                Auth::login($userByEmail);
-                
+                Auth::login($userResponse);;
                 return response()->json($responseJson, 200);
 
                
@@ -259,7 +267,6 @@ class LoginController extends Controller
                 'email' => $email,
                 'first_name' => $firstName,
                 'last_name' => $lastName,
-                'email' => $email,
                 'user_name' => $user_name,
                 'photo_profile' => $photoUrl,
             ];
@@ -267,7 +274,17 @@ class LoginController extends Controller
             $userResponse = $this->createGoogleUser($userDto);
             return response()->json([
                 'token' => $userResponse->createToken('access_token')->plainTextToken,
-                'user' => new UserResource($userResponse),
+                'user' => [
+                    'id' => $userResponse->id,
+                    'name' =>  $userResponse->name,
+                    'first_name' =>  $userResponse->first_name,
+                    'last_name' =>  $userResponse->last_name,
+                    'email' =>  $userResponse->email,
+                    'phone' =>  $userResponse->phone,
+                    'business_name' =>  $userResponse->business_name,
+                    'user_name' =>  $userResponse->user_name,
+                    'photo_profile' =>  $userResponse->avatar_url
+                ],
                 'status'    => 1,
             ], 200);
             
