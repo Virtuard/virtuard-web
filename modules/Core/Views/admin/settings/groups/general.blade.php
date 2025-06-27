@@ -14,8 +14,15 @@
                 </div>
                 <div class="form-group">
                     <label>{{__("Site Desc")}}</label>
+                    <small class="text-danger"><sup>*</sup>Recomended max 160 charackter</small>
                     <div class="form-controls">
                         <textarea name="site_desc" class="form-control" cols="30" rows="7">{{setting_item_with_lang('site_desc',request()->query('lang'))}}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{__("Site Keyword")}}</label>
+                    <div class="form-controls">
+                        <textarea name="site_keywords" class="form-control" cols="30" rows="3">{{setting_item_with_lang('site_keywords',request()->query('lang'))}}</textarea>
                     </div>
                 </div>
                 @if(is_default_lang())

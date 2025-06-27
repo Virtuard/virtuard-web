@@ -50,7 +50,7 @@
                         <div class="col-md-2">
                             <div class="form-group mt-3">
                                 <div class="smart-search smart-search-category">
-                                    <select id="explore_is_ipanorama" name="is_ipanorama" class="form-control">
+                                    <select id="explore_is_ipanorama" name="is_ipanorama" class="form-control" aria-label="explore panorama">
                                         <option value="">--{{ __('Filter 360') }}--</option>
                                         <option value="">{{ __('All') }}</option>
                                         <option value="1" @if(request('is_tour') == '1') selected @endif>{{ __('360 Only') }}</option>

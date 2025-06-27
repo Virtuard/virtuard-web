@@ -37,6 +37,7 @@ class MemberController extends Controller
             'memberCount' => 0,
             'followerCount' => 0,
             'followingCount' => 0,
+            'seo_meta' => seo_attributes(),
         ];
 
         if (isset($request->type)) {

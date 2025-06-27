@@ -70,8 +70,14 @@
                                     if(empty($allServices[$service_type])) continue;
                                     $module = new $allServices[$service_type];
                                 @endphp
-                                <li role="bravo_{{$service_type}}" class="text-center">
-                                    <a href="#bravo_{{$service_type}}" class="@if($number == 0) active @endif" aria-controls="bravo_{{$service_type}}" role="tab" data-toggle="tab">
+                                <li class="text-center" role="presentation">
+                                    <a 
+                                        href="#bravo_{{$service_type}}" 
+                                        class="@if($number == 0) active @endif" 
+                                        role="tab" 
+                                        aria-selected="{{ $number == 0 ? 'true' : 'false' }}"
+                                        aria-controls="bravo_{{$service_type}}" 
+                                        data-toggle="tab">
                                         <i class="{{ $module->getServiceIconFeatured() }}"></i>
                                         {{ !empty($modelBlock["title_for_".$service_type]) ? $modelBlock["title_for_".$service_type] : $module->getModelName() }}
                                     </a>
@@ -89,7 +95,12 @@
                                     if(empty($allServices[$service_type])) continue;
                                     $module = new $allServices[$service_type];
                                 @endphp
-                                <div role="tabpanel" class="tab-pane @if($number == 0) active @endif" id="bravo_{{$service_type}}" style="max-width: 100%;">
+                                <div 
+                                    role="tabpanel" 
+                                    id="bravo_{{$service_type}}" 
+                                    class="tab-pane @if($number == 0) active @endif" 
+                                    aria-labelledby="tab-{{$service_type}}" 
+                                    style="max-width: 100%;">
                                     @include(ucfirst($service_type).'::frontend.layouts.search.form-search')
                                 </div>
                                 @php $number++; @endphp

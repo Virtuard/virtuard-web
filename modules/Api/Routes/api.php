@@ -14,7 +14,8 @@ use Modules\Business\Controllers\ManageBusinessController;
 use Modules\Hotel\Controllers\VendorController;
 use Modules\Space\Controllers\ManageSpaceController;
 use Modules\User\Controllers\MessagesController as ControllersMessagesController;
-
+use Modules\Api\Controllers\MemberController;
+use Modules\Api\Controllers\MapController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -156,7 +157,13 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
     Route::delete('{id}','PostController@destroy');
 });
 
-/* Referral */ 
+Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
+
+Route::get('/all-members', [MemberController::class, 'allMembers']);
+
+Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
+    Route::post('/update', [ProfileController::class, 'updateProfile']);
+});
 
 Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('/report', [ReferralController::class, 'getReports']);

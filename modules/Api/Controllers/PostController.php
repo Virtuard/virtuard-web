@@ -81,6 +81,8 @@ class PostController extends Controller
                         ? url('/uploads/' . $post->author->mediaFile->file_path)
                         : url('/uploads/images/virtuard.png');
                     unset($post->author->mediaFile); 
+                    $post->author->followerCount = User::find($post->author->id)?->followers->count() ?? 0;
+                    $post->author->followingCount = User::find($post->author->id)?->followings->count() ?? 0;
                 }
                 return $post;
             });

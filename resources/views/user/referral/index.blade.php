@@ -230,9 +230,6 @@
                 })
             })
         </script>
-       
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
         <script>
             $('#modal_booking_detail').on('show.bs.modal', function(e) {
                 var btn = $(e.relatedTarget);

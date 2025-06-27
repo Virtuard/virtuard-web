@@ -92,7 +92,7 @@
 
     </div>
     <div class="item-title">
-        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}">
+        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}" alt="{{$translation->title}}">
             @if($row->is_instant)
                 <i class="fa fa-bolt d-none"></i>
             @endif

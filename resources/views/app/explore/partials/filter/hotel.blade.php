@@ -150,10 +150,16 @@
                                     <label class="mb-2">{{ __('Proximity') }} <span
                                             id="hotel_proximity_text">0</span> mil</label>
                                     <div class="input-search">
-                                        <input type="range" id="hotel_search_radius" name="search_radius"
-                                            min="0" max="500"
+                                        <input 
+                                            type="range" 
+                                            id="hotel_search_radius" 
+                                            name="search_radius"
                                             class="filter-search-radius w-100 cursor-pointer" value="0"
-                                            data-id="hotel" />
+                                            min="0" 
+                                            max="500"
+                                            data-id="hotel" 
+                                            aria-label="hotel radius"
+                                            />
                                     </div>
                                 </div>
                             </div>

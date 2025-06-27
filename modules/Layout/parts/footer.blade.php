@@ -109,7 +109,7 @@
 <script type="text/javascript" src="{{ asset('libs/daterange/daterangepicker.min.js') }}"></script>
 <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script>
 <script src="{{ asset('js/functions.js?_ver=' . config('app.asset_version')) }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/js/shepherd.min.js"></script>
+<script src="{{ asset('assets/js/shepherd.js') }}"></script>
 <script src="{{ asset('libs/lightbox2/dist/js/lightbox.js') }}"></script>
 
 @if (setting_item('tour_location_search_style') == 'autocompletePlace' ||
@@ -132,19 +132,17 @@
         request()->cookie('booking_cookie_agreement_enable') != 1 and
         !is_api() and
         !isset($_COOKIE['booking_cookie_agreement_enable']))
-    <div class="booking_cookie_agreement p-3 d-flex fixed-bottom">
+    <div id="booking_cookie_agreement" class="booking_cookie_agreement p-3 d-none fixed-bottom">
         <div class="content-cookie">{!! clean(setting_item_with_lang('cookie_agreement_content')) !!}</div>
         <button class="btn save-cookie">{!! clean(setting_item_with_lang('cookie_agreement_button_text')) !!}</button>
     </div>
     <script>
         var save_cookie_url = '{{ route('core.cookie.check') }}';
     </script>
-    <script src="{{ asset('js/cookie.js?_ver=' . config('app.asset_version')) }}"></script>
 @endif
 
 @if (setting_item('user_enable_2fa'))
     @include('auth.confirm-password-modal')
-    <script src="{{ asset('/module/user/js/2fa.js') }}"></script>
 @endif
 
 {!! \App\Helpers\Assets::js(true) !!}
@@ -152,7 +150,7 @@
 @php \App\Helpers\ReCaptchaEngine::scripts() @endphp
 @stack('js')
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/js/sweetalert2.js') }}"></script>
 <script>
     const Toast = Swal.mixin({
         toast: true,

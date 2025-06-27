@@ -155,7 +155,7 @@
     </div>
 @endsection
 @push('css')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/shepherd.js@10.0.1/dist/css/shepherd.css" />
+<link rel="stylesheet" href="{{ asset('assets/css/shepherd.css') }}" />
     <style>
         #ipanorama-frame {
             width: 100%;
