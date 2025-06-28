@@ -19,6 +19,9 @@ var listMaps = [];
 var listMapCount = null;
 let map, mapAutocomplete, markerCluster, currentInfoWindow;
 let mapMarkers = [];
+let allMarkers = [];
+let visibilityUpdateTimeout = null;
+let markerUpdateDelay = 2000;
 let clusterConfig = {
     imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
     gridSize: 60,
@@ -134,6 +137,11 @@ function initMap() {
     });
 
     initClusterZoomListener();
+    
+    // Start monitoring after a delay to allow initial data to load
+    setTimeout(() => {
+        startMarkerStatsMonitoring(10000); // Monitor every 10 seconds
+    }, 5000);
 }
 
 function getUserCurrentLocation() {
@@ -149,7 +157,7 @@ function getUserCurrentLocation() {
                 updateMapCenter(lat, lng);
             },
             function(error) {
-                console.log("Error getting location:", error);
+                //
             }
         );
     }
@@ -180,12 +188,16 @@ function getCenterMarker(mdata) {
 }
 
 function addMarkersToMap(markerData) {
+    // Clear existing markers
+    resetMarkers();
+    
+    // Create all markers but don't add them to map yet
     markerData.forEach((data) => {
         const lat = Number(data.map_lat);
         const lng = Number(data.map_lng);
         const newMarker = new google.maps.Marker({
             position: { lat, lng },
-            map: map,
+            map: null, // Don't add to map initially
             title: data.title,
             icon: data.icon,
         });
@@ -206,13 +218,194 @@ function addMarkersToMap(markerData) {
             currentInfoWindow = infowindow; 
         });
 
-        mapMarkers.push(newMarker);
+        // Store marker with its data for visibility management
+        allMarkers.push({
+            marker: newMarker,
+            data: data,
+            visible: false
+        });
     });
+
+    // Update marker visibility based on current map bounds
+    updateMarkerVisibility();
 
     const mapCenter = getCenterMarker(markerData);
     map.setCenter(mapCenter);
 
-    markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
+    // Add bounds change listener to update marker visibility
+    map.addListener('bounds_changed', throttledUpdateMarkerVisibility);
+    
+    // Add additional listeners for better performance with 2-second delay
+    map.addListener('dragend', function() {
+        delayedUpdateMarkerVisibility();
+    });
+    
+    map.addListener('zoom_changed', function() {
+        delayedUpdateMarkerVisibility();
+    });
+}
+
+// Function to update marker visibility based on current map bounds
+function updateMarkerVisibility() {
+    if (!map || allMarkers.length === 0) return;
+
+    const bounds = map.getBounds();
+    if (!bounds) return;
+
+    let visibleCount = 0;
+
+    allMarkers.forEach((markerObj) => {
+        const position = markerObj.marker.getPosition();
+        const isVisible = bounds.contains(position);
+
+        if (isVisible && !markerObj.visible) {
+            // Show marker
+            markerObj.marker.setMap(map);
+            markerObj.visible = true;
+            mapMarkers.push(markerObj.marker);
+            visibleCount++;
+        } else if (!isVisible && markerObj.visible) {
+            // Hide marker
+            markerObj.marker.setMap(null);
+            markerObj.visible = false;
+            const index = mapMarkers.indexOf(markerObj.marker);
+            if (index > -1) {
+                mapMarkers.splice(index, 1);
+            }
+        }
+    });
+
+    // Update cluster if it exists
+    if (markerCluster) {
+        markerCluster.clearMarkers();
+        markerCluster.addMarkers(mapMarkers);
+    } else if (mapMarkers.length > 0) {
+        markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
+    }
+
+    // Log marker visibility statistics
+    const stats = getMarkerVisibilityStats();
+}
+
+// Throttled version of updateMarkerVisibility for better performance
+function throttledUpdateMarkerVisibility() {
+    if (visibilityUpdateTimeout) {
+        clearTimeout(visibilityUpdateTimeout);
+    }
+    
+    visibilityUpdateTimeout = setTimeout(() => {
+        updateMarkerVisibility();
+        visibilityUpdateTimeout = null;
+    }, 150); // 150ms throttle
+}
+
+// Delayed version with 2-second delay for drag/zoom operations
+function delayedUpdateMarkerVisibility() {
+    if (visibilityUpdateTimeout) {
+        clearTimeout(visibilityUpdateTimeout);
+    }
+    
+    visibilityUpdateTimeout = setTimeout(() => {
+        updateMarkerVisibility();
+        visibilityUpdateTimeout = null;
+    }, markerUpdateDelay); // Configurable delay
+}
+
+// Function to configure marker visibility settings with delay options
+function configureMarkerVisibility(settings = {}) {
+    const defaultSettings = {
+        throttleDelay: 150,
+        dragZoomDelay: 2000, // 2 seconds for drag/zoom operations
+        enableLogging: true,
+        autoUpdate: true,
+        clusterEnabled: true
+    };
+    
+    const config = { ...defaultSettings, ...settings };
+    
+    // Update the global delay if provided
+    if (settings.dragZoomDelay !== undefined) {
+        markerUpdateDelay = settings.dragZoomDelay;
+    }
+    
+    return config;
+}
+
+// Function to set marker update delay
+function setMarkerUpdateDelay(delayMs) {
+    markerUpdateDelay = delayMs;
+}
+
+// Function to get current marker update delay
+function getMarkerUpdateDelay() {
+    return markerUpdateDelay;
+}
+
+// Function to cancel pending marker update
+function cancelPendingMarkerUpdate() {
+    if (visibilityUpdateTimeout) {
+        clearTimeout(visibilityUpdateTimeout);
+        visibilityUpdateTimeout = null;
+    }
+}
+
+// Function to force immediate marker update (bypass delay)
+function forceImmediateMarkerUpdate() {
+    cancelPendingMarkerUpdate();
+    updateMarkerVisibility();
+}
+
+// Function to check if there's a pending marker update
+function isMarkerUpdatePending() {
+    return visibilityUpdateTimeout !== null;
+}
+
+// Function to get remaining time for pending update
+function getRemainingUpdateTime() {
+    if (!visibilityUpdateTimeout) {
+        return 0;
+    }
+    // Note: This is an approximation since we can't directly get remaining time
+    // from setTimeout, but we can track when the timeout was set
+    return markerUpdateDelay;
+}
+
+// Function to get current marker visibility configuration
+function getMarkerVisibilityConfig() {
+    return {
+        totalMarkers: allMarkers.length,
+        visibleMarkers: mapMarkers.length,
+        throttleDelay: 150,
+        dragZoomDelay: markerUpdateDelay,
+        clusterEnabled: !!markerCluster,
+        bounds: map ? map.getBounds() : null
+    };
+}
+
+// Function to get marker visibility statistics
+function getMarkerVisibilityStats() {
+    const bounds = map.getBounds();
+    if (!bounds) return { visible: 0, total: allMarkers.length, bounds: null };
+
+    let visibleCount = 0;
+    allMarkers.forEach((markerObj) => {
+        const position = markerObj.marker.getPosition();
+        if (bounds.contains(position)) {
+            visibleCount++;
+        }
+    });
+
+    return {
+        visible: visibleCount,
+        total: allMarkers.length,
+        percentage: Math.round((visibleCount / allMarkers.length) * 100),
+        bounds: {
+            north: bounds.getNorthEast().lat(),
+            south: bounds.getSouthWest().lat(),
+            east: bounds.getNorthEast().lng(),
+            west: bounds.getSouthWest().lng()
+        }
+    };
 }
 
 function filterMarkers(condition) {
@@ -236,9 +429,18 @@ function defaultMarkers() {
 function resetMarkers() {
     if(markerCluster){
         markerCluster.clearMarkers();
-        mapMarkers.forEach(marker => marker.setMap(null));
-        mapMarkers = [];
     }
+    
+    // Clear visible markers
+    mapMarkers.forEach(marker => marker.setMap(null));
+    mapMarkers = [];
+    
+    // Clear all markers
+    allMarkers.forEach(markerObj => {
+        markerObj.marker.setMap(null);
+        markerObj.visible = false;
+    });
+    allMarkers = [];
 
     mapCenter = getCenterMarker([])
     map.setCenter(mapCenter)
@@ -672,5 +874,192 @@ function updateClusterByZoom() {
 function initClusterZoomListener() {
     google.maps.event.addListener(map, 'zoom_changed', function() {
         updateClusterByZoom();
+    });
+}
+
+// Function to force update marker visibility (can be called manually)
+function forceUpdateMarkerVisibility() {
+    updateMarkerVisibility();
+}
+
+// Function to show all markers (for debugging)
+function showAllMarkers() {
+    allMarkers.forEach((markerObj) => {
+        markerObj.marker.setMap(map);
+        markerObj.visible = true;
+        if (!mapMarkers.includes(markerObj.marker)) {
+            mapMarkers.push(markerObj.marker);
+        }
+    });
+    
+    if (markerCluster) {
+        markerCluster.clearMarkers();
+        markerCluster.addMarkers(mapMarkers);
+    }
+    
+}
+
+// Function to get currently visible markers information
+function getVisibleMarkersInfo() {
+    const visibleMarkers = allMarkers.filter(markerObj => markerObj.visible);
+    return {
+        count: visibleMarkers.length,
+        total: allMarkers.length,
+        markers: visibleMarkers.map(markerObj => ({
+            title: markerObj.data.title,
+            position: {
+                lat: markerObj.marker.getPosition().lat(),
+                lng: markerObj.marker.getPosition().lng()
+            },
+            data: markerObj.data
+        }))
+    };
+}
+
+// Function to check if a specific marker is visible
+function isMarkerVisible(markerTitle) {
+    const markerObj = allMarkers.find(m => m.data.title === markerTitle);
+    return markerObj ? markerObj.visible : false;
+}
+
+// Function to manually show/hide specific marker
+function toggleMarkerVisibility(markerTitle, show = true) {
+    const markerObj = allMarkers.find(m => m.data.title === markerTitle);
+    if (markerObj) {
+        if (show && !markerObj.visible) {
+            markerObj.marker.setMap(map);
+            markerObj.visible = true;
+            if (!mapMarkers.includes(markerObj.marker)) {
+                mapMarkers.push(markerObj.marker);
+            }
+        } else if (!show && markerObj.visible) {
+            markerObj.marker.setMap(null);
+            markerObj.visible = false;
+            const index = mapMarkers.indexOf(markerObj.marker);
+            if (index > -1) {
+                mapMarkers.splice(index, 1);
+            }
+        }
+        
+        // Update cluster
+        if (markerCluster) {
+            markerCluster.clearMarkers();
+            markerCluster.addMarkers(mapMarkers);
+        }
+        
+        // console.log(`Marker "${markerTitle}" ${show ? 'shown' : 'hidden'}`);
+    } else {
+        // console.warn(`Marker "${markerTitle}" not found`);
+    }
+}
+
+// Function to display marker statistics in console
+function displayMarkerStats() {
+    const stats = getMarkerVisibilityStats();
+}
+
+// Function to start periodic marker statistics display
+function startMarkerStatsMonitoring(intervalMs = 5000) {
+    setInterval(displayMarkerStats, intervalMs);
+}
+
+// Function to get performance metrics
+function getMarkerPerformanceMetrics() {
+    const stats = getMarkerVisibilityStats();
+    const performance = {
+        totalMarkers: stats.total,
+        visibleMarkers: stats.visible,
+        hiddenMarkers: stats.total - stats.visible,
+        visibilityRatio: stats.percentage / 100,
+        memoryEfficiency: stats.percentage < 50 ? 'Good' : 'Consider optimization',
+        recommendation: stats.total > 1000 ? 'High marker count detected' : 'Normal marker count'
+    };
+    
+    return performance;
+}
+
+function getPopupMarker(data) {
+    const contentString =
+        `
+            <div class="card" style="overflow: hidden; height: 100px;">
+                <div class="card card-custom card-has-bg click-col" style="background-image: url(${data.banner_image_id}); width: 250px; background-position: center;">
+                    <div class="card-img-overlay d-flex align-items-start">
+                        <div>
+                            <h5 class="card-title mt-0 mb-0" style="text-overflow: ellipsis; overflow:hidden; font-size: 16px;">
+                                <a class="text-white" href="${data.url}">${data.title}</a>
+                            </h5>
+                            <span class="text-white"> <i class="fa fa-map-marker"></i> ${data.address}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            `;
+
+    return contentString;
+}
+
+function initMap() {
+    // Default location if geolocation fails
+    const defaultLocation = { lat: 0, lng: 0 };
+
+    // Initialize map centered at default location
+    map = new google.maps.Map(document.getElementById('gmap'), {
+        center: defaultLocation,
+        zoom: 8,
+    });
+
+    // Try HTML5 geolocation
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const userLocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                // Set map center to user's current location
+                map.setCenter(userLocation);
+
+                // Add marker for user's location
+                // new google.maps.Marker({
+                //     position: userLocation,
+                //     map: map,
+                //     title: "You are here!"
+                // });
+
+                // Update hidden input fields if needed
+                $('#explore_map_lat').val(userLocation.lat);
+                $('#explore_map_lgn').val(userLocation.lng);
+            },
+            () => {
+                console.warn("Geolocation failed or was denied. Using default location.");
+                map.setCenter(defaultLocation);
+            }
+        );
+    } else {
+        // Browser doesn't support Geolocation
+        console.error("Your browser doesn't support geolocation.");
+        map.setCenter(defaultLocation);
+    }
+}
+
+function fetchMap(attr) {
+    $('#map-loading').show();
+
+    $.ajax({
+        type: "POST",
+        url: "/explore/map/search",
+        data: attr,
+        success: function(data) {
+            let maps = data.data.filter((item) => item.category == 'business' || item.category == 'hotel' || item.category == 'space');
+
+            resetMarkers();
+            addMarkersToMap(maps);
+
+            $('#map-loading').hide();
+        },
+        error: function(xhr) {
+            $('#map-loading').hide();
+        }
     });
 }
