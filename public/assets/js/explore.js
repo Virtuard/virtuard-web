@@ -1,3 +1,15 @@
+$(document).ready(function () {
+    initMap();
+    initAutocomplete();
+    initAutocompleteByCategory();
+    initFilterRadius();
+    initFilterRadiusMain();
+    onFetchData();
+    onChangeTab();
+    onSubmitForm();
+    onSubmitSearch();
+});
+
 var isResetSearch = false;
 var isLoadingScroll = false;
 var countService = 0;
@@ -14,13 +26,36 @@ let clusterConfig = {
     styles: [
         {
             textColor: 'white',
-            url: '/icon/circle-24.png',
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="#3B82F6" stroke="#1E40AF" stroke-width="2"/>
+                </svg>
+            `),
             height: 24,
             width: 24,
-            textSize: 12,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundColor: 'red'
+            textSize: 12
+        },
+        {
+            textColor: 'white',
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+                </svg>
+            `),
+            height: 24,
+            width: 24,
+            textSize: 12
+        },
+        {
+            textColor: 'white',
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="#EF4444" stroke="#DC2626" stroke-width="2"/>
+                </svg>
+            `),
+            height: 24,
+            width: 24,
+            textSize: 12
         }
     ]
 };
@@ -69,53 +104,80 @@ function initAutocompleteByCategory() {
 
             const lat = place.geometry.location.lat();
             const lng = place.geometry.location.lng();
-            const name = place.name;
 
             $(`#${id}_map_lat`).val(lat);
             $(`#${id}_map_lgn`).val(lng);
-            // $(`#${id}_service_name`).val(name);
+            
+            updateMapCenter(lat, lng);
         }
     });
 
 }
 
-// function initMap() {
-//     // Initialize the autocomplete
-//     // initAutocomplete();
+function initMap() {
+    initAutocomplete();
 
-//     map = new google.maps.Map(document.getElementById('gmap'), {
-//         center: { lat: 0, lng: 0 },
-//         zoom: 3,
-//     });
+    let initialLat = parseFloat($('#explore_map_lat').val()) || -6.2088;
+    let initialLng = parseFloat($('#explore_map_lgn').val()) || 106.8456;
 
-//     // add merker to map
-//     // addMarkersToMap(listMaps);
-// }
+    if (!parseFloat($('#explore_map_lat').val()) && !parseFloat($('#explore_map_lgn').val())) {
+        getUserCurrentLocation();
+    }
+
+    map = new google.maps.Map(document.getElementById('gmap'), {
+        center: { lat: initialLat, lng: initialLng },
+        zoom: 10,
+        mapTypeControl: true,
+        streetViewControl: true,
+        fullscreenControl: true,
+        zoomControl: true
+    });
+
+    initClusterZoomListener();
+}
+
+function getUserCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                
+                $('#explore_map_lat').val(lat);
+                $('#explore_map_lgn').val(lng);
+                
+                updateMapCenter(lat, lng);
+            },
+            function(error) {
+                console.log("Error getting location:", error);
+            }
+        );
+    }
+}
 
 function getCenterMarker(mdata) {
-    let map_lat = $('#explore_map_lat').val() ?? 0;
-    let map_lgn = $('#explore_map_lgn').val() ?? 0;
+    let map_lat = parseFloat($('#explore_map_lat').val()) || -6.2088;
+    let map_lng = parseFloat($('#explore_map_lgn').val()) || 106.8456;
 
     if (mdata.length !== 0) {
-        let mdata_lat = mdata[0].map_lat ?? 0;
-        let mdata_lgn = mdata[0].map_lgn ?? 0;
+        let mdata_lat = parseFloat(mdata[0].map_lat) || 0;
+        let mdata_lng = parseFloat(mdata[0].map_lng) || 0;
 
-        if (mdata_lat) {
-            map_lat = mdata_lat
+        if (mdata_lat !== 0) {
+            map_lat = mdata_lat;
         }
-        if (mdata_lgn) {
-            map_lat = mdata_lgn
+        if (mdata_lng !== 0) {
+            map_lng = mdata_lng;
         }
     }
 
     let center = {
         lat: Number(map_lat),
-        lng: Number(map_lgn)
+        lng: Number(map_lng)
     };
 
     return center;
 }
-
 
 function addMarkersToMap(markerData) {
     markerData.forEach((data) => {
@@ -147,11 +209,9 @@ function addMarkersToMap(markerData) {
         mapMarkers.push(newMarker);
     });
 
-    // map setCenter
     const mapCenter = getCenterMarker(markerData);
     map.setCenter(mapCenter);
 
-    // Create the MarkerClusterer
     markerCluster = new MarkerClusterer(map, mapMarkers, clusterConfig);
 }
 
@@ -203,7 +263,16 @@ function onPlaceChanged() {
 
     $('#explore_map_lat').val(lat);
     $('#explore_map_lgn').val(lng);
-    // $('#explore_service_name').val(name);
+    
+    updateMapCenter(lat, lng);
+}
+
+function updateMapCenter(lat, lng) {
+    if (map) {
+        const newCenter = { lat: parseFloat(lat), lng: parseFloat(lng) };
+        map.setCenter(newCenter);
+        map.setZoom(12);
+    }
 }
 
 function onChangeTab() {
@@ -226,9 +295,6 @@ function onChangeTab() {
             onFetchData(attr)
         }, 500);
 
-        // if (id == 'all') return defaultMarkers();
-
-        // filterMarkers(marker => marker.category == id);
     });
 }
 
@@ -343,7 +409,6 @@ function fetchService(attr = {}) {
                 } else {
                     $("#list-item").append(data.html);
                 }
-                // $("#count-list").html(`Showing ${countService} Result`);
             }
 
             isLoadingScroll = false;
@@ -442,14 +507,170 @@ jQuery(function($) {
     })
 });
 
-$(document).ready(function () {
-    initMap();
-    initAutocomplete();
-    initAutocompleteByCategory();
-    initFilterRadius();
-    initFilterRadiusMain();
-    onFetchData();
-    onChangeTab();
-    onSubmitForm();
-    onSubmitSearch();
+function createDynamicClusterConfig(categoryColors = {}) {
+    const defaultColors = {
+        'hotel': '#3B82F6',
+        'space': '#EF4444',
+        'business': '#F59E0B',
+        'default': '#6B7280'
+    };
+    
+    const colors = { ...defaultColors, ...categoryColors };
+    
+    return {
+        imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+        gridSize: 60,
+        minimumClusterSize: 4,
+        styles: [
+            {
+                textColor: 'white',
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="${colors.default}" stroke="#374151" stroke-width="2"/>
+                    </svg>
+                `),
+                height: 24,
+                width: 24,
+                textSize: 12
+            },
+            {
+                textColor: 'white',
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="${colors.default}" stroke="#374151" stroke-width="2"/>
+                    </svg>
+                `),
+                height: 24,
+                width: 24,
+                textSize: 12
+            },
+            {
+                textColor: 'white',
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" fill="${colors.default}" stroke="#374151" stroke-width="2"/>
+                    </svg>
+                `),
+                height: 24,
+                width: 24,
+                textSize: 12
+            }
+        ],
+        calculator: function(markers, numStyles) {
+            const categories = {};
+            markers.forEach(marker => {
+                const category = marker.getTitle() || 'default';
+                categories[category] = (categories[category] || 0) + 1;
+            });
+            
+            const dominantCategory = Object.keys(categories).reduce((a, b) => 
+                categories[a] > categories[b] ? a : b
+            );
+            
+            const color = colors[dominantCategory] || colors.default;
+            
+            let styleIndex = 0;
+            if (markers.length >= 100) styleIndex = 2;
+            else if (markers.length >= 10) styleIndex = 1;
+            
+            const style = this.styles[styleIndex];
+            const svgTemplate = `
+                <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" fill="${color}" stroke="#374151" stroke-width="2"/>
+                </svg>
+            `;
+            
+            style.url = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svgTemplate);
+            
+            return {
+                text: markers.length.toString(),
+                index: styleIndex
+            };
+        }
+    };
+}
+
+function updateClusterColors(categoryColors) {
+    if (markerCluster) {
+        markerCluster.clearMarkers();
+    }
+    
+    const dynamicConfig = createDynamicClusterConfig(categoryColors);
+    markerCluster = new MarkerClusterer(map, mapMarkers, dynamicConfig);
+}
+
+function updateClusterByCategory() {
+    const categoryColors = {
+        'hotel': '#3B82F6',
+        'space': '#EF4444',
+        'business': '#F59E0B'
+    };
+    
+    updateClusterColors(categoryColors);
+}
+
+function updateClusterByTime() {
+    const hour = new Date().getHours();
+    let colorScheme;
+    
+    if (hour >= 6 && hour < 12) {
+        colorScheme = {
+            'default': '#FBBF24',
+            'hotel': '#3B82F6',
+            'space': '#EF4444',
+            'business': '#F59E0B'
+        };
+    } else if (hour >= 12 && hour < 18) {
+        colorScheme = {
+            'default': '#F97316',
+            'hotel': '#1E40AF',
+            'space': '#DC2626',
+            'business': '#D97706'
+        };
+    } else {
+        colorScheme = {
+            'default': '#6B7280',
+            'hotel': '#1E3A8A',
+            'space': '#B91C1C',
+            'business': '#B45309'
+        };
+    }
+    
+    updateClusterColors(colorScheme);
+}
+
+function updateClusterByZoom() {
+    const zoom = map.getZoom();
+    let colorScheme;
+    
+    if (zoom >= 15) {
+        colorScheme = {
+            'default': '#10B981',
+            'hotel': '#3B82F6',
+            'space': '#EF4444',
+            'business': '#F59E0B'
+        };
+    } else if (zoom >= 12) {
+        colorScheme = {
+            'default': '#F59E0B',
+            'hotel': '#1E40AF',
+            'space': '#DC2626',
+            'business': '#D97706'
+        };
+    } else {
+        colorScheme = {
+            'default': '#6B7280',
+            'hotel': '#1E3A8A',
+            'space': '#B91C1C',
+            'business': '#B45309'
+        };
+    }
+    
+    updateClusterColors(colorScheme);
+}
+
+function initClusterZoomListener() {
+    google.maps.event.addListener(map, 'zoom_changed', function() {
+        updateClusterByZoom();
     });
+}
