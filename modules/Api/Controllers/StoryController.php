@@ -136,12 +136,13 @@ class StoryController extends Controller
             $users = DB::table('ref_story')
                 ->select('user_id')
                 ->distinct()
-                ->orderByRaw('MAX(created_at) DESC')  // Order by latest story per user
+                ->orderByRaw('MAX(created_at) DESC')
                 ->groupBy('user_id')
                 ->paginate(10);
+            
+            $userIds = collect($users->items())->pluck('user_id');
 
-// Get stories for these users only
-            $userIds = $users->pluck('user_id');
+
             $stories = Story::whereIn('user_id', $userIds)
                 ->orderBy('created_at', 'desc')
                 ->get()
