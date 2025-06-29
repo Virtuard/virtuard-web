@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class StoryController extends Controller
@@ -131,25 +132,40 @@ class StoryController extends Controller
     
     public function getStories(Request $request) {
         try{
-            $result = Story::query()->orderBy('created_at', 'desc')->paginate(10);
-            $transformedItems = $result->getCollection()->groupBy('user_id')->map(function ($stories, $userId) {
+            // Get distinct users with pagination
+            $users = DB::table('ref_story')
+                ->select('user_id')
+                ->distinct()
+                ->orderByRaw('MAX(created_at) DESC')
+                ->groupBy('user_id')
+                ->paginate(10);
+            
+            $userIds = collect($users->items())->pluck('user_id');
+
+
+            $stories = Story::whereIn('user_id', $userIds)
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->groupBy('user_id');
+
+            $transformedItems = collect($users->items())->map(function ($user) use ($stories) {
                 return [
-                    'user_id' => $userId,
-                    'urls' => $stories->map(function ($story) {
+                    'user_id' => $user->user_id,
+                    'urls' => $stories->get($user->user_id, collect())->map(function ($story) {
                         return [
                             'id' => $story->id,
                             'media' => $story->media,
                         ];
                     })->toArray(),
                 ];
-            })->values();
-            
-            $result->setCollection($transformedItems);
+            });
+
+            $users->setCollection($transformedItems);
 
             return response()->json([
                 "message" => "Get stories successfully",
                 "status" => "success",
-                "data" => $result,
+                "data" => $users,
             ]);
             
         }catch(\Exception $e) {
