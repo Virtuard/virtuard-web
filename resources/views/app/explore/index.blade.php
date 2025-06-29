@@ -340,5 +340,5 @@
 @push('js')
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js" defer></script>
-    <script src="{{ asset('assets/js/explore.js') }}" defer></script>
+    <script src="{{ asset('assets/js/explore.js') }}?_ver={{ config('app.asset_version') }}" defer></script>
 @endpush
