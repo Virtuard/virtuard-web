@@ -10,6 +10,7 @@ use Modules\Api\Controllers\ProfileController;
 use Modules\Api\Controllers\RecentlyController;
 use Modules\Api\Controllers\ReferralController;
 use Modules\Api\Controllers\SearchController;
+use Modules\Api\Controllers\StoryController;
 use Modules\Business\Controllers\ManageBusinessController;
 use Modules\Hotel\Controllers\VendorController;
 use Modules\Space\Controllers\ManageSpaceController;
@@ -167,4 +168,12 @@ Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], functio
 
 Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('/report', [ReferralController::class, 'getReports']);
+});
+
+/* User story */
+Route::group(['prefix' => 'story', 'middleware' => ['auth:sanctum'],], function () {
+    Route::post('/', [StoryController::class, 'createStory']);
+    Route::get('/', [StoryController::class, 'getStories']);
+    Route::delete('/{id}', [StoryController::class, 'deleteStory']);
+    
 });
