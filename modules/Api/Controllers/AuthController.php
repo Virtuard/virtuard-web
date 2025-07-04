@@ -193,19 +193,85 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function me(Request $request)
     {
-        $user = auth()->user();
-    
-        $user['avatar_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id ', 'full');
-        $user['avatar_thumb_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id');
-        $user['follower_count'] = DB::table('follow_member')->where('user_id', auth()->user()->id)->count();
-        $user['following_count'] = DB::table('follow_member')->where('follower_id', auth()->user()->id)->count();
-        return $this->sendSuccess([
-            'data' => $user
-        ]);
-    }
+        try {
+            $user = auth()->user();
 
+            // Check if user is authenticated
+            if (!$user) {
+                return $this->sendError('User not authenticated', [], 401);
+            }
+
+            $user['avatar_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id', 'full');
+            $user['avatar_thumb_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id');
+
+            // Get counts
+            $user['follower_count'] = DB::table('follow_member')->where('user_id', auth()->user()->id)->count();
+            $user['following_count'] = DB::table('follow_member')->where('follower_id', auth()->user()->id)->count();
+
+            // Add paginated lists if requested
+            if ($request->get('include_followers')) {
+                $followers = DB::table('users')
+                    ->join('follow_member', 'users.id', '=', 'follow_member.follower_id')
+                    ->where('follow_member.user_id', auth()->user()->id)
+                    ->select('users.id', 'users.name', 'users.user_name', 'users.avatar_id')
+                    ->paginate(15, ['*'], 'followers_page', $request->get('followers_page', 1));
+
+                // Add avatar URLs to followers
+                $followersWithAvatars = collect($followers->items())->map(function ($follower) {
+                    $follower->avatar_url = get_file_url($follower->avatar_id , 'full');
+                    // Remove avatar_id from response
+                    unset($follower->avatar_id);
+                    return $follower;
+                });
+
+                $user['followers_list'] = $followersWithAvatars;
+                $user['followers_pagination'] = [
+                    'current_page' => $followers->currentPage(),
+                    'total' => $followers->total(),
+                    'last_page' => $followers->lastPage(),
+                    'has_more_pages' => $followers->hasMorePages()
+                ];
+            }
+
+            if ($request->get('include_following')) {
+                $following = DB::table('users') 
+                    ->join('follow_member', 'users.id', '=', 'follow_member.user_id')
+                    ->where('follow_member.follower_id', auth()->user()->id)
+                    ->select('users.id', 'users.name', 'users.user_name', 'users.avatar_id')
+                    ->paginate(15, ['*'], 'following_page', $request->get('following_page', 1));
+
+                // Add avatar URLs to following
+                $followingWithAvatars = collect($following->items())->map(function ($followingUser) {
+                    $followingUser->avatar_url = get_file_url($followingUser->avatar_id, 'full');
+                    // Remove avatar_id from response
+                    unset($followingUser->avatar_id);
+                    return $followingUser;
+                });
+
+                $user['following_list'] = $followingWithAvatars;
+                $user['following_pagination'] = [
+                    'current_page' => $following->currentPage(),
+                    'total' => $following->total(),
+                    'last_page' => $following->lastPage(),
+                    'has_more_pages' => $following->hasMorePages()
+                ];
+            }
+
+            return $this->sendSuccess([
+                'data' => $user
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error in me() function: ' . $e->getMessage(), [
+                'user_id' => auth()->id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+
+            return $this->sendError('An error occurred while fetching user data', [], 500);
+        }
+    }
     public function updateUser(Request $request){
         $user = Auth::user();
         $rules = [
