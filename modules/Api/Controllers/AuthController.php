@@ -12,12 +12,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Matrix\Exception;
 use Modules\User\Events\SendMailUserRegistered;
 use Modules\User\Resources\UserResource;
-
+use Validator;
 
 class AuthController extends Controller
 {
@@ -102,13 +101,13 @@ class AuthController extends Controller
             'device_name' => 'required',
         ]);
         if ($validator->fails()) {
-            return $this->sendError('', ['errors' => $validator->errors()])->setStatusCode(400);
+            return $this->sendError('', ['errors' => $validator->errors()])->setStatusCode(400);;
         }
 
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            return $this->sendError(__("Password is not correct"), ['code' => 'invalid_credentials'])->setStatusCode(401);
+            return $this->sendError(__("Password is not correct"), ['code' => 'invalid_credentials'])->setStatusCode(401);;
         }
 
         return [
@@ -265,7 +264,7 @@ class AuthController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Error in me() function: ' . $e->getMessage(), [
+            \Log::error('Error in me() function: ' . $e->getMessage(), [
                 'user_id' => auth()->id(),
                 'trace' => $e->getTraceAsString()
             ]);
