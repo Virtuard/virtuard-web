@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
 use Modules\Api\Controllers\ChatController;
+use Modules\Api\Controllers\FollowController;
 use Modules\Api\Controllers\ListingController;
 use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
@@ -176,4 +177,10 @@ Route::group(['prefix' => 'story', 'middleware' => ['auth:sanctum'],], function 
     Route::get('/', [StoryController::class, 'getStories']);
     Route::delete('/{id}', [StoryController::class, 'deleteStory']);
     
+});
+
+// List of followers and followings
+Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function () {
+    Route::get('/followers', [FollowController::class, 'getFollowers']);
+    Route::get('/followings', [FollowController::class, 'getFollowings']);
 });
