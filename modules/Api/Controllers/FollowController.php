@@ -21,7 +21,7 @@ class FollowController
             }
 
             // Query to get followers with JOIN
-            $followers = DB::table('follow_member')
+            $followings = DB::table('follow_member')
                 ->join('users', 'follow_member.follower_id', '=', 'users.id')
                 ->select(
                     'users.id',
@@ -34,7 +34,7 @@ class FollowController
                 ->paginate($perPage, ['*'], 'page', $page);
 
             // Add avatar_url to each follower
-            $followers->getCollection()->transform(function ($user) {
+            $followings->getCollection()->transform(function ($user) {
                 $user->avatar_url = get_file_url($user->avatar_id, 'full');
                 // Remove avatar_id from response as it's not needed
                 unset($user->avatar_id);
@@ -45,15 +45,15 @@ class FollowController
                 'success' => true,
                 'message' => 'Followers retrieved successfully',
                 'data' => [
-                    'followers' => $followers->items(),
+                    'followers' => $followings->items(),
                     'pagination' => [
-                        'current_page' => $followers->currentPage(),
-                        'per_page' => $followers->perPage(),
-                        'total' => $followers->total(),
-                        'last_page' => $followers->lastPage(),
-                        'from' => $followers->firstItem(),
-                        'to' => $followers->lastItem(),
-                        'has_more_pages' => $followers->hasMorePages()
+                        'current_page' => $followings->currentPage(),
+                        'per_page' => $followings->perPage(),
+                        'total' => $followings->total(),
+                        'last_page' => $followings->lastPage(),
+                        'from' => $followings->firstItem(),
+                        'to' => $followings->lastItem(),
+                        'has_more_pages' => $followings->hasMorePages()
                     ]
                 ]
             ], 200);
@@ -80,7 +80,7 @@ class FollowController
             }
 
             // Query to get followers with JOIN
-            $followers = DB::table('follow_member')
+            $followings = DB::table('follow_member')
                 ->join('users', 'follow_member.follower_id', '=', 'users.id')
                 ->select(
                     'users.id',
@@ -93,7 +93,7 @@ class FollowController
                 ->paginate($perPage, ['*'], 'page', $page);
 
             // Add avatar_url to each follower
-            $followers->getCollection()->transform(function ($user) {
+            $followings->getCollection()->transform(function ($user) {
                 $user->avatar_url = get_file_url($user->avatar_id, 'full');
                 // Remove avatar_id from response as it's not needed
                 unset($user->avatar_id);
@@ -104,15 +104,15 @@ class FollowController
                 'success' => true,
                 'message' => 'Followings retrieved successfully',
                 'data' => [
-                    'followers' => $followers->items(),
+                    'followings' => $followings->items(),
                     'pagination' => [
-                        'current_page' => $followers->currentPage(),
-                        'per_page' => $followers->perPage(),
-                        'total' => $followers->total(),
-                        'last_page' => $followers->lastPage(),
-                        'from' => $followers->firstItem(),
-                        'to' => $followers->lastItem(),
-                        'has_more_pages' => $followers->hasMorePages()
+                        'current_page' => $followings->currentPage(),
+                        'per_page' => $followings->perPage(),
+                        'total' => $followings->total(),
+                        'last_page' => $followings->lastPage(),
+                        'from' => $followings->firstItem(),
+                        'to' => $followings->lastItem(),
+                        'has_more_pages' => $followings->hasMorePages()
                     ]
                 ]
             ], 200);
