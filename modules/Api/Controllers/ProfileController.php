@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -174,9 +175,8 @@ public function updateProfile(Request $request)
                 'instagram_url' => 'nullable|string',
                 'facebook_url' => 'nullable|string',
                 'twitter_url' => 'nullable|string',
-                'linkedin_url' => 'nullable|string'
-
-                //'avatar_id' => 'nullable|exists:media,id', // adjust if you use a different media table
+                'linkedin_url' => 'nullable|string',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
             ]);
 
             if ($validator->fails()) {
@@ -185,7 +185,7 @@ public function updateProfile(Request $request)
                     'errors' => $validator->errors(),
                 ], 422);
             }
-
+                    
             // Update fields
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
@@ -198,21 +198,52 @@ public function updateProfile(Request $request)
             $user->facebook_url = $request->facebook_url ?? $user->facebook_url;
             $user->twitter_url = $request->twitter_url ?? $user->twitter_url;
             $user->linkedin_url = $request->linkedin_url ?? $user->linkedin_url;
-            //$user->avatar_id = $request->avatar_id ?? $user->avatar_id;
+            
+            if ($request->hasFile('avatar')) {
+                // Delete old avatar if exists
+                $mediaFile = new \Modules\Media\Models\MediaFile();
+                if ($user->avatar_id) {
+                    $oldMedia = $mediaFile->findById($user->avatar_id);
+                    if ($oldMedia) {
+                        \Storage::delete($oldMedia->file_path);
+                         DB::table('media_files')->where('id', $oldMedia->id)->delete();
+                    }
+                }
+
+                // Store new avatar
+                $path = $request->file('avatar')->store('profile');
+               
+                $mediaFile->file_name = $request->file('avatar')->getClientOriginalName();
+                $mediaFile->file_path = $path;
+                $mediaFile->file_size = $request->file('avatar')->getSize();
+                $mediaFile->file_type = $request->file('avatar')->getMimeType();
+                $mediaFile->save();
+
+                $user->avatar_id = $mediaFile->id;
+               
+            }
 
             $user->save();
 
             return response()->json([
                 'status' => true,
                 'message' => 'Profile updated successfully',
-                // 'user' => [
-                //     'id' => $user->id,
-                //     'name' => $user->name,
-                //     'email' => $user->email,
-                //     'phone' => $user->phone,
-                //     'bio' => $user->bio,
-                //     // 'avatar_url' => $user->getAvatarUrl(), // or $user->avatar_url if accessor
-                // ],
+                 'user' => [
+                     'id' => $user->id,
+                     'first_name' => $user->first_name,
+                     'last_name' => $user->last_name,
+                     'business_name' => $user->business_name,
+                     'name' => $user->name,
+                     'email' => $user->email,
+                     'phone' => $user->phone,
+                     'bio' => $user->bio,
+                     'website_url' => $user->website_url,
+                     'instagram_url' => $user->instagram_url,
+                     'facebook_url' => $user->facebook_url,
+                     'twitter_url' => $user->twitter_url,
+                     'linkedin_url' => $user->linkedin_url,
+                     'avatar_url' => $user->getAvatarUrl(),
+                 ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
