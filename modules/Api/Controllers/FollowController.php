@@ -19,6 +19,8 @@ class FollowController
             if ($perPage > 100) {
                 $perPage = 100;
             }
+            
+            $userId = $request->route('id');
 
             // Query to get followers with JOIN
             $followings = DB::table('follow_member')
@@ -29,7 +31,7 @@ class FollowController
                     'users.user_name',
                     'users.avatar_id'
                 )
-                ->where('follow_member.user_id', auth()->user()->id)
+                ->where('follow_member.user_id', $userId)
                 ->orderBy('follow_member.created_at', 'desc')
                 ->paginate($perPage, ['*'], 'page', $page);
 
@@ -78,7 +80,8 @@ class FollowController
             if ($perPage > 100) {
                 $perPage = 100;
             }
-
+            
+            $userId = $request->route('id');
             // Query to get followers with JOIN
             $followings = DB::table('follow_member')
                 ->join('users', 'follow_member.user_id', '=', 'users.id')
@@ -88,7 +91,7 @@ class FollowController
                     'users.user_name',
                     'users.avatar_id'
                 )
-                ->where('follow_member.follower_id', auth()->user()->id)
+                ->where('follow_member.follower_id', $userId)
                 ->orderBy('follow_member.created_at', 'desc')
                 ->paginate($perPage, ['*'], 'page', $page);
 
