@@ -181,6 +181,6 @@ Route::group(['prefix' => 'story', 'middleware' => ['auth:sanctum'],], function 
 
 // List of followers and followings
 Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function () {
-    Route::get('/followers', [FollowController::class, 'getFollowers']);
-    Route::get('/followings', [FollowController::class, 'getFollowings']);
+    Route::get('/{id}/followers', [FollowController::class, 'getFollowers']);
+    Route::get('{id}/followings', [FollowController::class, 'getFollowings']);
 });
