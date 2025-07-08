@@ -29,7 +29,8 @@ class FollowController
                     'users.id',
                     'users.name',
                     'users.user_name',
-                    'users.avatar_id'
+                    'users.avatar_id',
+                    'users.created_at'
                 )
                 ->where('follow_member.user_id', $userId)
                 ->orderBy('follow_member.created_at', 'desc')
@@ -38,6 +39,15 @@ class FollowController
             // Add avatar_url to each follower
             $followings->getCollection()->transform(function ($user) {
                 $user->avatar_url = get_file_url($user->avatar_id, 'full');
+                // Get followers count for this user
+                $user->followers_count = DB::table('follow_member')
+                    ->where('user_id', $user->id)
+                    ->count();
+
+                // Get followings count for this user
+                $user->followings_count = DB::table('follow_member')
+                    ->where('follower_id', $user->id)
+                    ->count();
                 // Remove avatar_id from response as it's not needed
                 unset($user->avatar_id);
                 return $user;
@@ -89,7 +99,8 @@ class FollowController
                     'users.id',
                     'users.name',
                     'users.user_name',
-                    'users.avatar_id'
+                    'users.avatar_id',
+                    'users.created_at'
                 )
                 ->where('follow_member.follower_id', $userId)
                 ->orderBy('follow_member.created_at', 'desc')
@@ -98,6 +109,15 @@ class FollowController
             // Add avatar_url to each follower
             $followings->getCollection()->transform(function ($user) {
                 $user->avatar_url = get_file_url($user->avatar_id, 'full');
+                // Get followers count for this user
+                $user->followers_count = DB::table('follow_member')
+                    ->where('user_id', $user->id)
+                    ->count();
+
+                // Get followings count for this user
+                $user->followings_count = DB::table('follow_member')
+                    ->where('follower_id', $user->id)
+                    ->count();
                 // Remove avatar_id from response as it's not needed
                 unset($user->avatar_id);
                 return $user;
