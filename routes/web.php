@@ -128,16 +128,5 @@ Route::get('thankyou/booking', [BookingController::class, 'thanyouController'])-
 
 Route::post('midtrans/callback', [BookingController::class, 'midtransCallback'])->name('midtrans.callback');
 
-// Disable API Documentation in Production
-if (app()->environment('local')) {
-    Route::get('/api/documentation', '\L5Swagger\Http\Controllers\SwaggerController@api');
-} else {
-    Route::get('/api/documentation', function () {
-        abort(404);
-    });
-}
-
-    
-
 // Google OAuth route  (especially for mobile authentication)
 Route::post('/api/auth/google/account', [LoginController::class, 'handleGoogleAccount'] );

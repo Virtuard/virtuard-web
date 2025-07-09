@@ -62,9 +62,15 @@ return [
              * Middleware allows to prevent unexpected access to API documentation
              */
             'middleware' => [
-                'api' => [],
-                'asset' => [],
-                'docs' => [],
+                'api' => [
+                    \App\Http\Middleware\NotFoundWhenProduction::class,
+                ],
+                'asset' => [
+                    \App\Http\Middleware\NotFoundWhenProduction::class,
+                ],
+                'docs' => [
+                    \App\Http\Middleware\NotFoundWhenProduction::class,
+                ],
                 'oauth2_callback' => [],
             ],
 
@@ -314,7 +320,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST', 'https://virtuard.com'),
+            'L5_SWAGGER_CONST_HOST' => env('L5_SWAGGER_CONST_HOST'),
         ],
     ],
 ];

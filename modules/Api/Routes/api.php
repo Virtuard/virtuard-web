@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
 use Modules\Api\Controllers\ChatController;
 use Modules\Api\Controllers\FollowController;
+use Modules\Api\Controllers\Hotel\VendorHotelController;
 use Modules\Api\Controllers\ListingController;
 use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
@@ -151,7 +152,6 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 /* Post */
-Route::get('/', 'PostController@index');
 Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('/', 'PostController@index');
     Route::post('/','PostController@store');
@@ -183,4 +183,16 @@ Route::group(['prefix' => 'story', 'middleware' => ['auth:sanctum'],], function 
 Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('/{id}/followers', [FollowController::class, 'getFollowers']);
     Route::get('{id}/followings', [FollowController::class, 'getFollowings']);
+});
+
+// Hotel
+Route::group([
+    'prefix' => config('hotel.hotel_route_prefix'),
+    'middleware' => ['auth:sanctum'],
+], function () {
+    Route::get('/', [VendorHotelController::class, 'index']);
+    Route::get('/{id}', [VendorHotelController::class, 'show']);
+    Route::post('/', [VendorHotelController::class, 'store']);
+    Route::put('/{id}', [VendorHotelController::class, 'update']);
+    Route::delete('/{id}', [VendorHotelController::class, 'delete']);
 });
