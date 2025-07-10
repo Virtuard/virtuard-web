@@ -158,7 +158,7 @@ class MediaController extends Controller
      *
      * @return bool
      */
-    private function hasPermissionMedia()
+    protected function hasPermissionMedia()
     {
         if(Auth::id()){
             return true;

@@ -131,8 +131,9 @@ Route::get('/profile-user/{id_or_slug}/reviews', [ProfileController::class, 'all
 Route::get('/profile-user/{id_or_slug}/services', [ProfileController::class, 'allServices']);
 
 /* Media */
-Route::group(['prefix'=>'media','middleware' => 'auth:api'],function(){
-    Route::post('/store','MediaController@store')->name("api.media.store");
+Route::group(['prefix'=>'media','middleware' => 'auth:sanctum'],function(){
+    Route::post('/','MediaController@store')->name("api.media.store");
+    Route::get('/lists','MediaController@getLists')->name("api.media.lists");
 });
 
 
