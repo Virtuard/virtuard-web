@@ -65,13 +65,19 @@ class StoryController extends Controller
                     ],
                 ],
             ]);
-        }catch(\Exception $e) {
+        }catch(\Illuminate\Validation\ValidationException $e) {
             Log::error("Error upload story:");
             Log::error($e);
             return response()->json([
                 'status' => 'error',
                 'message' => $e->getMessage(),
-            ]);
+            ], 422);
+        }catch(\Exception $e) {
+            Log::error("Error upload story: " . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong while creating the story',
+            ], 500); // Internal Server Error
         }
     }
 
