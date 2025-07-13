@@ -19,11 +19,11 @@ use Illuminate\Support\Facades\Validator;
 
 /**
  * @OA\Tag(
- *     name="Hotel",
+ *     name="Manage Hotel",
  *     description="API Endpoints for Hotel management"
  * )
  */
-class VendorHotelController extends ApiController
+class ManageHotelController extends ApiController
 {
     protected $hotelClass;
     protected $hotelTranslationClass;
@@ -61,8 +61,8 @@ class VendorHotelController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/api/hotel",
-     *     tags={"Hotel"},
+     *     path="/api/user/hotel",
+     *     tags={"Manage Hotel"},
      *     summary="Get user's hotels",
      *     description="Retrieve a paginated list of hotels owned by the authenticated user",
      *     security={{"sanctum":{}}},
@@ -158,8 +158,8 @@ class VendorHotelController extends ApiController
 
     /**
      * @OA\Post(
-     *     path="/api/hotel",
-     *     tags={"Hotel"},
+     *     path="/api/user/hotel",
+     *     tags={"Manage Hotel"},
      *     summary="Create a new hotel",
      *     description="Create a new hotel. Requires hotel_create permission.",
      *     security={{"sanctum":{}}},
@@ -376,8 +376,8 @@ class VendorHotelController extends ApiController
 
     /**
      * @OA\Put(
-     *     path="/api/hotel/{id}",
-     *     tags={"Hotel"},
+     *     path="/api/user/hotel/{id}",
+     *     tags={"Manage Hotel"},
      *     summary="Update an existing hotel",
      *     description="Update an existing hotel by ID. Requires hotel_update permission and ownership or hotel_manage_others permission.",
      *     security={{"sanctum":{}}},
@@ -503,8 +503,8 @@ class VendorHotelController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/api/hotel/{id}",
-     *     tags={"Hotel"},
+     *     path="/api/user/hotel/{id}",
+     *     tags={"Manage Hotel"},
      *     summary="Get hotel details",
      *     description="Retrieve detailed information about a specific hotel",
      *     security={{"sanctum":{}}},
@@ -580,8 +580,8 @@ class VendorHotelController extends ApiController
 
     /**
      * @OA\Delete(
-     *     path="/api/hotel/{id}",
-     *     tags={"Hotel"},
+     *     path="/api/user/hotel/{id}",
+     *     tags={"Manage Hotel"},
      *     summary="Delete a hotel",
      *     description="Delete a hotel by ID. Requires hotel_delete permission and ownership. Supports permanent deletion with query parameter.",
      *     security={{"sanctum":{}}},

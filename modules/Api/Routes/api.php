@@ -4,7 +4,9 @@ use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Route;
 use Modules\Api\Controllers\ChatController;
 use Modules\Api\Controllers\FollowController;
-use Modules\Api\Controllers\Hotel\VendorHotelController;
+use Modules\Api\Controllers\Hotel\ManageHotelController as ApiManageHotelController;
+use Modules\Api\Controllers\Space\ManageSpaceController as ApiManageSpaceController;
+use Modules\Api\Controllers\Business\ManageBusinessController as ApiManageBusinessController;   
 use Modules\Api\Controllers\ListingController;
 use Modules\Api\Controllers\MessagesController;
 use Modules\Api\Controllers\PostController as ControllersPostController;
@@ -186,14 +188,41 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function (
     Route::get('{id}/followings', [FollowController::class, 'getFollowings']);
 });
 
-// Hotel
+// User Group Access
 Route::group([
-    'prefix' => config('hotel.hotel_route_prefix'),
+    'prefix' => 'user',
     'middleware' => ['auth:sanctum'],
 ], function () {
-    Route::get('/', [VendorHotelController::class, 'index']);
-    Route::get('/{id}', [VendorHotelController::class, 'show']);
-    Route::post('/', [VendorHotelController::class, 'store']);
-    Route::put('/{id}', [VendorHotelController::class, 'update']);
-    Route::delete('/{id}', [VendorHotelController::class, 'delete']);
+    // Hotel
+    Route::group([
+        'prefix' => config('hotel.hotel_route_prefix'),
+    ], function () {
+        Route::get('/', [ApiManageHotelController::class, 'index']);
+        Route::get('/{id}', [ApiManageHotelController::class, 'show']);
+        Route::post('/', [ApiManageHotelController::class, 'store']);
+        Route::put('/{id}', [ApiManageHotelController::class, 'update']);
+        Route::delete('/{id}', [ApiManageHotelController::class, 'delete']);
+    });
+
+    // Space
+    Route::group([
+        'prefix' => config('space.space_route_prefix'),
+    ], function () {
+        Route::get('/', [ApiManageSpaceController::class, 'index']);
+        Route::get('/{id}', [ApiManageSpaceController::class, 'show']);
+        Route::post('/', [ApiManageSpaceController::class, 'store']);
+        Route::put('/{id}', [ApiManageSpaceController::class, 'update']);
+        Route::delete('/{id}', [ApiManageSpaceController::class, 'delete']);
+    });
+
+    // Business
+    Route::group([
+        'prefix' => config('business.business_route_prefix'),
+    ], function () {
+        Route::get('/', [ApiManageBusinessController::class, 'index']);
+        Route::get('/{id}', [ApiManageBusinessController::class, 'show']);
+        Route::post('/', [ApiManageBusinessController::class, 'store']);
+        Route::put('/{id}', [ApiManageBusinessController::class, 'update']);
+        Route::delete('/{id}', [ApiManageBusinessController::class, 'delete']);
+    });
 });
