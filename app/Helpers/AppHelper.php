@@ -2092,3 +2092,10 @@ if (!function_exists('seo_attributes')) {
         return $seo_meta;
     }
 }
+
+if (!function_exists('get_asset_version')) {
+    function get_asset_version()
+    {
+        return config('app.asset_version');
+    }
+}

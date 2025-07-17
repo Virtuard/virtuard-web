@@ -47,7 +47,7 @@
         href='https://fonts.googleapis.com/css?family=Poppins%3A300%2C400%2C500%2C600&display=swap' type='text/css'
         media='all' />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ asset('assets/css/custom-app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-app.css?_ver=' . get_asset_version()) }}">
     {!! \App\Helpers\Assets::css() !!}
     {!! \App\Helpers\Assets::js() !!}
     @include('Layout::parts.global-script')
@@ -128,7 +128,7 @@
         {!! setting_item('footer_scripts') !!}
         {!! setting_item_with_lang_raw('footer_scripts') !!}
     @endif
-    <script src="{{ asset('assets/js/custom-app.js') }}"></script>
+    <script src="{{ asset('assets/js/custom-app.js?_ver=' . get_asset_version()) }}"></script>
     <script>
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
 
