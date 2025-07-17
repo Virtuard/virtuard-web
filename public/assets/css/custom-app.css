@@ -379,7 +379,7 @@ li.create-item a:before {
 
 .bravo_wrap .page-template-content .bravo-form-search-all {
     position: relative;
-    padding: 0 !important;
+    padding: 20px !important;
 }
 
 .bravo_wrap .page-template-content .bravo-form-search-all .g-form-control {
