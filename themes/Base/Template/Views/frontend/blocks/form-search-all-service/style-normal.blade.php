@@ -53,7 +53,7 @@
                 <i class="bi bi-search"></i> {{ __('Create your virtual tour for free!') }}
             </a>
 
-            <p class="text-center mt-2 text-white" style="font-size: 16px;">Or</p>
+            <p class="text-center my-2 text-white" style="font-size: 16px;">Or</p>
 
             <a href="/create" class="btn btn-info w-100">
                 <i class="bi bi-search"></i> {{ __('Create your listing') }}

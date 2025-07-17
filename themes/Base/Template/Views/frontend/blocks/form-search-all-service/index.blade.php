@@ -1,27 +1,27 @@
 @push('css')
     <style>
         .bravo-form-search-all {
-            height: 110vh;
+            /* height: 110vh; */
+            height: auto;
         }
         
         #mypanorama {
             border: none !important;
             filter: brightness(0.6);
-            height: 110vh;
+            height: 100vh;
             pointer-events: none;
             position: absolute !important;
-            top: 90px !important;
-            z-index: -10 !important;
+            top: 0px !important;
+            z-index: -1 !important;
         }
 
         .bravo-content {
-            margin-top: -70px !important;
+            /* margin-top: -70px !important; */
         }
 
         @media(max-width: 768px) {
             .bravo-form-search-all, #mypanorama {
-                height: 140% !important;
-                /* margin-bottom: 250px; */
+                height: 101% !important;
             }
         }
 

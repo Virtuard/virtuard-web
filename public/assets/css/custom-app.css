@@ -375,3 +375,17 @@ li.create-item a:before {
         }
     }
 } */
+
+
+.bravo_wrap .page-template-content .bravo-form-search-all {
+    position: relative;
+    padding: 0 !important;
+}
+
+.bravo_wrap .page-template-content .bravo-form-search-all .g-form-control {
+    margin: 0px 0 0;
+}
+
+.bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs {
+    margin-top: 20px !important;
+}
