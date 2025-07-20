@@ -32,7 +32,7 @@ class FollowController
                     'users.avatar_id',
                     'users.created_at'
                 )
-                ->where('follow_member.user_id', $userId)
+                ->where('follow_member.follower_id', $userId)
                 ->orderBy('follow_member.created_at', 'desc')
                 ->paginate($perPage, ['*'], 'page', $page);
 
@@ -41,12 +41,12 @@ class FollowController
                 $user->avatar_url = get_file_url($user->avatar_id, 'full');
                 // Get followers count for this user
                 $user->followers_count = DB::table('follow_member')
-                    ->where('user_id', $user->id)
+                    ->where('follower_id', $user->id)
                     ->count();
 
                 // Get followings count for this user
                 $user->followings_count = DB::table('follow_member')
-                    ->where('follower_id', $user->id)
+                    ->where('user_id', $user->id)
                     ->count();
                 // Remove avatar_id from response as it's not needed
                 unset($user->avatar_id);
@@ -102,7 +102,7 @@ class FollowController
                     'users.avatar_id',
                     'users.created_at'
                 )
-                ->where('follow_member.follower_id', $userId)
+                ->where('follow_member.user_id', $userId)
                 ->orderBy('follow_member.created_at', 'desc')
                 ->paginate($perPage, ['*'], 'page', $page);
 
@@ -111,12 +111,12 @@ class FollowController
                 $user->avatar_url = get_file_url($user->avatar_id, 'full');
                 // Get followers count for this user
                 $user->followers_count = DB::table('follow_member')
-                    ->where('user_id', $user->id)
+                    ->where('follower_id', $user->id)
                     ->count();
 
                 // Get followings count for this user
                 $user->followings_count = DB::table('follow_member')
-                    ->where('follower_id', $user->id)
+                    ->where('user_id', $user->id)
                     ->count();
                 // Remove avatar_id from response as it's not needed
                 unset($user->avatar_id);
