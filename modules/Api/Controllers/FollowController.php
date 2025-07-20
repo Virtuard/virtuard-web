@@ -24,7 +24,7 @@ class FollowController
 
             // Query to get followers with JOIN
             $followings = DB::table('follow_member')
-                ->join('users', 'follow_member.follower_id', '=', 'users.id')
+                ->join('users', 'follow_member.user_id', '=', 'users.id')
                 ->select(
                     'users.id',
                     'users.name',
@@ -94,7 +94,7 @@ class FollowController
             $userId = $request->route('id');
             // Query to get followers with JOIN
             $followings = DB::table('follow_member')
-                ->join('users', 'follow_member.user_id', '=', 'users.id')
+                ->join('users', 'follow_member.follower_id', '=', 'users.id')
                 ->select(
                     'users.id',
                     'users.name',
