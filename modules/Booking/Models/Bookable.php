@@ -417,6 +417,8 @@
                 'content'          => $translation->content,
                 'location'         => Location::selectRaw("id,name")->find($this->location_id) ?? null,
                 'is_featured'      => $this->is_featured ?? null,
+                'map_lat' => $this->map_lat,
+                'map_lng' => $this->map_lng,
             ];
             if ($forSingle) {
                 $data["address"] = $this->address;
