@@ -131,7 +131,8 @@ class FormSearchAllService extends BaseBlock
         $model['modelBlock'] = $model;
         $model['seatType'] =  SeatType::get();
 
-        $get_panorama = Ipanorama::find(174);
+        $mainPanoramaId = setting_item('main_panorama_id', 174);
+        $get_panorama = Ipanorama::find($mainPanoramaId);
         
         if(isset($get_panorama)){
             $model['get_panorama'] = $get_panorama;
