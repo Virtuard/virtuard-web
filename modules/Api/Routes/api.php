@@ -21,6 +21,7 @@ use Modules\Space\Controllers\ManageSpaceController;
 use Modules\User\Controllers\MessagesController as ControllersMessagesController;
 use Modules\Api\Controllers\MemberController;
 use Modules\Api\Controllers\MapController;
+use Modules\Api\Controllers\AttributeController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -187,6 +188,8 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function (
     Route::get('/{id}/followers', [FollowController::class, 'getFollowers']);
     Route::get('{id}/followings', [FollowController::class, 'getFollowings']);
 });
+
+Route::get('attributes', [AttributeController::class, 'index']);
 
 // User Group Access
 Route::group([
