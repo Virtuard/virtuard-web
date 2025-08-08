@@ -4,6 +4,7 @@ namespace Modules\Api\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\FollowUser;
+use App\Notifications\PrivateChannelServices;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -437,27 +438,64 @@ class PostController extends Controller
      */
     public function storeComment(Request $request, $id)
     {
+        $idUser = Auth::id();
+
         $request->validate([
             'comment' => 'required',
         ]);
 
-        try {
-            $data = $request->all();
-            $data['user_id'] = auth()->user()->id;
-            $data['post_id'] = $id;
-
-            $comment = PostComment::create($data);
-
+        $post = UserPost::find($id);
+        if (!$post) {
             return response()->json([
-                'status' => true,
-                'message' => 'Coment created successfully',
-                'data' => $comment
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Coment created failed',
-            ], 400);
+                "status" => false,
+                "message" => "Post not found"
+            ],404);
         }
+
+        $comment = new PostComment();
+        $comment->post_id = $id;
+        $comment->user_id = $idUser;
+        $comment->comment = $request->input('comment');
+        $comment->save();
+
+        $messageData = [
+            'id' => $post->user_id,
+            'message' => 'Commented on your post',
+        ];
+
+        $this->notifyUserComment($post->user_id, $messageData, $id);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Comment created successfully',
+            'data' => $comment
+        ]);
+    }
+
+    protected function notifyUserComment($toUserId, $message, $postId)
+    {
+        $currentUser = auth()->user();
+        $toUser = User::find($toUserId);
+
+        if (!$toUser) return;
+
+        $message_content = __(':name :message', [
+            'name' => $currentUser->display_name,
+            'message' => $message['message']
+        ]);
+
+        $data = [
+            'id' => $toUserId,
+            'notifiable_id' => $toUserId,
+            'event' => 'CommentUser',
+            'to' => 'user',
+            'name' => $currentUser->display_name,
+            'avatar' => $currentUser->profile_picture ?? '',
+            'link' => url()->previous() . '#Post-' . $postId,
+            'type' => 'comment',
+            'message' => $message_content
+        ];
+
+        $toUser->notify(new PrivateChannelServices($data));
     }
 }
