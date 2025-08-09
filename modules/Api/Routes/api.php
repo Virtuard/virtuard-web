@@ -163,6 +163,7 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
     Route::get('/{id}/comments','PostController@getComments');
     Route::delete('{id}','PostController@destroy');
     Route::put('/{id}/like','PostController@likeOrUnlikePost');
+    Route::delete('/{id}','PostController@deletePost');
 });
 
 Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
