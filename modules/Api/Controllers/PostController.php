@@ -597,6 +597,43 @@ class PostController extends Controller
             'message' => 'Post unliked successfully',
         ]);
     }
+    
+    public function deletePost($id) {
+        try {
+            $id = (int) $id;
+            $idUser = Auth::id();
+            
+            $post = UserPost::find($id);
+            if (!$post) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post not found'
+                ], 404);
+            }
+            
+            if($post->user_id != $idUser) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You are not authorized to delete this post'
+                ], 403);
+            }
+            
+            $post->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Post deleted successfully',
+            ]); 
+            
+        }catch(Exception $e) {
+            Log::error("Error while deleting post: ");
+            Log::error($e->getMessage());
+            
+            return response()->json([
+                'status' => false,
+                'message' => 'Error while deleting post',
+            ]);
+        }
+    }
 
     private function notifyUser($toUserId, $message, $postId)
     {
