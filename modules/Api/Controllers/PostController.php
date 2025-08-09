@@ -17,6 +17,7 @@ use App\Models\Story;
 use App\Models\Ipanorama;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use stdClass;
 
 class PostController extends Controller
 {
@@ -57,19 +58,14 @@ class PostController extends Controller
     {
         try {
             $posts = $this->userPost
-                ->with(['ipanorama', 'medias', 'likes', 'comments', 'author.mediaFile']) 
-                ->when(isset($request->filter), function ($q) use ($request) {
-                    if (auth()->check()) {
-                        if ($request->filter == 'me') {
-                            $q->where('user_id', auth()->user()->id);
-                        } elseif ($request->filter == 'friend') {
-                            $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
-                            $follower_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
-                            $ids = array_merge($following_ids, $follower_ids);
-                            $q->whereIn('user_id', $ids);
-                        }
-                    }
-                })
+                ->withCount('likes')
+                ->withCount('comments')
+                ->with([
+                    'medias',
+                    'likes' => function ($query) use ($request) {
+                        $query->where('user_id', $request->user_id);
+                    },
+                    'author.mediaFile'])
                 ->when(isset($request->user_id), function ($q) use ($request) {
                     $q->where('user_id', $request->user_id);
                 })
@@ -77,65 +73,56 @@ class PostController extends Controller
                 ->paginate(20)
                 ->withQueryString();
 
-            $posts->getCollection()->transform(function ($post) {
-                if ($post->author) {
-                    $post->author->photo_profile = $post->author->mediaFile
-                        ? url('/uploads/' . $post->author->mediaFile->file_path)
-                        : url('/uploads/images/virtuard.png');
-                    unset($post->author->mediaFile); 
-                    $post->author->followerCount = User::find($post->author->id)?->followers->count() ?? 0;
-                    $post->author->followingCount = User::find($post->author->id)?->followings->count() ?? 0;
-                }
+            $posts->getCollection()->transform(function ($post) use ($request){
+                unset($post->ipanorama_id);
+                $post->deletable = $post->user_id == $request->user_id;
+                
+                $author = $this->selectAuthorFields($post);
+                unset($post->author);
+                $post->author = $author;
+                
+                $post->is_liked = $this->isLikedByUser($post);
+                unset($post->likes);
                 return $post;
             });
-
-            $memberCount = User::count();
-            $idUser = Auth::id();
-            $dataIpanorama = Ipanorama::where([
-                ['user_id', $idUser],
-                ['status', 'publish'],
-            ])->get();
-            $feeds = Story::query()
-                ->when(isset($request->filter), function ($q) use ($request) {
-                    if (auth()->check()) {
-                        if ($request->filter == 'me') {
-                            $q->where('user_id', auth()->user()->id);
-                        } elseif ($request->filter == 'friend') {
-                            $following_ids = FollowUser::where('user_id', auth()->user()->id)->pluck('follower_id')->toArray();
-                            $follower_ids = FollowUser::where('follower_id', auth()->user()->id)->pluck('user_id')->toArray();
-                            $ids = array_merge($following_ids, $follower_ids);
-                            $q->whereIn('user_id', $ids);
-                        }
-                    }
-                })
-                ->orderByDesc('id')
-                ->paginate(50)
-                ->withQueryString();
-
-            $data = [
-                'posts' => $posts,
-                'memberCount' => $memberCount,
-                'dataIpanorama' => $dataIpanorama,
-                'feeds' => $feeds,
-            ];
-
-            if (auth()->check()) {
-                $data['followerCount'] = auth()->user()->followers->count();
-                $data['followingCount'] = auth()->user()->followings->count();
-            }
-
+            
             return response()->json([
                 'status' => true,
                 'message' => 'Post received successfully',
-                'data' => $data
+                'data' => $posts
             ]);
         } catch (Exception $e) {
+            Log::error("Error while fetching posts: ");
+            Log::error($e->getMessage());
             return response()->json([
                 'status' => false,
                 'message' => 'Post received failed',
                 'data' => isset($data) ? $data : []
             ], 400);
         }
+    }
+    
+    private function isLikedByUser($post) {
+        if($post->likes->count() > 0) return true;
+        return false;
+    }
+    
+    private function selectAuthorFields($post) {
+        $author = new stdClass();
+        $author->id = $post->user_id;
+        $author->email = $post->author->email;
+        $author->phone = $post->author->phone;
+        $author->name = $post->author->name;  
+        $author->first_name = $post->author->first_name;
+        $author->last_name = $post->author->last_name;
+        $author->user_name = $post->author->user_name;
+        $author->photo_profile = $post->author->mediaFile
+            ? url('/uploads/' . $post->author->mediaFile->file_path)
+            : url('/uploads/images/virtuard.png');
+
+        $author->follower_count = User::find($post->author->id)?->followers->count() ?? 0;
+        $author->following_count = User::find($post->author->id)?->followings->count() ?? 0;
+        return $author;
     }
 
     /**
