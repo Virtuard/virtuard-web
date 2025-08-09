@@ -3,7 +3,6 @@
 namespace Modules\Api\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\FollowUser;
 use App\Notifications\PrivateChannelServices;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -13,8 +12,6 @@ use App\Models\UserPost;
 use App\Models\PostMedia;
 use App\Models\PostLike;
 use App\Models\PostComment;
-use App\Models\Story;
-use App\Models\Ipanorama;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use stdClass;
