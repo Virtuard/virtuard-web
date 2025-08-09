@@ -160,6 +160,7 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
     Route::get('/', 'PostController@index');
     Route::post('/','PostController@store');
     Route::post('/{id}/comment','PostController@storeComment');
+    Route::get('/{id}/comments','PostController@getComments');
     Route::delete('{id}','PostController@destroy');
 });
 

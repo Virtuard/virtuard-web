@@ -16,6 +16,7 @@ use App\Models\PostComment;
 use App\Models\Story;
 use App\Models\Ipanorama;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -497,5 +498,55 @@ class PostController extends Controller
         ];
 
         $toUser->notify(new PrivateChannelServices($data));
+    }
+    
+    public function getComments(Request $request, $id) {
+        try {
+            $post = UserPost::find($id);
+            if (!$post) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post not found'
+                ], 404);
+            }
+
+
+            $comments = PostComment::with(['user.mediaFile'])
+                ->where('post_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->paginate(20)
+                ->withQueryString();
+            
+            $comments->getCollection()->transform(function ($comment) {
+                $commentArray = $comment->toArray();
+                unset($commentArray['user_id']);
+                unset($commentArray['deleted_at']);
+                if (isset($commentArray['user'])) {
+                    $commentArray['user'] = [
+                        'id' => $commentArray['user']['id'],
+                        'name' => $commentArray['user']['name'],
+                        'user_name' => $commentArray['user']['user_name'],
+                        'photo_profile' => isset($commentArray['user']['media_file']) && $commentArray['user']['media_file']
+                            ? url('/uploads/' . $commentArray['user']['media_file']['file_path'])
+                            : url('/uploads/images/virtuard.png')
+                    ];
+                }
+
+                return $commentArray;
+            });
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Comments fetched successfully',
+                'data' => $comments
+            ]);
+        } catch (Exception $e) {
+            Log::error("Error while fetching comments: ");
+            Log::error($e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
