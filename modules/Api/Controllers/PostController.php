@@ -549,4 +549,79 @@ class PostController extends Controller
             ], 500);
         }
     }
+    
+    private function createLikePost($idUser, $idPost) {
+        $like = new PostLike();
+        $like->post_id = $idPost;
+        $like->user_id = $idUser;
+        $like->save();
+        
+        return $like;
+    }
+
+
+    public function likeOrUnlikePost(Request $request, $id)
+    {
+        $id = (int) $id;
+        $idUser = Auth::id();
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        $postLike = PostLike::where('post_id', $id)
+            ->where('user_id', $idUser)
+            ->first();
+
+        if (!$postLike) {
+            $likedPost = $this->createLikePost($idUser, $id);
+            $messageData = [
+                'id' => $post->user_id,
+                'message' => 'Liked your post',
+            ];
+
+            $this->notifyUser($post->user_id, $messageData, $id);
+            return response()->json([
+                'status' => true,
+                'message' => 'Post liked successfully',
+                'data' => $likedPost
+            ]);
+        } 
+        
+        $postLike->delete();
+        return response()->json([
+            'status' => true,
+            'message' => 'Post unliked successfully',
+        ]);
+    }
+
+    private function notifyUser($toUserId, $message, $postId)
+    {
+        $currentUser = auth()->user();
+        $toUser = User::find($toUserId);
+
+        if (!$toUser) return;
+
+        $message_content = __(':name :message', [
+            'name' => $currentUser->display_name,
+            'message' => $message['message']
+        ]);
+
+        $data = [
+            'id' => $toUserId,
+            'notifiable_id' => $toUserId,
+            'event' => 'LikeUser',
+            'to' => 'user',
+            'name' => $currentUser->display_name,
+            'avatar' => $currentUser->profile_picture ?? '',
+            'link' => url()->previous() . '#Post-' . $postId,
+            'type' => 'like',
+            'message' => $message_content
+        ];
+
+        $toUser->notify(new PrivateChannelServices($data));
+    }
 }
