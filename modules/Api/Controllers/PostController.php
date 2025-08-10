@@ -544,7 +544,7 @@ class PostController extends Controller
     }
 
 
-    public function likeOrUnlikePost(Request $request, $id)
+    public function likeOrUnlikePost($id)
     {
         $id = (int) $id;
         $idUser = Auth::id();
@@ -568,17 +568,27 @@ class PostController extends Controller
             ];
 
             $this->notifyUser($post->user_id, $messageData, $id);
+            
+            $likedPost->likes_count = PostLike::where("post_id",$id)->count(); // Add current likes count
             return response()->json([
                 'status' => true,
                 'message' => 'Post liked successfully',
-                'data' => $likedPost
+                'data' => [
+                    'type' => 'LIKING_POST',
+                    'liked_post' => $likedPost
+                ]
             ]);
         } 
         
         $postLike->delete();
+        $postLike->likes_count = PostLike::where("post_id",$id)->count(); // Add current likes count
         return response()->json([
             'status' => true,
             'message' => 'Post unliked successfully',
+            'data' => [
+                'type' => 'UNLIKING_POST',
+                 'unliked_post' => $postLike
+            ]
         ]);
     }
     
