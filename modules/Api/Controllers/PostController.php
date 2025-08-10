@@ -575,7 +575,7 @@ class PostController extends Controller
                 'message' => 'Post liked successfully',
                 'data' => [
                     'type' => 'LIKING_POST',
-                    'liked_post' => $likedPost
+                    'post' => $likedPost
                 ]
             ]);
         } 
@@ -587,7 +587,7 @@ class PostController extends Controller
             'message' => 'Post unliked successfully',
             'data' => [
                 'type' => 'UNLIKING_POST',
-                 'unliked_post' => $postLike
+                 'post' => $postLike
             ]
         ]);
     }
