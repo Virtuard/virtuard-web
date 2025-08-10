@@ -54,13 +54,14 @@ class PostController extends Controller
     public function index(Request $request)
     {
         try {
+            $idUser = Auth::id();
             $posts = $this->userPost
                 ->withCount('likes')
                 ->withCount('comments')
                 ->with([
                     'medias',
-                    'likes' => function ($query) use ($request) {
-                        $query->where('user_id', $request->user_id);
+                    'likes' => function ($query) use ($request, $idUser) {
+                        $query->where('user_id',$idUser);
                     },
                     'author.mediaFile'])
                 ->when(isset($request->user_id), function ($q) use ($request) {
