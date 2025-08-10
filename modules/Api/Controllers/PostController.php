@@ -3,6 +3,7 @@
 namespace Modules\Api\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\FollowUser;
 use App\Notifications\PrivateChannelServices;
 use App\User;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,7 @@ use App\Models\PostLike;
 use App\Models\PostComment;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use stdClass;
 
 class PostController extends Controller
@@ -422,41 +424,97 @@ class PostController extends Controller
      *     )
      * )
      */
+
     public function storeComment(Request $request, $id)
     {
-        $idUser = Auth::id();
+        try {
+            $idUser = Auth::id();
 
-        $request->validate([
-            'comment' => 'required',
-        ]);
+            $validated = $request->validate([
+                'comment' => [
+                    'required',
+                    'string',
+                    'max:1000',
+                    'min:1',
+                    function ($attribute, $value, $fail) {
+                        if (trim($value) === '') {
+                            $fail('The comment cannot be empty or contain only whitespace.');
+                        }
+                    }
+                ],
+            ], [
+                'comment.required' => 'Comment content is required',
+                'comment.string' => 'Comment must be a valid text',
+                'comment.max' => 'Comment cannot exceed 1000 characters',
+                'comment.min' => 'Comment must be at least 1 character'
+            ]);
+            
+            $post = UserPost::find($id);
+            if (!$post) {
+                return response()->json([
+                    "status" => false,
+                    "message" => "Post not found"
+                ],404);
+            }
 
-        $post = UserPost::find($id);
-        if (!$post) {
+            $comment = PostComment::create([
+                'post_id' => $id,
+                'user_id' => $idUser,
+                'comment' => $request->input('comment')
+            ]);
+            
+            $comment->load('user.mediaFile');
+            $transformedComment = [
+                'id' => $comment->id,
+                'post_id' => $comment->post_id,
+                'comment' => $comment->comment,
+                'created_at' => $comment->created_at,
+                'updated_at' => $comment->updated_at,
+                'user' => [
+                    'id' => $comment->user->id,
+                    'phone' => $comment->user->phone,
+                    'user_name' => $comment->user->user_name,
+                    'name' => $comment->user->name,
+                    'created_at' => $comment->user->created_at,
+                    'photo_profile' => $comment->user->mediaFile
+                        ? url('/uploads/' . $comment->user->mediaFile->file_path)
+                        : url('/uploads/images/virtuard.png'),
+                    'following_count' => $comment->user->followings->count(),
+                    'followers_count' => $comment->user->followers->count(),
+                ]
+            ];
+            
+            $messageData = [
+                'id' => $post->user_id,
+                'message' => 'Commented on your post',
+            ];
+
+            $this->notifyUserComment($post->user_id, $messageData, $id);
+
             return response()->json([
-                "status" => false,
-                "message" => "Post not found"
-            ],404);
+                'status' => true,
+                'message' => 'Comment created successfully',
+                'data' => $transformedComment
+            ]);
+
+        } catch (ValidationException $e) {
+            // Get first error message
+            $firstError = collect($e->errors())->flatten()->first();
+
+            return response()->json([
+                'status' => false,
+                'message' => $firstError // Only first error
+            ], 422);
+        }catch (Exception $e) {
+            Log::error("Error while creating comment: ");
+            Log::error($e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+            ], 500);
         }
-
-        $comment = new PostComment();
-        $comment->post_id = $id;
-        $comment->user_id = $idUser;
-        $comment->comment = $request->input('comment');
-        $comment->save();
-
-        $messageData = [
-            'id' => $post->user_id,
-            'message' => 'Commented on your post',
-        ];
-
-        $this->notifyUserComment($post->user_id, $messageData, $id);
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Comment created successfully',
-            'data' => $comment
-        ]);
     }
+  
 
     protected function notifyUserComment($toUserId, $message, $postId)
     {
@@ -485,7 +543,7 @@ class PostController extends Controller
         $toUser->notify(new PrivateChannelServices($data));
     }
     
-    public function getComments(Request $request, $id) {
+    public function getComments($id) {
         try {
             $post = UserPost::find($id);
             if (!$post) {
@@ -511,9 +569,13 @@ class PostController extends Controller
                         'id' => $commentArray['user']['id'],
                         'name' => $commentArray['user']['name'],
                         'user_name' => $commentArray['user']['user_name'],
+                        'phone' => $commentArray['user']['phone'],
                         'photo_profile' => isset($commentArray['user']['media_file']) && $commentArray['user']['media_file']
                             ? url('/uploads/' . $commentArray['user']['media_file']['file_path'])
-                            : url('/uploads/images/virtuard.png')
+                            : url('/uploads/images/virtuard.png'),
+                        'follower_count' => FollowUser::where('follower_id', $commentArray['user']['id'])->count(),
+                        'following_count' => FollowUser::where('user_id', $commentArray['user']['id'])->count(),
+                        'created_at' => $commentArray['user']['created_at'],
                     ];
                 }
 
