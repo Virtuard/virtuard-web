@@ -346,8 +346,8 @@ class PostController extends Controller
 
             return response()->json([
                 'status' => false,
-                'message' => 'Post deleted failed',
-            ], 400);
+                'message' => 'You are not authorized to delete this post.',
+            ], 403);
         } catch (Exception $e) {
             return response()->json([
                 'status' => false,
