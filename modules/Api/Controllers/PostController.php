@@ -73,9 +73,9 @@ class PostController extends Controller
                 ->paginate(20)
                 ->withQueryString();
 
-            $posts->getCollection()->transform(function ($post) use ($request){
+            $posts->getCollection()->transform(function ($post) use ($request, $idUser){
                 unset($post->ipanorama_id);
-                $post->deletable = $post->user_id == $request->user_id;
+                $post->deletable = $post->user_id == $idUser;
                 
                 $author = $this->selectAuthorFields($post);
                 unset($post->author);
