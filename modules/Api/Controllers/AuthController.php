@@ -199,8 +199,8 @@ class AuthController extends Controller
     
         $user['avatar_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id ', 'full');
         $user['avatar_thumb_url'] = get_file_url($user['avatar_id'] ?? 'default_avatar_id');
-        $user['follower_count'] = DB::table('follow_member')->where('user_id', auth()->user()->id)->count();
-        $user['following_count'] = DB::table('follow_member')->where('follower_id', auth()->user()->id)->count();
+        $user['follower_count'] = DB::table('follow_member')->where('follower_id', auth()->user()->id)->count();
+        $user['following_count'] = DB::table('follow_member')->where('user_id', auth()->user()->id)->count();
         return $this->sendSuccess([
             'data' => $user
         ]);
