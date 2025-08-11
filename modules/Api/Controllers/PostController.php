@@ -466,7 +466,7 @@ class PostController extends Controller
             $comment->load('user.mediaFile');
             $transformedComment = [
                 'id' => $comment->id,
-                'post_id' => $comment->post_id,
+                'post_id' => (int) $comment->post_id,
                 'comment' => $comment->comment,
                 'created_at' => $comment->created_at,
                 'updated_at' => $comment->updated_at,
