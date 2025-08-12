@@ -482,36 +482,46 @@ class PostController extends Controller
             ], 500);
         }
     }
-    
-    public function deleteComment($id) {
-        try{
-            $idUser = Auth::id();
-            $comment = PostComment::find($id);
+
+    public function deleteComment($id)
+    {
+        try {
+            $userId = Auth::id();
+
+            // Get comment with post user_id in single query
+            $comment = PostComment::select('user_post_comment.*', 'user_post_status.user_id as post_user_id')
+                ->join('user_post_status', 'user_post_comment.post_id', '=', 'user_post_status.id')
+                ->where('user_post_comment.id', $id)
+                ->first();
+
             if (!$comment) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Comment not found.',
                 ], 404);
             }
-            
-            if($comment->user_id != $idUser) {
+
+            // Check authorization: either comment owner OR post owner
+            if ($comment->user_id != $userId && $comment->post_user_id != $userId) {
                 return response()->json([
                     'status' => false,
                     'message' => 'You are not authorized to delete this comment.',
                 ], 403);
             }
-            
-            $comment->delete();
+
+            // Delete using the comment model (not the joined result)
+            PostComment::destroy($id);
+
             return response()->json([
                 'status' => true,
-                'message' => 'Comment deleted successfully',
+                'message' => 'Comment deleted successfully.',
             ]);
-        }catch(Exception $e) {
-            Log::error("Error while deleting comment: ");
-            Log::error($e->getMessage());
+
+        } catch (Exception $e) {
+            Log::error("Error while deleting comment: " . $e->getMessage());
             return response()->json([
                 'status' => false,
-                'message' => 'Something went wrong',
+                'message' => 'Something went wrong.',
             ], 500);
         }
     }
