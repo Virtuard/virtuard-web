@@ -323,39 +323,7 @@ class PostController extends Controller
      *     ),
      * )
      */
-    public function destroy($id)
-    {
-        try {
-            $post = $this->userPost->find($id);
-
-            if (!$post) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Post not found',
-                ], 404);
-            }
-
-            if (auth()->user()->isAdmin() || auth()->user()->id == $post->user_id) {
-                $post->delete();
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Post deleted successfully',
-                ]);
-            }
-
-            return response()->json([
-                'status' => false,
-                'message' => 'You are not authorized to delete this post.',
-            ], 403);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Post deleted failed',
-            ], 400);
-        }
-    }
-
+    
     /**
      * @OA\Post(
      *     path="/api/post/{id}/comment",
@@ -514,6 +482,39 @@ class PostController extends Controller
             ], 500);
         }
     }
+    
+    public function deleteComment($id) {
+        try{
+            $idUser = Auth::id();
+            $comment = PostComment::find($id);
+            if (!$comment) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Comment not found.',
+                ], 404);
+            }
+            
+            if($comment->user_id != $idUser) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You are not authorized to delete this comment.',
+                ], 403);
+            }
+            
+            $comment->delete();
+            return response()->json([
+                'status' => true,
+                'message' => 'Comment deleted successfully',
+            ]);
+        }catch(Exception $e) {
+            Log::error("Error while deleting comment: ");
+            Log::error($e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+            ], 500);
+        }
+    }
   
 
     protected function notifyUserComment($toUserId, $message, $postId)
@@ -545,6 +546,7 @@ class PostController extends Controller
     
     public function getComments($id) {
         try {
+            $idUser = Auth::id();
             $post = UserPost::find($id);
             if (!$post) {
                 return response()->json([
@@ -560,8 +562,9 @@ class PostController extends Controller
                 ->paginate(20)
                 ->withQueryString();
             
-            $comments->getCollection()->transform(function ($comment) {
+            $comments->getCollection()->transform(function ($comment) use($idUser) {
                 $commentArray = $comment->toArray();
+                $commentArray['is_owner'] = $this->isCommentOwnerByUser($commentArray, $idUser);
                 unset($commentArray['user_id']);
                 unset($commentArray['deleted_at']);
                 if (isset($commentArray['user'])) {
@@ -597,6 +600,13 @@ class PostController extends Controller
         }
     }
     
+    private function isCommentOwnerByUser($comment, $idUser){
+        if($comment['user_id'] == $idUser) {
+            return true;
+        }
+        
+        return false;
+    }
     private function createLikePost($idUser, $idPost) {
         $like = new PostLike();
         $like->post_id = $idPost;
