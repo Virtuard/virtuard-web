@@ -11,7 +11,7 @@
                                         <i class="icofont-island-alt"></i>
                                     </div>
                                     <div class="media-body">
-                                        <h4 class="media-heading">{{ __('Get Updates & More') }}</h4>
+                                        <p class="media-heading font-weight-bold">{{ __('Get Updates & More') }}</p>
                                         <p>{{ __('Thoughtful thoughts to your inbox') }}</p>
                                     </div>
                                 </div>
