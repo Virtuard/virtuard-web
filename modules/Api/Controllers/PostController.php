@@ -557,14 +557,17 @@ class PostController extends Controller
 
 
             $comments = PostComment::with(['user.mediaFile'])
-                ->where('post_id', $id)
-                ->orderBy('created_at', 'desc')
+                ->join('user_post_status', 'user_post_status.id', '=', 'user_post_comment.post_id')
+                ->select('user_post_comment.*', 'user_post_status.user_id as post_user_id')
+                ->where('user_post_comment.post_id', $id)
+                ->orderBy('user_post_comment.created_at', 'desc')
                 ->paginate(20)
                 ->withQueryString();
             
             $comments->getCollection()->transform(function ($comment) use($idUser) {
                 $commentArray = $comment->toArray();
-                $commentArray['is_owner'] = $this->isCommentOwnerByUser($commentArray, $idUser);
+                $commentArray['deletable'] = $this->isDeletable($commentArray, $idUser);
+                unset($commentArray['post_user_id']);
                 unset($commentArray['user_id']);
                 unset($commentArray['deleted_at']);
                 if (isset($commentArray['user'])) {
@@ -600,10 +603,8 @@ class PostController extends Controller
         }
     }
     
-    private function isCommentOwnerByUser($comment, $idUser){
-        if($comment['user_id'] == $idUser) {
-            return true;
-        }
+    private function isDeletable($comment, $idUser){
+        if($comment['post_user_id'] == $idUser || $comment['user_id'] == $idUser)  return true;
         
         return false;
     }
