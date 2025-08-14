@@ -65,12 +65,12 @@
         </div>
     @endif
     <div class="thumb-image ">
-        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}">
+        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}" aria-label="{{$row->title}}">
             @if($row->image_url)
                 @if(!empty($disable_lazyload))
-                    <img loading='lazy' src="{{$row->image_url}}" class="img-responsive" alt="">
+                    <img loading='lazy' src="{{$row->image_url}}" class="img-responsive" alt="{{$row->title}}">
                 @else
-                    {!! get_image_tag($row->image_id,'medium',['class'=>'img-responsive','alt'=>$translation->title]) !!}
+                    {!! get_image_tag($row->image_id,'medium',['class'=>'img-responsive','alt'=>$row->title]) !!}
                 @endif
             @endif
         </a>
@@ -92,7 +92,7 @@
 
     </div>
     <div class="item-title">
-        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}" alt="{{$translation->title}}">
+        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl()}}" aria-label="{{$row->title}}">
             @if($row->is_instant)
                 <i class="fa fa-bolt d-none"></i>
             @endif
