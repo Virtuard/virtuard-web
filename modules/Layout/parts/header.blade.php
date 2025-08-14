@@ -13,7 +13,7 @@
                     @if($logo_id)
                         <?php $logo = get_file_url($logo_id,'full') ?>
                         <img src="{{$logo}}" alt="{{setting_item("site_title")}}" fetchpriority="high"
-                        decoding="async" width="70" height="70">
+                        decoding="async">
                     @endif
                 </a>
                 <div class="bravo-menu">
