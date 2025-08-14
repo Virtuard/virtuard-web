@@ -55,7 +55,7 @@
 
             <p class="text-center my-2 text-white" style="font-size: 16px;">Or</p>
 
-            <a href="/create" class="btn btn-info w-100">
+            <a href="/create" class="btn w-100" style="background-color: #006bb3; color: #fff;">
                 <i class="bi bi-search"></i> {{ __('Create your listing') }}
             </a>
 
