@@ -1,4 +1,11 @@
 document.addEventListener("DOMContentLoaded", function (event) {
+    document.querySelectorAll('[tabindex]').forEach(el => {
+        let val = parseInt(el.getAttribute('tabindex'), 10);
+        if (val > 0) {
+            el.setAttribute('tabindex', '0');
+        }
+    });
+    
     tooglePassword();
 });
 
