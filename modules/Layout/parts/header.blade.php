@@ -12,7 +12,8 @@
                     @endphp
                     @if($logo_id)
                         <?php $logo = get_file_url($logo_id,'full') ?>
-                        <img loading='lazy' src="{{$logo}}" alt="{{setting_item("site_title")}}">
+                        <img src="{{$logo}}" alt="{{setting_item("site_title")}}" fetchpriority="high"
+                        decoding="async" width="70" height="70">
                     @endif
                 </a>
                 <div class="bravo-menu">
