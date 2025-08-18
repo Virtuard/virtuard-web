@@ -393,3 +393,11 @@ li.create-item a:before {
 .item-loop .service-review .review {
     color: #000 !important;
 }
+
+.bravo_wrap .page-template-content .bravo-list-space .item-loop .featured {
+    background-color: #b50019;
+}
+
+.bravo_wrap .page-template-content .bravo-list-space .item-loop .featured:after {
+    border-bottom: 29px solid #b50019;
+}
