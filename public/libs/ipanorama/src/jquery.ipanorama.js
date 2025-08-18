@@ -233,7 +233,7 @@
 			sceneThumbsStatic: false, // change scene thumbs's direction from horizontal to vertical
 			title: true, // show or hide the title control
 			compass: true, // enable or disable the compass
-			keyboardNav: true, // enable or disable navigation with keyboard (arrows keys)
+			keyboardNav: false, // enable or disable navigation with keyboard (arrows keys)
 			keyboardZoom: true, // enable or disable zoom with keyboard (plus and minus keys)
 			pinchZoom: true, // enable or disable multitouchzoom (2 fingers touch on the screen at the same time)
 			pinchZoomCoef: 0.1, // the coefficient by which the panorama is zoomed
