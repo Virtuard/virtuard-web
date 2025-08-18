@@ -1100,7 +1100,7 @@
 		buildDOM: function() {
 			this.container.empty();
 			
-			this.controls.$panorama = $("<div class='ipnrm" + (this.config.theme ? " " + this.config.theme : "") + (this.config.showControlsOnHover ? " ipnrm-hide-controls" : "") + "' tabindex='1'></div>");
+			this.controls.$panorama = $("<div class='ipnrm" + (this.config.theme ? " " + this.config.theme : "") + (this.config.showControlsOnHover ? " ipnrm-hide-controls" : "") + "' tabindex='0'></div>");
 			this.controls.$view = $("<div class='ipnrm-view'></div>");
 			this.controls.$preview = $("<div class='ipnrm-preview'></div>");
 			if(this.config.imagePreview) {
