@@ -51,6 +51,7 @@ Route::group([
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
 });
 });
+Route::get('/plan/expired', 'VirtuardController@expiredPlan')->name('plan.expired');
 
 Route::get('/panorama/compress/{id}', 'VirtuardController@compressPanorama')->name('panorama.compress');
 Route::get('/panorama/{id}', 'VirtuardController@preview')->name('panorama.preview');

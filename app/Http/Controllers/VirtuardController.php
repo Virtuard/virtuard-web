@@ -286,7 +286,9 @@ class VirtuardController extends Controller
         ])->first();
         abort_if(!$panorama, 404);
 
-        abort_if(!$panorama->author->checkUserIpanoramaPlan(), 403);
+        if(!$panorama->author->checkUserIpanoramaPlan()) {
+            return redirect(route('plan.expired'));
+        }
 
         $data = [
             'panorama' => $panorama,
@@ -303,7 +305,9 @@ class VirtuardController extends Controller
         ])->first();
         abort_if(!$panorama, 404);
 
-        abort_if(!$panorama->author->checkUserIpanoramaPlan(), 403);
+        if(!$panorama->author->checkUserIpanoramaPlan()) {
+            return redirect(route('plan.expired'));
+        }
 
         $embedUrl = route('panorama.share', $panorama->uuid);
 
@@ -313,5 +317,10 @@ class VirtuardController extends Controller
         ];
 
         return view('app.panorama.preview', $data);
+    }
+
+    public function expiredPlan()
+    {
+        return view('app.panorama.expired');
     }
 }
