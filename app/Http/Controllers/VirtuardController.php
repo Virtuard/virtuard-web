@@ -277,4 +277,41 @@ class VirtuardController extends Controller
             ]);
         }
     }
+
+    public function share($id)
+    {
+        $panorama = Ipanorama::where([
+            'uuid' => $id,
+            'status' => 'publish',
+        ])->first();
+        abort_if(!$panorama, 404);
+
+        abort_if(!$panorama->author->checkUserIpanoramaPlan(), 403);
+
+        $data = [
+            'panorama' => $panorama,
+        ];
+
+        return view('app.panorama.share', $data);
+    }
+
+    public function preview($id)
+    {
+        $panorama = Ipanorama::where([
+            'uuid' => $id,
+            'status' => 'publish',
+        ])->first();
+        abort_if(!$panorama, 404);
+
+        abort_if(!$panorama->author->checkUserIpanoramaPlan(), 403);
+
+        $embedUrl = route('panorama.share', $panorama->uuid);
+
+        $data = [
+            'panorama' => $panorama,
+            'embedUrl' => $embedUrl,
+        ];
+
+        return view('app.panorama.preview', $data);
+    }
 }

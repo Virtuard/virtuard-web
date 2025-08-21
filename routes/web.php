@@ -51,8 +51,10 @@ Route::group([
 Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
 });
 });
-Route::get('/panorama/preview', 'VirtuardController@previewIpanorama')->name('panorama.preview');
+
 Route::get('/panorama/compress/{id}', 'VirtuardController@compressPanorama')->name('panorama.compress');
+Route::get('/panorama/{id}', 'VirtuardController@preview')->name('panorama.preview');
+Route::get('/vtour/{id}/share', 'VirtuardController@share')->name('panorama.share')->middleware('allow_iframe');
 
 // Story
 Route::get('/story', 'StoryController@list')->name('story.list');

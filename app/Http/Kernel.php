@@ -84,5 +84,6 @@ class Kernel extends HttpKernel
         "set_language_for_api" => \App\Http\Middleware\SetLanguageForApi::class,
         "user_plan" => \App\Http\Middleware\CheckUserPlan::class,
         "user_ipanorama_plan" => \App\Http\Middleware\CheckUserIpanoramaPlan::class,
+        "allow_iframe" => \App\Http\Middleware\AllowIframe::class,
     ];
 }

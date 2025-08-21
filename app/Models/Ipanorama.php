@@ -27,4 +27,15 @@ class Ipanorama extends Model
     {
         return $this->belongsTo(User::class, "user_id", "id")->withDefault();
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::saving(function ($model) {
+            if (empty($model->uuid)) {
+                $model->uuid = \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
 }
