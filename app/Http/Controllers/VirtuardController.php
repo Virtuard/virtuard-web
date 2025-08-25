@@ -286,7 +286,7 @@ class VirtuardController extends Controller
         ])->first();
         abort_if(!$panorama, 404);
 
-        if(!$panorama->author->checkUserIpanoramaPlan()) {
+        if(!$panorama->author->checkUserPlanStatus()) {
             return redirect(route('plan.expired'));
         }
 
@@ -305,7 +305,7 @@ class VirtuardController extends Controller
         ])->first();
         abort_if(!$panorama, 404);
 
-        if(!$panorama->author->checkUserIpanoramaPlan()) {
+        if(!$panorama->author->checkUserPlanStatus()) {
             return redirect(route('plan.expired'));
         }
 
