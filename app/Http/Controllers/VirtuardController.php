@@ -284,6 +284,16 @@ class VirtuardController extends Controller
             'uuid' => $id,
             'status' => 'publish',
         ])->first();
+
+        $listingUrl = '';
+        if($panorama->hotels->count() > 0){
+            $listingUrl = route('hotel.detail', $panorama->hotels[0]->slug);
+        }elseif($panorama->spaces->count() > 0){
+            $listingUrl = route('space.detail', $panorama->spaces[0]->slug);
+        }elseif($panorama->businesses->count() > 0){
+            $listingUrl = route('business.detail', $panorama->businesses[0]->slug);
+        }
+        
         abort_if(!$panorama, 404);
 
         if(!$panorama->author->checkUserPlanStatus()) {
@@ -292,6 +302,7 @@ class VirtuardController extends Controller
 
         $data = [
             'panorama' => $panorama,
+            'listingUrl' => $listingUrl,
         ];
 
         return view('app.panorama.share', $data);

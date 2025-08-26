@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\User\Models\User;
+use Modules\Hotel\Models\Hotel;
+use Modules\Space\Models\Space;
+use Modules\Business\Models\Business;
 
 class Ipanorama extends Model
 {
@@ -23,11 +26,6 @@ class Ipanorama extends Model
         'update_user',
     ];
 
-    public function author()
-    {
-        return $this->belongsTo(User::class, "user_id", "id")->withDefault();
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -38,4 +36,35 @@ class Ipanorama extends Model
             }
         });
     }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, "user_id", "id")->withDefault();
+    }
+
+    public function listing()
+    {
+        return [
+            'hotels' => $this->hotels(),
+            'spaces' => $this->spaces(),
+            'businesses' => $this->businesses(),
+        ];
+    }
+
+    public function hotels()
+    {
+        return $this->hasMany(Hotel::class, 'ipanorama_id');
+    }
+
+    public function spaces()
+    {
+        return $this->hasMany(Space::class, 'ipanorama_id');
+    }
+
+    public function businesses()
+    {
+        return $this->hasMany(Business::class, 'ipanorama_id');
+    }
+    
+    
 }
