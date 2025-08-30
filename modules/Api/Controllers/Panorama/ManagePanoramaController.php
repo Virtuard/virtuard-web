@@ -108,10 +108,15 @@ class ManagePanoramaController extends ApiController
                 'data' => $ipanorama,
             ], 201);
         } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
                 'message' => 'Data failed to save',
-            ], 500);
+            ], $statusCode);
         }
     }
 
@@ -159,19 +164,33 @@ class ManagePanoramaController extends ApiController
      */
     public function show($id)
     {
-        $panorama = $this->model::find($id);
+        try {
+            $panorama = $this->model::find($id);
 
-        if (!$panorama) {
+            if (!$panorama) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data not found',
+                ], 404);
+            }
+
+            $this->isValidAccess($panorama->user_id);
+
+            return response()->json([
+                'status' => true,
+                'data' => $panorama,
+            ]);
+        } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
-                'message' => 'Data not found',
-            ], 404);
+                'message' => $message
+            ], $statusCode);
         }
-
-        return response()->json([
-            'status' => true,
-            'data' => $panorama,
-        ]);
     }
 
     /**
@@ -250,15 +269,9 @@ class ManagePanoramaController extends ApiController
                 $attr['status'] = 'publish';
             }
             $panorama = $this->model::find($id);
-            
-            if(auth()->user()->id !== $panorama->user_id){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'You do not have permission to update this data',
-                ], 403);
-            }
 
-            
+            $this->isValidAccess($panorama->user_id);
+
             $panorama->update($attr);
 
             return response()->json([
@@ -267,10 +280,15 @@ class ManagePanoramaController extends ApiController
                 'data' => $panorama,
             ], 200);
         } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
                 'message' => 'Data failed to update',
-            ], 500);
+            ], $statusCode);
         }
     }
 
@@ -300,7 +318,7 @@ class ManagePanoramaController extends ApiController
      *         description="Data not found",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Data not found or you do not have permission to delete")
+     *             @OA\Property(property="message", type="string", example="Delete data failed")
      *         )
      *     ),
      *     @OA\Response(
@@ -308,104 +326,41 @@ class ManagePanoramaController extends ApiController
      *         description="User does not have permission to delete data",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="You do not have permission to delete this data")
+     *             @OA\Property(property="message", type="string", example="Delete data failed")
      *         )
      *     )
      * )
      */
     public function delete($id)
     {
-        $ipanorama = Ipanorama::find($id);
+        try {
+            $ipanorama = Ipanorama::find($id);
 
-        if ($ipanorama) {
+            if (!$ipanorama) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Delete data failed',
+                ], 404);
+            }
+
+            $this->isValidAccess($ipanorama->user_id);
+
             $ipanorama->delete();
 
             return response()->json([
                 'status' => true,
                 'message' => 'Data deleted successfully',
             ]);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => 'Data not found or you do not have permission to delete',
-            ], 404);
-        }
-    }
-
-    /**
-     * @OA\Get(
-     *     path="/api/user/vtour/{id}/load",
-     *     tags={"Vtour"},
-     *     summary="Load a vtour",
-     *     description="Load a vtour by ID",
-     *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Data loaded successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Data loaded successfully"),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="user_id", type="integer", example=5),
-     *                 @OA\Property(property="title", type="string", example="Vtour Title"),
-     *                 @OA\Property(property="code", type="string", example="{}"),
-     *                 @OA\Property(property="json_data", type="string", example="{}"),
-     *                 @OA\Property(property="thumb", type="string", example="upload/2/136/250826-136-1-18548.jpg"),
-     *                 @OA\Property(property="status", type="string", example="draft"),
-     *                 @OA\Property(property="create_user", type="integer", example=5),
-     *                 @OA\Property(property="update_user", type="integer", example=5),
-     *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Data not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Data not found")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Data failed to load",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Data failed to load")
-     *         )
-     *     )
-     * )
-     */
-    public function load(Request $request)
-    {
-        try {
-            $idItem = $request->query('id');
-
-            $virtuard = $this->model::find($idItem);
-
-            if (!$virtuard) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data not found',
-                ], 404);
-            }
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data loaded successfully',
-                'data' => $virtuard,
-            ]);
         } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
-                'message' => 'Data failed to load',
-            ], 500);
+                'message' => $message
+            ], $statusCode);
         }
     }
 
@@ -429,7 +384,7 @@ class ManagePanoramaController extends ApiController
      *             @OA\Schema(
      *                 required={"images"},
      *                 @OA\Property(
-        *                  property="images",
+     *                  property="images",
      *                     type="string",
      *                     format="binary",
      *                     description="The file to upload"
@@ -463,38 +418,109 @@ class ManagePanoramaController extends ApiController
      *     )
      * )
      */
-    public function addImage(Request $request)
+    public function addImage(Request $request, $id)
     {
-        logger($request->all());
         $request->merge(['user_id' => Auth::id()]);
 
-        $this->validate($request, [
-            'images.*' => 'required|mimes:jpeg,png,webp',
-        ]);
+        // Validate images
+        if (!$request->hasFile('images')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No image file provided',
+            ], 400);
+        }
+
+        $images = $request->file('images');
+
+        // Validate single file or array of files
+        if (is_array($images)) {
+            foreach ($images as $image) {
+                if (!$image || !$image->isValid()) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Invalid image file provided',
+                    ], 400);
+                }
+
+                $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+                if (!in_array($image->getMimeType(), $allowedMimes)) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Invalid file type. Only JPEG, PNG, and WebP are allowed.',
+                    ], 400);
+                }
+
+                if ($image->getSize() > 10 * 1024 * 1024) { // 10MB
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'File size too large. Maximum size is 10MB.',
+                    ], 400);
+                }
+            }
+        } else {
+            // Single file validation
+            if (!$images->isValid()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid image file provided',
+                ], 400);
+            }
+
+            $allowedMimes = ['image/jpeg', 'image/png', 'image/webp'];
+            if (!in_array($images->getMimeType(), $allowedMimes)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Invalid file type. Only JPEG, PNG, and WebP are allowed.',
+                ], 400);
+            }
+
+            if ($images->getSize() > 10 * 1024 * 1024) { // 10MB
+                return response()->json([
+                    'status' => false,
+                    'message' => 'File size too large. Maximum size is 10MB.',
+                ], 400);
+            }
+        }
 
         try {
-            $image = $request->file('images');
-            // logger('proofImage: ' . $proofImage);
+            $images = $request->file('images');
 
-            // foreach ($proofImage as $image) {
-                $path = "/ipanoramaBuilder/upload/" . $request['user_id'] . "/" . $request->id;
-                logger('path: ' . $path);
-                if ($image) {
-                    $newFileName = now()->format('ymd') . '-' . $request->id . '-' . $request->user_id . '-' . $image->getClientOriginalName();
-                    $image->storeAs($path, $newFileName);
+            // Handle both single file and multiple files
+            $imageArray = is_array($images) ? $images : [$images];
+
+            foreach ($imageArray as $image) {
+                if (!$image || !$image->isValid()) {
+                    continue;
                 }
-            // }
+
+                $path = "ipanoramaBuilder/upload/" . $request['user_id'] . "/" . $id;
+
+                $newFileName = now()->format('ymd') . '-' . $id . '-' . $request->user_id . '-' . $image->getClientOriginalName();
+
+                // Ensure directory exists
+                $fullPath = public_path('uploads/' . $path);
+                if (!file_exists($fullPath)) {
+                    mkdir($fullPath, 0755, true);
+                }
+
+                // Store file using uploads disk
+                $image->storeAs($path, $newFileName, 'uploads');
+            }
 
             return response()->json([
                 'status' => true,
                 'message' => 'Image saved successfully',
             ], 201);
         } catch (\Exception $e) {
-            logger()->error($e);
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
-                'message' => 'Image failed to save',
-            ], 500);
+                'message' => $message
+            ], $statusCode);
         }
     }
 
@@ -576,12 +602,7 @@ class ManagePanoramaController extends ApiController
 
             $panorama = $this->model::find($id);
 
-            if(auth()->user()->id !== $panorama->user_id){
-                return response()->json([
-                    'status' => false,
-                    'message' => 'You do not have permission to update this data',
-                ], 403);
-            }
+            $this->isValidAccess($panorama->user_id);
 
             $panorama->json_data = $jsonData;
             $panorama->save();
@@ -593,10 +614,15 @@ class ManagePanoramaController extends ApiController
                 'attr' => $attr,
             ]);
         } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
-                'message' => 'Data failed to process',
-            ], 500);
+                'message' => $message
+            ], $statusCode);
         }
     }
 
@@ -650,7 +676,7 @@ class ManagePanoramaController extends ApiController
         try {
             // Validate panorama exists and user has access
             $panorama = $this->model::find($id);
-            
+
             if (!$panorama) {
                 return response()->json([
                     'status' => false,
@@ -660,16 +686,11 @@ class ManagePanoramaController extends ApiController
 
             // Check if user has access to this panorama
             $user_id = auth()->user()->id;
-            if (!$user_id || $panorama->user_id != $user_id) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Access denied'
-                ], 403);
-            }
+            $this->isValidAccess($panorama->user_id);
 
             // Build directory path
             $directory = public_path("uploads/ipanoramaBuilder/upload/{$user_id}/{$id}");
-            
+
             // Check if directory exists
             if (!is_dir($directory)) {
                 return response()->json([
@@ -680,17 +701,17 @@ class ManagePanoramaController extends ApiController
             }
 
             $result = [];
-            
+
             // Get all image files from the directory
             $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-            
+
             foreach (glob($directory . '/*.*') as $file) {
                 $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-                
+
                 if (in_array($extension, $allowedExtensions)) {
                     $filename = basename($file);
                     $relativePath = "uploads/ipanoramaBuilder/upload/{$user_id}/{$id}/{$filename}";
-                    
+
                     $result[] = [
                         'filename' => $filename,
                         'full_path' => '/' . $relativePath,
@@ -699,7 +720,7 @@ class ManagePanoramaController extends ApiController
             }
 
             // Sort by creation time (newest first)
-            usort($result, function($a, $b) {
+            usort($result, function ($a, $b) {
                 return strtotime($b['created_at']) - strtotime($a['created_at']);
             });
 
@@ -708,12 +729,23 @@ class ManagePanoramaController extends ApiController
                 'message' => 'Files retrieved successfully',
                 'data' => $result
             ]);
-
         } catch (\Exception $e) {
+            $statusCode = $e->getCode() ?: 500;
+            $message = 'Something went wrong';
+            if ($statusCode == 403) {
+                $message = 'You do not have permission to access this data';
+            }
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to retrieve files: ' . $e->getMessage()
-            ], 500);
+                'message' => $message
+            ], $statusCode);
+        }
+    }
+
+    protected function isValidAccess($user_id)
+    {
+        if (auth()->user()->id !== $user_id) {
+            throw new \Exception('You do not have permission to access this data', 403);
         }
     }
 }
