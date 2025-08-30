@@ -15,7 +15,7 @@ class MediaController extends \Modules\Media\Admin\MediaController
      *     summary="Upload a media file",
      *     description="Upload an image, video, or document file to the media library",
      *     tags={"Media"},
-     *     security={{"bearerAuth":{}}},
+     *     security={{"sanctum":{}}},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\MediaType(
@@ -103,7 +103,6 @@ class MediaController extends \Modules\Media\Admin\MediaController
      */
     public function store(Request $request)
     {
-
         if(!\auth()->user()){
             return $this->sendError(__("Please log in"));
         }

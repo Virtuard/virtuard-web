@@ -22,6 +22,8 @@ use Modules\User\Controllers\MessagesController as ControllersMessagesController
 use Modules\Api\Controllers\MemberController;
 use Modules\Api\Controllers\MapController;
 use Modules\Api\Controllers\AttributeController;
+use Modules\Api\Controllers\Panorama\ManagePanoramaController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -135,7 +137,7 @@ Route::get('/profile-user/{id_or_slug}/services', [ProfileController::class, 'al
 
 /* Media */
 Route::group(['prefix'=>'media','middleware' => 'auth:sanctum'],function(){
-    Route::post('/','MediaController@store')->name("api.media.store");
+    Route::post('/upload','MediaController@store')->name("api.media.store");
     Route::get('/lists','MediaController@getLists')->name("api.media.lists");
 });
 
@@ -193,7 +195,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function (
     Route::get('{id}/followings', [FollowController::class, 'getFollowings']);
 });
 
-Route::get('attributes', [AttributeController::class, 'index']);
+Route::get('attributes', [AttributeController::class, 'index'])->middleware(['auth:sanctum']);
 
 // User Group Access
 Route::group([
@@ -231,5 +233,20 @@ Route::group([
         Route::post('/', [ApiManageBusinessController::class, 'store']);
         Route::put('/{id}', [ApiManageBusinessController::class, 'update']);
         Route::delete('/{id}', [ApiManageBusinessController::class, 'delete']);
+    });
+
+    // Vtour
+    Route::group([
+        'prefix' => 'vtour',
+    ], function () {
+        Route::get('/', [ManagePanoramaController::class, 'index']);
+        Route::get('/{id}', [ManagePanoramaController::class, 'show']);
+        Route::post('/', [ManagePanoramaController::class, 'store']);
+        Route::put('/{id}', [ManagePanoramaController::class, 'update']);
+        Route::delete('/{id}', [ManagePanoramaController::class, 'delete']);
+        Route::get('/{id}/load', [ManagePanoramaController::class, 'load']);
+        Route::post('/{id}/add-image', [ManagePanoramaController::class, 'addImage']);
+        Route::post('/{id}/update-json-data', [ManagePanoramaController::class, 'updateJsonData']);
+        Route::get('/{id}/get-files', [ManagePanoramaController::class, 'getFiles']);
     });
 });

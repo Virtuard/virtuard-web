@@ -2,7 +2,7 @@
 
 namespace Modules\Api\Controllers;
 
-use App\Http\Controllers\Controller;
+use Modules\ApiController;
 use Modules\Core\Models\Attributes;
 use Illuminate\Http\Request;
 
@@ -12,12 +12,13 @@ use Illuminate\Http\Request;
  *     description="API Endpoints for service attributes"
  * )
  */
-class AttributeController extends Controller
+class AttributeController extends ApiController
 {
     protected $attributesClass;
 
     public function __construct(Attributes $attributes)
     {
+        parent::__construct();
         $this->attributesClass = $attributes;
     }
 
@@ -27,6 +28,7 @@ class AttributeController extends Controller
      *     tags={"Attributes"},
      *     summary="Get service attributes",
      *     description="Retrieve all available attributes for a specific service type with their associated terms",
+     *     security={{"sanctum":{}}},
      *     @OA\Parameter(
      *         name="service",
      *         in="query",
