@@ -35,6 +35,11 @@
     <link href="{{ asset('themes/admin/libs/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
     <link href="{{ asset('dist/admin/css/app.css') }}" rel="stylesheet">
 
+    <style>
+        .dungdt-upload-multiple .attach-demo .image-item .inner img {
+            object-fit: contain;
+        }
+    </style>
 
     {!! \App\Helpers\Assets::css() !!}
     {!! \App\Helpers\Assets::js() !!}
@@ -214,6 +219,7 @@
 
 <script src="{{url('libs/daterange/moment.min.js')}}"></script>
 <script src="{{url('libs/daterange/daterangepicker.min.js?_ver='.config('app.asset_version'))}}"></script>
+<script src="{{ asset('assets/js/custom-admin.js?_ver='.config('app.asset_version')) }}" ></script>
 
 
 {!! \App\Helpers\Assets::js(true) !!}
