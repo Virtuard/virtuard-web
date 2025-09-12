@@ -308,8 +308,6 @@
             $(this).attr('draggable', true);
             $(this).addClass('sortable-item');
         });
-
-        console.log('Custom Admin JS: Gallery drag-to-reorder functionality initialized');
     });
 
     // Export functions for global access
