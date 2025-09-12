@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore 3D & 360 Virtual Tours | Virtual Tours by Virtuard</title>
-
+    <link rel="canonicalize" href="{{ url()->current() }}" />
     <meta name="description" content="Want to showcase your property, hotel, restaurant, or shop like never before? With Virtuard, you can create your listing and 360° Virtual Tour on your own – at no cost and with no assistance needed!">
     {{-- <meta name="keywords" content="keyword1, keyword2, keyword3"> --}}
     {{-- <meta name="author" content="Your Name or Company"> --}}
@@ -16,8 +16,8 @@
     <style>
         * {margin: 0; padding: 0;}
 
-        body, html { 
-            font-family: 'Urbanist', arial; 
+        body, html {
+            font-family: 'Urbanist', arial;
             min-height: 100vh;
         }
 
@@ -381,7 +381,7 @@
         .how-it-works .item-number p {
             border: 1px solid #5191FA;
             padding: 2px 10px;
-            margin-top: 12px; 
+            margin-top: 12px;
             font-size: 18px;
             border-radius: 999px;
             color: #5191FA;
@@ -447,7 +447,7 @@
     </style>
     {{-- bootstrap --}}
     <link href="{{ asset('libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/virtual-tour-plugin/index.css" />
@@ -519,7 +519,7 @@
                     <h1 class="title">{!! __('Explore Virtuard: Your Gateway to <span>Immersive Virtual Tours</span>') !!}</h1>
                     <p class="description">{{ __('Virtuard is a cutting-edge platform that empowers users to upload and explore virtual tours with integrated booking services. Supporting various tour formats, Virtuard features eight distinct categories: Real Estate, Hotels, Commercial Activities.') }}</p>
                     <button class="btn btn-second" id="btn-demo">{{ __('Virtuard Tour Demo') }}</button>
-    
+
                     <div class="mouse-container">
                         <div class="mouse"></div>
                     </div>
@@ -554,7 +554,7 @@
                 </div>
             </section>
         </div>
-        
+
         <div class="bg-overlay">
             <section class="container get-started-container">
                 <div class="text-center mb-5 text-white section-header">
@@ -840,7 +840,7 @@
                 </div>
             </section>
         </div>
-        
+
         <div class="bg-overlay">
             <section class="container get-started-container additional-features">
                 <div class="text-center mb-5 text-white section-header">
@@ -1107,7 +1107,7 @@
     <script src="{{ asset('/libs/jquery-3.6.3.min.js') }}"></script>
     <script src="https://maps.google.com/maps/api/js?key={{ get_map_gmap_key() }}&libraries=places"></script>
     <script src="https://cdn.jsdelivr.net/npm/@google/markerclusterer@2.0.9/dist/markerclusterer.min.js"></script>
-    
+
     {{-- <script type="module" src="{{ asset('/assets/js/landing.js') }}"></script> --}}
 
     <script type="module">
@@ -1116,7 +1116,7 @@
         // Deteksi jika dibuka dari Instagram atau Facebook
         if (userAgent.includes("Instagram") || userAgent.includes("FBAN") || userAgent.includes("FBAV")) {
             // Arahkan ke browser eksternal (Google Chrome di Android)
-            window.location.href = "googlechrome://virtuard.com/landing"; 
+            window.location.href = "googlechrome://virtuard.com/landing";
             // window.location.href = "intent://virtuard.com/landing#Intent;scheme=https;package=com.android.chrome;end";
         }
 
@@ -1134,7 +1134,7 @@
         const baseUrl = '/assets/images/';
         const baseUrl2 = 'https://photo-sphere-viewer-data.netlify.app/assets/';
 
-        const container = document.createElement('section'); 
+        const container = document.createElement('section');
         const caption = 'Deep Blue Villa New <br> <b>&copy; virtuard.com</b>';
 
         const nodes = [
@@ -1145,7 +1145,7 @@
                 // name: 'One',
                 caption: `[1] ${caption}`,
                 links: [
-                    { 
+                    {
                         nodeId: '2',
                         position: { yaw: 10.0, pitch: 10.0 },
                     }
@@ -1251,10 +1251,10 @@
                     positionMode: 'gps',
                     renderMode: '3d',
                     nodes: nodes,
-                    startNodeId: '1',   
+                    startNodeId: '1',
                 }],
             ],
-        });     
+        });
 
         function handleFullscreenChange() {
             const mainElement = document.getElementById('main');
@@ -1435,11 +1435,11 @@
                 newMarker.addListener("click", () => {
                     if (currentInfoWindow != null) {
                         currentInfoWindow.close();
-                    } 
+                    }
 
                     infowindow.open(map, newMarker);
 
-                    currentInfoWindow = infowindow; 
+                    currentInfoWindow = infowindow;
                 });
 
                 mapMarkers.push(newMarker);
