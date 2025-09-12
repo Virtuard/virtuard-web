@@ -1,4 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteRule ^(.*)$ public/$1 [L]
+    RewriteCond %{HTTP_HOST} ^www\.virtuard\.com$
+    RewriteRule ^/?$ "http\:\/\/virtuard\.com\/" [R=301,L]
 </IfModule>
