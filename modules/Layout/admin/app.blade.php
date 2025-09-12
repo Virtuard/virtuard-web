@@ -177,13 +177,13 @@
                 <div class="row">
                     <div class="col-md-6 copy-right" >
                         {{date('Y')}}
-                        <a href="{{__('https://www.virtuard.com')}}" target="_blank">{{__('Virtuard')}}</a>
-                        &copy; 
-                        {{__('All Rights reserved')}} 
+                        <a href="{{__('https://www.virtuard.com/')}}" target="_blank">{{__('Virtuard')}}</a>
+                        &copy;
+                        {{__('All Rights reserved')}}
                     </div>
                     <div class="col-md-6">
                         <div class="text-md-right footer-links d-none d-sm-block">
-                            <a href="{{__('https://www.virtuard.com')}}" target="_blank">{{__('About Us')}}</a>
+                            <a href="{{__('https://www.virtuard.com/')}}" target="_blank">{{__('About Us')}}</a>
                             {{-- <a href="{{__('https://m.me/virtuard')}}" target="_blank">{{__('Contact Us')}}</a> --}}
                         </div>
                     </div>
