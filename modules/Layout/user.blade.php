@@ -130,8 +130,8 @@
     </div>
     <script src="{{ asset('libs/filerobot-image-editor/filerobot-image-editor.min.js?_ver='.config('app.asset_version')) }}"></script>
     <script src="{{ asset('libs/bootstrap/js/bootstrap.js') }}"></script>
-
     <script src="{{ asset('assets/js/custom-user.js?_ver=' . get_asset_version()) }}"></script>
+    <script src="{{ asset('assets/js/gallery-form.js?_ver='.config('app.asset_version')) }}" ></script>
     @if(!is_demo_mode())
     {!! setting_item('footer_scripts') !!}
     @endif

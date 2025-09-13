@@ -219,7 +219,7 @@
 
 <script src="{{url('libs/daterange/moment.min.js')}}"></script>
 <script src="{{url('libs/daterange/daterangepicker.min.js?_ver='.config('app.asset_version'))}}"></script>
-<script src="{{ asset('assets/js/custom-admin.js?_ver='.config('app.asset_version')) }}" ></script>
+<script src="{{ asset('assets/js/gallery-form.js?_ver='.config('app.asset_version')) }}" ></script>
 
 
 {!! \App\Helpers\Assets::js(true) !!}
