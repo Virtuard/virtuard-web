@@ -57,7 +57,7 @@
         }
     @endphp
     <title>{{ $page_title }}</title>
-    <meta name="description" content="{{setting_item_with_lang("site_desc")}}"/>
+    <meta name="description" content="{{setting_item_with_lang('site_desc')}}"/>
             {{-- JSON-LD Microdata for SEO --}}
             <script type="application/ld+json">
             {
