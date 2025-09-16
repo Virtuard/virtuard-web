@@ -16,7 +16,7 @@
     <meta name="keywords" content="{{$seo_meta['seo_keywords'] ?? $seo_meta['service_keywords'] ?? setting_item_with_lang("site_keywords")}}"/>
     <meta name="robots" content="index,follow" />
     {{-- Facebook share --}}
-    <meta property="og:url" content="{{$seo_meta['full_url'] ?? : ''}}"/>
+    <meta property="og:url" content="{{$seo_meta['full_url'] ?? ''}}"/>
     <meta property="og:type" content="company"/>
     <meta property="og:title" content="{{$seo_meta['seo_share']['facebook']['title'] ?? $seo_meta['seo_title'] ?? $seo_meta['service_title'] ?? $page_title ?? ""}}"/>
     <meta property="og:description" content="{{$seo_meta['seo_share']['facebook']['desc'] ?? $seo_meta['seo_desc'] ?? $seo_meta['service_desc'] ?? ""}}"/>
@@ -28,26 +28,6 @@
     <meta name="twitter:image" content="{{ get_file_url( $seo_meta['seo_share']['twitter']['image'] ?? $seo_meta['seo_image'] ?? $seo_meta['service_image'] ?? setting_item('logo_id') ?? "" , "full") }}">
     <link rel="canonical" href="{{$seo_meta['full_url'] ?? ''}}"/>
     <link rel="canonicalize" href="{{ url()->current() }}" />
-    <script type="application/ld+json">
-      {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "{{ setting_item_with_lang('site_title', false, 'Virtuard') }}",
-          "url": "https://virtuard.com/",
-          "logo": "{{ get_file_url(setting_item('logo_id'), 'full') }}",
-          "description": "{{ $seo_meta['seo_desc'] ?? $seo_meta['service_desc'] ?? setting_item_with_lang('site_desc') }}",
-          "contactPoint": {
-              "@type": "ContactPoint",
-              "telephone": "{{ setting_item('site_phone') ?? '+62' }}",
-              "contactType": "customer service"
-          },
-          "sameAs": [
-              "{{ setting_item('site_facebook') }}",
-              "{{ setting_item('site_instagram') }}",
-              "{{ setting_item('site_twitter') }}"
-          ]
-      }
-    </script>
 @else
     @php
         if(!empty($page_title)){
@@ -58,25 +38,4 @@
     @endphp
     <title>{{ $page_title }}</title>
     <meta name="description" content="{{setting_item_with_lang('site_desc')}}"/>
-            {{-- JSON-LD Microdata for SEO --}}
-            <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                "name": "{{ setting_item_with_lang('site_title', false, 'Virtuard') }}",
-                "url": "https://virtuard.com/",
-                "logo": "{{ get_file_url(setting_item('logo_id'), 'full') }}",
-                "description": "{{ setting_item_with_lang('site_desc') }}",
-                "contactPoint": {
-                    "@type": "ContactPoint",
-                    "telephone": "{{ setting_item('site_phone') ?? '+62' }}",
-                    "contactType": "customer service"
-                },
-                "sameAs": [
-                    "{{ setting_item('site_facebook') }}",
-                    "{{ setting_item('site_instagram') }}",
-                    "{{ setting_item('site_twitter') }}"
-                ]
-            }
-            </script>
 @endif
