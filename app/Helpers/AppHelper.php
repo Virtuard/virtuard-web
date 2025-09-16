@@ -1632,9 +1632,12 @@ if (!function_exists('hide_submenu_setting')) {
     function hide_submenu_setting() {
         $data = [
             'flight',
-            // 'car',
-            // 'event',
+            'car',
+            'event',
             'tour',
+            'natural',
+            'cultural',
+            'art',
             'media',
         ];
 
