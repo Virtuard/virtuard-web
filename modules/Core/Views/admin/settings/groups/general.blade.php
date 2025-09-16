@@ -22,9 +22,51 @@
                 <div class="form-group">
                     <label>{{__("Site Keyword")}}</label>
                     <div class="form-controls">
-                        <textarea name="site_keywords" class="form-control" cols="30" rows="3">{{setting_item_with_lang('site_keywords',request()->query('lang'))}}</textarea>
+                        @php
+                          $lang = request()->query('lang');
+
+                          // Get existing keywords from database first
+                          $existingKeywords = setting_item_with_lang('site_keywords', $lang);
+
+                          // Only generate fallback if no keywords exist in database
+                          if (empty($existingKeywords)) {
+                              $title = setting_item_with_lang('site_title', $lang);
+                              $desc = setting_item_with_lang('site_desc', $lang);
+
+                              $combined = $title . ' ' . $desc;
+                              $combined = strtolower(preg_replace('/[^a-zA-Z0-9\s]/', ' ', $combined));
+                              $words = array_filter(
+                                  array_unique(
+                                      array_map('trim', explode(' ', preg_replace('/\s+/', ' ', trim($combined))))
+                                  ),
+                                  function($word) {
+                                      return strlen($word) > 2;
+                                  }
+                              );
+                              $fallbackKeywords = implode(', ', array_values(array_slice($words, 0, 15)));
+                              $displayKeywords = $fallbackKeywords;
+                          } else {
+                              $displayKeywords = $existingKeywords;
+                          }
+                      @endphp
+
+                        <div class="d-flex align-items-center mb-2">
+                            <button type="button" id="regenerate-keywords" class="btn btn-sm btn-info">
+                                <i class="fa fa-magic"></i> {{__("Generate AI Keywords")}}
+                            </button>
+                        </div>
+
+                        <!-- Status div for messages -->
+
+                        <textarea disabled name="site_keywords" id="site_keywords" class="form-control" cols="30" rows="3" placeholder="{{__('Click Generate AI Keywords button to generate keywords or enter manually...')}}">{{ $displayKeywords }}</textarea>
+
+                        <small class="text-muted mt-1 d-block">
+                            <strong>{{__("Note:")}}</strong> {{__("AI-generated keywords will only contain words that exist in your Site Title and Description. Keywords will not auto-generate when switching language tabs.")}}
+                        </small>
+
                     </div>
                 </div>
+
                 @if(is_default_lang())
                 <div class="form-group">
                     <label>{{__("Date format")}}</label>
@@ -320,4 +362,204 @@
             });
         })(jQuery)
     </script>
+<script>
+// Gemini AI Keywords Generator - Fixed Version (Manual Generation Only)
+class GeminiKeywordGenerator {
+    constructor() {
+        this.apiKey = '{{ env("GEMINI_API_KEY") }}';
+        this.baseUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+
+        this.init();
+    }
+
+    init() {
+        // Only bind click event for manual generation
+        document.getElementById('regenerate-keywords').addEventListener('click', () => {
+            this.generateAIKeywords();
+        });
+
+        // Remove auto-generation event listeners
+        // No more blur events that cause auto-generation when switching tabs
+    }
+
+    async generateAIKeywords() {
+        if (!this.apiKey || this.apiKey.trim() === '') {
+            this.generateManualKeywords();
+            return;
+        }
+
+        const button = document.getElementById('regenerate-keywords');
+        const originalHtml = button.innerHTML;
+        const siteTitle = document.querySelector('input[name="site_title"]')?.value || '';
+        const siteDesc = document.querySelector('textarea[name="site_desc"]')?.value || '';
+        const lang = '{{ request()->query("lang") ?? "en" }}';
+
+        if (!siteTitle.trim() && !siteDesc.trim()) {
+            return;
+        }
+
+        // Show loading
+        button.innerHTML = '<i class="fa fa-spinner fa-spin"></i> {{__("Generating AI Keywords...")}}';
+        button.disabled = true;
+
+        try {
+            const keywords = await this.callGeminiAPI(siteTitle, siteDesc, lang);
+            const validatedKeywords = this.validateKeywords(keywords, siteTitle, siteDesc);
+
+            document.getElementById('site_keywords').value = validatedKeywords;
+            // Enable the textarea after successful generation
+            document.getElementById('site_keywords').disabled = false;
+
+        } catch (error) {
+            console.error('Gemini API Error:', error);
+            this.generateManualKeywords();
+        } finally {
+            button.innerHTML = originalHtml;
+            button.disabled = false;
+        }
+    }
+
+    async callGeminiAPI(title, description, lang) {
+        const languageMap = {
+            'en': 'English',
+            'id': 'Indonesian/Bahasa Indonesia',
+            'it': 'Italian',
+            'rus': 'Russian',
+            'de': 'German',
+            'pt': 'Portuguese',
+            'ja': 'Japanese',
+            'ko': 'Korean',
+            'zh': 'Chinese'
+        };
+
+        const language = languageMap[lang] || 'English';
+
+        const prompt = `Analyze the following website content and create SEO keywords in ${language}.
+
+IMPORTANT RULES:
+1. You can ONLY use words that exist in the provided title and description
+2. Do not invent new words or synonyms not present in the source text
+3. Create meaningful keyword combinations from existing words
+4. Include both single words and 2-3 word phrases
+5. Remove duplicates and limit to 15 keywords maximum
+6. Return ONLY the keywords separated by commas in a single line
+7. No explanations, no formatting, just the keywords
+
+Website Title: "${title}"
+Website Description: "${description}"
+
+Available words you can use: ${this.extractWords(title + ' ' + description).join(', ')}
+
+Generate keywords using ONLY the words listed above:`;
+
+        const requestBody = {
+            contents: [{
+                parts: [{
+                    text: prompt
+                }]
+            }],
+            generationConfig: {
+                temperature: 0.7,
+                topK: 40,
+                topP: 0.8,
+                maxOutputTokens: 200,
+            }
+        };
+
+        const response = await fetch(`${this.baseUrl}?key=${this.apiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts[0]) {
+            return data.candidates[0].content.parts[0].text.trim();
+        } else {
+            throw new Error('Invalid response format');
+        }
+    }
+
+    extractWords(text) {
+        const words = text.toLowerCase()
+            .replace(/[^a-zA-Z0-9\s]/g, ' ')
+            .split(/\s+/)
+            .filter(word => word.length > 2)
+            .filter((word, index, arr) => arr.indexOf(word) === index); // remove duplicates
+
+        return words;
+    }
+
+    validateKeywords(keywords, title, description) {
+        const availableWords = this.extractWords(title + ' ' + description);
+        const keywordList = keywords.split(',').map(k => k.trim());
+        const validatedKeywords = [];
+
+        for (let keyword of keywordList) {
+            if (!keyword) continue;
+
+            // Check if all words in the keyword exist in source text
+            const keywordWords = this.extractWords(keyword);
+            const isValid = keywordWords.every(word => availableWords.includes(word));
+
+            if (isValid && validatedKeywords.indexOf(keyword) === -1) {
+                validatedKeywords.push(keyword);
+            }
+        }
+
+        // If no valid keywords, fallback to manual extraction
+        if (validatedKeywords.length === 0) {
+            return this.generateManualKeywords(false);
+        }
+
+        return validatedKeywords.slice(0, 15).join(', ');
+    }
+
+    generateManualKeywords(updateUI = true) {
+        const siteTitle = document.querySelector('input[name="site_title"]')?.value || '';
+        const siteDesc = document.querySelector('textarea[name="site_desc"]')?.value || '';
+
+        const combined = siteTitle + ' ' + siteDesc;
+        const words = this.extractWords(combined);
+        const keywords = words.slice(0, 15).join(', ');
+
+        if (updateUI) {
+            document.getElementById('site_keywords').value = keywords;
+            // Enable the textarea after manual generation
+            document.getElementById('site_keywords').disabled = false;
+        }
+
+        return keywords;
+    }
+  }
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    new GeminiKeywordGenerator();
+});
+</script>
+
+<style>
+#keyword-status .alert {
+    margin-bottom: 0;
+    padding: 8px 12px;
+    font-size: 0.875rem;
+}
+
+.btn-sm {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+}
+
+.form-controls .btn + .btn {
+    margin-left: 0.5rem;
+}
+</style>
 @endpush
