@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+    <!-- Home Page Images -->
+    <url>
+        <loc>https://www.virtuard.com/</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/hero/virtuard-hero-banner.jpg</image:loc>
+            <image:caption>Virtuard - Your Virtual Travel Companion</image:caption>
+            <image:title>Virtuard Hero Banner</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/services/travel-services-overview.jpg</image:loc>
+            <image:caption>Complete travel services including tours, hotels, flights, and car rentals</image:caption>
+            <image:title>Virtuard Travel Services</image:title>
+        </image:image>
+    </url>
+
+    <!-- Tour Images -->
+    <url>
+        <loc>https://www.virtuard.com/tour</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/tours/bali-temple-tour.jpg</image:loc>
+            <image:caption>Beautiful Balinese temple during sunset tour</image:caption>
+            <image:title>Bali Temple Tour</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/tours/jakarta-city-tour.jpg</image:loc>
+            <image:caption>Jakarta city skyline and modern attractions</image:caption>
+            <image:title>Jakarta City Tour</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/tours/yogyakarta-cultural-tour.jpg</image:loc>
+            <image:caption>Traditional Yogyakarta cultural experience</image:caption>
+            <image:title>Yogyakarta Cultural Tour</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/tours/lombok-beach-tour.jpg</image:loc>
+            <image:caption>Pristine beaches of Lombok island tour</image:caption>
+            <image:title>Lombok Beach Tour</image:title>
+        </image:image>
+    </url>
+
+    <!-- Hotel Images -->
+    <url>
+        <loc>https://www.virtuard.com/hotel</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/hotels/luxury-resort-bali.jpg</image:loc>
+            <image:caption>Luxury resort with infinity pool in Bali</image:caption>
+            <image:title>Luxury Resort Bali</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/hotels/boutique-hotel-jakarta.jpg</image:loc>
+            <image:caption>Modern boutique hotel in Jakarta city center</image:caption>
+            <image:title>Boutique Hotel Jakarta</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/hotels/beach-villa-lombok.jpg</image:loc>
+            <image:caption>Private beach villa with ocean view in Lombok</image:caption>
+            <image:title>Beach Villa Lombok</image:title>
+        </image:image>
+    </url>
+
+    <!-- Flight Images -->
+    <url>
+        <loc>https://www.virtuard.com/flight</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/flights/airplane-sunset.jpg</image:loc>
+            <image:caption>Commercial airplane flying at sunset</image:caption>
+            <image:title>Flight Services</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/flights/business-class-interior.jpg</image:loc>
+            <image:caption>Comfortable business class airplane interior</image:caption>
+            <image:title>Business Class Flight</image:title>
+        </image:image>
+    </url>
+
+    <!-- Car Rental Images -->
+    <url>
+        <loc>https://www.virtuard.com/car</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/cars/luxury-sedan.jpg</image:loc>
+            <image:caption>Luxury sedan for comfortable city travel</image:caption>
+            <image:title>Luxury Car Rental</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/cars/suv-mountain.jpg</image:loc>
+            <image:caption>SUV perfect for mountain and adventure trips</image:caption>
+            <image:title>SUV Car Rental</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/cars/convertible-beach.jpg</image:loc>
+            <image:caption>Convertible car for scenic coastal drives</image:caption>
+            <image:title>Convertible Car Rental</image:title>
+        </image:image>
+    </url>
+
+    <!-- Boat/Marine Images -->
+    <url>
+        <loc>https://www.virtuard.com/boat</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/boats/yacht-sunset.jpg</image:loc>
+            <image:caption>Luxury yacht sailing during golden hour</image:caption>
+            <image:title>Yacht Rental</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/boats/speedboat-island.jpg</image:loc>
+            <image:caption>Speedboat for island hopping adventures</image:caption>
+            <image:title>Speedboat Island Tour</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/boats/traditional-boat.jpg</image:loc>
+            <image:caption>Traditional Indonesian boat for cultural tours</image:caption>
+            <image:title>Traditional Boat Tour</image:title>
+        </image:image>
+    </url>
+
+    <!-- Event Images -->
+    <url>
+        <loc>https://www.virtuard.com/event</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/events/wedding-beach.jpg</image:loc>
+            <image:caption>Beautiful beach wedding ceremony setup</image:caption>
+            <image:title>Beach Wedding Event</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/events/corporate-meeting.jpg</image:loc>
+            <image:caption>Professional corporate meeting and conference setup</image:caption>
+            <image:title>Corporate Event</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/events/cultural-festival.jpg</image:loc>
+            <image:caption>Traditional Indonesian cultural festival celebration</image:caption>
+            <image:title>Cultural Festival Event</image:title>
+        </image:image>
+    </url>
+
+    <!-- Space/Venue Images -->
+    <url>
+        <loc>https://www.virtuard.com/space</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/spaces/conference-room.jpg</image:loc>
+            <image:caption>Modern conference room with city view</image:caption>
+            <image:title>Conference Room Rental</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/spaces/event-hall.jpg</image:loc>
+            <image:caption>Elegant event hall for special occasions</image:caption>
+            <image:title>Event Hall Rental</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/spaces/rooftop-venue.jpg</image:loc>
+            <image:caption>Rooftop venue with panoramic city views</image:caption>
+            <image:title>Rooftop Venue</image:title>
+        </image:image>
+    </url>
+
+    <!-- Destinations Images -->
+    <url>
+        <loc>https://www.virtuard.com/destinations</loc>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/destinations/bali-rice-terraces.jpg</image:loc>
+            <image:caption>Famous Bali rice terraces landscape</image:caption>
+            <image:title>Bali Destination</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/destinations/komodo-dragon.jpg</image:loc>
+            <image:caption>Komodo dragon in its natural habitat</image:caption>
+            <image:title>Komodo National Park</image:title>
+        </image:image>
+        <image:image>
+            <image:loc>https://www.virtuard.com/images/destinations/borobudur-temple.jpg</image:loc>
+            <image:caption>Ancient Borobudur temple at sunrise</image:caption>
+            <image:title>Borobudur Temple</image:title>
+        </image:image>
+    </url>
+
+</urlset>
