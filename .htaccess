@@ -2,5 +2,5 @@
     RewriteEngine On
     RewriteRule ^(.*)$ public/$1 [L]
     RewriteCond %{HTTP_HOST} !^www.virtuard.com$ [NC]
-RewriteRule ^(.*)$ http://www.virtuard.com/$1 [L,R=301]
+RewriteRule ^(.*)$ https://www.virtuard.com/$1 [L,R=301]
 </IfModule>
