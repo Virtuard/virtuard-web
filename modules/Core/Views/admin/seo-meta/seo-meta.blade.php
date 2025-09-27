@@ -89,6 +89,7 @@ $seo_share = $meta_seo['seo_share'] ?? false;
                 @if(is_default_lang())
                     <div class="form-group form-group-image">
                         <label class="control-label">{{__("SEO Image")}}</label>
+                        <small class="text-danger"><sup>*</sup>{{__("Recommended max 1200x630px for social sharing")}}</small>
                         {!! \Modules\Media\Helpers\FileHelper::fieldUpload('seo_image', $meta_seo['seo_image'] ?? "" ) !!}
                     </div>
                 @endif

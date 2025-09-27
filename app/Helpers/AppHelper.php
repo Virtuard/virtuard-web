@@ -2005,7 +2005,7 @@ if (!function_exists('resize_seo_image')) {
 
         $media = MediaFile::find($id);
 
-        if ($media->file_width <= 100) {
+        if ($media->file_width <= 1200) {
             return $id;
         }
 
@@ -2023,7 +2023,7 @@ if (!function_exists('resize_seo_image')) {
             $originalFile = Storage::disk($driver)->path($media->file_path);
             if ($originalFile) {
                 $img = Image::make($originalFile);
-                $img->resize(100, null, function ($constraint) {
+                $img->resize(1200, null, function ($constraint) {
                     $constraint->aspectRatio();
                 });
                 $img->save(Storage::disk($driver)->path($resizePath), 80);
@@ -2031,8 +2031,8 @@ if (!function_exists('resize_seo_image')) {
                 $newMedia = new MediaFile();
                 $newMedia->file_name = $resizeName;
                 $newMedia->file_path = $resizePath;
-                $newMedia->file_type = 'image/png';
-                $newMedia->file_extension = 'png';
+                $newMedia->file_type = 'image/jpeg';
+                $newMedia->file_extension = 'jpeg';
                 $newMedia->file_width = $img->width();
                 $newMedia->file_height = $img->height();
                 $newMedia->save();
