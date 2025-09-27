@@ -194,6 +194,9 @@ class BaseModel extends Model
             $meta->object_model = $seo_key;
         }
         $meta->fill($request->input());
+        if ($meta->seo_image) {
+            $meta->seo_image = resize_seo_image($meta->seo_image);
+        }
         return $meta->save();
     }
 

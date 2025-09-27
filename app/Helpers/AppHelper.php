@@ -1998,6 +1998,53 @@ if (!function_exists('resize_feature_image')) {
     }
 }
 
+if (!function_exists('resize_seo_image')) {
+    function resize_seo_image($id)
+    {
+        if (config('app.env') == 'local') return $id;
+
+        $media = MediaFile::find($id);
+
+        if ($media->file_width <= 100) {
+            return $id;
+        }
+
+        if ($media) {
+            $driver = $media->driver ?? 'uploads';
+            $arrPath = explode('/', $media->file_path);
+            array_pop($arrPath);
+
+            $newPath = implode('/', $arrPath);
+
+            $resizeName = $media->file_name . '-compress';
+            $resizePath = $newPath .'/'. $resizeName . '.webp';
+            $arrPath[] = $resizeName;
+
+            $originalFile = Storage::disk($driver)->path($media->file_path);
+            if ($originalFile) {
+                $img = Image::make($originalFile);
+                $img->resize(100, null, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+                $img->save(Storage::disk($driver)->path($resizePath), 80);
+
+                $newMedia = new MediaFile();
+                $newMedia->file_name = $resizeName;
+                $newMedia->file_path = $resizePath;
+                $newMedia->file_type = 'image/webp';
+                $newMedia->file_extension = 'webp';
+                $newMedia->file_width = $img->width();
+                $newMedia->file_height = $img->height();
+                $newMedia->save();
+
+                return $newMedia->id;
+            }
+        }
+
+        return $id;
+    }
+}
+
 if (!function_exists('view_panorama')) {
     function view_panorama($service, $row)
     {
