@@ -2017,7 +2017,7 @@ if (!function_exists('resize_seo_image')) {
             $newPath = implode('/', $arrPath);
 
             $resizeName = $media->file_name . '-fav';
-            $resizePath = $newPath .'/'. $resizeName . '.png';
+            $resizePath = $newPath .'/'. $resizeName . '.jpeg';
             $arrPath[] = $resizeName;
 
             $originalFile = Storage::disk($driver)->path($media->file_path);
