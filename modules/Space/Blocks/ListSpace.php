@@ -83,6 +83,10 @@ class ListSpace extends BaseBlock
                             'value' => 'title',
                             'name'  => __("Title")
                         ],
+                        [
+                            'value' => 'review_score',
+                            'name'  => __("Review Score")
+                        ],
                     ]
                 ],
                 [
@@ -151,6 +155,11 @@ class ListSpace extends BaseBlock
 
     public function query($model, $authorId = null)
     {
+        $spaceClass = $this->spaceClass->search($model);
+        $limit = $model['number'] ?? 5;
+        if(isset($authorId)) $spaceClass->where('author_id', $authorId);
+        return $spaceClass->paginate($limit);
+
         $model_space = Space::select("bravo_spaces.*")->with([
             'location',
             'translation',

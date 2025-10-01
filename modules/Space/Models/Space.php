@@ -1051,8 +1051,12 @@ class Space extends Bookable
                 $model_space->orderBy("ipanorama_id", "desc");
                 break;
             default:
-                $model_space->orderBy("is_featured", "desc");
-                $model_space->orderBy("id", "desc");
+                if(!empty($request['order']) and !empty($request['order_by'])){
+                    $model_space->orderBy("bravo_spaces.".$request['order'], $request['order_by']);
+                }else{
+                    $model_space->orderBy("is_featured", "desc");
+                    $model_space->orderBy("id", "desc");
+                }
         }
 
         $model_space->groupBy("bravo_spaces.id");

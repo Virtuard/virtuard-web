@@ -83,6 +83,10 @@ class ListBusiness extends BaseBlock
                             'value' => 'title',
                             'name'  => __("Title")
                         ],
+                        [
+                            'value'   => 'review_score',
+                            'name' => __("Review Score")
+                        ],
                     ]
                 ],
                 [
@@ -151,6 +155,11 @@ class ListBusiness extends BaseBlock
 
     public function query($model, $authorId = null)
     {
+        $businessClass = $this->businessClass->search($model);
+        $limit = $model['number'] ?? 5;
+        if(isset($authorId)) $businessClass->where('author_id', $authorId);
+        return $businessClass->paginate($limit);
+
         $model_business = Business::select("bravo_businesses.*")->with([
             'location',
             'translation',

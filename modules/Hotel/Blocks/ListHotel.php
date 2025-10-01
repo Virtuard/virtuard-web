@@ -85,6 +85,10 @@ class ListHotel extends BaseBlock
                             'value'   => 'title',
                             'name' => __("Title")
                         ],
+                        [
+                            'value'   => 'review_score',
+                            'name' => __("Review Score")
+                        ],
                     ],
                 ],
                 [

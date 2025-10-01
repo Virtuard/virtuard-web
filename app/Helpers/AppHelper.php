@@ -2016,7 +2016,7 @@ if (!function_exists('resize_seo_image')) {
 
             $newPath = implode('/', $arrPath);
 
-            $resizeName = $media->file_name . '-fav';
+            $resizeName = $media->file_name . '-medium';
             $resizePath = $newPath .'/'. $resizeName . '.jpeg';
             $arrPath[] = $resizeName;
 

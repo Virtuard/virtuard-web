@@ -1038,8 +1038,12 @@ class Business extends Bookable
                 $model_business->orderBy("ipanorama_id", "desc");
                 break;
             default:
-                $model_business->orderBy("is_featured", "desc");
-                $model_business->orderBy("id", "desc");
+                if(!empty($request['order']) and !empty($request['order_by'])){
+                    $model_business->orderBy("bravo_businesses.".$request['order'], $request['order_by']);
+                }else{
+                    $model_business->orderBy("is_featured", "desc");
+                    $model_business->orderBy("id", "desc");
+                }
         }
 
         $model_business->groupBy("bravo_businesses.id");
