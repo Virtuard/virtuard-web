@@ -41,7 +41,8 @@ class Space extends Bookable
         'title',
         'content',
         'status',
-        'faqs'
+        'faqs',
+        'view_count'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -1103,6 +1104,14 @@ class Space extends Bookable
     static public function getClassAvailability()
     {
         return "\Modules\Space\Controllers\AvailabilityController";
+    }
+
+    /**
+     * Increment the view count for this space
+     */
+    public function incrementViewCount()
+    {
+        $this->increment('view_count');
     }
 
     static public function getFiltersSearch()

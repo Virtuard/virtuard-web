@@ -41,7 +41,8 @@ class Business extends Bookable
         'title',
         'content',
         'status',
-        'faqs'
+        'faqs',
+        'view_count'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -1165,5 +1166,13 @@ class Business extends Bookable
     public function user()
     {
         return $this->belongsTo(User::class, 'create_user');
+    }
+
+    /**
+     * Increment the view count for this business
+     */
+    public function incrementViewCount()
+    {
+        $this->increment('view_count');
     }
 }

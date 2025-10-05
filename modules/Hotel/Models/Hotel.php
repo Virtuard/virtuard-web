@@ -37,6 +37,7 @@ class Hotel extends Bookable
         'title',
         'content',
         'status',
+        'view_count',
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -1268,5 +1269,13 @@ class Hotel extends Bookable
         }
         return $search_fields;
 
+    }
+
+    /**
+     * Increment the view count for this hotel
+     */
+    public function incrementViewCount()
+    {
+        $this->increment('view_count');
     }
 }

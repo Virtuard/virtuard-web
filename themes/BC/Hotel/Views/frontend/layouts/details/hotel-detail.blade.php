@@ -33,6 +33,12 @@
                 </div>
             @endif
         @endif
+        
+        <!-- View Count Display -->
+        <div class="view-count">
+            <i class="fa fa-eye"></i>
+            <span class="view-number">{{ number_format($row->view_count ?? 0) }}</span>
+        </div>
     </div>
 </div>
 @if($row->getGallery())

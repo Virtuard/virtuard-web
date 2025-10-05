@@ -66,6 +66,7 @@
                             <th width="130px"> {{ __('Author')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Reviews')}}</th>
+                            <th width="100px"> {{ __('Views')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
                             <th width="100px"></th>
                         </tr>
@@ -96,6 +97,7 @@
                                             {{ $row->getNumberReviewsInService() }}
                                         </a>
                                     </td>
+                                    <td>{{ number_format($row->view_count ?? 0) }}</td>
                                     <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
                                         @if(empty($recovery))
@@ -106,7 +108,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="7">{{__("No space found")}}</td>
+                                <td colspan="8">{{__("No space found")}}</td>
                             </tr>
                         @endif
                         </tbody>

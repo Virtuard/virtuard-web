@@ -134,6 +134,12 @@ class HotelController extends Controller
             return redirect('/');
         }
 
+        $ipKey = 'hotel_viewed_' . $row->id;
+        if (!session()->has($ipKey)) {
+            $row->incrementViewCount();
+            session()->put($ipKey, true);
+        }
+
         if (!empty($request['preview_panorama'])) {
             return view_panorama('hotel', $row);
         }

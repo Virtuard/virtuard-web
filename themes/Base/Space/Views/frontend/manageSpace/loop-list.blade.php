@@ -41,6 +41,10 @@
                 {{__("Status")}}: <span class="badge badge-{{ $row->status }}">{{ $row->status_text }}</span>
             </div>
             <div class="location">
+                <i class="fa fa-eye"></i>
+                {{__("Views")}}: <span>{{ number_format($row->view_count ?? 0) }}</span>
+            </div>
+            <div class="location">
                 <i class="icofont-wall-clock"></i>
                 {{__("Last Updated")}}: {{ display_datetime($row->updated_at ?? $row->created_at) }}
             </div>

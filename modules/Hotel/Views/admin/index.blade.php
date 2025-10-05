@@ -66,6 +66,7 @@
                             <th width="130px"> {{ __('Author')}}</th>
                             <th width="100px"> {{ __('Status')}}</th>
                             <th width="100px"> {{ __('Reviews')}}</th>
+                            <th width="100px"> {{ __('Views')}}</th>
                             <th width="100px"> {{ __('Date')}}</th>
                             <th width="100px"></th>
                         </tr>
@@ -95,6 +96,9 @@
                                         <a target="_blank" href="{{ route('review.admin.index',['service_id'=>$row->id]) }}" class="review-count-approved">
                                             {{ $row->getNumberReviewsInService() }}
                                         </a>
+                                    </td>
+                                    <td>
+                                        {{ number_format($row->view_count ?? 0) }}
                                     </td>
                                     <td>{{ display_date($row->updated_at)}}</td>
                                     <td>
