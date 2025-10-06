@@ -13,6 +13,12 @@
                 {{$translation->address}}
             </h2>
         @endif
+        @if($row->view_count > 0)
+            <div class="view-count">
+                <i class="fa fa-eye"></i>
+                <span class="view-number">{{ number_format($row->view_count) }}</span>
+            </div>
+        @endif
     </div>
     <div class="right">
         @if($row->getReviewEnable())
@@ -33,12 +39,6 @@
                 </div>
             @endif
         @endif
-        
-        <!-- View Count Display -->
-        <div class="view-count">
-            <i class="fa fa-eye"></i>
-            <span class="view-number">{{ number_format($row->view_count ?? 0) }}</span>
-        </div>
     </div>
 </div>
 @if($row->getGallery())
