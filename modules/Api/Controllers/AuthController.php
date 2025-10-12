@@ -117,6 +117,54 @@ class AuthController extends Controller
         ];
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/auth/register",
+     *     tags={"Auth"},
+     *     summary="User registration",
+     *     description="Register a new user account",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"first_name","last_name","email","password","term"},
+     *             @OA\Property(property="first_name", type="string", example="John"),
+     *             @OA\Property(property="last_name", type="string", example="Doe"),
+     *             @OA\Property(property="email", type="string", format="email", example="john@example.com"),
+     *             @OA\Property(property="password", type="string", example="secret123"),
+     *             @OA\Property(property="phone", type="string", example="+628123456789"),
+     *             @OA\Property(property="term", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User registered successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="message", type="string", example="Register successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation errors",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\Property(property="email", type="array", @OA\Items(type="string", example="The email has already been taken.")),
+     *                 @OA\Property(property="first_name", type="array", @OA\Items(type="string", example="The first name field is required."))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Registration disabled",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="You are not allowed to register")
+     *         )
+     *     )
+     * )
+     */
+    
     public function register(Request $request)
     {
         if(!is_enable_registration()){
