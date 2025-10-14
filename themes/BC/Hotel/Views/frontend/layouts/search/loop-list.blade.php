@@ -93,6 +93,12 @@
                     {{__(":number reviews",['number'=>$reviewData['total_review']])}}
                 </div>
             @endif
+            @if($row->view_count > 0)
+                <span class="view-counts ml-2">
+                    <span class="view-number">{{ number_format($row->view_count) }}</span>
+                    <i class="fa fa-eye"></i>
+                </span>
+            @endif
         </div>
     </div>
 </div>
