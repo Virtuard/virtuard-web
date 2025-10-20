@@ -185,13 +185,13 @@ class VirtuardController extends Controller
         }
 
         $id = $request->id;
-
+        $panorama = Ipanorama::find($id);
+        
         abort_if(auth()->user()->id !== $panorama->user_id, 403);
 
         if(!auth()->user()->isAdmin() && auth()->user()->checkUserIpanoramaPlan()) {
             $attr['status'] = 'publish';
         }
-        $panorama = Ipanorama::find($id);
         $panorama->update($attr);
 
         return response()->json([
