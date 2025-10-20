@@ -1,1 +1,7 @@
 uploads/
+!uploads/ipanoramaBuilder/
+!uploads/ipanoramaBuilder/assets/
+!uploads/ipanoramaBuilder/assets/**
+!uploads/ipanoramaBuilder/index.html
+!uploads/ipanoramaBuilder/get-files.php
+!uploads/ipanoramaBuilder/.gitignore

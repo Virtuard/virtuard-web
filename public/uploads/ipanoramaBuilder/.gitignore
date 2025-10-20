@@ -1,0 +1,8 @@
+!.gitignore
+!assets
+!assets/**
+!get-files.php
+!index.html
+upload/
+compress/
+*.DS_Store
