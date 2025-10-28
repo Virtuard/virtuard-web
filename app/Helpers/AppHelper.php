@@ -2045,6 +2045,18 @@ if (!function_exists('resize_seo_image')) {
     }
 }
 
+if (!function_exists('format_file_size')) {
+    function format_file_size($bytes, $precision = 2) {
+        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+        
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
+        }
+        
+        return round($bytes, $precision) . ' ' . $units[$i];
+    }
+}
+
 if (!function_exists('view_panorama')) {
     function view_panorama($service, $row)
     {
@@ -2140,6 +2152,55 @@ if (!function_exists('seo_attributes')) {
             $seo_meta['full_url'] = url()->full();
         }
         return $seo_meta;
+    }
+
+}
+
+if (!function_exists('process_catalog_files')) {
+    function process_catalog_files($model, $request, $translationField = 'catalogs', $storagePath = '/business/catalogs')
+    {
+        if (!$request->has('catalogs')) {
+            return;
+        }
+
+        $catalogs = $request->input('catalogs');
+        $processedCatalogs = [];
+
+        foreach ($catalogs as $key => $catalog) {
+            $processedCatalog = [
+                'name' => $catalog['name'] ?? '',
+                'type' => $catalog['type'] ?? 'file',
+                'url' => $catalog['url'] ?? ''
+            ];
+
+            // Handle file upload
+            if ($catalog['type'] === 'file' && $request->hasFile("catalogs.{$key}.file")) {
+                $file = $request->file("catalogs.{$key}.file");
+                
+                // Validate file type (only PDF)
+                if ($file->getClientOriginalExtension() !== 'pdf') {
+                    continue; // Skip invalid files
+                }
+
+                // Generate unique filename
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs($storagePath, $filename, 'public');
+                
+                // Store file path directly to url field
+                $processedCatalog['url'] = $path;
+            } elseif ($catalog['type'] === 'link') {
+                // For link type, use the provided URL
+                $processedCatalog['url'] = $catalog['url'] ?? '';
+            }
+
+            $processedCatalogs[] = $processedCatalog;
+        }
+
+        $translation = $model->translation;
+        if ($translation) {
+            $translation->$translationField = json_encode($processedCatalogs);
+            $translation->save();
+        }
     }
 }
 

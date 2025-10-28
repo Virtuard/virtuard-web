@@ -92,6 +92,7 @@
         </div>
 
         @include('Business::admin/business/item')
+        @include('Business::admin/business/catalog')
 
         @if (is_default_lang())
             <div class="form-group">

@@ -251,6 +251,7 @@ class BusinessController extends AdminController
             'website',
             'ipanorama_id',
             'items',
+            'catalogs',
 
         ];
         if($this->hasPermission('business_manage_others')){
@@ -258,6 +259,12 @@ class BusinessController extends AdminController
         }
 
         $row->fillByAttr($dataKeys,$request->input());
+        
+        // Debug catalogs data
+        if($request->has('catalogs')){
+            \Log::info('Catalogs data received:', $request->input('catalogs'));
+        }
+        
         if($request->input('slug')){
             $row->slug = $request->input('slug');
         }
@@ -271,6 +278,7 @@ class BusinessController extends AdminController
         if ($res) {
             if(!$request->input('lang') or is_default_lang($request->input('lang'))) {
                 $this->saveTerms($row, $request);
+                process_catalog_files($row, $request);
             }
 
             if($id > 0 ){
@@ -299,6 +307,7 @@ class BusinessController extends AdminController
             $this->business_term::where('target_id', $row->id)->whereNotIn('term_id', $term_ids)->delete();
         }
     }
+
 
     public function bulkEdit(Request $request)
     {

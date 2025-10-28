@@ -160,6 +160,43 @@
         </div>
     </div>
 @endif
+@php
+    $catalogs = [];
+    if ($translation->catalogs) {
+        $catalogs = is_array($translation->catalogs) ? $translation->catalogs : json_decode($translation->catalogs, true);
+    }
+@endphp
+@if(!empty($catalogs) && count($catalogs) > 0)
+    <div class="g-catalogs mt-5 mb-5">
+        <h3>{{__("Catalogs")}}</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    @foreach($catalogs as $key => $catalog)
+                        @if(!empty($catalog['name']) && !empty($catalog['url']))
+                            <tr>
+                                <td>
+                                    {{ $catalog['name'] }}
+                                </td>
+                                <td>
+                                    @if($catalog['type'] === 'file')
+                                        <a href="{{ Storage::url($catalog['url']) }}" download>
+                                            <i class="fa fa-download"></i> 
+                                        </a>
+                                    @else
+                                        <a href="{{ $catalog['url'] }}">
+                                            <i class="fa fa-download"></i> 
+                                        </a>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endif
 @if($translation->faqs)
 <div class="g-faq">
     <h3> {{__("FAQs")}} </h3>

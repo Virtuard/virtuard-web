@@ -20,8 +20,8 @@ use Modules\Review\Models\Review;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Modules\User\Models\UserWishList;
 use Modules\Location\Models\Location;
-use App\Models\MediaFile;
 use App\Models\User;
+use Modules\Media\Models\MediaFile;
 
 class Business extends Bookable
 {
@@ -42,7 +42,8 @@ class Business extends Bookable
         'content',
         'status',
         'faqs',
-        'view_count'
+        'view_count',
+        'catalogs'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -54,6 +55,7 @@ class Business extends Bookable
         'service_fee' => 'array',
         'surrounding' => 'array',
         'items' => 'array',
+        'catalogs' => 'array',
     ];
     /**
      * @var Booking
@@ -1175,4 +1177,63 @@ class Business extends Bookable
     {
         $this->increment('view_count');
     }
+
+    /**
+     * Get catalogs formatted for display
+     */
+    public function getCatalogsForDisplay()
+    {
+        $catalogs = [];
+        
+        // Priority: Get catalogs from translation first
+        if ($this->translation && $this->translation->catalogs) {
+            $translationCatalogs = is_array($this->translation->catalogs) 
+                ? $this->translation->catalogs 
+                : json_decode($this->translation->catalogs, true);
+            
+            if ($translationCatalogs) {
+                foreach ($translationCatalogs as $catalog) {
+                    $catalogs[] = $this->formatCatalogForDisplay($catalog);
+                }
+            }
+        }
+        // Fallback: Only check main business catalogs if no translation catalogs exist
+        elseif ($this->catalogs) {
+            $mainCatalogs = is_array($this->catalogs) 
+                ? $this->catalogs 
+                : json_decode($this->catalogs, true);
+            
+            if ($mainCatalogs) {
+                foreach ($mainCatalogs as $catalog) {
+                    $catalogs[] = $this->formatCatalogForDisplay($catalog);
+                }
+            }
+        }
+        
+        return $catalogs;
+    }
+    
+    /**
+     * Format a single catalog item for display
+     */
+    private function formatCatalogForDisplay($catalog)
+    {
+        $formatted = [
+            'name' => $catalog['name'] ?? '',
+            'type' => $catalog['type'] ?? 'file',
+            'url' => $catalog['url'] ?? '',
+            'extension' => 'pdf'
+        ];
+        
+        if ($catalog['type'] === 'file' && isset($catalog['url'])) {
+            $formatted['url'] = asset('storage/' . $catalog['url']);
+            $formatted['extension'] = 'pdf';
+        } elseif ($catalog['type'] === 'link' && isset($catalog['url'])) {
+            $formatted['url'] = $catalog['url'];
+            $formatted['extension'] = 'link';
+        }
+        
+        return $formatted;
+    }
+
 }

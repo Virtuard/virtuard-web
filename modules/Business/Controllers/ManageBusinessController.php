@@ -197,6 +197,7 @@ class ManageBusinessController extends FrontendController
             'website',
             'ipanorama_id',
             'items',
+            'catalogs',
 
         ];
         $row->fillByAttr($dataKeys,$request->input());
@@ -207,6 +208,7 @@ class ManageBusinessController extends FrontendController
         if ($res) {
             if(!$request->input('lang') or is_default_lang($request->input('lang'))) {
                 $this->saveTerms($row, $request);
+                process_catalog_files($row, $request);
             }
 
             if($id > 0 ){
@@ -319,6 +321,7 @@ class ManageBusinessController extends FrontendController
         if ($res) {
             if (!$request->input('lang') || is_default_lang($request->input('lang'))) {
                 $this->saveTerms($row, $request);
+                process_catalog_files($row, $request);
             }
 
             if ($id > 0) {
@@ -349,6 +352,7 @@ class ManageBusinessController extends FrontendController
             $this->businessTermClass::where('target_id', $row->id)->whereNotIn('term_id', $term_ids)->delete();
         }
     }
+
 
     public function editBusiness(Request $request, $id)
     {

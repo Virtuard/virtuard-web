@@ -17,6 +17,7 @@ class MediaController extends Controller
         return redirect(FileHelper::url($id, $size));
     }
 
+
     public function privateFileStore(Request $request)
     {
         if(!$user_id = Auth::id()){
