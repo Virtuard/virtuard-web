@@ -88,6 +88,34 @@
     @include('Hotel::frontend.layouts.details.hotel-attributes')
 </div>
 @include('app.details.extra-info')
+@php
+    $catalogs = $row->getCatalogsForDisplay();
+@endphp
+@if(!empty($catalogs) && count($catalogs) > 0)
+    <div class="g-catalogs mt-5 mb-5">
+        <h3>{{__("Catalogs")}}</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    @foreach($catalogs as $key => $catalog)
+                        @if(!empty($catalog['name']) && !empty($catalog['url']))
+                            <tr>
+                                <td>
+                                    {{ $catalog['name'] }}
+                                </td>
+                                <td>
+                                    <a href="{{ $catalog['url'] }}" @if($catalog['type'] === 'file') download @endif>
+                                        <i class="fa fa-download"></i> 
+                                    </a>
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endif
 <div class="g-rules">
     <h3>{{__("Rules")}}</h3>
     <div class="description">

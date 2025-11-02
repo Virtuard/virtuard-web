@@ -38,6 +38,7 @@ class Hotel extends Bookable
         'content',
         'status',
         'view_count',
+        'catalogs',
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -47,6 +48,7 @@ class Hotel extends Bookable
         'extra_price' => 'array',
         'service_fee' => 'array',
         'surrounding' => 'array',
+        'catalogs' => 'array',
     ];
     protected $bookingClass;
     protected $reviewClass;
@@ -1277,5 +1279,48 @@ class Hotel extends Bookable
     public function incrementViewCount()
     {
         $this->increment('view_count');
+    }
+
+    /**
+     * Get catalogs formatted for display
+     */
+    public function getCatalogsForDisplay()
+    {
+        $catalogs = [];
+        
+        // Get catalogs from main hotel table only
+        if ($this->catalogs) {
+            $mainCatalogs = is_array($this->catalogs) 
+                ? $this->catalogs 
+                : json_decode($this->catalogs, true);
+            
+            if ($mainCatalogs) {
+                foreach ($mainCatalogs as $catalog) {
+                    $catalogs[] = $this->formatCatalogForDisplay($catalog);
+                }
+            }
+        }
+        
+        return $catalogs;
+    }
+    
+    /**
+     * Format a single catalog item for display
+     */
+    private function formatCatalogForDisplay($catalog)
+    {
+        $formatted = [
+            'name' => $catalog['name'] ?? '',
+            'type' => $catalog['type'] ?? 'file',
+            'url' => $catalog['url'] ?? '',
+        ];
+        
+        if ($catalog['type'] === 'file' && isset($catalog['url'])) {
+            $formatted['url'] = asset('storage/' . $catalog['url']);
+        } elseif ($catalog['type'] === 'link' && isset($catalog['url'])) {
+            $formatted['url'] = $catalog['url'];
+        }
+        
+        return $formatted;
     }
 }

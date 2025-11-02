@@ -55,6 +55,7 @@
     </div>
 </div>
 
+@include('Hotel::admin.hotel.catalog')
 @include('partials.listing.form-ipanorama')
 @include('Hotel::admin.hotel.extra-info')
 

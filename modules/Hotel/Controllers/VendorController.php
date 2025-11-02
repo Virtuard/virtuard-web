@@ -11,6 +11,7 @@ use Modules\Core\Events\UpdatedServiceEvent;
 use Modules\FrontendController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Modules\Hotel\Hook;
 use Modules\Hotel\Models\Hotel;
 use Modules\Location\Models\Location;
@@ -201,6 +202,11 @@ class VendorController extends FrontendController
         if ($res) {
             if (!$request->input('lang') or is_default_lang($request->input('lang'))) {
                 $this->saveTerms($row, $request);
+                
+                // Refresh model after saveOriginOrTranslation
+                $row->refresh();
+                
+                $this->processCatalogFiles($row, $request);
             }
             do_action(Hook::AFTER_SAVING, $row, $request);
 
@@ -306,6 +312,11 @@ class VendorController extends FrontendController
         if ($res) {
             if (!$request->input('lang') || is_default_lang($request->input('lang'))) {
                 $this->saveTerms($row, $request);
+                
+                // Refresh model after saveOriginOrTranslation
+                $row->refresh();
+                
+                $this->processCatalogFiles($row, $request);
             }
 
             do_action(Hook::AFTER_SAVING, $row, $request);
@@ -339,6 +350,86 @@ class VendorController extends FrontendController
                 ->whereNotIn('term_id', $term_ids)
                 ->delete();
         }
+    }
+
+    protected function processCatalogFiles($model, $request)
+    {
+        if (!$request->has('catalogs')) {
+            Log::info('Hotel Vendor processCatalogFiles: No catalogs in request');
+            return;
+        }
+
+        $catalogs = $request->input('catalogs');
+        Log::info('Hotel Vendor processCatalogFiles: Raw catalogs input', ['catalogs' => $catalogs, 'count' => is_array($catalogs) ? count($catalogs) : 0]);
+        
+        $processedCatalogs = [];
+
+        foreach ($catalogs as $key => $catalog) {
+            // Skip empty catalogs
+            if (empty($catalog['name']) && empty($catalog['url']) && !$request->hasFile("catalogs.{$key}.file")) {
+                Log::info("Hotel Vendor processCatalogFiles: Skipping empty catalog at key {$key}");
+                continue;
+            }
+
+            $processedCatalog = [
+                'name' => $catalog['name'] ?? '',
+                'type' => $catalog['type'] ?? 'file',
+                'url' => $catalog['url'] ?? ''
+            ];
+
+            // Handle file upload
+            if (($catalog['type'] ?? 'file') === 'file' && $request->hasFile("catalogs.{$key}.file")) {
+                $file = $request->file("catalogs.{$key}.file");
+                
+                Log::info("Hotel Vendor processCatalogFiles: Processing file upload for key {$key}", ['filename' => $file->getClientOriginalName()]);
+                
+                // Validate file type (only PDF)
+                if ($file->getClientOriginalExtension() !== 'pdf') {
+                    Log::warning("Hotel Vendor processCatalogFiles: Invalid file type for key {$key}", ['extension' => $file->getClientOriginalExtension()]);
+                    continue; // Skip invalid files
+                }
+
+                // Generate unique filename
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('/hotel/catalogs', $filename, 'public');
+                
+                // Store file path directly to url field
+                $processedCatalog['url'] = $path;
+                Log::info("Hotel Vendor processCatalogFiles: File uploaded successfully", ['path' => $path]);
+            } elseif (($catalog['type'] ?? 'file') === 'link') {
+                // For link type, use the provided URL
+                $processedCatalog['url'] = $catalog['url'] ?? '';
+                Log::info("Hotel Vendor processCatalogFiles: Processing link for key {$key}", ['url' => $processedCatalog['url']]);
+            } elseif (($catalog['type'] ?? 'file') === 'file') {
+                // For file type without new upload, use existing URL from request (sent via hidden input)
+                $processedCatalog['url'] = $catalog['url'] ?? '';
+                Log::info("Hotel Vendor processCatalogFiles: Keeping existing file URL for key {$key}", ['url' => $processedCatalog['url']]);
+            }
+
+            $processedCatalogs[] = $processedCatalog;
+        }
+
+        Log::info('Hotel Vendor processCatalogFiles: Processed catalogs before save', [
+            'count' => count($processedCatalogs),
+            'catalogs' => $processedCatalogs,
+            'model_id' => $model->id
+        ]);
+
+        // Save to main model directly as array (model has cast for catalogs)
+        $model->catalogs = $processedCatalogs;
+        $saved = $model->save();
+        
+        Log::info('Hotel Vendor processCatalogFiles: Save result', [
+            'saved' => $saved,
+            'model_id' => $model->id,
+            'catalogs_after_save' => $model->catalogs
+        ]);
+        
+        // Refresh to verify
+        $model->refresh();
+        Log::info('Hotel Vendor processCatalogFiles: After refresh', [
+            'catalogs' => $model->catalogs
+        ]);
     }
 
     public function edit(Request $request, $id)
