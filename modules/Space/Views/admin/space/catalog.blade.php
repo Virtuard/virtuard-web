@@ -201,7 +201,7 @@
 
 @push('js')
 <script>
-$(document).ready(function() 
+$(document).ready(function() {
     var $catalogSection = $('.form-group-item:has(.catalog-type)');
     
     $catalogSection.on('change', '.catalog-type', function() {

@@ -263,7 +263,6 @@ $(document).ready(function() {
         });
     });
     
-    // Remove catalog item
     $catalogSection.on('click', '.btn-remove-catalog', function() {
         $(this).closest('.item').remove();
     });
