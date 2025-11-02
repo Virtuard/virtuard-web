@@ -365,11 +365,7 @@ class VendorController extends FrontendController
         $processedCatalogs = [];
 
         foreach ($catalogs as $key => $catalog) {
-            // Skip empty catalogs
-            if (empty($catalog['name']) && empty($catalog['url']) && !$request->hasFile("catalogs.{$key}.file")) {
-                Log::info("Hotel Vendor processCatalogFiles: Skipping empty catalog at key {$key}");
-                continue;
-            }
+            // Allow empty catalogs - just save whatever is provided
 
             $processedCatalog = [
                 'name' => $catalog['name'] ?? '',
@@ -382,12 +378,6 @@ class VendorController extends FrontendController
                 $file = $request->file("catalogs.{$key}.file");
                 
                 Log::info("Hotel Vendor processCatalogFiles: Processing file upload for key {$key}", ['filename' => $file->getClientOriginalName()]);
-                
-                // Validate file type (only PDF)
-                if ($file->getClientOriginalExtension() !== 'pdf') {
-                    Log::warning("Hotel Vendor processCatalogFiles: Invalid file type for key {$key}", ['extension' => $file->getClientOriginalExtension()]);
-                    continue; // Skip invalid files
-                }
 
                 // Generate unique filename
                 $filename = time() . '_' . $file->getClientOriginalName();

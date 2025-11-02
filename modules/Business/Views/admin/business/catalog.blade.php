@@ -202,25 +202,14 @@
 @push('js')
 <script>
 $(document).ready(function() {
-    console.log('Catalog script loaded');
-    console.log('Catalogs data:', @json($translation->catalogs ?? []));
-    
-    // Scope to catalog section only
     var $catalogSection = $('.form-group-item:has(.catalog-type)');
     
-    // Handle catalog type change
     $catalogSection.on('change', '.catalog-type', function() {
         var $item = $(this).closest('.item');
         var type = $(this).val();
         
-        console.log('Type changed to:', type);
-        console.log('Item found:', $item.length);
-        
         var $fileRow = $item.find('.catalog-file-row');
         var $urlRow = $item.find('.catalog-url-row');
-        
-        console.log('File row:', $fileRow.length);
-        console.log('URL row:', $urlRow.length);
         
         if (type === 'file') {
             $fileRow.show().removeClass('hidden').addClass('visible');
@@ -233,7 +222,6 @@ $(document).ready(function() {
         }
     });
     
-    // Initialize existing items on page load
     $catalogSection.find('.catalog-type').each(function() {
         var $item = $(this).closest('.item');
         var type = $(this).val();
@@ -250,7 +238,6 @@ $(document).ready(function() {
         }
     });
     
-    // Add new catalog item
     $catalogSection.on('click', '.btn-add-catalog', function() {
         var $template = $catalogSection.find('.g-more').html();
         var $items = $catalogSection.find('.g-items');
@@ -259,11 +246,9 @@ $(document).ready(function() {
         var $newItem = $(($template.replace(/__number__/g, index).replace(/__name__/g, 'name')));
         $items.append($newItem);
         
-        // Initialize the new item
         $newItem.find('.catalog-type').trigger('change');
     });
     
-    // Debug form submission
     $('form').on('submit', function() {
         var catalogs = [];
         $catalogSection.find('.item').each(function(index) {
@@ -276,31 +261,6 @@ $(document).ready(function() {
             };
             catalogs.push(catalog);
         });
-        console.log('Catalogs being submitted:', catalogs);
-    });
-    
-    // Add URL validation for link type
-    $catalogSection.on('blur', 'input[name*="[url]"]', function() {
-        var $item = $(this).closest('.item');
-        var type = $item.find('select[name*="[type]"]').val();
-        var url = $(this).val();
-        
-        if (type === 'link' && url) {
-            // Basic URL validation
-            var urlPattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-            if (!urlPattern.test(url)) {
-                $(this).addClass('is-invalid');
-                if (!$(this).next('.invalid-feedback').length) {
-                    $(this).after('<div class="invalid-feedback">Please enter a valid URL</div>');
-                }
-            } else {
-                $(this).removeClass('is-invalid');
-                $(this).next('.invalid-feedback').remove();
-            }
-        } else {
-            $(this).removeClass('is-invalid');
-            $(this).next('.invalid-feedback').remove();
-        }
     });
     
     // Remove catalog item

@@ -311,11 +311,7 @@ class HotelController extends AdminController
         $processedCatalogs = [];
 
         foreach ($catalogs as $key => $catalog) {
-            // Skip empty catalogs
-            if (empty($catalog['name']) && empty($catalog['url']) && !$request->hasFile("catalogs.{$key}.file")) {
-                Log::info("Hotel processCatalogFiles: Skipping empty catalog at key {$key}");
-                continue;
-            }
+            // Allow empty catalogs - just save whatever is provided
 
             $processedCatalog = [
                 'name' => $catalog['name'] ?? '',
@@ -328,12 +324,6 @@ class HotelController extends AdminController
                 $file = $request->file("catalogs.{$key}.file");
                 
                 Log::info("Hotel processCatalogFiles: Processing file upload for key {$key}", ['filename' => $file->getClientOriginalName()]);
-                
-                // Validate file type (only PDF)
-                if ($file->getClientOriginalExtension() !== 'pdf') {
-                    Log::warning("Hotel processCatalogFiles: Invalid file type for key {$key}", ['extension' => $file->getClientOriginalExtension()]);
-                    continue; // Skip invalid files
-                }
 
                 // Generate unique filename
                 $filename = time() . '_' . $file->getClientOriginalName();
