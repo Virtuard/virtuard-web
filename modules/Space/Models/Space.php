@@ -42,7 +42,8 @@ class Space extends Bookable
         'content',
         'status',
         'faqs',
-        'view_count'
+        'view_count',
+        'catalogs'
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';
@@ -53,6 +54,7 @@ class Space extends Bookable
         'extra_price'  => 'array',
         'service_fee' => 'array',
         'surrounding' => 'array',
+        'catalogs' => 'array',
     ];
     /**
      * @var Booking
@@ -1177,5 +1179,60 @@ class Space extends Bookable
             }
         }
         return $search_fields;
+    }
+
+    /**
+     * Get catalogs formatted for display
+     */
+    public function getCatalogsForDisplay()
+    {
+        $catalogs = [];
+        
+        // Priority: Get catalogs from translation first
+        if ($this->translation && $this->translation->catalogs) {
+            $translationCatalogs = is_array($this->translation->catalogs) 
+                ? $this->translation->catalogs 
+                : json_decode($this->translation->catalogs, true);
+            
+            if ($translationCatalogs) {
+                foreach ($translationCatalogs as $catalog) {
+                    $catalogs[] = $this->formatCatalogForDisplay($catalog);
+                }
+            }
+        }
+        // Fallback: Only check main space catalogs if no translation catalogs exist
+        elseif ($this->catalogs) {
+            $mainCatalogs = is_array($this->catalogs) 
+                ? $this->catalogs 
+                : json_decode($this->catalogs, true);
+            
+            if ($mainCatalogs) {
+                foreach ($mainCatalogs as $catalog) {
+                    $catalogs[] = $this->formatCatalogForDisplay($catalog);
+                }
+            }
+        }
+        
+        return $catalogs;
+    }
+    
+    /**
+     * Format a single catalog item for display
+     */
+    private function formatCatalogForDisplay($catalog)
+    {
+        $formatted = [
+            'name' => $catalog['name'] ?? '',
+            'type' => $catalog['type'] ?? 'file',
+            'url' => $catalog['url'] ?? '',
+        ];
+        
+        if ($catalog['type'] === 'file' && isset($catalog['url'])) {
+            $formatted['url'] = asset('storage/' . $catalog['url']);
+        } elseif ($catalog['type'] === 'link' && isset($catalog['url'])) {
+            $formatted['url'] = $catalog['url'];
+        }
+        
+        return $formatted;
     }
 }

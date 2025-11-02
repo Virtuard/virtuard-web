@@ -140,6 +140,34 @@
 @endif
 @include('Space::frontend.layouts.details.space-attributes')
 @include('app.details.extra-info')
+@php
+    $catalogs = $row->getCatalogsForDisplay();
+@endphp
+@if(!empty($catalogs) && count($catalogs) > 0)
+    <div class="g-catalogs mt-5 mb-5">
+        <h3>{{__("Catalogs")}}</h3>
+        <div class="table-responsive">
+            <table class="table">
+                <tbody>
+                    @foreach($catalogs as $key => $catalog)
+                        @if(!empty($catalog['name']) && !empty($catalog['url']))
+                            <tr>
+                                <td>
+                                    {{ $catalog['name'] }}
+                                </td>
+                                <td>
+                                    <a href="{{ $catalog['url'] }}" @if($catalog['type'] === 'file') download @endif>
+                                        <i class="fa fa-{{$catalog['type'] === 'file' ? 'download' : 'external-link'}}"></i> 
+                                     </a>
+                                </td>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+@endif
 @if($translation->faqs)
 <div class="g-faq">
     <h3> {{__("FAQs")}} </h3>

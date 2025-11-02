@@ -254,6 +254,7 @@ class SpaceController extends AdminController
             'phone',
             'website',
             'ipanorama_id',
+            'catalogs',
 
         ];
         if($this->hasPermission('space_manage_others')){
@@ -274,6 +275,7 @@ class SpaceController extends AdminController
         if ($res) {
             if(!$request->input('lang') or is_default_lang($request->input('lang'))) {
                 $this->saveTerms($row, $request);
+                $this->processCatalogFiles($row, $request);
             }
 
             if($id > 0 ){
@@ -301,6 +303,50 @@ class SpaceController extends AdminController
             }
             $this->space_term::where('target_id', $row->id)->whereNotIn('term_id', $term_ids)->delete();
         }
+    }
+
+    protected function processCatalogFiles($model, $request)
+    {
+        if (!$request->has('catalogs')) {
+            return;
+        }
+
+        $catalogs = $request->input('catalogs');
+        $processedCatalogs = [];
+
+        foreach ($catalogs as $key => $catalog) {
+            $processedCatalog = [
+                'name' => $catalog['name'] ?? '',
+                'type' => $catalog['type'] ?? 'file',
+                'url' => $catalog['url'] ?? ''
+            ];
+
+            // Handle file upload
+            if ($catalog['type'] === 'file' && $request->hasFile("catalogs.{$key}.file")) {
+                $file = $request->file("catalogs.{$key}.file");
+                
+                // Validate file type (only PDF)
+                if ($file->getClientOriginalExtension() !== 'pdf') {
+                    continue; // Skip invalid files
+                }
+
+                // Generate unique filename
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('/space/catalogs', $filename, 'public');
+                
+                // Store file path directly to url field
+                $processedCatalog['url'] = $path;
+            } elseif ($catalog['type'] === 'link') {
+                // For link type, use the provided URL
+                $processedCatalog['url'] = $catalog['url'] ?? '';
+            }
+
+            $processedCatalogs[] = $processedCatalog;
+        }
+
+        // Save to main model, not translation
+        $model->catalogs = json_encode($processedCatalogs);
+        $model->save();
     }
 
     public function bulkEdit(Request $request)

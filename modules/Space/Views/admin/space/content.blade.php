@@ -90,6 +90,9 @@
                 </div>
             </div>
         </div>
+
+        @include('Space::admin.space.catalog')
+
         @if (is_default_lang())
             <div class="form-group">
                 <label class="control-label">{{ __('Banner Image') }}</label>
