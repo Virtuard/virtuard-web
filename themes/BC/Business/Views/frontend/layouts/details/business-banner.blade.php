@@ -21,7 +21,7 @@
                                         </path>
                                     </g>
                                 </svg>
-                            </i>{{__("Space Video")}}
+                            </i>{{__("Video")}}
                         </a>
                     @endif
                 </div>
