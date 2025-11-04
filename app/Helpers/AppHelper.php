@@ -1027,14 +1027,37 @@ function is_enable_guest_checkout(){
 
 function handleVideoUrl($string,$video_id = false)
 {
+    if(empty($string)) {
+        return '';
+    }
+    
     if($video_id && !empty($string)){
         parse_str( parse_url( $string, PHP_URL_QUERY ), $values );
-        return $values['v'];
+        return isset($values['v']) ? $values['v'] : '';
     }
+    
+    // If already an embed URL, return as is
+    if (strpos($string, 'youtube.com/embed/') !== false) {
+        return $string;
+    }
+    
+    // Handle YouTube Shorts URLs (format: youtube.com/shorts/VIDEO_ID)
+    if (strpos($string, 'youtube.com/shorts/') !== false || strpos($string, 'youtu.be/shorts/') !== false) {
+        preg_match("#(?<=shorts/)[a-zA-Z0-9_-]+#", $string, $matches);
+        if (!empty($matches[0])) {
+            return "https://www.youtube.com/embed/" . e($matches[0]);
+        }
+    }
+    
+    // Handle regular YouTube URLs (watch, youtu.be, etc.)
     if (strpos($string, 'youtu') !== false) {
-        preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $string, $matches);
-        if (!empty($matches[0])) return "https://www.youtube.com/embed/" . e($matches[0]);
+        preg_match("#(?<=v=)[a-zA-Z0-9_-]+(?=&)|(?<=v\/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $string, $matches);
+        if (!empty($matches[0])) {
+            return "https://www.youtube.com/embed/" . e($matches[0]);
+        }
     }
+    
+    // Return original string for non-YouTube URLs (Vimeo, etc.)
     return $string;
 }
 
