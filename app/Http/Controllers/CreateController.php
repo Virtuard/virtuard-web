@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Modules\Page\Models\Page;
 
 class CreateController extends Controller
 {
@@ -59,8 +60,15 @@ class CreateController extends Controller
             return $a['position'] <=> $b['position'];
         });
 
+        $page = Page::where("slug","create")->first();
+        if ($page) {
+            $translation = $page->translate();
+            $seo_meta = $page->getSeoMetaWithTranslation(app()->getLocale(), $translation);
+        }
+
         $dataView = [
             'menus' => $menus,
+            'seo_meta' => $seo_meta ?? seo_attributes(),
         ];
 
         return view('app.create.index', $dataView);
