@@ -502,7 +502,7 @@ use Illuminate\Notifications\Notifiable;
             return $this->hasMany(UserPlan::class, 'user_id')->where('end_date', '=', null);
         }
 
-        public function applyPlan(Plan $plan,$price,$is_annual = false,$active=true){
+        public function applyPlan(Plan $plan,$payment,$is_annual = false,$active=true){
             $max_service = $plan->max_service;
             if($active){
                 $user_plan = UserPlan::firstOrNew(['plan_id'=>$plan->id,'user_id'=>$this->id,'status'=>0,'price'=>$price]);
@@ -519,14 +519,16 @@ use Illuminate\Notifications\Notifiable;
             $plan_data['is_annual'] = $is_annual;
             $data = [
                 'plan_id'=>$plan->id,
-                'price'=>$price,
+                'price'=>$payment->amount,
                 'start_date'=>date('Y-m-d H:i:s'),
                 // 'end_date'=>date('Y-m-d H:i:s',$end_date),
                 'max_service'=>$max_service,
                 'max_ipanorama'=>$plan->max_ipanorama,
                 'plan_data'=>$plan_data,
                 'user_id'=>$this->id,
-                'status'=>0
+                'status'=>0,
+                'referal_user_id'=>$payment->affiliate_id,
+                'referal_amount'=>$payment->amount * 0.1
             ];
             if ($plan->duration) {
                 $data['end_date']=date('Y-m-d H:i:s',$end_date);

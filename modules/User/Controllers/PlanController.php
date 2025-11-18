@@ -292,7 +292,7 @@ class PlanController extends FrontendController
             $payment->addMeta('user_request', $user->id);
             $payment->addMeta('annual', $is_annual);
 
-            $user->applyPlan($plan, $payment->amount, $is_annual, false);
+            $user->applyPlan($plan, $payment, $is_annual, false);
 
             // dd($payment->amount);
 
