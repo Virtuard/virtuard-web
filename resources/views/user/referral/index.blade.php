@@ -62,7 +62,7 @@
                             <table class="table table-bordered table-striped table-booking-history">
                                 <thead>
                                     <tr>
-                                        <th style="width: 5%">{{ __('Status') }}</th>
+                                        <th>{{ __('#') }}</th>
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Plan') }}</th>
                                         <th>{{ __('Price') }}</th>
@@ -72,28 +72,19 @@
                                 </thead>
                                 <tbody>
                                     @if ($referals && $referals->isNotEmpty())
-                                        @foreach ($referals as $booking)
+                                        @foreach ($referals as $key => $booking)
                                             <tr>
-                                                <td style="text-align: center; vertical-align: middle;">
-                                                    <span
-                                                        style="
-                                                            display: inline-block;
-                                                            width: 15px;
-                                                            height: 15px;
-                                                            border-radius: 50%;
-                                                            background-color: {{ $booking->referal_user_id ? 'green' : 'orange' }};
-                                                        "></span>
-                                                </td>
-                                                <td>{{ $booking->user->name }}</td>
-                                                <td>{{ $booking->plan->title }}</td>
-                                                <td>{{ format_money($booking->price) }}</td>
-                                                <td>{{ $booking->referalName->name ?? 'Direct' }}</td>
-                                                <td>{{ format_money($booking->referal_amount ?? '-') }}</td>
+                                                <td>{{ $key + 1 }}</td>
+                                                <td>{{ $booking->user->name ?? '' }}</td>
+                                                <td>{{ $booking->plan->title ?? '' }}</td>
+                                                <td>{{ format_money($booking->price ?? 0) }}</td>
+                                                <td>{{ $booking->referalName->name ?? '' }}</td>
+                                                <td>{{ format_money($booking->referal_amount ?? 0) }}</td>
                                             </tr>
                                         @endforeach
                                     @else
                                         <tr>
-                                            <td colspan="4">{{ __('No Referral Report') }}</td>
+                                            <td colspan="6">{{ __('No Referral Report') }}</td>
                                         </tr>
                                     @endif
                                 </tbody>

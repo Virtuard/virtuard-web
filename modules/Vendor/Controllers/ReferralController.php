@@ -44,7 +44,7 @@ class ReferralController extends FrontendController
         if ($user->role_id == 2) {
             $bookings = $this->bookingPayment::getReferralHistory(Auth::id())->paginate(10);
         } elseif ($user->role_id == 1) {
-            $bookings = $this->bookingPayment::getReferralAdminHistory();
+            $bookings = $this->bookingPayment::getReferralAdminHistory()->paginate(10);
         } elseif ($user->role_id == 3) {
             $bookings = null;
         }

@@ -18,7 +18,8 @@ class BookingPayment extends BaseModel
     {
         return self::where('referal_user_id', $userId)
         ->where('status', 1)
-        ->orderBy('created_at', 'desc');
+        ->where('referal_amount', '>', 0)
+        ->orderBy('id', 'desc');
     }
     
     
@@ -36,7 +37,8 @@ class BookingPayment extends BaseModel
     {
         return self::query()
         ->where('status', 1)
-        ->paginate(10);
+        ->where('referal_amount', '>', 0)
+        ->orderBy('id', 'desc');
     }
 
     public function user()
