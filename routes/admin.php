@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ReferralController;
 // Admin Route
 /*Route::group(['prefix'=>'admin','middleware' => ['auth','dashboard']], function() {
     Route::match(['get','post'],'/',function (){
@@ -39,6 +40,8 @@ Route::group([
     'as'=>'admin.',
     'middleware' => ['auth','dashboard']
 ], function() {
+    Route::get('referral', [ReferralController::class, 'index'])->name('referral.index');
+
     Route::group([
         'prefix'=>'virtuard360',
         'as' => 'virtuard360.'

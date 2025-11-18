@@ -66,8 +66,8 @@
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Plan') }}</th>
                                         <th>{{ __('Price') }}</th>
-                                        <th>{{ __('Referal Share Name') }}</th>
-                                        <th>{{ __('Referal Amount') }}</th>
+                                        <th>{{ __('Referral Name') }}</th>
+                                        <th>{{ __('Referral Amount') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -1394,6 +1394,7 @@ if (!function_exists('menu_admin')) {
             'art',
             'theme',
             'virtuard360',
+            'referral',
         ];
 
         return $data;

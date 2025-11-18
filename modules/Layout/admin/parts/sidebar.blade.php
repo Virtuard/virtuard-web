@@ -12,6 +12,12 @@ $menus = [
         'icon'  => 'icon ion-ios-camera',
         "position"=>0
     ],
+    'referral'=>[
+        'url'   => route('admin.referral.index'),
+        'title' => __("Referral Report"),
+        'icon'  => 'icon ion-ios-people',
+        "position"=>0
+    ],
     'menu'=>[
         "position"=>60,
         'url'        => route('core.admin.menu.index'),
