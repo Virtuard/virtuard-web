@@ -1699,13 +1699,11 @@ if (!function_exists('get_explore_service')) {
 
             switch ($list) {
                 case 'hotel':
-                    // $data['title'] = __('Accomodation');
-                    $data['title'] = __('Rent');
+                    $data['title'] = __('Accomodation');
                     $data['icon'] = '<i class="fa fa-sm mr-2 fa-building"></i>';
                     break;
                 case 'space':
-                    // $data['title'] = __('Property');
-                    $data['title'] = __('Sell');
+                    $data['title'] = __('Property');
                     $data['icon'] = '<i class="fa fa-sm mr-2 fa-home"></i>';
                     break;
                 case 'business':
