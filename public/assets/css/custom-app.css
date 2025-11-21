@@ -410,8 +410,34 @@ li.create-item a:before {
 }
 
 @media (max-width: 768px) {
+
+    .bravo_wrap .page-template-content .bravo-list-hotel .item-loop, 
+    .bravo_wrap .page-template-content .bravo-list-space .item-loop {
+        margin-bottom: 0px;
+        padding-bottom: 5px;
+    }
+
+    .bravo_wrap .page-template-content .bravo-list-hotel .item-loop .item-title,
+    .bravo_wrap .page-template-content .bravo-list-space .item-loop .item-title {
+        font-size: 0.8em;
+        font-weight: 400;
+        padding: 5px 10px 5px;
+    }
+
     .bravo_wrap .page-template-content .bravo-list-hotel .item-loop .thumb-image ,
     .bravo_wrap .page-template-content .bravo-list-space .item-loop .thumb-image {
         height: unset;
+    }
+
+    .bravo_wrap .page-template-content .bravo-list-hotel .item-loop .service-review,
+    .bravo_wrap .page-template-content .bravo-list-space .item-loop .service-review {
+        padding: 5px 10px 0;
+        font-size: 0.8em;
+    }
+
+    .bravo_wrap .page-template-content .bravo-list-hotel .item-loop .amenities,
+    .bravo_wrap .page-template-content .bravo-list-space .item-loop .amenities {
+        padding-top: 0px;
+        margin: 5px auto;
     }
 }
