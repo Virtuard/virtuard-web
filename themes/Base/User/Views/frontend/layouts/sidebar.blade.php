@@ -1,13 +1,6 @@
 <?php
 $dataUser = Auth::user();
 $menus = [
-    'admin' => [
-        'url' => route('admin.index'),
-        'title' => __('Admin Dashboard'),
-        'icon' => 'icon ion-ios-ribbon',
-        'permission' => 'dashboard_access',
-        'position' => 1,
-    ],
     'dashboard' => [
         'url' => route('vendor.dashboard'),
         'title' => __('Dashboard'),
@@ -44,6 +37,13 @@ $menus = [
         'title' => __('Change password'),
         'icon' => 'fa fa-lock',
         'position' => 100,
+    ],
+    'admin' => [
+        'url' => route('admin.index'),
+        'title' => __('Admin Dashboard'),
+        'icon' => 'icon ion-ios-ribbon',
+        'permission' => 'dashboard_access',
+        'position' => 110,
     ],
     'virtuard360' => [
         'url' => route('user.virtuard-360.index'),
