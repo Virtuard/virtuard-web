@@ -76,6 +76,7 @@ class ProfileController extends FrontendController
         $data['avatarUrl'] = $avatarUrl;
         $data['followers'] = $followers;
         $data['following'] = $following;
+        $data['seo_meta'] = $user->getSeoMeta();
 
         $this->registerCss('dist/frontend/module/user/css/profile.css');
         return view('User::frontend.profile.profile', $data);

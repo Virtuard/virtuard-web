@@ -642,7 +642,16 @@ use Illuminate\Notifications\Notifiable;
             return $this->belongsTo(MediaFile::class, 'avatar_id');
         }
 
-    
+        public function getSeoMeta()
+        {
+            return [
+                'seo_title' => $this->getDisplayName(),
+                'seo_desc' => $this->bio,
+                'seo_keywords' => $this->user_name,
+                'seo_image' => $this->avatar_id,
+                'full_url' => url('/profile/' . $this->user_name),
+            ];
+        }
     }
 
     
