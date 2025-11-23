@@ -244,7 +244,7 @@
 
     .ig-follow-btn {
         /* background-color: #0095f6; */
-        color: white;
+        color: #000;
         border: none;
     }
 

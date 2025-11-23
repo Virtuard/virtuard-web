@@ -2,6 +2,8 @@
 $types = get_bookable_services();
 if (empty($types)) return;
 $list_service = [];
+$userPanoramas = getUserPanoramas($user->id);
+$isOwner = auth()->check() && auth()->user()->id == $user->id;
 ?>
 <div class="profile-service-tabs">
     <div class="service-nav-tabs mb-2">
@@ -10,9 +12,11 @@ $list_service = [];
             <li class="nav-item">
                 <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">Profile</a>
             </li>
+            @if($isOwner || $userPanoramas->count() > 0)
             <li class="nav-item">
-                <a href="#" class="nav-link" data-toggle="tab" data-target="#profile_360">Virtual Tour</a>
-            </li>
+                    <a href="#" class="nav-link" data-toggle="tab" data-target="#profile_360">Virtual Tour</a>
+                </li>
+            @endif
             @foreach($types as $type=>$moduleClass)
                 @php
                     if(!in_array($type, menu_listing()))  continue;
@@ -40,9 +44,11 @@ $list_service = [];
         <div class="tab-pane fade @if(!$i) show active @endif" id="profile" role="tabpanel" aria-labelledby="pills-home-tab">
             @include('User::frontend.profile.gallery', ['userPosts' => getUserPosts($user->id)])
         </div>
-        <div class="tab-pane fade" id="profile_360" role="tabpanel" aria-labelledby="pills-home-tab">
-            @include('User::frontend.profile.gallery_360', ['userPanoramas' => getUserPanoramas($user->id)])
-        </div>
+        @if($isOwner || $userPanoramas->count() > 0)
+            <div class="tab-pane fade" id="profile_360" role="tabpanel" aria-labelledby="pills-home-tab">
+                @include('User::frontend.profile.gallery_360', ['userPanoramas' => $userPanoramas])
+            </div>
+        @endif
         @foreach($types as $type=>$moduleClass)
             @php
                 if($type == "flight")  continue;
