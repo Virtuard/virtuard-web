@@ -107,7 +107,7 @@
                                     <a href="{{ route('user.profile', $user->user_name ?? $user->id) }}" style="text-decoration: none; color: #262626; font-weight: bold;">
                                         {{ $user->name }}
                                     </a>
-                                    <div class="small text-muted">{{ $user->role_name }}</div>
+                                    <div class="small text-muted d-none">{{ $user->role_name }}</div>
                                 </div>
                             </div>
                 
@@ -126,11 +126,13 @@
                                         <input type="hidden" name="action" value="{{ !is_following($user->id) ? 'follow' : 'unfollow' }}">
                                         <input type="hidden" name="follower_id" value="{{ $user->id }}">
                                         <button class="btn btn-sm btn-{{ !is_following($user->id) ? 'primary' : 'secondary' }}" style="border-radius: 8px; font-weight: bold;">
-                                            {{ !is_following($user->id) ? 'Follow' : 'Unfollow' }}
+                                            <i class="fa fa-{{ !is_following($user->id) ? 'user-plus' : 'user-times' }}"></i>
                                         </button>
                                     </form>
                                 @else
-                                    <button class="btn btn-sm btn-primary mr-2" onclick="showModalLogin()" style="border-radius: 8px; font-weight: bold;">Follow</button>
+                                    <button class="btn btn-sm btn-primary mr-2" onclick="showModalLogin()" style="border-radius: 8px; font-weight: bold;">
+                                        <i class="fa fa-user-plus"></i>
+                                    </button>
                                 @endauth
                 
                                

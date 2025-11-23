@@ -497,7 +497,7 @@
             <p class="profile-since mb-0 mr-3">Member Since
                 {{ date('M Y', strtotime($user->created_at)) }}</p>
 
-            <div class="text-center mb-1 mr-3">
+            <div class="text-center mb-1 mr-3 d-none">
                 <span class="role-name badge badge-primary">{{ $user->role_name }}</span>
             </div>
 
