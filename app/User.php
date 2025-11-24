@@ -202,10 +202,10 @@ use Illuminate\Notifications\Notifiable;
                 ->where('m.val', $socialId)->first();
         }
 
-        public function getAvatarUrl()
+        public function getAvatarUrl($size = 'thumb')
         {
             if (!empty($this->avatar_id)) {
-                return get_file_url($this->avatar_id, 'thumb');
+                return get_file_url($this->avatar_id, $size);
             }
             if(!empty($meta_avatar = $this->getMeta("social_meta_avatar",false))) {
                 return $meta_avatar;
@@ -649,6 +649,7 @@ use Illuminate\Notifications\Notifiable;
                 'seo_desc' => $this->bio,
                 'seo_keywords' => $this->user_name,
                 'seo_image' => $this->avatar_id,
+                'seo_image_url' => get_social_meta_avatar($this->getMeta('social_meta_avatar',false)),
                 'full_url' => url('/profile/' . $this->user_name),
             ];
         }

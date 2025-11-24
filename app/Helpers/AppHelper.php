@@ -2232,3 +2232,13 @@ if (!function_exists('get_asset_version')) {
         return config('app.asset_version');
     }
 }
+
+if (!function_exists('get_social_meta_image')) {
+    function get_social_meta_avatar($url)
+    {
+        if (Str::contains($url, '=')) {
+            $url = Str::before($url, '=');
+        }
+        return $url;
+    }
+}

@@ -20,12 +20,20 @@
     <meta property="og:type" content="company"/>
     <meta property="og:title" content="{{$seo_meta['seo_share']['facebook']['title'] ?? $seo_meta['seo_title'] ?? $seo_meta['service_title'] ?? $page_title ?? ""}}"/>
     <meta property="og:description" content="{{$seo_meta['seo_share']['facebook']['desc'] ?? $seo_meta['seo_desc'] ?? $seo_meta['service_desc'] ?? ""}}"/>
+    @if(!empty($seo_meta['seo_image_url']))
+    <meta property="og:image" content="{{ $seo_meta['seo_image_url'] }}"/>
+    @else
     <meta property="og:image" content="{{ get_file_url( $seo_meta['seo_share']['facebook']['image'] ?? $seo_meta['seo_image'] ?? $seo_meta['service_image'] ?? setting_item('logo_id') ?? "" , "full") }}"/>
+    @endif
     {{-- Twitter share --}}
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{$seo_meta['seo_share']['twitter']['title'] ?? $seo_meta['seo_title'] ?? $seo_meta['service_title'] ?? $page_title ?? ""}}">
     <meta name="twitter:description" content="{{$seo_meta['seo_share']['twitter']['desc'] ?? $seo_meta['seo_desc'] ?? $seo_meta['service_desc'] ?? ""}}">
+    @if(!empty($seo_meta['seo_image_url']))
+    <meta name="twitter:image" content="{{ $seo_meta['seo_image_url'] }}"/>
+    @else
     <meta name="twitter:image" content="{{ get_file_url( $seo_meta['seo_share']['twitter']['image'] ?? $seo_meta['seo_image'] ?? $seo_meta['service_image'] ?? setting_item('logo_id') ?? "" , "full") }}">
+    @endif
     <link rel="canonical" href="{{$seo_meta['full_url'] ?? ''}}"/>
     <link rel="canonicalize" href="{{ url()->current() }}" />
 
