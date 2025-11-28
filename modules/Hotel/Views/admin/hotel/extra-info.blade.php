@@ -3,30 +3,42 @@
         <div class="panel-title"><strong>{{ __('Extra Info') }}</strong></div>
         <div class="panel-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>{{ __('No. Room') }}</label>
                         <input type="number" value="{{ $row->room }}" placeholder="{{ __('Example: 3') }}" name="room" class="form-control">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
-                        <label>{{ __('Chain') }}</label>
-                        <input type="text" value="{{ $row->chain }}" placeholder="{{ __('Chain') }}" name="chain" class="form-control">
+                        <label>{{ __('No. Bed') }}</label>
+                        <input type="number" value="{{ $row->bed }}" placeholder="{{ __('Example: 3') }}" name="bed" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>{{ __('No. Bathroom') }}</label>
+                        <input type="number" value="{{ $row->bathroom }}" placeholder="{{ __('Example: 5') }}" name="bathroom" class="form-control">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>{{ __('Phone') }}</label>
                         <input type="text" value="{{ $row->phone }}" placeholder="{{ __('Phone') }}" name="phone" class="form-control">
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="form-group">
                         <label>{{ __('Website') }}</label>
                         <input type="text" value="{{ $row->website }}" placeholder="{{ __('Website') }}" name="website" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>{{ __('Chain') }}</label>
+                        <input type="text" value="{{ $row->chain }}" placeholder="{{ __('Chain') }}" name="chain" class="form-control">
                     </div>
                 </div>
             </div>

@@ -93,7 +93,7 @@ class ListAllService extends BaseBlock
                 'link' => route('space.search'),
             ],
             [
-                'name' => __('Business'),
+                'name' => __('Commercial Activities'),
                 'image' => 'uploads/images/business.webp',
                 'link' => route('business.search'),
             ],

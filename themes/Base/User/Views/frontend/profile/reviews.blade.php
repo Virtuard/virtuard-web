@@ -35,7 +35,8 @@ $reviews = \Modules\Review\Models\Review::query()->where([
                                     @endif
                                 </div>
                                 <div class="media-body">
-                                    <h4 class="media-heading">{{$userInfo->getDisplayName()}}</h4>
+                                    <h4 class="media-heading">
+                                        <a href="{{ route('user.profile', $userInfo->user_name ?? $userInfo->id) }}">{{$userInfo->getDisplayName()}}</a></h4>
                                     <div class="date">{{display_datetime($item->created_at)}}</div>
                                 </div>
                             </div>

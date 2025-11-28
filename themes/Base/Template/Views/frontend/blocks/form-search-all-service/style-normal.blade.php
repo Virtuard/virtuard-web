@@ -69,6 +69,8 @@
                                     $allServices = get_bookable_services();
                                     if(empty($allServices[$service_type])) continue;
                                     $module = new $allServices[$service_type];
+                                    $attrType = get_attribute_listing($service_type);
+                                    $typeText = __(ucwords($attrType['new_key']));
                                 @endphp
                                 <li class="text-center" role="presentation">
                                     <a 
@@ -79,7 +81,7 @@
                                         aria-controls="bravo_{{$service_type}}" 
                                         data-toggle="tab">
                                         <i class="{{ $module->getServiceIconFeatured() }}"></i>
-                                        {{ !empty($modelBlock["title_for_".$service_type]) ? $modelBlock["title_for_".$service_type] : $module->getModelName() }}
+                                        {{ $typeText }}
                                     </a>
                                 </li>
                                 @php $number++; @endphp

@@ -332,6 +332,8 @@ class ManageHotelController extends ApiController
                 'surrounding',
                 'category_id',
                 'room',
+                'bed',
+                'bathroom',
                 'chain',
                 'phone',
                 'website',

@@ -1307,18 +1307,13 @@ if (!function_exists('get_attribute_listing')) {
 
         switch ($key) {
             case 'hotel':
-                // $data['new_key'] = 'accomodation';
-                $data['new_key'] = 'rent';
+                $data['new_key'] = 'accomodation';
                 break;
             case 'space':
-                // $data['new_key'] = 'property';
-                $data['new_key'] = 'sell';
+                $data['new_key'] = 'property';
                 break;
-            case 'boat':
-                $data['new_key'] = 'vehicle';
-                break;
-            case 'car':
-                $data['new_key'] = 'car';
+            case 'business':
+                $data['new_key'] = 'commercial activities';
                 break;
         }
 

@@ -10,11 +10,11 @@ $isOwner = auth()->check() && auth()->user()->id == $user->id;
         <ul class="nav nav-tabs w-100 flex-nowrap">
             @php $i = 0; @endphp
             <li class="nav-item">
-                <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">Profile</a>
+                <a href="#" class="nav-link @if(!$i) active @endif" data-toggle="tab" data-target="#profile">{{ __('Profile') }}</a>
             </li>
             @if($isOwner || $userPanoramas->count() > 0)
             <li class="nav-item">
-                    <a href="#" class="nav-link" data-toggle="tab" data-target="#profile_360">Virtual Tour</a>
+                    <a href="#" class="nav-link" data-toggle="tab" data-target="#profile_360">{{ __('Virtual Tour') }}</a>
                 </li>
             @endif
             @foreach($types as $type=>$moduleClass)
@@ -28,7 +28,7 @@ $isOwner = auth()->check() && auth()->user()->id == $user->id;
     
                     $attrType = get_attribute_listing($type);
                     $typeKey = $attrType['old_key'];
-                    $typeText = $attrType['new_key'];
+                    $typeText = __(ucwords($attrType['new_key']));
                 @endphp
                 <li class="nav-item">
                     <a href="#" class="nav-link" data-toggle="tab" data-target="#type_{{$typeKey}}">{{ $typeText }}</a>

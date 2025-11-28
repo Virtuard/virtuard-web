@@ -441,3 +441,15 @@ li.create-item a:before {
         margin: 5px auto;
     }
 }
+
+@media (max-width: 766px) {
+    .bravo_wrap .bravo-list-hotel.layout_carousel .owl-nav {
+        top: 10px;
+    }
+    .bravo_wrap .page-template-content .bravo-list-space.layout_carousel .owl-nav {
+        top: 10px;
+    }
+    .bravo_wrap .page-template-content .bravo-list-space.layout_carousel .owl-nav {
+        top: 10px;
+    }
+}

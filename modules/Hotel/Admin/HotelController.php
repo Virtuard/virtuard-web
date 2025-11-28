@@ -243,6 +243,8 @@ class HotelController extends AdminController
             'service_fee',
             'surrounding',
             'room',
+            'bed',
+            'bathroom',
             'chain',
             'phone',
             'website',
