@@ -19,16 +19,34 @@
                 {{ $row->room }} {{ __('Rooms') }}
             </div>
         @endif
-        @if (!empty($row->bed))
+        @if (!empty($row->bedroom))
             <div class="item">
                 <i class="icofont-check-circled icon-default"></i>
-                {{ $row->bed }} {{ __('Bedrooms') }}
+                {{ $row->bedroom }} {{ __('Bedrooms') }}
             </div>
         @endif
         @if (!empty($row->bathroom))
             <div class="item">
                 <i class="icofont-check-circled icon-default"></i>
                 {{ $row->bathroom }} {{ __('Bathrooms') }}
+            </div>
+        @endif
+        @if (!empty($row->bed))
+            <div class="item">
+                <i class="icofont-check-circled icon-default"></i>
+                {{ $row->bed }} {{ __('Beds') }}
+            </div>
+        @endif
+        @if (!empty($row->single_bed))
+            <div class="item">
+                <i class="icofont-check-circled icon-default"></i>
+                {{ $row->single_bed }} {{ __('Single Beds') }}
+            </div>
+        @endif
+        @if (!empty($row->double_bed))
+            <div class="item">
+                <i class="icofont-check-circled icon-default"></i>
+                {{ $row->double_bed }} {{ __('Double Beds') }}
             </div>
         @endif
         @if (!empty($row->chain))

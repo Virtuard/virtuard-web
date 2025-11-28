@@ -39,6 +39,11 @@ class Hotel extends Bookable
         'status',
         'view_count',
         'catalogs',
+        'bed',
+        'bathroom',
+        'bedroom',
+        'single_bed',
+        'double_bed',
     ];
     protected $slugField     = 'slug';
     protected $slugFromField = 'title';

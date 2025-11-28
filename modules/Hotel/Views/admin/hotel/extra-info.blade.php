@@ -11,14 +11,34 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <label>{{ __('No. Bed') }}</label>
-                        <input type="number" value="{{ $row->bed }}" placeholder="{{ __('Example: 3') }}" name="bed" class="form-control">
+                        <label>{{ __('No. Bedroom') }}</label>
+                        <input type="number" value="{{ $row->bedroom }}" placeholder="{{ __('Example: 4') }}" name="bedroom" class="form-control">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>{{ __('No. Bathroom') }}</label>
                         <input type="number" value="{{ $row->bathroom }}" placeholder="{{ __('Example: 5') }}" name="bathroom" class="form-control">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>{{ __('No. Bed') }}</label>
+                        <input type="number" value="{{ $row->bed }}" placeholder="{{ __('Example: 3') }}" name="bed" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>{{ __('No. Single Bed') }}</label>
+                        <input type="number" value="{{ $row->single_bed }}" placeholder="{{ __('Example: 2') }}" name="single_bed" class="form-control">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>{{ __('No. Double Bed') }}</label>
+                        <input type="number" value="{{ $row->double_bed }}" placeholder="{{ __('Example: 2') }}" name="double_bed" class="form-control">
                     </div>
                 </div>
             </div>
