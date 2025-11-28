@@ -74,7 +74,8 @@ class MemberController extends Controller
             $q->where('id', '!=', auth()->user()->id);
         })
         ->when(isset($request->search), function ($q) use ($request) {
-            return $q->where('name', 'like', '%' . $request->search . '%');
+            return $q->where('name', 'ilike', '%' . $request->search . '%')
+                    ->orWhere('email', 'ilike', '%' . $request->search . '%');
         })
         ->when(isset($request->type), function ($q) use ($request) {
             if ($request->type == 'following') {
@@ -91,7 +92,6 @@ class MemberController extends Controller
             ['role_id', '!=', 1],
             ['status', '=', 'publish'],
         ])
-        ->orderBy('last_login_at', 'DESC')
         ->orderBy('id', 'DESC')
         ->paginate(15);
     
