@@ -457,3 +457,7 @@ li.create-item a:before {
 .bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a {
     height: 100%;
 }
+
+.bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a i {
+    display: block;
+}
