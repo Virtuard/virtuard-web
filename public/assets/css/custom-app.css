@@ -458,6 +458,8 @@ li.create-item a:before {
     height: 100%;
 }
 
-.bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a i {
-    display: block;
+@media (max-width: 768px) {
+    .bravo_wrap .page-template-content .bravo-form-search-all .g-form-control .nav-tabs li a i {
+        display: block;
+    }
 }
