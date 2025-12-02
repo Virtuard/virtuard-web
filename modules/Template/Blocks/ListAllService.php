@@ -83,7 +83,7 @@ class ListAllService extends BaseBlock
     {
         $list = [
             [
-                'name' => __('Accomodation'),
+                'name' => __('Accommodation'),
                 'image' => 'uploads/images/accomodation.webp',
                 'link' => route('hotel.search'),
             ],

@@ -43,7 +43,7 @@ class ModuleProvider extends ModuleServiceProvider
             'hotel'=>[
                 "position" => setMenuAdminPosition('hotel'),
                 'url'        => route('hotel.admin.index'),
-                'title'      => __('listing.accomodation.manage'),
+                'title'      => __('listing.accommodation.manage'),
                 'icon'       => 'fa fa-building-o',
                 'permission' => 'hotel_view',
                 'children'   => [
@@ -110,18 +110,18 @@ class ModuleProvider extends ModuleServiceProvider
         if(Hotel::isEnable()){
             $res['hotel'] = [
                 'url'   => route('hotel.vendor.index'),
-                'title'      => __('listing.accomodation.manage'),
+                'title'      => __('listing.accommodation.manage'),
                 'icon'       => Hotel::getServiceIconFeatured(),
                 'position'   => 30,
                 'permission' => 'hotel_view',
                 'children' => [
                     [
                         'url'   => route('hotel.vendor.index'),
-                        'title'  => __('listing.accomodation.all'),
+                        'title'  => __('listing.accommodation.all'),
                     ],
                     [
                         'url'   => route('hotel.vendor.create'),
-                        'title'      => __('listing.accomodation.add'),
+                        'title'      => __('listing.accommodation.add'),
                         'permission' => 'hotel_create',
                     ],
                     [

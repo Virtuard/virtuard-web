@@ -68,7 +68,7 @@ class VendorController extends FrontendController
             'rows' => $list_hotel->paginate(5),
             'breadcrumbs' => [
                 [
-                    'name' => __('listing.accomodation.manage'),
+                    'name' => __('listing.accommodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [
@@ -76,7 +76,7 @@ class VendorController extends FrontendController
                     'class' => 'active',
                 ],
             ],
-            'page_title' => __('listing.accomodation.manage'),
+            'page_title' => __('listing.accommodation.manage'),
         ];
         return view('Hotel::frontend.vendorHotel.index', $data);
     }
@@ -94,7 +94,7 @@ class VendorController extends FrontendController
             'recovery' => 1,
             'breadcrumbs' => [
                 [
-                    'name' => __('listing.accomodation.manage'),
+                    'name' => __('listing.accommodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [
@@ -123,7 +123,7 @@ class VendorController extends FrontendController
             'attributes' => $this->attributesClass::where('service', 'hotel')->get(),
             'breadcrumbs' => [
                 [
-                    'name' => __('listing.accomodation.manage'),
+                    'name' => __('listing.accommodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [
@@ -455,7 +455,7 @@ class VendorController extends FrontendController
             'selected_terms' => $row->terms->pluck('term_id'),
             'breadcrumbs' => [
                 [
-                    'name' => __('listing.accomodation.manage'),
+                    'name' => __('listing.accommodation.manage'),
                     'url' => route('hotel.vendor.index'),
                 ],
                 [

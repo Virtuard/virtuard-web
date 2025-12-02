@@ -4729,7 +4729,7 @@ window.tinymce.emoticons_plugin_database = {
     category: "travel_and_places"
   },
   hotel: {
-    keywords: [ "building", "accomodation", "checkin" ],
+    keywords: [ "building", "accommodation", "checkin" ],
     "char": "\ud83c\udfe8",
     fitzpatrick_scale: false,
     category: "travel_and_places"

@@ -1,15 +1,15 @@
 <div class="panel">
-    <div class="panel-title"><strong>{{ __('Accomodation Content') }}</strong></div>
+    <div class="panel-title"><strong>{{ __('Accommodation Content') }}</strong></div>
     <div class="panel-body">
         <div class="form-group">
             <label>{{ __('Title') }} <span class="text-danger">*</span></label>
-            <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Name of the accomodation') }}"
-                name="title" class="form-control accomodation-title" required>
+            <input type="text" value="{!! clean($translation->title) !!}" placeholder="{{ __('Name of the accommodation') }}"
+                name="title" class="form-control accommodation-title" required>
         </div>
         <div class="form-group">
             <label class="control-label">{{ __('Content') }}</label>
             <div class="">
-                <textarea name="content" class="d-none has-ckeditor accomodation-content" data-fullurl="true" cols="30" rows="10">{{ $translation->content }}</textarea>
+                <textarea name="content" class="d-none has-ckeditor accommodation-content" data-fullurl="true" cols="30" rows="10">{{ $translation->content }}</textarea>
             </div>
         </div>
         @if (is_default_lang())
@@ -60,13 +60,13 @@
 @include('Hotel::admin.hotel.extra-info')
 
 <div class="panel">
-    <div class="panel-title"><strong>{{ __('Accomodation Policy') }}</strong></div>
+    <div class="panel-title"><strong>{{ __('Accommodation Policy') }}</strong></div>
     <div class="panel-body">
         @if (is_default_lang())
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>{{ __('Accomodation rating standard') }}</label>
+                        <label>{{ __('Accommodation rating standard') }}</label>
                         <input type="number" value="{{ $row->star_rate }}" placeholder="{{ __('Eg: 5') }}"
                             name="star_rate" class="form-control">
                     </div>

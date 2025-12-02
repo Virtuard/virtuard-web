@@ -12,11 +12,11 @@
             }
         }
 
-        /* @media(max-width: 350px) {
+        @media(max-width: 768px) {
             .nav.nav-tabs {
-                grid-template-columns: repeat(1, 1fr);
+                gap: 0;
             }
-        } */
+        }
     </style>
 
     <!-- iPanorama -->

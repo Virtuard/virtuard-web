@@ -1,7 +1,7 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar no-border-bottom">
-        {{$row->id ? __('Edit: ').$row->title : __('listing.accomodation.add_new')}}
+        {{$row->id ? __('Edit: ').$row->title : __('listing.accommodation.add_new')}}
         @if($row->id)
             <div class="title-action">
                 <a class="btn btn-info" href="{{route('hotel.vendor.room.index',['hotel_id'=>$row->id])}}">
@@ -86,12 +86,12 @@
     <script type="text/javascript" src="{{ asset('js/condition.js?_ver='.config('app.asset_version')) }}"></script>
     {!! App\Helpers\MapEngine::scripts() !!}
     <script>
-        $(".accomodation-title").on("input",function(){
+        $(".accommodation-title").on("input",function(){
             $(".meta-title-input").val($(this).val())
         })
 
         tinymce.init({
-            selector: '.accomodation-content',
+            selector: '.accommodation-content',
             setup: function (editor) {
                 editor.on('input', function () {
                     var content = editor.getContent(); 

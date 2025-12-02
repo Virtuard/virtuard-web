@@ -1,7 +1,7 @@
 @extends('layouts.user')
 @section('content')
     <h2 class="title-bar no-border-bottom">
-        {{$row->id ? __('Edit: ').$row->title : __('listing.accomodation.add_new')}}
+        {{$row->id ? __('Edit: ').$row->title : __('listing.accommodation.add_new')}}
     </h2>
     @include('admin.message')
     @if($row->id)
