@@ -25,7 +25,7 @@
 
             @foreach ($galleries as $media)
                 <div class="col-md-4 col-6 mb-2">
-                    <div id="Post-{{$post->id}}" class="gallery-item">
+                    <div class="gallery-item">
                         {{-- Tombol Delete --}}
                         @if (auth()->check() && auth()->user()->id == $post->user_id)
                             <form action="{{ route('post.destroy', $post->id) }}" method="POST"
@@ -38,26 +38,31 @@
                             </form>
                         @endif
 
-                        {{-- Tombol Like --}}
-                        <div class="like-btn-wrapper">
+                        {{-- Tombol Like & Comment --}}
+                        <div class="action-btn-wrapper">
                             @auth
                                 @if ($liked->count() > 0)
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="like-btn liked">
+                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn liked">
                                         <i class="fa fa-heart"></i>
-                                        <span class="like-count">{{ $post->likes->count() }}</span>
-                                    </a>
+                                        <span class="action-count">{{ $post->likes->count() }}</span>
+                                    </a>    
                                 @else
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="like-btn">
+                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn">
                                         <i class="fa fa-heart-o"></i>
-                                        <span class="like-count">{{ $post->likes->count() }}</span>
+                                        <span class="action-count">{{ $post->likes->count() }}</span>
                                     </a>
                                 @endif
                             @else
-                                <a onclick="alert('You need to login to like this post');" class="like-btn cursor-pointer">
+                                <a onclick="alert('You need to login to like this post');" class="action-btn cursor-pointer">
                                     <i class="fa fa-heart-o"></i>
-                                    <span class="like-count">{{ $post->likes->count() }}</span>
+                                    <span class="action-count">{{ $post->likes->count() }}</span>
                                 </a>
                             @endauth
+
+                            <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
+                                <i class="fa fa-comment-o"></i>
+                                <span class="action-count">{{ $post->comments->count() }}</span>
+                            </a>
                         </div>
 
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
@@ -71,7 +76,7 @@
 
             @foreach ($galleries_360 as $gallery)
                 <div class="col-md-4 col-6 mb-2">
-                    <div id="Post-{{$post->id}}" class="gallery-item">
+                    <div class="gallery-item">
                         @if (auth()->check() && auth()->user()->id == $post->user_id)
                             <form action="{{ route('post.destroy', $post->id) }}" method="POST"
                                   class="delete-btn-wrapper">
@@ -83,27 +88,33 @@
                             </form>
                         @endif
 
-                        {{-- Tombol Like --}}
-                        <div class="like-btn-wrapper">
-                            @auth
-                                @if ($liked->count() > 0)
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="like-btn liked">
-                                        <i class="fa fa-heart"></i>
-                                        <span class="like-count">{{ $post->likes->count() }}</span>
-                                    </a>
+
+                            {{-- Tombol Like & Comment --}}
+                            <div class="action-btn-wrapper">
+                                @auth
+                                    @if ($liked->count() > 0)
+                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn liked">
+                                            <i class="fa fa-heart"></i>
+                                            <span class="action-count">{{ $post->likes->count() }}</span>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn">
+                                            <i class="fa fa-heart-o"></i>
+                                            <span class="action-count">{{ $post->likes->count() }}</span>
+                                        </a>
+                                    @endif
                                 @else
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="like-btn">
+                                    <a onclick="alert('You need to login to like this post');" class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
-                                        <span class="like-count">{{ $post->likes->count() }}</span>
+                                        <span class="action-count">{{ $post->likes->count() }}</span>
                                     </a>
-                                @endif
-                            @else
-                                <a onclick="alert('You need to login to like this post');" class="like-btn cursor-pointer">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span class="like-count">{{ $post->likes->count() }}</span>
+                                @endauth
+
+                                <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
+                                    <i class="fa fa-comment-o"></i>
+                                    <span class="action-count">{{ $post->comments->count() }}</span>
                                 </a>
-                            @endauth
-                        </div>
+                            </div>
 
                         <div class="panorama-image" style="width: 500px; height: 100%; object-fit: cover;" id="panorama-{{ $gallery->id }}"></div>
                     </div>
@@ -125,7 +136,7 @@
 
             @foreach ($videos as $vid)
                 <div class="col-md-4 col-6 mb-2">
-                    <div id="Post-{{$post->id}}" class="gallery-item">
+                    <div class="gallery-item">
 
                         @if (auth()->check() && auth()->user()->id == $post->user_id)
                             <form action="{{ route('post.destroy', $post->id) }}" method="POST"
@@ -138,27 +149,33 @@
                             </form>
                         @endif
 
-                        {{-- Tombol Like --}}
-                        <div class="like-btn-wrapper">
-                            @auth
-                                @if ($liked->count() > 0)
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="like-btn liked">
-                                        <i class="fa fa-heart"></i>
-                                        <span class="like-count">{{ $post->likes->count() }}</span>
-                                    </a>
+
+                            {{-- Tombol Like & Comment --}}
+                            <div class="action-btn-wrapper">
+                                @auth
+                                    @if ($liked->count() > 0)
+                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn liked">
+                                            <i class="fa fa-heart"></i>
+                                            <span class="action-count">{{ $post->likes->count() }}</span>
+                                        </a>
+                                    @else
+                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn">
+                                            <i class="fa fa-heart-o"></i>
+                                            <span class="action-count">{{ $post->likes->count() }}</span>
+                                        </a>
+                                    @endif
                                 @else
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="like-btn">
+                                    <a onclick="alert('You need to login to like this post');" class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
-                                        <span class="like-count">{{ $post->likes->count() }}</span>
+                                        <span class="action-count">{{ $post->likes->count() }}</span>
                                     </a>
-                                @endif
-                            @else
-                                <a onclick="alert('You need to login to like this post');" class="like-btn cursor-pointer">
-                                    <i class="fa fa-heart-o"></i>
-                                    <span class="like-count">{{ $post->likes->count() }}</span>
+                                @endauth
+
+                                <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
+                                    <i class="fa fa-comment-o"></i>
+                                    <span class="action-count">{{ $post->comments->count() }}</span>
                                 </a>
-                            @endauth
-                        </div>
+                            </div>
 
                         <div class="video-container">
                             <div class="video-wrapper">
@@ -175,7 +192,158 @@
                 </div>
             @endforeach
 
-            <script>
+                {{-- Comment Modal --}}
+                <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto";>
+                        <div class="modal-content" style="max-height: 90vh; width: 100vw; max-width: none;">
+                            <div class="modal-header" style="max-height: 90vh;">
+                                <h5 class="modal-title">{{ __('Post') }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body p-0" style="overflow-y: auto; height: calc(100% - 60px);">
+                                <div class="row no-gutters" style="min-height: 500px;">
+                                    {{-- Left Side - Post Media --}}
+                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
+                                         style="min-height: 400px;">
+                                        @php
+                                            $firstMedia = $post->medias->first();
+                                        @endphp
+
+                                        @if($firstMedia)
+                                            @if($firstMedia->type == 'image')
+                                                @if($firstMedia->is_360_media)
+                                                    {{-- 360 Image --}}
+                                                    <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
+                                                    <script>
+                                                        document.addEventListener("DOMContentLoaded", function () {
+                                                            pannellum.viewer('panorama-modal-{{ $post->id }}', {
+                                                                "type": "equirectangular",
+                                                                "panorama": "/uploads/{{ $firstMedia->media }}",
+                                                                "autoLoad": true,
+                                                                "showZoomCtrl": true
+                                                            });
+                                                        });
+                                                    </script>
+                                                @else
+                                                    {{-- Regular Image --}}
+                                                    <img src="{{ asset('uploads/' . $firstMedia->media) }}"
+                                                         alt="Post"
+                                                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                @endif
+                                            @elseif($firstMedia->type == 'video')
+                                                {{-- Video --}}
+                                                <div class="video-wrapper" style="width: 100%; height: 100%;">
+                                                    <video controls id="video-modal-{{ $post->id }}" preload="auto"
+                                                           class="video-js vjs-default-skin"
+                                                           style="width: 100%; height: 100%;">
+                                                        <source src="{{ url('uploads/' . $firstMedia->media) }}" type="video/mp4">
+                                                    </video>
+                                                </div>
+                                                <script>
+                                                    document.addEventListener("DOMContentLoaded", function() {
+                                                        var playerModal{{ $post->id }} = videojs("video-modal-{{ $post->id }}", {
+                                                            controls: true,
+                                                            autoplay: false,
+                                                            fluid: false,
+                                                            controlBar: {
+                                                                fullscreenToggle: true,
+                                                            }
+                                                        });
+
+                                                        @if($firstMedia->is_360_media)
+                                                        playerModal{{ $post->id }}.vr({
+                                                            projection: "360",
+                                                        });
+                                                        @endif
+                                                    });
+                                                </script>
+                                            @endif
+                                        @else
+                                            <p class="text-white">{{ __('No media available') }}</p>
+                                        @endif
+                                    </div>
+
+                                    {{-- Right Side - Comments Section (Bottom on mobile) --}}
+                                    <div class="col-12 col-md-6 d-flex flex-column bg-white" style="min-height: 400px;">
+
+                                        {{-- Comments List --}}
+                                        <div id="commentsList{{ $post->id }}" class="flex-grow-1 p-3 bg-white"
+                                             style="overflow-y: auto; flex: 1; max-height: 100%;">
+
+                                            @forelse($post->comments as $comment)
+                                                <div class="mb-3 comment-item">
+                                                    <div class="d-flex">
+                                                        <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
+                                                             alt="User"
+                                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                        <div class="ml-2 flex-grow-1">
+                                                            <div class="bg-light p-2 rounded">
+                                                                <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
+                                                                    {{ $comment->user->display_name ?? $comment->user->name }}
+                                                                </p>
+                                                                <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
+                                                            </div>
+                                                            <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                                {{ $comment->created_at->diffForHumans() }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @empty
+                                                <p id="noComments{{ $post->id }}" class="text-center text-muted">
+                                                    {{ __('No comments yet. Be the first to comment!') }}
+                                                </p>
+                                            @endforelse
+                                        </div>
+
+                                        {{-- Like & Comment Count --}}
+                                        <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
+                                            <div class="d-flex justify-content-between">
+                                <span>
+                                    <i class="fa fa-comment"></i> 
+                                    <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
+                                </span>
+                                            </div>
+                                        </div>
+
+                                        {{-- Comment Form --}}
+                                        <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
+                                            @auth
+                                                <form action="{{ route('post.comment.store', $post->id) }}"
+                                                      method="POST"
+                                                      class="comment-form"
+                                                      data-post-id="{{ $post->id }}">
+                                                    @csrf
+                                                    <div class="input-group">
+                                                        <input type="text"
+                                                               name="comment"
+                                                               class="form-control border-0"
+                                                               placeholder="{{ __('Write a comment...') }}"
+                                                               style="background: #f0f2f5;"
+                                                               required>
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-primary" type="submit">
+                                                                <i class="fa fa-paper-plane"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            @else
+                                                <p class="text-center text-muted mb-0">
+                                                    <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
+                                                </p>
+                                            @endauth
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     @foreach ($videos as $vid)
                     var player{{ $vid->id }} = videojs("video-{{ $vid->id }}", {
@@ -216,83 +384,12 @@
             </script>
         @endforeach
     </div>
-
-    <div id="modalGallery" class="modal fade">
-        <div class="modal-dialog modal-dialog-centered">
-            <form action="{{ route('post.store') }}" method="POST"
-                  enctype="multipart/form-data" class="modal-content">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Add Post') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-4">
-                        <label for="" class="form-label">{{ __('Caption') }}</label>
-                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="{{ __('What\'s new?') }}"
-                                  oninput="auto_grow(this)"></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="" class="form-label">{{ __('Select Media') }}</label>
-                        <input type="file" id="fileInput" class="m-0" name="media_user[]"
-                               accept="image/*, video/*"
-                               multiple>
-                    </div>
-                    <div class="">
-                        <label for="is_360_media" class="form-label d-block">{{ __('Is it 360 media?') }}</label>
-                        <label class="switch">
-                            <input name="is_360_media" id="is_360_media" type="checkbox">
-                            <div class="slider">
-                                <div class="circle">
-                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <g>
-                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
-                                        </g>
-                                    </svg>
-                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                                        <g>
-                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="">
-                        <label for="" class="form-label d-block">{{ __('Status') }}</label>
-                        <select class="h-100" id="filter-post" name="type_post"
-                                style="
-                            padding: 5px 16px;
-                            background: #f5f5f5;
-                            border: 0;
-                            border-radius: 100px;
-                            font-weight: 600;
-                            outline: none;
-                        ">
-                            <option value="">{{ __('Public') }}</option>
-                            <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
-                            <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
-                        </select>
-                        <a class="cursor-pointer d-none">
-                            <i class="fa fa-lg fa-smile-o ml-3"></i>
-                        </a>
-                        <div class="cursor-pointer d-none" id="toogle-tag" onclick="showSelect()">
-                            <i class="fa fa-lg fa-tags ml-3"></i>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">{{ __('Post') }}</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    
 </div>
 
 @push('css')
     <style>
+        
         .delete-btn-wrapper {
             position: absolute;
             top: 8px;
@@ -320,17 +417,18 @@
             transform: scale(1.1);
             box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.5);
         }
-
-        /* Like Button Styles */
-        .like-btn-wrapper {
+        
+        .action-btn-wrapper {
             position: absolute;
             bottom: 8px;
             left: 8px;
             z-index: 10;
+            display: flex;
+            gap: 8px;
         }
 
-        .like-btn {
-            background: rgba(0, 0, 0, 0.2);
+        .action-btn {
+            background: rgba(0, 0, 0, 0.6);
             color: white;
             border: none;
             padding: 6px 12px;
@@ -344,29 +442,66 @@
             text-decoration: none;
         }
 
-        .like-btn:hover {
-            background: rgba(0, 0, 0, 0.5);
+        .action-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
             transform: scale(1.05);
             color: white;
             text-decoration: none;
         }
 
-        .like-btn.liked {
+        .action-btn.liked {
             background: rgba(255, 20, 147, 0.8);
             color: white;
         }
 
-        .like-btn.liked:hover {
+        .action-btn.liked:hover {
             background: rgba(255, 20, 147, 1);
         }
 
-        .like-btn i {
+        .action-btn i {
             font-size: 16px;
         }
 
-        .like-count {
+        .action-count {
             font-weight: 600;
             font-size: 13px;
+        }
+
+        .comment-btn:hover {
+            background: rgba(0, 123, 255, 0.8);
+        }
+
+        .comment-item {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar styling for comments */
+        [id^="commentsList"]::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        [id^="commentsList"]::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        [id^="commentsList"]::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        [id^="commentsList"]::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
 
         .gallery-item {
@@ -392,17 +527,21 @@
                 transform: scale(0.15);
             }
 
-            .like-btn {
+            .action-btn {
                 padding: 4px 8px;
                 font-size: 12px;
             }
 
-            .like-btn i {
+            .action-btn i {
                 font-size: 14px;
             }
 
-            .like-count {
+            .action-count {
                 font-size: 11px;
+            }
+
+            .action-btn-wrapper {
+                gap: 6px;
             }
         }
 
@@ -601,5 +740,67 @@
             element.style.height = "5px";
             element.style.height = (element.scrollHeight) + "px";
         }
+
+        // Handle comment form submission via AJAX
+        $(document).ready(function() {
+            $('.comment-form').on('submit', function(e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var postId = form.data('post-id');
+                var commentInput = form.find('input[name="comment"]');
+                var commentText = commentInput.val();
+
+                if (!commentText.trim()) {
+                    return;
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    // Update bagian success di script AJAX yang sudah ada
+                    success: function(response) {
+                        // Clear input
+                        commentInput.val('');
+
+                        // Hide "no comments" message if exists
+                        $('#noComments' + postId).hide();
+
+                        // Add new comment to the list
+                        var newComment = `
+        <div class="mb-3 comment-item">
+            <div class="d-flex">
+                <img src="${response.user.avatar}" 
+                     alt="User" 
+                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                <div class="ml-2 flex-grow-1">
+                    <div class="bg-light p-2 rounded">
+                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
+                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
+                    </div>
+                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                </div>
+            </div>
+        </div>
+    `;
+
+                        $('#commentsList' + postId).append(newComment);
+
+                        // Scroll to bottom
+                        var commentsList = document.getElementById('commentsList' + postId);
+                        commentsList.scrollTop = commentsList.scrollHeight;
+
+                        // Update comment count in the button AND in modal
+                        var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
+                        $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
+                        $('.comment-count-' + postId).text(currentCount + 1);
+                    },
+                    error: function(xhr) {
+                        alert('Failed to post comment. Please try again.');
+                    }
+                });
+            });
+        });
     </script>
 @endpush

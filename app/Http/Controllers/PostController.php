@@ -265,6 +265,18 @@ class PostController extends Controller
 
         $this->notifyUserComeent($post->user_id, $messageData, $id);
 
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'comment' => $comment->comment,
+                'user' => [
+                    'name' => auth()->user()->display_name ?? auth()->user()->name,
+                    'avatar' => auth()->user()->getAvatarUrl() ?? asset('images/avatar.png')
+                ],
+                'created_at' => $comment->created_at->diffForHumans()
+            ]);
+        }
+
         return redirect()->to(url()->previous() . '#Post-' . $id);
     }
 
