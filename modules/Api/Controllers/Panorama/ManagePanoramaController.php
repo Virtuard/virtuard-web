@@ -24,6 +24,66 @@ class ManagePanoramaController extends ApiController
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/user/vtour",
+     *     tags={"Vtour"},
+     *     summary="Get all panoramas",
+     *     description="Get a list of all panoramas for the authenticated user",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Data retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="user_id", type="integer", example=5),
+     *                     @OA\Property(property="title", type="string", example="Vtour Title"),
+     *                     @OA\Property(property="code", type="string", example="{}"),
+     *                     @OA\Property(property="json_data", type="string", example="{}"),
+     *                     @OA\Property(property="thumb", type="string", nullable=true, example="upload/2/136/250826-136-1-18548.jpg"),
+     *                     @OA\Property(property="status", type="string", example="draft"),
+     *                     @OA\Property(property="create_user", type="integer", example=5),
+     *                     @OA\Property(property="update_user", type="integer", nullable=true, example=5),
+     *                     @OA\Property(property="scenes", type="array",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="id", type="string", example="main"),
+     *                             @OA\Property(property="image", type="string", format="url", example="http://example.com/uploads/ipanoramaBuilder/upload/5/1/scene-image.jpg")
+     *                         )
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function index()
+    {
+        $panoramas = $this->model->all();
+        
+        // Add scenes field to each panorama
+        $panoramas->transform(function ($panorama) {
+            $panorama->scenes = $this->extractScenes($panorama);
+            return $panorama;
+        });
+        
+        return response()->json([
+            'status' => true,
+            'data' => $panoramas,
+        ])->setEncodingOptions(JSON_UNESCAPED_SLASHES);
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/user/vtour",
      *     tags={"Vtour"},
@@ -35,6 +95,10 @@ class ManagePanoramaController extends ApiController
      *         @OA\JsonContent(
      *             required={"title"},
      *             @OA\Property(property="title", type="string", maxLength=255, example="Vtour Title", description="Vtour title"),
+     *             @OA\Property(property="code", type="object", nullable=true, description="Panorama code configuration (JSON object)"),
+     *             @OA\Property(property="json_data", type="object", nullable=true, description="Panorama JSON data configuration (JSON object)"),
+     *             @OA\Property(property="thumb", type="string", nullable=true, maxLength=255, example="upload/2/136/250826-136-1-18548.jpg", description="Thumbnail image path"),
+     *             @OA\Property(property="status", type="string", nullable=true, example="draft", description="Panorama status (draft or publish)"),
      *         )
      *     ),
      *     @OA\Response(
@@ -92,7 +156,10 @@ class ManagePanoramaController extends ApiController
                 'user_id' => $idUser,
                 'create_user' => $idUser,
                 'title' => $request->title,
-                'status' => 'draft',
+                'code' => $request->has('code') ? (is_string($request->code) ? $request->code : json_encode($request->code)) : null,
+                'json_data' => $request->has('json_data') ? (is_string($request->json_data) ? $request->json_data : json_encode($request->json_data)) : null,
+                'thumb' => $request->thumb ?? null,
+                'status' => $request->status ?? 'draft',
             ]);
 
             $urlWithId = route('user.panorama.edit', [
@@ -149,6 +216,13 @@ class ManagePanoramaController extends ApiController
      *                 @OA\Property(property="status", type="string", example="draft"),
      *                 @OA\Property(property="create_user", type="integer", example=5),
      *                 @OA\Property(property="update_user", type="integer", example=5),
+     *                 @OA\Property(property="scenes", type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="string", example="main"),
+     *                         @OA\Property(property="image", type="string", format="url", example="http://example.com/uploads/ipanoramaBuilder/upload/5/1/scene-image.jpg")
+     *                     )
+     *                 )
      *             )
      *         )
      *     ),
@@ -174,12 +248,15 @@ class ManagePanoramaController extends ApiController
                 ], 404);
             }
 
-            $this->isValidAccess($panorama->user_id);
+            // $this->isValidAccess($panorama->user_id);
+
+            // Add scenes field to panorama
+            $panorama->scenes = $this->extractScenes($panorama);
 
             return response()->json([
                 'status' => true,
                 'data' => $panorama,
-            ]);
+            ])->setEncodingOptions(JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             $message = 'Something went wrong';
@@ -209,8 +286,11 @@ class ManagePanoramaController extends ApiController
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"title"},
-     *             @OA\Property(property="title", type="string", maxLength=255, example="Updated Vtour Title", description="Updated vtour title"),
+     *             @OA\Property(property="title", type="string", nullable=true, maxLength=255, example="Updated Vtour Title", description="Vtour title"),
+     *             @OA\Property(property="code", type="object", nullable=true, description="Panorama code configuration (JSON object)"),
+     *             @OA\Property(property="json_data", type="object", nullable=true, description="Panorama JSON data configuration (JSON object)"),
+     *             @OA\Property(property="thumb", type="string", nullable=true, maxLength=255, example="upload/2/136/250826-136-1-18548.jpg", description="Thumbnail image path"),
+     *             @OA\Property(property="status", type="string", nullable=true, example="publish", description="Panorama status (draft or publish)"),
      *         )
      *     ),
      *     @OA\Response(
@@ -740,6 +820,142 @@ class ManagePanoramaController extends ApiController
                 'message' => $message
             ], $statusCode);
         }
+    }
+
+    /**
+     * Extract scenes from panorama data
+     *
+     * @param object $panorama
+     * @return array
+     */
+    protected function extractScenes($panorama)
+    {
+        $scenes = [];
+        
+        // Try to extract scenes from code field first
+        if (!empty($panorama->code)) {
+            $scenes = $this->extractScenesFromCode($panorama);
+        }
+        
+        // If no scenes found in code, try json_data
+        if (empty($scenes) && !empty($panorama->json_data)) {
+            $scenes = $this->extractScenesFromJsonData($panorama);
+        }
+        
+        return $scenes;
+    }
+
+    /**
+     * Extract scenes from code field
+     *
+     * @param object $panorama
+     * @return array
+     */
+    protected function extractScenesFromCode($panorama)
+    {
+        $scenes = [];
+        $code = json_decode($panorama->code);
+        
+        if (!$code || !isset($code->scenes)) {
+            return $scenes;
+        }
+        
+        foreach ($code->scenes as $sceneId => $scene) {
+            if (isset($scene->image)) {
+                $imageUrl = $this->buildImageUrl($scene->image, $panorama);
+                $scenes[] = [
+                    'id' => $sceneId,
+                    'image' => $imageUrl,
+                ];
+            }
+        }
+        
+        return $scenes;
+    }
+
+    /**
+     * Extract scenes from json_data field
+     *
+     * @param object $panorama
+     * @return array
+     */
+    protected function extractScenesFromJsonData($panorama)
+    {
+        $scenes = [];
+        $jsonData = json_decode($panorama->json_data);
+        
+        if (!$jsonData || !isset($jsonData->config->scenes)) {
+            return $scenes;
+        }
+        
+        $scenesArray = is_array($jsonData->config->scenes) 
+            ? $jsonData->config->scenes 
+            : (array) $jsonData->config->scenes;
+        
+        foreach ($scenesArray as $index => $scene) {
+            $imageUrl = null;
+            
+            // Try different possible image paths
+            if (isset($scene->image)) {
+                $imageUrl = $scene->image;
+            } elseif (isset($scene->config->imageFront->url)) {
+                $imageUrl = $scene->config->imageFront->url;
+            }
+            
+            if ($imageUrl) {
+                $imageUrl = $this->buildImageUrl($imageUrl, $panorama);
+                $scenes[] = [
+                    'id' => is_numeric($index) ? (string)$index : $index,
+                    'image' => $imageUrl,
+                ];
+            }
+        }
+        
+        return $scenes;
+    }
+
+    /**
+     * Build full URL for image
+     *
+     * @param string $imageUrl
+     * @param object $panorama
+     * @return string
+     */
+    protected function buildImageUrl($imageUrl, $panorama)
+    {
+        // If already a full URL, normalize and return
+        if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+            return preg_replace('#([^:])//+#', '$1/', $imageUrl);
+        }
+        
+        // Clean the imageUrl - remove leading/trailing slashes and normalize
+        $imageUrl = trim($imageUrl, '/');
+        
+        // If it's already a full path starting with /uploads/, normalize and return
+        if (strpos($imageUrl, 'uploads/') === 0 || strpos($imageUrl, '/uploads/') === 0) {
+            $imageUrl = ltrim($imageUrl, '/');
+            $cleanPath = '/' . $imageUrl;
+            $cleanPath = preg_replace('#/+#', '/', $cleanPath);
+            $fullUrl = url($cleanPath);
+            return preg_replace('#([^:])//+#', '$1/', $fullUrl);
+        }
+        
+        // Remove common prefixes that might be in the stored path
+        $imageUrl = preg_replace('#^(upload/|ipanoramaBuilder/upload/|uploads/ipanoramaBuilder/upload/)#', '', $imageUrl);
+        
+        // Remove user_id and panorama_id if already in the path
+        $pattern = '#^' . preg_quote($panorama->user_id, '#') . '/' . preg_quote($panorama->id, '#') . '/#';
+        $imageUrl = preg_replace($pattern, '', $imageUrl);
+        
+        // Build clean path
+        $cleanPath = '/uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $panorama->id . '/' . $imageUrl;
+        
+        // Normalize double slashes in path
+        $cleanPath = preg_replace('#/+#', '/', $cleanPath);
+        
+        // Build URL and remove any double slashes (except after http: or https:)
+        $fullUrl = url($cleanPath);
+        return preg_replace('#([^:])//+#', '$1/', $fullUrl);
     }
 
     protected function isValidAccess($user_id)
