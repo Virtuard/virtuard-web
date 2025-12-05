@@ -41,19 +41,17 @@
                         {{-- Tombol Like & Comment --}}
                         <div class="action-btn-wrapper">
                             @auth
-                                @if ($liked->count() > 0)
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn liked">
-                                        <i class="fa fa-heart"></i>
-                                        <span class="action-count">{{ $post->likes->count() }}</span>
-                                    </a>    
-                                @else
-                                    <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn">
-                                        <i class="fa fa-heart-o"></i>
-                                        <span class="action-count">{{ $post->likes->count() }}</span>
-                                    </a>
-                                @endif
+                                <a href="javascript:void(0)"
+                                   class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                   data-post-id="{{ $post->id }}"
+                                   data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
+                                    <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
+                                    <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                </a>
                             @else
-                                <a onclick="alert('You need to login to like this post');" class="action-btn cursor-pointer">
+                                <a href="javascript:void(0)"
+                                   onclick="alert('You need to login to like this post');"
+                                   class="action-btn cursor-pointer">
                                     <i class="fa fa-heart-o"></i>
                                     <span class="action-count">{{ $post->likes->count() }}</span>
                                 </a>
@@ -88,23 +86,20 @@
                             </form>
                         @endif
 
-
                             {{-- Tombol Like & Comment --}}
                             <div class="action-btn-wrapper">
                                 @auth
-                                    @if ($liked->count() > 0)
-                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn liked">
-                                            <i class="fa fa-heart"></i>
-                                            <span class="action-count">{{ $post->likes->count() }}</span>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn">
-                                            <i class="fa fa-heart-o"></i>
-                                            <span class="action-count">{{ $post->likes->count() }}</span>
-                                        </a>
-                                    @endif
+                                    <a href="javascript:void(0)"
+                                       class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                       data-post-id="{{ $post->id }}"
+                                       data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
+                                        <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
+                                        <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    </a>
                                 @else
-                                    <a onclick="alert('You need to login to like this post');" class="action-btn cursor-pointer">
+                                    <a href="javascript:void(0)"
+                                       onclick="alert('You need to login to like this post');"
+                                       class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
                                         <span class="action-count">{{ $post->likes->count() }}</span>
                                     </a>
@@ -153,19 +148,17 @@
                             {{-- Tombol Like & Comment --}}
                             <div class="action-btn-wrapper">
                                 @auth
-                                    @if ($liked->count() > 0)
-                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn liked">
-                                            <i class="fa fa-heart"></i>
-                                            <span class="action-count">{{ $post->likes->count() }}</span>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('post.like', ['id' => $post->id]) }}" class="action-btn">
-                                            <i class="fa fa-heart-o"></i>
-                                            <span class="action-count">{{ $post->likes->count() }}</span>
-                                        </a>
-                                    @endif
+                                    <a href="javascript:void(0)"
+                                       class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                       data-post-id="{{ $post->id }}"
+                                       data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
+                                        <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
+                                        <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    </a>
                                 @else
-                                    <a onclick="alert('You need to login to like this post');" class="action-btn cursor-pointer">
+                                    <a href="javascript:void(0)"
+                                       onclick="alert('You need to login to like this post');"
+                                       class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
                                         <span class="action-count">{{ $post->likes->count() }}</span>
                                     </a>
@@ -736,6 +729,68 @@
     <script src="https://unpkg.com/videojs-vr/dist/videojs-vr.min.js"></script>
 
     <script>
+        $(document).ready(function() {
+            handleLikeButtons();
+        });
+
+        function handleLikeButtons() {
+            $('.action-btn').on('click', function(e) {
+                e.preventDefault();
+
+                var btn = $(this);
+                var postId = btn.data('post-id');
+                var likeUrl = btn.data('like-url');
+                console.log("Like URL: " + likeUrl);
+                var icon = btn.find('i');
+                var likeCount = $('.like-count-' + postId);
+                var likeCountModal = $('.like-count-modal-' + postId);
+
+                // Prevent multiple clicks
+                if (btn.data('processing')) {
+                    return;
+                }
+
+                btn.data('processing', true);
+
+                $.ajax({
+                    url: likeUrl,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.success) {
+                            if (response.liked) {
+                                btn.addClass('liked');
+                                icon.removeClass('fa-heart-o').addClass('fa-heart');
+
+                              
+                                icon.addClass('like-animation');
+                                setTimeout(function() {
+                                    icon.removeClass('like-animation');
+                                }, 600);
+                            } else {
+                                btn.removeClass('liked');
+                                icon.removeClass('fa-heart').addClass('fa-heart-o');
+                            }
+                            
+                            likeCount.text(response.total_likes);
+                            likeCountModal.text(response.total_likes);
+                        }
+
+                        btn.data('processing', false);
+                    },
+                    error: function(xhr) {
+                        btn.data('processing', false);
+
+                        if (xhr.status === 401) {
+                            alert('You need to login to like this post');
+                        } else {
+                            alert('Failed to like/unlike post. Please try again.');
+                        }
+                    }
+                });
+            });
+        }
+        
         function auto_grow(element) {
             element.style.height = "5px";
             element.style.height = (element.scrollHeight) + "px";
@@ -802,5 +857,7 @@
                 });
             });
         });
+        
+        
     </script>
 @endpush
