@@ -41,8 +41,8 @@ class ManagePanoramaController extends ApiController
      *                     @OA\Property(property="id", type="integer", example=1),
      *                     @OA\Property(property="user_id", type="integer", example=5),
      *                     @OA\Property(property="title", type="string", example="Vtour Title"),
-     *                     @OA\Property(property="code", type="string", example="{}"),
-     *                     @OA\Property(property="json_data", type="string", example="{}"),
+     *                     @OA\Property(property="code", type="object", nullable=true, example={"theme":"ipnrm-theme-default","autoLoad":true}),
+     *                     @OA\Property(property="json_data", type="object", nullable=true, example={"id":"ipanorama_config__ipanorama_config","name":"ipanorama_config","config":{"theme":"ipnrm-theme-default","autoLoad":true}}),
      *                     @OA\Property(property="thumb", type="string", nullable=true, example="upload/2/136/250826-136-1-18548.jpg"),
      *                     @OA\Property(property="status", type="string", example="draft"),
      *                     @OA\Property(property="create_user", type="integer", example=5),
@@ -71,9 +71,10 @@ class ManagePanoramaController extends ApiController
     {
         $panoramas = $this->model->all();
         
-        // Add scenes field to each panorama
+        // Add scenes field to each panorama and decode JSON fields
         $panoramas->transform(function ($panorama) {
             $panorama->scenes = $this->extractScenes($panorama);
+            $this->decodeJsonFields($panorama);
             return $panorama;
         });
         
@@ -95,8 +96,98 @@ class ManagePanoramaController extends ApiController
      *         @OA\JsonContent(
      *             required={"title"},
      *             @OA\Property(property="title", type="string", maxLength=255, example="Vtour Title", description="Vtour title"),
-     *             @OA\Property(property="code", type="object", nullable=true, description="Panorama code configuration (JSON object)"),
-     *             @OA\Property(property="json_data", type="object", nullable=true, description="Panorama JSON data configuration (JSON object)"),
+     *             @OA\Property(
+     *                 property="code",
+     *                 type="object",
+     *                 nullable=true,
+     *                 description="Panorama code configuration (JSON object) containing autoLoad and scenes properties",
+     *                 @OA\Property(property="theme", type="string", example="ipnrm-theme-default", description="Panorama theme"),
+     *                 @OA\Property(property="autoLoad", type="boolean", example=true, description="Auto load panorama"),
+     *                 @OA\Property(property="autoRotate", type="boolean", example=false, description="Enable auto rotate"),
+     *                 @OA\Property(property="grab", type="boolean", example=true, description="Enable grab/drag interaction"),
+     *                 @OA\Property(property="sceneId", type="string", example="scene1", description="Default scene ID"),
+     *                 @OA\Property(
+     *                     property="scenes",
+     *                     type="object",
+     *                     description="Scene definitions (key-value pairs where key is scene ID)",
+     *                     @OA\AdditionalProperties(
+     *                         type="object",
+     *                         @OA\Property(property="type", type="string", example="sphere", description="Scene type: sphere, cube, or cylinder"),
+     *                         @OA\Property(property="image", type="string", example="upload/2/148/251204-148-2-create.jpeg", description="Scene image path"),
+     *                         @OA\Property(property="saveCamera", type="boolean", example=true, description="Save camera position"),
+     *                         @OA\Property(property="title", type="string", nullable=true, example="Room", description="Scene title"),
+     *                         @OA\Property(
+     *                             property="hotSpots",
+     *                             type="array",
+     *                             description="Array of hotspots",
+     *                             @OA\Items(
+     *                                 type="object",
+     *                                 @OA\Property(property="title", type="string", example="Room", description="Hotspot title"),
+     *                                 @OA\Property(property="yaw", type="number", format="float", example=0, description="Hotspot yaw position"),
+     *                                 @OA\Property(property="pitch", type="number", format="float", example=0, description="Hotspot pitch position"),
+     *                                 @OA\Property(property="sceneId", type="string", nullable=true, example="scene2", description="Link to another scene ID"),
+     *                                 @OA\Property(property="popoverHtml", type="boolean", example=true, description="Use HTML for popover"),
+     *                                 @OA\Property(property="popoverShow", type="boolean", example=false, description="Show popover on load")
+     *                             )
+     *                         )
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="json_data",
+     *                 type="object",
+     *                 nullable=true,
+     *                 description="Panorama JSON data configuration containing config with scenes array",
+     *                 @OA\Property(property="id", type="string", example="ipanorama_config__ipanorama_config", description="Configuration ID"),
+     *                 @OA\Property(property="name", type="string", example="ipanorama_config", description="Configuration name"),
+     *                 @OA\Property(
+     *                     property="config",
+     *                     type="object",
+     *                     @OA\Property(property="theme", type="string", example="ipnrm-theme-default", description="Panorama theme"),
+     *                     @OA\Property(property="autoLoad", type="boolean", example=true, description="Auto load panorama"),
+     *                     @OA\Property(
+     *                         property="scenes",
+     *                         type="array",
+     *                         description="Array of scene configurations",
+     *                         @OA\Items(
+     *                             type="object",
+     *                             @OA\Property(property="id", type="string", example="Scene 1", description="Scene ID"),
+     *                             @OA\Property(property="title", type="string", nullable=true, example="Room", description="Scene title"),
+     *                             @OA\Property(
+     *                                 property="config",
+     *                                 type="object",
+     *                                 @OA\Property(property="type", type="string", example="sphere", description="Scene type"),
+     *                                 @OA\Property(
+     *                                     property="imageFront",
+     *                                     type="object",
+     *                                     @OA\Property(property="isCustom", type="boolean", example=false, description="Is custom image"),
+     *                                     @OA\Property(property="url", type="string", example="251204-148-2-create.jpeg", description="Front image filename")
+     *                                 ),
+     *                                 @OA\Property(property="yaw", type="number", format="float", example=0, description="Starting yaw position"),
+     *                                 @OA\Property(property="pitch", type="number", format="float", example=0, description="Starting pitch position"),
+     *                                 @OA\Property(property="zoom", type="number", format="float", example=75, description="Starting zoom level"),
+     *                                 @OA\Property(
+     *                                     property="hotspots",
+     *                                     type="array",
+     *                                     description="Array of hotspots",
+     *                                     @OA\Items(
+     *                                         type="object",
+     *                                         @OA\Property(property="id", type="string", example="Hotspot 1", description="Hotspot ID"),
+     *                                         @OA\Property(
+     *                                             property="config",
+     *                                             type="object",
+     *                                             @OA\Property(property="title", type="string", example="Room", description="Hotspot title"),
+     *                                             @OA\Property(property="yaw", type="number", format="float", example=0, description="Hotspot yaw position"),
+     *                                             @OA\Property(property="pitch", type="number", format="float", example=0, description="Hotspot pitch position"),
+     *                                             @OA\Property(property="sceneId", type="string", nullable=true, example="scene2", description="Link to another scene ID")
+     *                                         )
+     *                                     )
+     *                                 )
+     *                             )
+     *                         )
+     *                     )
+     *                 )
+     *             ),
      *             @OA\Property(property="thumb", type="string", nullable=true, maxLength=255, example="upload/2/136/250826-136-1-18548.jpg", description="Thumbnail image path"),
      *             @OA\Property(property="status", type="string", nullable=true, example="draft", description="Panorama status (draft or publish)"),
      *         )
@@ -152,22 +243,20 @@ class ManagePanoramaController extends ApiController
 
             $idUser = Auth::id();
 
-            $ipanorama =  $this->model->create([
+            $code = $request->code ? json_encode($request->code) : null;
+            $json_data = $request->json_data ? json_encode($request->json_data) : null;
+
+            $data = [
                 'user_id' => $idUser,
                 'create_user' => $idUser,
                 'title' => $request->title,
-                'code' => $request->has('code') ? (is_string($request->code) ? $request->code : json_encode($request->code)) : null,
-                'json_data' => $request->has('json_data') ? (is_string($request->json_data) ? $request->json_data : json_encode($request->json_data)) : null,
+                'code' => $code,
+                'json_data' => $json_data,
                 'thumb' => $request->thumb ?? null,
                 'status' => $request->status ?? 'draft',
-            ]);
+            ];
 
-            $urlWithId = route('user.panorama.edit', [
-                'id' => $ipanorama->id,
-                'user_id' => $idUser,
-                'page' => $request->input('page'),
-                'wstep' => $request->input('wstep'),
-            ]);
+            $ipanorama =  $this->model->create($data);
 
             return response()->json([
                 'status' => true,
@@ -182,7 +271,7 @@ class ManagePanoramaController extends ApiController
             }
             return response()->json([
                 'status' => false,
-                'message' => 'Data failed to save',
+                'message' => $message,
             ], $statusCode);
         }
     }
@@ -210,8 +299,8 @@ class ManagePanoramaController extends ApiController
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="user_id", type="integer", example=5),
      *                 @OA\Property(property="title", type="string", example="Vtour Title"),
-     *                 @OA\Property(property="code", type="string", example="{}"),
-     *                 @OA\Property(property="json_data", type="string", example="{}"),
+     *                 @OA\Property(property="code", type="object", nullable=true, example={"theme":"ipnrm-theme-default","autoLoad":true}),
+     *                 @OA\Property(property="json_data", type="object", nullable=true, example={"id":"ipanorama_config__ipanorama_config","name":"ipanorama_config","config":{"theme":"ipnrm-theme-default","autoLoad":true}}),
      *                 @OA\Property(property="thumb", type="string", example="upload/2/136/250826-136-1-18548.jpg"),
      *                 @OA\Property(property="status", type="string", example="draft"),
      *                 @OA\Property(property="create_user", type="integer", example=5),
@@ -252,6 +341,9 @@ class ManagePanoramaController extends ApiController
 
             // Add scenes field to panorama
             $panorama->scenes = $this->extractScenes($panorama);
+            
+            // Decode JSON fields to objects
+            $this->decodeJsonFields($panorama);
 
             return response()->json([
                 'status' => true,
@@ -330,29 +422,26 @@ class ManagePanoramaController extends ApiController
      *     )
      * )
      */
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         try {
-            $attr = $request->except('id');
-            $attr['code']['autoLoad'] = true;
-
-            if ($attr == null) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Data failed to update',
-                ], 400);
-            }
-
-            $id = $request->id;
-
-            if (!Auth::user()->isAdmin() && Auth::user()->checkUserIpanoramaPlan()) {
-                $attr['status'] = 'publish';
-            }
-            $panorama = $this->model::find($id);
+            $panorama = $this->model->find($id);
 
             $this->isValidAccess($panorama->user_id);
 
-            $panorama->update($attr);
+            $data = $request->all();
+            
+            if ($request['status'] == 'publish') {
+                if (!Auth::user()->checkUserIpanoramaPlan()) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'User not have plan',
+                        'redirect' => route('user.plan'),
+                    ], 400);
+                }
+            }
+
+            $panorama->update($data);
 
             return response()->json([
                 'status' => true,
@@ -360,6 +449,7 @@ class ManagePanoramaController extends ApiController
                 'data' => $panorama,
             ], 200);
         } catch (\Exception $e) {
+            logger($e);
             $statusCode = $e->getCode() ?: 500;
             $message = 'Something went wrong';
             if ($statusCode == 403) {
@@ -367,7 +457,7 @@ class ManagePanoramaController extends ApiController
             }
             return response()->json([
                 'status' => false,
-                'message' => 'Data failed to update',
+                'message' => $message,
             ], $statusCode);
         }
     }
@@ -605,108 +695,6 @@ class ManagePanoramaController extends ApiController
     }
 
     /**
-     * @OA\Post(
-     *     path="/api/user/vtour/{id}/update-json-data",
-     *     tags={"Vtour"},
-     *     summary="Update JSON data",
-     *     description="Update JSON data of a vtour",
-     *     security={{"sanctum":{}}},
-     *     @OA\Parameter(
-     *         name="id",
-     *         in="path",
-     *         required=true,
-     *         @OA\Schema(type="integer")
-     *     ),
-     *     @OA\RequestBody(
-     *         required=true,
-     *         @OA\JsonContent(
-     *             required={"data"},
-     *             @OA\Property(property="data", type="string", description="JSON data to update")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Data updated successfully",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=true),
-     *             @OA\Property(property="message", type="string", example="Data processed successfully"),
-     *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="id", type="integer", example=1),
-     *                 @OA\Property(property="user_id", type="integer", example=5),
-     *                 @OA\Property(property="title", type="string", example="Vtour Title"),
-     *                 @OA\Property(property="code", type="string", example="{}"),
-     *                 @OA\Property(property="json_data", type="string", example="{}"),
-     *                 @OA\Property(property="thumb", type="string", example="upload/2/136/250826-136-1-18548.jpg"),
-     *                 @OA\Property(property="status", type="string", example="draft"),
-     *                 @OA\Property(property="create_user", type="integer", example=5),
-     *                 @OA\Property(property="update_user", type="integer", example=5),
-     *             ),
-     *             @OA\Property(property="attr", type="object", description="Original request data")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=400,
-     *         description="Data failed to update",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="string", example="error"),
-     *             @OA\Property(property="message", type="string", example="Data failed to process")
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=500,
-     *         description="Data failed to update",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Data failed to process")
-     *         )
-     *     )
-     * )
-     */
-    public function updateJsonData(Request $request)
-    {
-        try {
-            $attr = json_decode($request->getContent());
-
-            if ($attr == null) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Data failed to process',
-                ], 400);
-            }
-
-            $id = $attr->id;
-
-            $jsonData = json_decode($attr->data);
-            $jsonData->config->autoLoad = true;
-            $jsonData = json_encode($jsonData);
-
-            $panorama = $this->model::find($id);
-
-            $this->isValidAccess($panorama->user_id);
-
-            $panorama->json_data = $jsonData;
-            $panorama->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Data processed successfully',
-                'data' => $panorama,
-                'attr' => $attr,
-            ]);
-        } catch (\Exception $e) {
-            $statusCode = $e->getCode() ?: 500;
-            $message = 'Something went wrong';
-            if ($statusCode == 403) {
-                $message = 'You do not have permission to access this data';
-            }
-            return response()->json([
-                'status' => false,
-                'message' => $message
-            ], $statusCode);
-        }
-    }
-
-    /**
      * @OA\Get(
      *     path="/api/user/vtour/{id}/get-files",
      *     tags={"Vtour"},
@@ -912,6 +900,25 @@ class ManagePanoramaController extends ApiController
         }
         
         return $scenes;
+    }
+
+    /**
+     * Decode JSON fields from string to object
+     *
+     * @param object $panorama
+     * @return void
+     */
+    protected function decodeJsonFields($panorama)
+    {
+        if (!empty($panorama->code) && is_string($panorama->code)) {
+            $decoded = json_decode($panorama->code);
+            $panorama->code = $decoded !== null ? $decoded : $panorama->code;
+        }
+        
+        if (!empty($panorama->json_data) && is_string($panorama->json_data)) {
+            $decoded = json_decode($panorama->json_data);
+            $panorama->json_data = $decoded !== null ? $decoded : $panorama->json_data;
+        }
     }
 
     /**

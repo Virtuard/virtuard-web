@@ -245,7 +245,6 @@ Route::group([
         Route::put('/{id}', [ManagePanoramaController::class, 'update']);
         Route::delete('/{id}', [ManagePanoramaController::class, 'delete']);
         Route::post('/{id}/add-image', [ManagePanoramaController::class, 'addImage']);
-        Route::post('/{id}/update-json-data', [ManagePanoramaController::class, 'updateJsonData']);
         Route::get('/{id}/get-files', [ManagePanoramaController::class, 'getFiles']);
     });
 });
