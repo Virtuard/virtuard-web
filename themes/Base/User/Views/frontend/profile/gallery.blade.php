@@ -187,19 +187,19 @@
 
                 {{-- Comment Modal --}}
                 <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto";>
-                        <div class="modal-content" style="max-height: 90vh; width: 100vw; max-width: none;">
-                            <div class="modal-header" style="max-height: 90vh;">
+                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto;">
+                        <div class="modal-content" style="height: 90vh; max-width: 1200px;">
+                            <div class="modal-header">
                                 <h5 class="modal-title">{{ __('Post') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body p-0" style="overflow-y: auto; height: calc(100% - 60px);">
-                                <div class="row no-gutters" style="min-height: 500px;">
-                                    {{-- Left Side - Post Media --}}
+                            <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
+                                <div class="row no-gutters" style="height: 100%;">
+                                    {{-- Left Side - Post Media (FIXED, NO SCROLL) --}}
                                     <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
-                                         style="min-height: 400px;">
+                                         style="height: 100%;">
                                         @php
                                             $firstMedia = $post->medias->first();
                                         @endphp
@@ -258,12 +258,12 @@
                                         @endif
                                     </div>
 
-                                    {{-- Right Side - Comments Section (Bottom on mobile) --}}
-                                    <div class="col-12 col-md-6 d-flex flex-column bg-white" style="min-height: 400px;">
+                                    {{-- Right Side - Comments Section --}}
+                                    <div class="col-12 col-md-6 d-flex flex-column bg-white" style="height: 100%;">
 
-                                        {{-- Comments List --}}
-                                        <div id="commentsList{{ $post->id }}" class="flex-grow-1 p-3 bg-white"
-                                             style="overflow-y: auto; flex: 1; max-height: 100%;">
+                                        {{-- Comments List (SCROLLABLE AREA) --}}
+                                        <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
+                                             style="overflow-y: auto; flex: 1 1 auto; height: 0;">
 
                                             @forelse($post->comments as $comment)
                                                 <div class="mb-3 comment-item">
@@ -291,7 +291,7 @@
                                             @endforelse
                                         </div>
 
-                                        {{-- Like & Comment Count --}}
+                                        {{-- Like & Comment Count (FIXED) --}}
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                             <div class="d-flex justify-content-between">
                                 <span>
@@ -301,7 +301,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Comment Form --}}
+                                        {{-- Comment Form (FIXED) --}}
                                         <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
                                             @auth
                                                 <form action="{{ route('post.comment.store', $post->id) }}"

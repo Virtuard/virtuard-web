@@ -65,105 +65,99 @@
                     </div>
                 </div>
 
-                {{-- Comment Modal --}}
-                <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto">
-                        <div class="modal-content" style="max-height: 90vh; width: 100vw; max-width: none;">
-                            <div class="modal-header" style="max-height: 90vh;">
-                                <h5 class="modal-title">{{ __('Post') }}</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body p-0" style="overflow-y: auto; height: calc(100% - 60px);">
-                                <div class="row no-gutters" style="min-height: 500px;">
-                                    {{-- Left Side - 360 Panorama --}}
-                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
-                                         style="min-height: 400px;">
-                                        <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
-                                    </div>
-
-                                    {{-- Right Side - Comments Section --}}
-                                    <div class="col-12 col-md-6 d-flex flex-column bg-white" style="min-height: 400px;">
-
-                                        {{-- Comments List --}}
-                                        <div id="commentsList{{ $post->id }}" class="flex-grow-1 p-3 bg-white"
-                                             style="overflow-y: auto; flex: 1; max-height: 100%;">
-
-                                            @forelse($post->comments as $comment)
-                                                <div class="mb-3 comment-item">
-                                                    <div class="d-flex">
-                                                        <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
-                                                             alt="User"
-                                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                                                        <div class="ml-2 flex-grow-1">
-                                                            <div class="bg-light p-2 rounded">
-                                                                <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
-                                                                    {{ $comment->user->display_name ?? $comment->user->name }}
-                                                                </p>
-                                                                <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
-                                                            </div>
-                                                            <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
-                                                                {{ $comment->created_at->diffForHumans() }}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @empty
-                                                <p id="noComments{{ $post->id }}" class="text-center text-muted">
-                                                    {{ __('No comments yet. Be the first to comment!') }}
-                                                </p>
-                                            @endforelse
+                    {{-- Comment Modal --}}
+                    <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto;">
+                            <div class="modal-content" style="height: 90vh; max-width: 1200px;">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">{{ __('Post') }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
+                                    <div class="row no-gutters" style="height: 100%;">
+                                        {{-- Left Side - 360 Panorama (FIXED, NO SCROLL) --}}
+                                        <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
+                                             style="height: 100%;">
+                                            <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
                                         </div>
 
-                                        {{-- Like & Comment Count --}}
-                                        <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
-                                            <div class="d-flex justify-content-between">
-                                                <span>
-                                                    <i class="fa fa-heart text-danger"></i> 
-                                                    <strong class="like-count-modal-{{ $post->id }}">{{ $post->likes->count() }}</strong> {{ __('likes') }}
-                                                </span>
+                                        {{-- Right Side - Comments Section --}}
+                                        <div class="col-12 col-md-6 d-flex flex-column bg-white" style="height: 100%;">
+
+                                            {{-- Comments List (SCROLLABLE AREA) --}}
+                                            <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
+                                                 style="overflow-y: auto; flex: 1 1 auto; height: 0;">
+
+                                                @forelse($post->comments as $comment)
+                                                    <div class="mb-3 comment-item">
+                                                        <div class="d-flex">
+                                                            <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
+                                                                 alt="User"
+                                                                 style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                            <div class="ml-2 flex-grow-1">
+                                                                <div class="bg-light p-2 rounded">
+                                                                    <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
+                                                                        {{ $comment->user->display_name ?? $comment->user->name }}
+                                                                    </p>
+                                                                    <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
+                                                                </div>
+                                                                <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                                    {{ $comment->created_at->diffForHumans() }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @empty
+                                                    <p id="noComments{{ $post->id }}" class="text-center text-muted">
+                                                        {{ __('No comments yet. Be the first to comment!') }}
+                                                    </p>
+                                                @endforelse
+                                            </div>
+
+                                            {{-- Like & Comment Count (FIXED) --}}
+                                            <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                                 <span>
                                                     <i class="fa fa-comment"></i> 
                                                     <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
                                                 </span>
                                             </div>
-                                        </div>
 
-                                        {{-- Comment Form --}}
-                                        <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
-                                            @auth
-                                                <form action="{{ route('post.comment.store', $post->id) }}"
-                                                      method="POST"
-                                                      class="virtual-tour-comment-form"
-                                                      data-post-id="{{ $post->id }}">
-                                                    @csrf
-                                                    <div class="input-group">
-                                                        <input type="text"
-                                                               name="comment"
-                                                               class="form-control border-0"
-                                                               placeholder="{{ __('Write a comment...') }}"
-                                                               style="background: #f0f2f5;"
-                                                               required>
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-primary" type="submit">
-                                                                <i class="fa fa-paper-plane"></i>
-                                                            </button>
+                                            {{-- Comment Form (FIXED) --}}
+                                            <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
+                                                @auth
+                                                    <form action="{{ route('post.comment.store', $post->id) }}"
+                                                          method="POST"
+                                                          class="virtual-tour-comment-form"
+                                                          data-post-id="{{ $post->id }}">
+                                                        @csrf
+                                                        <div class="input-group">
+                                                            <input type="text"
+                                                                   name="comment"
+                                                                   class="form-control border-0"
+                                                                   placeholder="{{ __('Write a comment...') }}"
+                                                                   style="background: #f0f2f5;"
+                                                                   required>
+                                                            <div class="input-group-append">
+                                                                <button class="btn btn-primary" type="submit">
+                                                                    <i class="fa fa-paper-plane"></i>
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </form>
-                                            @else
-                                                <p class="text-center text-muted mb-0">
-                                                    <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
-                                                </p>
-                                            @endauth
+                                                    </form>
+                                                @else
+                                                    <p class="text-center text-muted mb-0">
+                                                        <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
+                                                    </p>
+                                                @endauth
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             @endif
         @endforeach
     </div>
