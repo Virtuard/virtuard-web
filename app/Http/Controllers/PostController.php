@@ -208,6 +208,12 @@ class PostController extends Controller
         } else {
             $postLike->delete();
         }
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+            ]);
+        }
         return redirect()->to(url()->previous() . '#Post-' . $id);
     }
 
