@@ -796,7 +796,7 @@ class ManagePanoramaController extends ApiController
                 'status' => true,
                 'message' => 'Files retrieved successfully',
                 'data' => $result
-            ]);
+            ], 200, [], JSON_UNESCAPED_SLASHES);
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             $message = 'Something went wrong';

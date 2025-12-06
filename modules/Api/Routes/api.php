@@ -198,7 +198,7 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function (
 Route::get('attributes', [AttributeController::class, 'index'])->middleware(['auth:sanctum']);
 
 Route::get('user/vtour', [ManagePanoramaController::class, 'index']);
-Route::get('/{id}', [ManagePanoramaController::class, 'show']);
+Route::get('user/vtour/{id}', [ManagePanoramaController::class, 'show']);
 
 // User Group Access
 Route::group([
