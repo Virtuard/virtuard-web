@@ -197,6 +197,9 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:sanctum'],], function (
 
 Route::get('attributes', [AttributeController::class, 'index'])->middleware(['auth:sanctum']);
 
+Route::get('user/vtour', [ManagePanoramaController::class, 'index']);
+Route::get('/{id}', [ManagePanoramaController::class, 'show']);
+
 // User Group Access
 Route::group([
     'prefix' => 'user',
@@ -239,8 +242,6 @@ Route::group([
     Route::group([
         'prefix' => 'vtour',
     ], function () {
-        Route::get('/', [ManagePanoramaController::class, 'index']);
-        Route::get('/{id}', [ManagePanoramaController::class, 'show']);
         Route::post('/', [ManagePanoramaController::class, 'store']);
         Route::put('/{id}', [ManagePanoramaController::class, 'update']);
         Route::delete('/{id}', [ManagePanoramaController::class, 'delete']);
