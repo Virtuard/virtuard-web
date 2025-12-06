@@ -967,8 +967,10 @@ class ManagePanoramaController extends ApiController
 
     protected function isValidAccess($user_id)
     {
-        if (auth()->user()->id !== $user_id) {
-            throw new \Exception('You do not have permission to access this data', 403);
+        if (auth()->user()->isAdmin() || auth()->user()->id === $user_id) {
+            return true;
         }
+        
+        throw new \Exception('You do not have permission to access this data', 403);
     }
 }
