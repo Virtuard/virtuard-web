@@ -192,7 +192,7 @@ class VirtuardController extends Controller
         if(!auth()->user()->isAdmin() && auth()->user()->checkUserIpanoramaPlan()) {
             $attr['status'] = 'publish';
         }
-        $panorama->update($attr);
+        $panorama->update($data);
 
         return response()->json([
             'status' => 'success',

@@ -117,10 +117,6 @@ class Virtuard360Controller extends Controller
         $attr['status'] = 'draft';
         
         $row = $this->model->create($attr);
-        
-        $row->update([
-            
-        ]);
 
         return redirect(route('admin.virtuard360.edit', ['id' => $row->id,'user_id' => $row->create_user]))->with('success', __('Virtuard 360 updated'));
     }
