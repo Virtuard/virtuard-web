@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class ManagePanoramaController extends ApiController
 {
@@ -73,7 +74,7 @@ class ManagePanoramaController extends ApiController
         
         // Add scenes field to each panorama and decode JSON fields
         $panoramas->transform(function ($panorama) {
-            $panorama->scenes = $this->extractScenes($panorama);
+            $panorama->scenes = $this->extractScenes($panorama, true); // Use relative path for index
             $this->decodeJsonFields($panorama);
             return $panorama;
         });
@@ -340,7 +341,7 @@ class ManagePanoramaController extends ApiController
             // $this->isValidAccess($panorama->user_id);
 
             // Add scenes field to panorama
-            $panorama->scenes = $this->extractScenes($panorama);
+            $panorama->scenes = $this->extractScenes($panorama, true); // Use relative path for show
             
             // Decode JSON fields to objects
             $this->decodeJsonFields($panorama);
@@ -696,16 +697,16 @@ class ManagePanoramaController extends ApiController
 
     /**
      * @OA\Get(
-     *     path="/api/user/vtour/{id}/get-files",
+     *     path="/api/user/vtour/get-files/{user_id}",
      *     tags={"Vtour"},
      *     summary="Get files for image selection",
-     *     description="Get list of uploaded images for a specific vtour panorama",
+     *     description="Get list of uploaded images organized by directory and root files for a specific user",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="id",
+     *         name="user_id",
      *         in="path",
      *         required=true,
-     *         @OA\Schema(type="integer", description="Panorama ID")
+     *         @OA\Schema(type="integer", description="User ID")
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -715,18 +716,47 @@ class ManagePanoramaController extends ApiController
      *             @OA\Property(property="message", type="string", example="Files retrieved successfully"),
      *             @OA\Property(property="data", type="array",
      *                 @OA\Items(
-     *                     @OA\Property(property="filename", type="string", example="250826-136-2-18548.jpg"),
-     *                     @OA\Property(property="full_path", type="string", example="/uploads/ipanoramaBuilder/upload/2/136/250826-136-2-18548.jpg"),
-     *                 )
+     *                     oneOf={
+     *                         @OA\Schema(
+     *                             type="object",
+     *                             @OA\Property(property="type", type="string", example="directory"),
+     *                             @OA\Property(property="name", type="string", example="147"),
+     *                             @OA\Property(property="files", type="array",
+     *                                 @OA\Items(
+     *                                     type="object",
+     *                                     @OA\Property(property="type", type="string", example="file"),
+     *                                     @OA\Property(property="name", type="string", example="251020-147-2-4.png")
+     *                                 )
+     *                             )
+     *                         ),
+     *                         @OA\Schema(
+     *                             type="object",
+     *                             @OA\Property(property="type", type="string", example="file"),
+     *                             @OA\Property(property="name", type="string", example="boat.jpg")
+     *                         )
+     *                     }
+     *                 ),
+     *                 example={
+     *                     {
+     *                         "type": "directory",
+     *                         "name": "147",
+     *                         "files": {
+     *                             {
+     *                                 "type": "file",
+     *                                 "name": "251020-147-2-4.png"
+     *                             },
+     *                             {
+     *                                 "type": "file",
+     *                                 "name": "251020-147-2-5.png"
+     *                             }
+     *                         }
+     *                     },
+     *                     {
+     *                         "type": "file",
+     *                         "name": "boat.jpg"
+     *                     }
+     *                 }
      *             )
-     *         )
-     *     ),
-     *     @OA\Response(
-     *         response=404,
-     *         description="Panorama not found",
-     *         @OA\JsonContent(
-     *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Panorama not found")
      *         )
      *     ),
      *     @OA\Response(
@@ -739,64 +769,62 @@ class ManagePanoramaController extends ApiController
      *     )
      * )
      */
-    public function getFiles(Request $request, $id)
+    public function getFiles(Request $request, $user_id)
     {
         try {
-            // Validate panorama exists and user has access
-            $panorama = $this->model::find($id);
-
-            if (!$panorama) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Panorama not found'
-                ], 404);
-            }
-
-            // Check if user has access to this panorama
-            $user_id = auth()->user()->id;
-            $this->isValidAccess($panorama->user_id);
-
-            // Build directory path
-            $directory = public_path("uploads/ipanoramaBuilder/upload/{$user_id}/{$id}");
-
-            // Check if directory exists
-            if (!is_dir($directory)) {
-                return response()->json([
-                    'status' => true,
-                    'message' => 'No files found',
-                    'data' => []
-                ]);
-            }
-
             $result = [];
+            $directory = public_path("uploads/ipanoramaBuilder/upload/{$user_id}");
+            $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
 
-            // Get all image files from the directory
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+            if (File::exists($directory)) {
+                $folders = File::directories($directory);
 
-            foreach (glob($directory . '/*.*') as $file) {
-                $extension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+                foreach ($folders as $folderPath) {
+                    $folderName = basename($folderPath);
+                    $folderFiles = [];
 
-                if (in_array($extension, $allowedExtensions)) {
-                    $filename = basename($file);
-                    $relativePath = "uploads/ipanoramaBuilder/upload/{$user_id}/{$id}/{$filename}";
+                    $files = File::files($folderPath);
 
-                    $result[] = [
-                        'filename' => $filename,
-                        'full_path' => '/' . $relativePath,
-                    ];
+                    foreach ($files as $file) {
+                        $extension = strtolower($file->getExtension());
+                        
+                        if (in_array($extension, $allowedExtensions)) {
+                            $folderFiles[] = [
+                                'type' => 'file',
+                                'name' => $file->getFilename()
+                            ];
+                        }
+                    }
+
+                    if (!empty($folderFiles)) {
+                        $result[] = [
+                            'type' => 'directory',
+                            'name' => $folderName,
+                            'files' => $folderFiles
+                        ];
+                    }
+                }
+
+                $rootFiles = File::files($directory);
+
+                foreach ($rootFiles as $file) {
+                    $extension = strtolower($file->getExtension());
+                    
+                    if (in_array($extension, $allowedExtensions)) {
+                        $result[] = [
+                            'type' => 'file',
+                            'name' => $file->getFilename()
+                        ];
+                    }
                 }
             }
-
-            // Sort by creation time (newest first)
-            usort($result, function ($a, $b) {
-                return strtotime($b['created_at']) - strtotime($a['created_at']);
-            });
 
             return response()->json([
                 'status' => true,
                 'message' => 'Files retrieved successfully',
                 'data' => $result
             ], 200, [], JSON_UNESCAPED_SLASHES);
+
         } catch (\Exception $e) {
             $statusCode = $e->getCode() ?: 500;
             $message = 'Something went wrong';
@@ -814,20 +842,21 @@ class ManagePanoramaController extends ApiController
      * Extract scenes from panorama data
      *
      * @param object $panorama
+     * @param bool $useRelativePath Whether to use relative path (from uploads) instead of full URL
      * @return array
      */
-    protected function extractScenes($panorama)
+    protected function extractScenes($panorama, $useRelativePath = false)
     {
         $scenes = [];
         
         // Try to extract scenes from code field first
         if (!empty($panorama->code)) {
-            $scenes = $this->extractScenesFromCode($panorama);
+            $scenes = $this->extractScenesFromCode($panorama, $useRelativePath);
         }
         
         // If no scenes found in code, try json_data
         if (empty($scenes) && !empty($panorama->json_data)) {
-            $scenes = $this->extractScenesFromJsonData($panorama);
+            $scenes = $this->extractScenesFromJsonData($panorama, $useRelativePath);
         }
         
         return $scenes;
@@ -837,9 +866,10 @@ class ManagePanoramaController extends ApiController
      * Extract scenes from code field
      *
      * @param object $panorama
+     * @param bool $useRelativePath Whether to use relative path (from uploads) instead of full URL
      * @return array
      */
-    protected function extractScenesFromCode($panorama)
+    protected function extractScenesFromCode($panorama, $useRelativePath = false)
     {
         $scenes = [];
         $code = json_decode($panorama->code);
@@ -850,7 +880,9 @@ class ManagePanoramaController extends ApiController
         
         foreach ($code->scenes as $sceneId => $scene) {
             if (isset($scene->image)) {
-                $imageUrl = $this->buildImageUrl($scene->image, $panorama);
+                $imageUrl = $useRelativePath 
+                    ? $this->buildImagePath($scene->image, $panorama)
+                    : $this->buildImageUrl($scene->image, $panorama);
                 $scenes[] = [
                     'id' => $sceneId,
                     'image' => $imageUrl,
@@ -865,9 +897,10 @@ class ManagePanoramaController extends ApiController
      * Extract scenes from json_data field
      *
      * @param object $panorama
+     * @param bool $useRelativePath Whether to use relative path (from uploads) instead of full URL
      * @return array
      */
-    protected function extractScenesFromJsonData($panorama)
+    protected function extractScenesFromJsonData($panorama, $useRelativePath = false)
     {
         $scenes = [];
         $jsonData = json_decode($panorama->json_data);
@@ -891,7 +924,9 @@ class ManagePanoramaController extends ApiController
             }
             
             if ($imageUrl) {
-                $imageUrl = $this->buildImageUrl($imageUrl, $panorama);
+                $imageUrl = $useRelativePath 
+                    ? $this->buildImagePath($imageUrl, $panorama)
+                    : $this->buildImageUrl($imageUrl, $panorama);
                 $scenes[] = [
                     'id' => is_numeric($index) ? (string)$index : $index,
                     'image' => $imageUrl,
@@ -919,6 +954,47 @@ class ManagePanoramaController extends ApiController
             $decoded = json_decode($panorama->json_data);
             $panorama->json_data = $decoded !== null ? $decoded : $panorama->json_data;
         }
+    }
+
+    /**
+     * Build relative path for image (from uploads)
+     *
+     * @param string $imageUrl
+     * @param object $panorama
+     * @return string
+     */
+    protected function buildImagePath($imageUrl, $panorama)
+    {
+        // If already a full URL, extract the path
+        if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+            $parsedUrl = parse_url($imageUrl);
+            $path = isset($parsedUrl['path']) ? ltrim($parsedUrl['path'], '/') : '';
+            // If path starts with uploads/, return it
+            if (strpos($path, 'uploads/') === 0) {
+                return $path;
+            }
+        }
+        
+        // Clean the imageUrl - remove leading/trailing slashes and normalize
+        $imageUrl = trim($imageUrl, '/');
+        
+        // If it's already a path starting with uploads/, normalize and return
+        if (strpos($imageUrl, 'uploads/') === 0) {
+            return preg_replace('#/+#', '/', $imageUrl);
+        }
+        
+        // Remove common prefixes that might be in the stored path
+        $imageUrl = preg_replace('#^(upload/|ipanoramaBuilder/upload/|uploads/ipanoramaBuilder/upload/)#', '', $imageUrl);
+        
+        // Remove user_id and panorama_id if already in the path
+        $pattern = '#^' . preg_quote($panorama->user_id, '#') . '/' . preg_quote($panorama->id, '#') . '/#';
+        $imageUrl = preg_replace($pattern, '', $imageUrl);
+        
+        // Build clean path
+        $cleanPath = 'uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $panorama->id . '/' . $imageUrl;
+        
+        // Normalize double slashes in path
+        return preg_replace('#/+#', '/', $cleanPath);
     }
 
     /**
