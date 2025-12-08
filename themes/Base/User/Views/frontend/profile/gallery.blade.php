@@ -208,22 +208,15 @@
                                             @if($firstMedia->type == 'image')
                                                 @if($firstMedia->is_360_media)
                                                     {{-- 360 Image --}}
-                                                    <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
-                                                    <script>
-                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                            pannellum.viewer('panorama-modal-{{ $post->id }}', {
-                                                                "type": "equirectangular",
-                                                                "panorama": "/uploads/{{ $firstMedia->media }}",
-                                                                "autoLoad": true,
-                                                                "showZoomCtrl": true
-                                                            });
-                                                        });
-                                                    </script>
+                                                    <div id="panorama-modal-{{ $post->id }}"
+                                                         data-url="/uploads/{{ $firstMedia->media }}"
+                                                         style="width: 100%; height: 100%;">
+                                                    </div>
                                                 @else
                                                     {{-- Regular Image --}}
                                                     <img src="{{ asset('uploads/' . $firstMedia->media) }}"
                                                          alt="Post"
-                                                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                         style="width: 100%; height: 100%; object-fit: cover;">
                                                 @endif
                                             @elseif($firstMedia->type == 'video')
                                                 {{-- Video --}}
@@ -731,7 +724,43 @@
     <script>
         $(document).ready(function() {
             handleLikeButtons();
+            handleInitial360MediaModal();
         });
+        
+        function handleInitial360MediaModal() {
+            var panoramaViewers = {};
+            
+            $('[id^="commentModal"]').on('shown.bs.modal', function() {
+                var postId = $(this).attr('id').replace('commentModal', '');
+                var containerId = 'panorama-modal-' + postId;
+                var container = $('#' + containerId);
+
+                if (container.length && container.data('url') && !panoramaViewers[postId]) {
+                    setTimeout(function() {
+                        try {
+                            panoramaViewers[postId] = pannellum.viewer(containerId, {
+                                "type": "equirectangular",
+                                "panorama": container.data('url'),
+                                "autoLoad": true,
+                                "showZoomCtrl": true
+                            });
+                        } catch(e) {
+                            console.error('Panorama error:', e);
+                        }
+                    }, 150);
+                }
+            });
+            
+            $('[id^="commentModal"]').on('hidden.bs.modal', function() {
+                var postId = $(this).attr('id').replace('commentModal', '');
+                if (panoramaViewers[postId]) {
+                    try {
+                        panoramaViewers[postId].destroy();
+                    } catch(e) {}
+                    delete panoramaViewers[postId];
+                }
+            });
+        }
 
         function handleLikeButtons() {
             $('.action-btn').on('click', function(e) {
