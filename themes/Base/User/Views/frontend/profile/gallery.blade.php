@@ -198,8 +198,7 @@
                             <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
                                 <div class="row no-gutters" style="height: 100%;">
                                     {{-- Left Side - Post Media (FIXED, NO SCROLL) --}}
-                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
-                                         style="height: 100%;">
+                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
                                         @php
                                             $firstMedia = $post->medias->first();
                                         @endphp
@@ -252,7 +251,7 @@
                                     </div>
 
                                     {{-- Right Side - Comments Section --}}
-                                    <div class="col-12 col-md-6 d-flex flex-column bg-white" style="height: 100%;">
+                                    <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
 
                                         {{-- Comments List (SCROLLABLE AREA) --}}
                                         <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
@@ -708,6 +707,16 @@
 
         .custom-fullscreen-btn:hover {
             background: rgba(0, 0, 0, 0.8);
+        }
+        @media (max-width: 767px) {
+
+            .modal .panorama-side {
+            height: 40vh !important; 
+            }
+            .modal .comments-side {
+                height: calc(60vh - 60px) !important; 
+            }
+
         }
     </style>
 

@@ -78,13 +78,12 @@
                                 <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
                                     <div class="row no-gutters" style="height: 100%;">
                                         {{-- Left Side - 360 Panorama (FIXED, NO SCROLL) --}}
-                                        <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
-                                             style="height: 100%;">
+                                        <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
                                             <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
                                         </div>
-
-                                        {{-- Right Side - Comments Section --}}
-                                        <div class="col-12 col-md-6 d-flex flex-column bg-white" style="height: 100%;">
+                                        
+                                        <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
+                                        
 
                                             {{-- Comments List (SCROLLABLE AREA) --}}
                                             <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
@@ -587,6 +586,16 @@
         .action-btn-wrapper {
             gap: 6px;
         }
+        }
+        @media (max-width: 767px) {
+
+        .modal .panorama-side {
+        height: 40vh !important;
+    }
+        .modal .comments-side {
+            height: calc(50vh - 60px) !important; 
+        }
+
     }
 
     .col-4 {
