@@ -67,7 +67,7 @@
 
                     {{-- Comment Modal --}}
                     <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto;">
+                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                             <div class="modal-content" style="height: 90vh; max-width: 1200px;">
                                 <div class="modal-header">
                                     <h5 class="modal-title">{{ __('Post') }}</h5>
@@ -587,16 +587,22 @@
             gap: 6px;
         }
         }
+        .modal-dialog.modal-dialog-centered.modal-xl {
+            max-height: 90vh; 
+            margin: 1.75rem auto;
+        }
         @media (max-width: 767px) {
 
-        .modal .panorama-side {
-        height: 40vh !important;
-    }
-        .modal .comments-side {
-            height: calc(50vh - 60px) !important; 
+            .modal .panorama-side {
+            height: 40vh !important; 
+            }
+            .modal .comments-side {
+                height: calc(50vh - 60px) !important; 
+            }
+            .modal-dialog.modal-dialog-centered.modal-xl {
+            margin: 0 auto !important;
         }
-
-    }
+        }
 
     .col-4 {
         padding-left: 5px;
