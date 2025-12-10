@@ -51,7 +51,10 @@
                                 </a>
                             @endauth
 
-                            <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
+                            <a href="#" class="action-btn comment-btn"
+                               data-toggle="modal"
+                               data-target="#commentModal{{ $post->id }}"
+                               data-target-mobile="#commentModalMobile{{ $post->id }}">
                                 <i class="fa fa-comment-o"></i>
                                 <span class="action-count">{{ $post->comments->count() }}</span>
                             </a>
@@ -65,98 +68,179 @@
                     </div>
                 </div>
 
-                    {{-- Comment Modal --}}
-                    <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
-                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                            <div class="modal-content" style="height: 90vh; max-width: 1200px;">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">{{ __('Post') }}</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
-                                    <div class="row no-gutters" style="height: 100%;">
-                                        {{-- Left Side - 360 Panorama (FIXED, NO SCROLL) --}}
-                                        <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
-                                            <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
-                                        </div>
-                                        
-                                        <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
-                                        
+                {{-- Comment Modal for Desktop --}}
+                <div class="modal fade comment-modal-desktop" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                        <div class="modal-content" style="height: 90vh; max-width: 1200px;">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ __('Post') }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
+                                <div class="row no-gutters" style="height: 100%;">
+                                    {{-- Left Side - 360 Panorama (DESKTOP ONLY) --}}
+                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
+                                        <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
+                                    </div>
 
-                                            {{-- Comments List (SCROLLABLE AREA) --}}
-                                            <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
-                                                 style="overflow-y: auto; flex: 1 1 auto; height: 0;">
+                                    {{-- Right Side - Comments Section --}}
+                                    <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
+                                        {{-- Comments List (SCROLLABLE AREA) --}}
+                                        <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
+                                             style="overflow-y: auto; flex: 1 1 auto; height: 0;">
 
-                                                @forelse($post->comments as $comment)
-                                                    <div class="mb-3 comment-item">
-                                                        <div class="d-flex">
-                                                            <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
-                                                                 alt="User"
-                                                                 style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                                                            <div class="ml-2 flex-grow-1">
-                                                                <div class="bg-light p-2 rounded">
-                                                                    <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
-                                                                        {{ $comment->user->display_name ?? $comment->user->name }}
-                                                                    </p>
-                                                                    <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
-                                                                </div>
-                                                                <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
-                                                                    {{ $comment->created_at->diffForHumans() }}
+                                            @forelse($post->comments as $comment)
+                                                <div class="mb-3 comment-item">
+                                                    <div class="d-flex">
+                                                        <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
+                                                             alt="User"
+                                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                        <div class="ml-2 flex-grow-1">
+                                                            <div class="bg-light p-2 rounded">
+                                                                <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
+                                                                    {{ $comment->user->display_name ?? $comment->user->name }}
                                                                 </p>
+                                                                <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
                                                             </div>
+                                                            <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                                {{ $comment->created_at->diffForHumans() }}
+                                                            </p>
                                                         </div>
                                                     </div>
-                                                @empty
-                                                    <p id="noComments{{ $post->id }}" class="text-center text-muted">
-                                                        {{ __('No comments yet. Be the first to comment!') }}
-                                                    </p>
-                                                @endforelse
-                                            </div>
+                                                </div>
+                                            @empty
+                                                <p id="noComments{{ $post->id }}" class="text-center text-muted">
+                                                    {{ __('No comments yet. Be the first to comment!') }}
+                                                </p>
+                                            @endforelse
+                                        </div>
 
-                                            {{-- Like & Comment Count (FIXED) --}}
-                                            <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
+                                        {{-- Like & Comment Count (FIXED) --}}
+                                        <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                                 <span>
                                                     <i class="fa fa-comment"></i> 
                                                     <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
                                                 </span>
-                                            </div>
+                                        </div>
 
-                                            {{-- Comment Form (FIXED) --}}
-                                            <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
-                                                @auth
-                                                    <form action="{{ route('post.comment.store', $post->id) }}"
-                                                          method="POST"
-                                                          class="virtual-tour-comment-form"
-                                                          data-post-id="{{ $post->id }}">
-                                                        @csrf
-                                                        <div class="input-group">
-                                                            <input type="text"
-                                                                   name="comment"
-                                                                   class="form-control border-0"
-                                                                   placeholder="{{ __('Write a comment...') }}"
-                                                                   style="background: #f0f2f5;"
-                                                                   required>
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-primary" type="submit">
-                                                                    <i class="fa fa-paper-plane"></i>
-                                                                </button>
-                                                            </div>
+                                        {{-- Comment Form (FIXED) --}}
+                                        <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
+                                            @auth
+                                                <form action="{{ route('post.comment.store', $post->id) }}"
+                                                      method="POST"
+                                                      class="virtual-tour-comment-form"
+                                                      data-post-id="{{ $post->id }}">
+                                                    @csrf
+                                                    <div class="input-group">
+                                                        <input type="text"
+                                                               name="comment"
+                                                               class="form-control border-0"
+                                                               placeholder="{{ __('Write a comment...') }}"
+                                                               style="background: #f0f2f5;"
+                                                               required>
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-primary" type="submit">
+                                                                <i class="fa fa-paper-plane"></i>
+                                                            </button>
                                                         </div>
-                                                    </form>
-                                                @else
-                                                    <p class="text-center text-muted mb-0">
-                                                        <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
-                                                    </p>
-                                                @endauth
-                                            </div>
+                                                    </div>
+                                                </form>
+                                            @else
+                                                <p class="text-center text-muted mb-0">
+                                                    <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
+                                                </p>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                {{-- Comment Modal for Mobile (COMMENTS ONLY) --}}
+                <div class="modal fade comment-modal-mobile" id="commentModalMobile{{ $post->id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%; margin: 0; height: 100vh;">
+                        <div class="modal-content" style="height: 100vh; border-radius: 0;">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ __('Comments') }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body p-0 d-flex flex-column" style="height: calc(100vh - 60px);">
+                                {{-- Comments List - scrollable area --}}
+                                <div id="commentsListMobile{{ $post->id }}" class="p-3 bg-white" style="overflow-y: auto; flex: 1 1 auto; min-height: 0;">
+                                    @forelse($post->comments as $comment)
+                                        <div class="mb-3 comment-item">
+                                            <div class="d-flex">
+                                                <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
+                                                     alt="User"
+                                                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                <div class="ml-2 flex-grow-1">
+                                                    <div class="bg-light p-2 rounded">
+                                                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
+                                                            {{ $comment->user->display_name ?? $comment->user->name }}
+                                                        </p>
+                                                        <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
+                                                    </div>
+                                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                        {{ $comment->created_at->diffForHumans() }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <p id="noCommentsMobile{{ $post->id }}" class="text-center text-muted">
+                                            {{ __('No comments yet. Be the first to comment!') }}
+                                        </p>
+                                    @endforelse
+                                </div>
+
+                                {{-- Comment Count - fixed --}}
+                                <div class="px-3 py-2 border-top border-bottom bg-white comment-count-section" style="flex: 0 0 auto;">
+                                    <div class="d-flex justify-content-between">
+                                            <span>
+                                                <i class="fa fa-comment"></i> 
+                                                <strong class="comment-count-mobile-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
+                                            </span>
+                                    </div>
+                                </div>
+
+                                {{-- Comment Form - fixed at bottom --}}
+                                <div class="comment-form-section bg-white" style="flex: 0 0 auto; padding: 20px 15px;">
+                                    @auth
+                                        <form action="{{ route('post.comment.store', $post->id) }}"
+                                              method="POST"
+                                              class="virtual-tour-comment-form-mobile"
+                                              data-post-id="{{ $post->id }}">
+                                            @csrf
+                                            <div class="input-group">
+                                                <input type="text"
+                                                       name="comment"
+                                                       class="form-control border-0"
+                                                       placeholder="{{ __('Write a comment...') }}"
+                                                       style="background: #f0f2f5; font-size: 16px; min-height: 44px; padding: 12px 15px;"
+                                                       required>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" type="submit" style="min-height: 44px; min-width: 54px;">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    @else
+                                        <p class="text-center text-muted mb-0">
+                                            <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
+                                        </p>
+                                    @endauth
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             @endif
         @endforeach
     </div>
@@ -239,13 +323,305 @@
     </div>
 </section>
 
+@push('css')
+    <style>
+        /* Hide mobile modal on desktop */
+        @media (min-width: 768px) {
+            .comment-modal-mobile {
+                display: none !important;
+            }
+        }
+
+        /* Hide desktop modal on mobile */
+        @media (max-width: 767px) {
+            .comment-modal-desktop {
+                display: none !important;
+            }
+        }
+
+        /* Mobile modal specific styles */
+        .comment-modal-mobile .modal-dialog {
+            max-width: 100%;
+            margin: 0;
+            height: 100vh;
+        }
+
+        .comment-modal-mobile .modal-content {
+            height: 100vh;
+            border-radius: 0;
+            border: none;
+        }
+
+        .comment-modal-mobile .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* Comments list - scrollable area */
+        [id^="commentsListMobile"] {
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            overflow-y: auto !important;
+            flex: 1 1 auto;
+            min-height: 0;
+        }
+
+        /* Comment count section - fixed */
+        .comment-modal-mobile .comment-count-section {
+            flex: 0 0 auto;
+            flex-shrink: 0;
+        }
+
+        /* Comment form section - fixed at bottom with more spacing */
+        .comment-modal-mobile .comment-form-section {
+            flex: 0 0 auto;
+            flex-shrink: 0;
+            padding: 20px 15px 20px 15px !important;
+            background: white;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        /* Safe area for devices with notch */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .comment-modal-mobile .comment-form-section {
+                padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
+            }
+        }
+
+        /* Comment input styling for mobile */
+        .virtual-tour-comment-form-mobile .form-control {
+            font-size: 16px !important; /* Prevents iOS zoom */
+            min-height: 44px;
+            padding: 12px 15px !important;
+        }
+
+        .virtual-tour-comment-form-mobile .btn {
+            min-height: 44px;
+            min-width: 54px;
+            padding: 10px 16px !important;
+        }
+
+        .delete-btn-wrapper {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
+        }
+
+        .delete-btn {
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-size: 16px;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 0, 0, 1);
+            transform: scale(1.1);
+            box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.5);
+        }
+
+        .action-btn-wrapper {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            z-index: 10;
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.05);
+            color: white;
+            text-decoration: none;
+        }
+
+        .action-btn.liked {
+            background: rgba(255, 20, 147, 0.8);
+            color: white;
+        }
+
+        .action-btn.liked:hover {
+            background: rgba(255, 20, 147, 1);
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        .action-count {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .comment-btn:hover {
+            background: rgba(0, 123, 255, 0.8);
+        }
+
+        .comment-item {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        /* Like animation */
+        .like-animation {
+            animation: likeHeart 0.6s ease-in-out;
+        }
+
+        @keyframes likeHeart {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.3);
+            }
+            50% {
+                transform: scale(0.9);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar styling for comments */
+        [id^="commentsList"]::-webkit-scrollbar,
+        [id^="commentsListMobile"]::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        [id^="commentsList"]::-webkit-scrollbar-track,
+        [id^="commentsListMobile"]::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        [id^="commentsList"]::-webkit-scrollbar-thumb,
+        [id^="commentsListMobile"]::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+
+        [id^="commentsList"]::-webkit-scrollbar-thumb:hover,
+        [id^="commentsListMobile"]::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            background: #f0f0f0;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gallery-item img {
+            height: 100%;
+            object-fit: fill;
+            transform: scale(0.5);
+            transform-origin: center center;
+            background-color: #f0f0f0;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-item img {
+                transform: scale(0.15);
+            }
+
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 12px;
+            }
+
+            .action-btn i {
+                font-size: 14px;
+            }
+
+            .action-count {
+                font-size: 11px;
+            }
+
+            .action-btn-wrapper {
+                gap: 6px;
+            }
+        }
+
+        .modal-dialog.modal-dialog-centered.modal-xl {
+            max-height: 90vh;
+            margin: 1.75rem auto;
+        }
+
+        @media (max-width: 767px) {
+            .modal .panorama-side {
+                height: 40vh !important;
+            }
+            .modal .comments-side {
+                height: calc(50vh - 60px) !important;
+            }
+            .modal-dialog.modal-dialog-centered.modal-xl {
+                margin: 0 auto !important;
+            }
+        }
+
+        .col-4 {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        .col-4.mb-2 {
+            margin-bottom: 5px;
+        }
+    </style>
+@endpush
+
 @push('js')
     <script>
         $(document).ready(function() {
             previewPanorama();
             initPanoramaModals();
             handleCommentForms();
+            handleMobileCommentForms();
             handleLikeButtons();
+            handleCommentButtons();
         });
 
         function previewPanorama() {
@@ -264,9 +640,9 @@
             })
         }
 
-        // Initialize panorama in comment modals
+        // Initialize panorama in comment modals (DESKTOP ONLY)
         function initPanoramaModals() {
-            $('[id^="commentModal"]').on('shown.bs.modal', function () {
+            $('[id^="commentModal"]:not([id*="Mobile"])').on('shown.bs.modal', function () {
                 let modalId = $(this).attr('id');
                 let postId = modalId.replace('commentModal', '');
                 let panoramaContainer = $('#panorama-modal-' + postId);
@@ -287,7 +663,51 @@
                 }
             });
         }
-        
+
+        // Handle comment button click - FIXED VERSION
+        function handleCommentButtons() {
+            $('.comment-btn').on('click', function(e) {
+                e.preventDefault();
+
+                var isMobile = window.innerWidth < 768;
+                var targetDesktop = $(this).data('target');
+                var targetMobile = $(this).data('target-mobile');
+
+                // Force close ALL modals first and clean up
+                $('.modal').modal('hide');
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+
+                // Wait for cleanup, then open the correct modal
+                setTimeout(function() {
+                    if (isMobile && targetMobile) {
+                        $(targetMobile).modal('show');
+                    } else {
+                        $(targetDesktop).modal('show');
+                    }
+                }, 350);
+            });
+
+            // Clean up when modal closes
+            $('.modal').on('hidden.bs.modal', function() {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+            });
+
+            // Handle orientation/resize changes
+            var resizeTimeout;
+            $(window).on('resize orientationchange', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    if ($('.modal.show').length > 0) {
+                        $('.modal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open').css('padding-right', '');
+                    }
+                }, 100);
+            });
+        }
+
         function handleLikeButtons() {
             $('.like-btn').on('click', function(e) {
                 e.preventDefault();
@@ -298,7 +718,7 @@
                 var icon = btn.find('i');
                 var likeCount = $('.like-count-' + postId);
                 var likeCountModal = $('.like-count-modal-' + postId);
-                
+
                 if (btn.data('processing')) {
                     return;
                 }
@@ -308,45 +728,39 @@
                 $.ajax({
                     url: likeUrl,
                     method: 'GET',
+                    dataType: 'json',
                     success: function(response) {
-                        // Toggle liked state
-                        if (btn.hasClass('liked')) {
-                            // Unlike
-                            btn.removeClass('liked');
-                            icon.removeClass('fa-heart').addClass('fa-heart-o');
+                        if (response.success) {
+                            if (response.liked) {
+                                btn.addClass('liked');
+                                icon.removeClass('fa-heart-o').addClass('fa-heart');
+                                icon.addClass('like-animation');
+                                setTimeout(function() {
+                                    icon.removeClass('like-animation');
+                                }, 600);
+                            } else {
+                                btn.removeClass('liked');
+                                icon.removeClass('fa-heart').addClass('fa-heart-o');
+                            }
 
-                            // Decrease count
-                            var currentCount = parseInt(likeCount.text());
-                            likeCount.text(currentCount - 1);
-                            likeCountModal.text(currentCount - 1);
-                        } else {
-                            // Like
-                            btn.addClass('liked');
-                            icon.removeClass('fa-heart-o').addClass('fa-heart');
-
-                            // Increase count
-                            var currentCount = parseInt(likeCount.text());
-                            likeCount.text(currentCount + 1);
-                            likeCountModal.text(currentCount + 1);
-
-                            // Add animation
-                            icon.addClass('like-animation');
-                            setTimeout(function() {
-                                icon.removeClass('like-animation');
-                            }, 600);
+                            likeCount.text(response.total_likes);
+                            likeCountModal.text(response.total_likes);
                         }
-
                         btn.data('processing', false);
                     },
                     error: function(xhr) {
                         btn.data('processing', false);
-                        alert('Failed to like/unlike post. Please try again.');
+                        if (xhr.status === 401) {
+                            alert('You need to login to like this post');
+                        } else {
+                            alert('Failed to like/unlike post. Please try again.');
+                        }
                     }
                 });
             });
         }
 
-        // Handle comment form submission via AJAX
+        // Handle desktop comment form submission via AJAX
         function handleCommentForms() {
             $('.virtual-tour-comment-form').on('submit', function(e) {
                 e.preventDefault();
@@ -393,9 +807,11 @@
 
                         // Scroll to bottom
                         var commentsList = document.getElementById('commentsList' + postId);
-                        commentsList.scrollTop = commentsList.scrollHeight;
+                        if (commentsList) {
+                            commentsList.scrollTop = commentsList.scrollHeight;
+                        }
 
-                        // Update comment count in the button AND in modal
+                        // Update comment count
                         var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
                         $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
                         $('.comment-count-' + postId).text(currentCount + 1);
@@ -406,335 +822,69 @@
                 });
             });
         }
+
+        // Handle mobile comment form submission via AJAX
+        function handleMobileCommentForms() {
+            $('.virtual-tour-comment-form-mobile').on('submit', function(e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var postId = form.data('post-id');
+                var commentInput = form.find('input[name="comment"]');
+                var commentText = commentInput.val();
+
+                if (!commentText.trim()) {
+                    return;
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        // Clear input
+                        commentInput.val('');
+
+                        // Hide "no comments" message if exists
+                        $('#noCommentsMobile' + postId).hide();
+
+                        // Add new comment to the list
+                        var newComment = `
+                        <div class="mb-3 comment-item">
+                            <div class="d-flex">
+                                <img src="${response.user.avatar}" 
+                                     alt="User" 
+                                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                <div class="ml-2 flex-grow-1">
+                                    <div class="bg-light p-2 rounded">
+                                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
+                                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
+                                    </div>
+                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                        $('#commentsListMobile' + postId).append(newComment);
+
+                        // Scroll to bottom
+                        var commentsListMobile = document.getElementById('commentsListMobile' + postId);
+                        if (commentsListMobile) {
+                            commentsListMobile.scrollTop = commentsListMobile.scrollHeight;
+                        }
+
+                        // Update comment count in both button and mobile modal
+                        var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
+                        $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
+                        $('.comment-count-' + postId).text(currentCount + 1);
+                        $('.comment-count-mobile-' + postId).text(currentCount + 1);
+                    },
+                    error: function(xhr) {
+                        alert('Failed to post comment. Please try again.');
+                    }
+                });
+            });
+        }
     </script>
 @endpush
-
-<style>
-    @media (max-width: 767px) {
-        .modal-dialog.modal-dialog-centered.modal-xl {
-            margin: 0 auto !important;
-            max-height: 100vh;
-            height: 100vh;
-        }
-
-        .modal-content {
-            height: 100vh !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
-        }
-        
-        .modal .panorama-side {
-            height: 35vh !important;
-            min-height: 250px;
-        }
-        
-        .modal .comments-side {
-            height: calc(65vh - 60px) !important;
-            min-height: 0;
-        }
-        
-        [id^="commentsList"] {
-            flex: 1 1 auto !important;
-            overflow-y: auto !important;
-            -webkit-overflow-scrolling: touch;
-            min-height: 0;
-            max-height: calc(65vh - 200px) !important;
-        }
-        
-        .modal .comments-side > div:nth-child(2) {
-            flex: 0 0 auto !important;
-            flex-shrink: 0 !important;
-        }
-        
-        .modal .comments-side > div:last-child {
-            flex: 0 0 auto !important;
-            flex-shrink: 0 !important;
-            padding: 12px 15px !important;
-            background: white;
-            border-top: 2px solid #e0e0e0;
-            position: sticky;
-            bottom: 0;
-            z-index: 100;
-        }
-        
-        .virtual-tour-comment-form .form-control {
-            font-size: 16px !important; 
-            padding: 10px 12px !important;
-            min-height: 40px;
-        }
-
-        .virtual-tour-comment-form .btn {
-            min-width: 50px;
-            min-height: 40px;
-            padding: 8px 15px !important;
-        }
-        
-        .modal-body.p-0 {
-            padding: 0 !important;
-        }
-        
-        .comments-side.d-flex.flex-column {
-            display: flex !important;
-            flex-direction: column !important;
-            height: 100% !important;
-        }
-        
-        @supports (padding-bottom: env(safe-area-inset-bottom)) {
-            .modal .comments-side > div:last-child {
-                padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
-            }
-        }
-        
-        @supports (-webkit-touch-callout: none) {
-            /* iOS specific */
-            .modal-content {
-                height: -webkit-fill-available !important;
-                max-height: -webkit-fill-available !important;
-            }
-        }
-    }
-
-
-    @media (max-width: 575px) {
-        .modal .panorama-side {
-            height: 30vh !important;
-            min-height: 200px;
-        }
-
-        .modal .comments-side {
-            height: calc(70vh - 60px) !important;
-        }
-
-        [id^="commentsList"] {
-            max-height: calc(70vh - 200px) !important;
-        }
-        
-        .virtual-tour-comment-form .form-control {
-            font-size: 16px !important;
-            padding: 12px 15px !important;
-            min-height: 44px;
-        }
-
-        .virtual-tour-comment-form .btn {
-            min-width: 54px;
-            min-height: 44px;
-            padding: 10px 16px !important;
-        }
-    }
-    
-    @media (max-width: 767px) and (orientation: landscape) {
-        .modal .panorama-side {
-            height: 50vh !important;
-        }
-
-        .modal .comments-side {
-            height: calc(50vh - 60px) !important;
-        }
-
-        [id^="commentsList"] {
-            max-height: calc(50vh - 180px) !important;
-        }
-    }
-    .delete-btn-wrapper {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        z-index: 10;
-    }
-
-    .delete-btn {
-        background: rgba(255, 0, 0, 0.7);
-        color: white;
-        border: none;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-        font-size: 16px;
-    }
-
-    .delete-btn:hover {
-        background: rgba(255, 0, 0, 1);
-        transform: scale(1.1);
-        box-shadow: 0px 4px 10px rgba(255, 0, 0, 0.5);
-    }
-
-    .action-btn-wrapper {
-        position: absolute;
-        bottom: 8px;
-        left: 8px;
-        z-index: 10;
-        display: flex;
-        gap: 8px;
-    }
-
-    .action-btn {
-        background: rgba(0, 0, 0, 0.6);
-        color: white;
-        border: none;
-        padding: 6px 12px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease-in-out;
-        font-size: 14px;
-        text-decoration: none;
-    }
-
-    .action-btn:hover {
-        background: rgba(0, 0, 0, 0.8);
-        transform: scale(1.05);
-        color: white;
-        text-decoration: none;
-    }
-
-    .action-btn.liked {
-        background: rgba(255, 20, 147, 0.8);
-        color: white;
-    }
-
-    .action-btn.liked:hover {
-        background: rgba(255, 20, 147, 1);
-    }
-
-    .action-btn i {
-        font-size: 16px;
-    }
-
-    .action-count {
-        font-weight: 600;
-        font-size: 13px;
-    }
-
-    .comment-btn:hover {
-        background: rgba(0, 123, 255, 0.8);
-    }
-
-    .comment-item {
-        animation: fadeIn 0.3s ease-in;
-    }
-
-    /* Like animation */
-    .like-animation {
-        animation: likeHeart 0.6s ease-in-out;
-    }
-
-    @keyframes likeHeart {
-        0% {
-            transform: scale(1);
-        }
-        25% {
-            transform: scale(1.3);
-        }
-        50% {
-            transform: scale(0.9);
-        }
-        75% {
-            transform: scale(1.1);
-        }
-        100% {
-            transform: scale(1);
-        }
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Scrollbar styling for comments */
-    [id^="commentsList"]::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    [id^="commentsList"]::-webkit-scrollbar-track {
-        background: #f1f1f1;
-    }
-
-    [id^="commentsList"]::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 3px;
-    }
-
-    [id^="commentsList"]::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-
-    .gallery-item {
-        position: relative;
-        overflow: hidden;
-        background: #f0f0f0;
-        aspect-ratio: 1 / 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .gallery-item img {
-        height: 100%;
-        object-fit: fill;
-        transform: scale(0.5);
-        transform-origin: center center;
-        background-color: #f0f0f0;
-    }
-
-    @media (max-width: 768px) {
-        .gallery-item img {
-            transform: scale(0.15);
-        }
-
-        .action-btn {
-            padding: 4px 8px;
-            font-size: 12px;
-        }
-
-        .action-btn i {
-            font-size: 14px;
-        }
-
-        .action-count {
-            font-size: 11px;
-        }
-
-        .action-btn-wrapper {
-            gap: 6px;
-        }
-        }
-        .modal-dialog.modal-dialog-centered.modal-xl {
-            max-height: 90vh; 
-            margin: 1.75rem auto;
-        }
-        @media (max-width: 767px) {
-
-            .modal .panorama-side {
-            height: 40vh !important; 
-            }
-            .modal .comments-side {
-                height: calc(50vh - 60px) !important; 
-            }
-            .modal-dialog.modal-dialog-centered.modal-xl {
-            margin: 0 auto !important;
-        }
-        }
-
-    .col-4 {
-        padding-left: 5px;
-        padding-right: 5px;
-    }
-
-    .col-4.mb-2 {
-        margin-bottom: 5px;
-    }
-</style>
