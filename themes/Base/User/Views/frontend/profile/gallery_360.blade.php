@@ -410,6 +410,131 @@
 @endpush
 
 <style>
+    @media (max-width: 767px) {
+        .modal-dialog.modal-dialog-centered.modal-xl {
+            margin: 0 auto !important;
+            max-height: 100vh;
+            height: 100vh;
+        }
+
+        .modal-content {
+            height: 100vh !important;
+            max-height: 100vh !important;
+            border-radius: 0 !important;
+        }
+        
+        .modal .panorama-side {
+            height: 35vh !important;
+            min-height: 250px;
+        }
+        
+        .modal .comments-side {
+            height: calc(65vh - 60px) !important;
+            min-height: 0;
+        }
+        
+        [id^="commentsList"] {
+            flex: 1 1 auto !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch;
+            min-height: 0;
+            max-height: calc(65vh - 200px) !important;
+        }
+        
+        .modal .comments-side > div:nth-child(2) {
+            flex: 0 0 auto !important;
+            flex-shrink: 0 !important;
+        }
+        
+        .modal .comments-side > div:last-child {
+            flex: 0 0 auto !important;
+            flex-shrink: 0 !important;
+            padding: 12px 15px !important;
+            background: white;
+            border-top: 2px solid #e0e0e0;
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+        }
+        
+        .virtual-tour-comment-form .form-control {
+            font-size: 16px !important; 
+            padding: 10px 12px !important;
+            min-height: 40px;
+        }
+
+        .virtual-tour-comment-form .btn {
+            min-width: 50px;
+            min-height: 40px;
+            padding: 8px 15px !important;
+        }
+        
+        .modal-body.p-0 {
+            padding: 0 !important;
+        }
+        
+        .comments-side.d-flex.flex-column {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important;
+        }
+        
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .modal .comments-side > div:last-child {
+                padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+            }
+        }
+        
+        @supports (-webkit-touch-callout: none) {
+            /* iOS specific */
+            .modal-content {
+                height: -webkit-fill-available !important;
+                max-height: -webkit-fill-available !important;
+            }
+        }
+    }
+
+
+    @media (max-width: 575px) {
+        .modal .panorama-side {
+            height: 30vh !important;
+            min-height: 200px;
+        }
+
+        .modal .comments-side {
+            height: calc(70vh - 60px) !important;
+        }
+
+        [id^="commentsList"] {
+            max-height: calc(70vh - 200px) !important;
+        }
+        
+        .virtual-tour-comment-form .form-control {
+            font-size: 16px !important;
+            padding: 12px 15px !important;
+            min-height: 44px;
+        }
+
+        .virtual-tour-comment-form .btn {
+            min-width: 54px;
+            min-height: 44px;
+            padding: 10px 16px !important;
+        }
+    }
+    
+    @media (max-width: 767px) and (orientation: landscape) {
+        .modal .panorama-side {
+            height: 50vh !important;
+        }
+
+        .modal .comments-side {
+            height: calc(50vh - 60px) !important;
+        }
+
+        [id^="commentsList"] {
+            max-height: calc(50vh - 180px) !important;
+        }
+    }
     .delete-btn-wrapper {
         position: absolute;
         top: 8px;

@@ -446,6 +446,147 @@
 
 @push('css')
     <style>
+        /* Existing styles (keep all your existing styles) */
+
+        /* Mobile-specific fixes for comment modal */
+        @media (max-width: 767px) {
+            /* Adjust modal height to account for mobile browser bars */
+            .modal-dialog.modal-dialog-centered.modal-xl {
+                margin: 0 auto !important;
+                max-height: 100vh;
+                height: 100vh;
+            }
+
+            .modal-content {
+                height: 100vh !important;
+                max-height: 100vh !important;
+                border-radius: 0 !important;
+            }
+
+            /* Make panorama side take less space on mobile */
+            .modal .panorama-side {
+                height: 35vh !important;
+                min-height: 250px;
+            }
+
+            /* Comments side takes remaining space */
+            .modal .comments-side {
+                height: calc(65vh - 60px) !important;
+                min-height: 0;
+            }
+
+            /* Comments list area - ensure it's scrollable */
+            [id^="commentsList"] {
+                flex: 1 1 auto !important;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                min-height: 0;
+                max-height: calc(65vh - 200px) !important;
+            }
+
+            /* Like & Comment count section */
+            .modal .comments-side > div:nth-child(2) {
+                flex: 0 0 auto !important;
+                flex-shrink: 0 !important;
+            }
+
+            /* Comment form - ensure it's always visible and above browser bar */
+            .modal .comments-side > div:last-child {
+                flex: 0 0 auto !important;
+                flex-shrink: 0 !important;
+                padding: 12px 15px !important;
+                background: white;
+                border-top: 2px solid #e0e0e0;
+                position: sticky;
+                bottom: 0;
+                z-index: 100;
+            }
+
+            /* Make comment input more prominent on mobile */
+            .comment-form .form-control {
+                font-size: 16px !important; /* Prevents zoom on iOS */
+                padding: 10px 12px !important;
+                min-height: 40px;
+            }
+
+            .comment-form .btn {
+                min-width: 50px;
+                min-height: 40px;
+                padding: 8px 15px !important;
+            }
+
+            /* Ensure modal body doesn't have padding that interferes */
+            .modal-body.p-0 {
+                padding: 0 !important;
+            }
+
+            /* Make the entire comments column flex properly */
+            .comments-side.d-flex.flex-column {
+                display: flex !important;
+                flex-direction: column !important;
+                height: 100% !important;
+            }
+
+            /* Add safe area padding for devices with notch */
+            @supports (padding-bottom: env(safe-area-inset-bottom)) {
+                .modal .comments-side > div:last-child {
+                    padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+                }
+            }
+
+            /* Ensure viewport height accounts for browser UI */
+            @supports (-webkit-touch-callout: none) {
+                /* iOS specific */
+                .modal-content {
+                    height: -webkit-fill-available !important;
+                    max-height: -webkit-fill-available !important;
+                }
+            }
+        }
+
+        /* Extra small devices (phones in portrait) */
+        @media (max-width: 575px) {
+            .modal .panorama-side {
+                height: 30vh !important;
+                min-height: 200px;
+            }
+
+            .modal .comments-side {
+                height: calc(70vh - 60px) !important;
+            }
+
+            [id^="commentsList"] {
+                max-height: calc(70vh - 200px) !important;
+            }
+
+            /* Make form elements touch-friendly */
+            .comment-form .form-control {
+                font-size: 16px !important;
+                padding: 12px 15px !important;
+                min-height: 44px;
+            }
+
+            .comment-form .btn {
+                min-width: 54px;
+                min-height: 44px;
+                padding: 10px 16px !important;
+            }
+        }
+
+        /* Landscape mode on mobile */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .modal .panorama-side {
+                height: 50vh !important;
+            }
+
+            .modal .comments-side {
+                height: calc(50vh - 60px) !important;
+            }
+
+            [id^="commentsList"] {
+                max-height: calc(50vh - 180px) !important;
+            }
+        }
         
         .delete-btn-wrapper {
             position: absolute;
