@@ -57,10 +57,13 @@
                                 </a>
                             @endauth
 
-                            <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
-                                <i class="fa fa-comment-o"></i>
-                                <span class="action-count">{{ $post->comments->count() }}</span>
-                            </a>
+                                <a href="#" class="action-btn comment-btn"
+                                   data-toggle="modal"
+                                   data-target="#commentModal{{ $post->id }}"
+                                   data-target-mobile="#commentModalMobile{{ $post->id }}">
+                                    <i class="fa fa-comment-o"></i>
+                                    <span class="action-count">{{ $post->comments->count() }}</span>
+                                </a>
                         </div>
 
                         <a href="{{ asset('uploads/' . $media->media) }}" data-lightbox="image-1">
@@ -105,10 +108,13 @@
                                     </a>
                                 @endauth
 
-                                <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
-                                    <i class="fa fa-comment-o"></i>
-                                    <span class="action-count">{{ $post->comments->count() }}</span>
-                                </a>
+                                    <a href="#" class="action-btn comment-btn"
+                                       data-toggle="modal"
+                                       data-target="#commentModal{{ $post->id }}"
+                                       data-target-mobile="#commentModalMobile{{ $post->id }}">
+                                        <i class="fa fa-comment-o"></i>
+                                        <span class="action-count">{{ $post->comments->count() }}</span>
+                                    </a>
                             </div>
 
                         <div class="panorama-image" style="width: 500px; height: 100%; object-fit: cover;" id="panorama-{{ $gallery->id }}"></div>
@@ -164,10 +170,13 @@
                                     </a>
                                 @endauth
 
-                                <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
-                                    <i class="fa fa-comment-o"></i>
-                                    <span class="action-count">{{ $post->comments->count() }}</span>
-                                </a>
+                                    <a href="#" class="action-btn comment-btn"
+                                       data-toggle="modal"
+                                       data-target="#commentModal{{ $post->id }}"
+                                       data-target-mobile="#commentModalMobile{{ $post->id }}">
+                                        <i class="fa fa-comment-o"></i>
+                                        <span class="action-count">{{ $post->comments->count() }}</span>
+                                    </a>
                             </div>
 
                         <div class="video-container">
@@ -185,8 +194,8 @@
                 </div>
             @endforeach
 
-                {{-- Comment Modal --}}
-                <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
+                <!---Modal-for-desktop--->
+                <div class="modal fade comment-modal-desktop" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                         <div class="modal-content" style="height: 90vh; max-width: 1200px;">
                             <div class="modal-header">
@@ -197,7 +206,7 @@
                             </div>
                             <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
                                 <div class="row no-gutters" style="height: 100%;">
-                                    {{-- Left Side - Post Media (FIXED, NO SCROLL) --}}
+                                    {{-- Left Side - Post Media --}}
                                     <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
                                         @php
                                             $firstMedia = $post->medias->first();
@@ -206,19 +215,16 @@
                                         @if($firstMedia)
                                             @if($firstMedia->type == 'image')
                                                 @if($firstMedia->is_360_media)
-                                                    {{-- 360 Image --}}
                                                     <div id="panorama-modal-{{ $post->id }}"
                                                          data-url="/uploads/{{ $firstMedia->media }}"
                                                          style="width: 100%; height: 100%;">
                                                     </div>
                                                 @else
-                                                    {{-- Regular Image --}}
                                                     <img src="{{ asset('uploads/' . $firstMedia->media) }}"
                                                          alt="Post"
                                                          style="width: 100%; height: 100%; object-fit: cover;">
                                                 @endif
                                             @elseif($firstMedia->type == 'video')
-                                                {{-- Video --}}
                                                 <div class="video-wrapper" style="width: 100%; height: 100%;">
                                                     <video controls id="video-modal-{{ $post->id }}" preload="auto"
                                                            class="video-js vjs-default-skin"
@@ -226,24 +232,6 @@
                                                         <source src="{{ url('uploads/' . $firstMedia->media) }}" type="video/mp4">
                                                     </video>
                                                 </div>
-                                                <script>
-                                                    document.addEventListener("DOMContentLoaded", function() {
-                                                        var playerModal{{ $post->id }} = videojs("video-modal-{{ $post->id }}", {
-                                                            controls: true,
-                                                            autoplay: false,
-                                                            fluid: false,
-                                                            controlBar: {
-                                                                fullscreenToggle: true,
-                                                            }
-                                                        });
-
-                                                        @if($firstMedia->is_360_media)
-                                                        playerModal{{ $post->id }}.vr({
-                                                            projection: "360",
-                                                        });
-                                                        @endif
-                                                    });
-                                                </script>
                                             @endif
                                         @else
                                             <p class="text-white">{{ __('No media available') }}</p>
@@ -252,11 +240,9 @@
 
                                     {{-- Right Side - Comments Section --}}
                                     <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
-
-                                        {{-- Comments List (SCROLLABLE AREA) --}}
+                                        {{-- Comments List --}}
                                         <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
                                              style="overflow-y: auto; flex: 1 1 auto; height: 0;">
-
                                             @forelse($post->comments as $comment)
                                                 <div class="mb-3 comment-item">
                                                     <div class="d-flex">
@@ -283,7 +269,7 @@
                                             @endforelse
                                         </div>
 
-                                        {{-- Like & Comment Count (FIXED) --}}
+                                        {{-- Like & Comment Count --}}
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                             <div class="d-flex justify-content-between">
                                 <span>
@@ -293,7 +279,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Comment Form (FIXED) --}}
+                                        {{-- Comment Form --}}
                                         <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
                                             @auth
                                                 <form action="{{ route('post.comment.store', $post->id) }}"
@@ -327,7 +313,88 @@
                         </div>
                     </div>
                 </div>
+            
+                <!---Modal-for-mobile--->
+                <div class="modal fade comment-modal-mobile" id="commentModalMobile{{ $post->id }}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%; margin: 0; height: 100vh;">
+                        <div class="modal-content" style="height: 100vh; border-radius: 0;">
+                            <div class="modal-header">
+                                <h5 class="modal-title">{{ __('Comments') }}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body p-0 d-flex flex-column" style="height: calc(100vh - 60px);">
+                                {{-- Comments List  --}}
+                                <div id="commentsListMobile{{ $post->id }}" class="p-3 bg-white" style="overflow-y: auto; flex: 1 1 auto;">
+                                    @forelse($post->comments as $comment)
+                                        <div class="mb-3 comment-item">
+                                            <div class="d-flex">
+                                                <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
+                                                     alt="User"
+                                                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                <div class="ml-2 flex-grow-1">
+                                                    <div class="bg-light p-2 rounded">
+                                                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
+                                                            {{ $comment->user->display_name ?? $comment->user->name }}
+                                                        </p>
+                                                        <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
+                                                    </div>
+                                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                        {{ $comment->created_at->diffForHumans() }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @empty
+                                        <p id="noCommentsMobile{{ $post->id }}" class="text-center text-muted">
+                                            {{ __('No comments yet. Be the first to comment!') }}
+                                        </p>
+                                    @endforelse
+                                </div>
 
+                                {{-- Comment Count --}}
+                                <div class="px-3 py-2 border-top border-bottom bg-white comment-count-section" style="flex: 0 0 auto;">
+                                    <div class="d-flex justify-content-between">
+                        <span>
+                            <i class="fa fa-comment"></i> 
+                            <strong class="comment-count-mobile-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
+                        </span>
+                                    </div>
+                                </div>
+
+                                {{-- Comment Form --}}
+                                <div class="comment-form-section bg-white" style="flex: 0 0 auto; padding: 20px 15px;">
+                                    @auth
+                                        <form action="{{ route('post.comment.store', $post->id) }}"
+                                              method="POST"
+                                              class="comment-form-mobile"
+                                              data-post-id="{{ $post->id }}">
+                                            @csrf
+                                            <div class="input-group">
+                                                <input type="text"
+                                                       name="comment"
+                                                       class="form-control border-0"
+                                                       placeholder="{{ __('Write a comment...') }}"
+                                                       style="background: #f0f2f5; font-size: 16px; min-height: 44px; padding: 12px 15px;"
+                                                       required>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" type="submit" style="min-height: 44px; min-width: 54px;">
+                                                        <i class="fa fa-paper-plane"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    @else
+                                        <p class="text-center text-muted mb-0">
+                                            <a href="{{ route('login') }}">{{ __('Login') }}</a> {{ __('to comment') }}
+                                        </p>
+                                    @endauth
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     @foreach ($videos as $vid)
@@ -446,146 +513,82 @@
 
 @push('css')
     <style>
-        /* Existing styles (keep all your existing styles) */
+        /* Hide mobile modal on desktop */
+        @media (min-width: 768px) {
+            .comment-modal-mobile {
+                display: none !important;
+            }
+        }
 
-        /* Mobile-specific fixes for comment modal */
+        /* Hide desktop modal on mobile */
         @media (max-width: 767px) {
-            /* Adjust modal height to account for mobile browser bars */
-            .modal-dialog.modal-dialog-centered.modal-xl {
-                margin: 0 auto !important;
-                max-height: 100vh;
-                height: 100vh;
-            }
-
-            .modal-content {
-                height: 100vh !important;
-                max-height: 100vh !important;
-                border-radius: 0 !important;
-            }
-
-            /* Make panorama side take less space on mobile */
-            .modal .panorama-side {
-                height: 35vh !important;
-                min-height: 250px;
-            }
-
-            /* Comments side takes remaining space */
-            .modal .comments-side {
-                height: calc(65vh - 60px) !important;
-                min-height: 0;
-            }
-
-            /* Comments list area - ensure it's scrollable */
-            [id^="commentsList"] {
-                flex: 1 1 auto !important;
-                overflow-y: auto !important;
-                -webkit-overflow-scrolling: touch;
-                min-height: 0;
-                max-height: calc(65vh - 200px) !important;
-            }
-
-            /* Like & Comment count section */
-            .modal .comments-side > div:nth-child(2) {
-                flex: 0 0 auto !important;
-                flex-shrink: 0 !important;
-            }
-
-            /* Comment form - ensure it's always visible and above browser bar */
-            .modal .comments-side > div:last-child {
-                flex: 0 0 auto !important;
-                flex-shrink: 0 !important;
-                padding: 12px 15px !important;
-                background: white;
-                border-top: 2px solid #e0e0e0;
-                position: sticky;
-                bottom: 0;
-                z-index: 100;
-            }
-
-            /* Make comment input more prominent on mobile */
-            .comment-form .form-control {
-                font-size: 16px !important; /* Prevents zoom on iOS */
-                padding: 10px 12px !important;
-                min-height: 40px;
-            }
-
-            .comment-form .btn {
-                min-width: 50px;
-                min-height: 40px;
-                padding: 8px 15px !important;
-            }
-
-            /* Ensure modal body doesn't have padding that interferes */
-            .modal-body.p-0 {
-                padding: 0 !important;
-            }
-
-            /* Make the entire comments column flex properly */
-            .comments-side.d-flex.flex-column {
-                display: flex !important;
-                flex-direction: column !important;
-                height: 100% !important;
-            }
-
-            /* Add safe area padding for devices with notch */
-            @supports (padding-bottom: env(safe-area-inset-bottom)) {
-                .modal .comments-side > div:last-child {
-                    padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
-                }
-            }
-
-            /* Ensure viewport height accounts for browser UI */
-            @supports (-webkit-touch-callout: none) {
-                /* iOS specific */
-                .modal-content {
-                    height: -webkit-fill-available !important;
-                    max-height: -webkit-fill-available !important;
-                }
+            .comment-modal-desktop {
+                display: none !important;
             }
         }
 
-        /* Extra small devices (phones in portrait) */
-        @media (max-width: 575px) {
-            .modal .panorama-side {
-                height: 30vh !important;
-                min-height: 200px;
-            }
+        /* Mobile modal specific styles */
+        .comment-modal-mobile .modal-dialog {
+            max-width: 100%;
+            margin: 0;
+            height: 100vh;
+        }
 
-            .modal .comments-side {
-                height: calc(70vh - 60px) !important;
-            }
+        .comment-modal-mobile .modal-content {
+            height: 100vh;
+            border-radius: 0;
+            border: none;
+        }
 
-            [id^="commentsList"] {
-                max-height: calc(70vh - 200px) !important;
-            }
+        .comment-modal-mobile .modal-body {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
 
-            /* Make form elements touch-friendly */
-            .comment-form .form-control {
-                font-size: 16px !important;
-                padding: 12px 15px !important;
-                min-height: 44px;
-            }
+        /* Comments list - scrollable area */
+        [id^="commentsListMobile"] {
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            overflow-y: auto !important;
+            flex: 1 1 auto;
+            min-height: 0
+        }
 
-            .comment-form .btn {
-                min-width: 54px;
-                min-height: 44px;
-                padding: 10px 16px !important;
+        /* Comment count section - fixed */
+        .comment-modal-mobile .comment-count-section {
+            flex: 0 0 auto;
+            flex-shrink: 0;
+        }
+
+        /* Comment form section - fixed at bottom with more spacing */
+        .comment-modal-mobile .comment-form-section {
+            flex: 0 0 auto;
+            flex-shrink: 0;
+            padding: 20px 15px 20px 15px !important;
+            background: white;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        /* Safe area for devices with notch */
+        @supports (padding-bottom: env(safe-area-inset-bottom)) {
+            .comment-modal-mobile .comment-form-section {
+                padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
             }
         }
 
-        /* Landscape mode on mobile */
-        @media (max-width: 767px) and (orientation: landscape) {
-            .modal .panorama-side {
-                height: 50vh !important;
-            }
+        /* Comment input styling for mobile */
+        .comment-form-mobile .form-control {
+            font-size: 16px !important; /* Prevents iOS zoom */
+            min-height: 44px;
+            padding: 12px 15px !important;
+        }
 
-            .modal .comments-side {
-                height: calc(50vh - 60px) !important;
-            }
-
-            [id^="commentsList"] {
-                max-height: calc(50vh - 180px) !important;
-            }
+        .comment-form-mobile .btn {
+            min-height: 44px;
+            min-width: 54px;
+            padding: 10px 16px !important;
         }
         
         .delete-btn-wrapper {
@@ -949,17 +952,21 @@
     <script src="https://unpkg.com/video.js/dist/video.js"></script>
     <script src="https://unpkg.com/videojs-vr/dist/videojs-vr.min.js"></script>
 
+
     <script>
         $(document).ready(function() {
             handleLikeButtons();
             handleInitial360MediaModal();
+            handleCommentButtons();
+            handleCommentFormSubmission();
+            handleMobileCommentFormSubmission();
         });
-        
+
         function handleInitial360MediaModal() {
             var panoramaViewers = {};
-            
+
             $('[id^="commentModal"]').on('shown.bs.modal', function() {
-                var postId = $(this).attr('id').replace('commentModal', '');
+                var postId = $(this).attr('id').replace('commentModal', '').replace('Mobile', '');
                 var containerId = 'panorama-modal-' + postId;
                 var container = $('#' + containerId);
 
@@ -978,9 +985,9 @@
                     }, 150);
                 }
             });
-            
+
             $('[id^="commentModal"]').on('hidden.bs.modal', function() {
-                var postId = $(this).attr('id').replace('commentModal', '');
+                var postId = $(this).attr('id').replace('commentModal', '').replace('Mobile', '');
                 if (panoramaViewers[postId]) {
                     try {
                         panoramaViewers[postId].destroy();
@@ -991,18 +998,16 @@
         }
 
         function handleLikeButtons() {
-            $('.action-btn').on('click', function(e) {
+            $('.like-btn').on('click', function(e) {
                 e.preventDefault();
 
                 var btn = $(this);
                 var postId = btn.data('post-id');
                 var likeUrl = btn.data('like-url');
-                console.log("Like URL: " + likeUrl);
                 var icon = btn.find('i');
                 var likeCount = $('.like-count-' + postId);
                 var likeCountModal = $('.like-count-modal-' + postId);
 
-                // Prevent multiple clicks
                 if (btn.data('processing')) {
                     return;
                 }
@@ -1018,8 +1023,6 @@
                             if (response.liked) {
                                 btn.addClass('liked');
                                 icon.removeClass('fa-heart-o').addClass('fa-heart');
-
-                              
                                 icon.addClass('like-animation');
                                 setTimeout(function() {
                                     icon.removeClass('like-animation');
@@ -1028,16 +1031,14 @@
                                 btn.removeClass('liked');
                                 icon.removeClass('fa-heart').addClass('fa-heart-o');
                             }
-                            
+
                             likeCount.text(response.total_likes);
                             likeCountModal.text(response.total_likes);
                         }
-
                         btn.data('processing', false);
                     },
                     error: function(xhr) {
                         btn.data('processing', false);
-
                         if (xhr.status === 401) {
                             alert('You need to login to like this post');
                         } else {
@@ -1047,14 +1048,58 @@
                 });
             });
         }
-        
+
         function auto_grow(element) {
             element.style.height = "5px";
             element.style.height = (element.scrollHeight) + "px";
         }
 
-        // Handle comment form submission via AJAX
-        $(document).ready(function() {
+        // Handle comment button click - FIXED VERSION
+        function handleCommentButtons() {
+            $('.comment-btn').on('click', function(e) {
+                e.preventDefault();
+
+                var isMobile = window.innerWidth < 768;
+                var targetDesktop = $(this).data('target');
+                var targetMobile = $(this).data('target-mobile');
+
+                // Force close ALL modals first and clean up
+                $('.modal').modal('hide');
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+
+                // Wait for cleanup, then open the correct modal
+                setTimeout(function() {
+                    if (isMobile && targetMobile) {
+                        $(targetMobile).modal('show');
+                    } else {
+                        $(targetDesktop).modal('show');
+                    }
+                }, 350);
+            });
+
+            // Clean up when modal closes
+            $('.modal').on('hidden.bs.modal', function() {
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+            });
+
+            // Handle orientation/resize changes
+            var resizeTimeout;
+            $(window).on('resize orientationchange', function() {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(function() {
+                    if ($('.modal.show').length > 0) {
+                        $('.modal').modal('hide');
+                        $('.modal-backdrop').remove();
+                        $('body').removeClass('modal-open').css('padding-right', '');
+                    }
+                }, 100);
+            });
+        }
+
+        // Handle desktop comment form submission via AJAX
+        function handleCommentFormSubmission() {
             $('.comment-form').on('submit', function(e) {
                 e.preventDefault();
 
@@ -1071,39 +1116,34 @@
                     url: form.attr('action'),
                     method: 'POST',
                     data: form.serialize(),
-                    // Update bagian success di script AJAX yang sudah ada
                     success: function(response) {
-                        // Clear input
                         commentInput.val('');
-
-                        // Hide "no comments" message if exists
                         $('#noComments' + postId).hide();
 
-                        // Add new comment to the list
                         var newComment = `
-        <div class="mb-3 comment-item">
-            <div class="d-flex">
-                <img src="${response.user.avatar}" 
-                     alt="User" 
-                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                <div class="ml-2 flex-grow-1">
-                    <div class="bg-light p-2 rounded">
-                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
-                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
-                    </div>
-                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
-                </div>
-            </div>
-        </div>
-    `;
+                        <div class="mb-3 comment-item">
+                            <div class="d-flex">
+                                <img src="${response.user.avatar}" 
+                                     alt="User" 
+                                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                <div class="ml-2 flex-grow-1">
+                                    <div class="bg-light p-2 rounded">
+                                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
+                                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
+                                    </div>
+                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
 
                         $('#commentsList' + postId).append(newComment);
 
-                        // Scroll to bottom
                         var commentsList = document.getElementById('commentsList' + postId);
-                        commentsList.scrollTop = commentsList.scrollHeight;
+                        if (commentsList) {
+                            commentsList.scrollTop = commentsList.scrollHeight;
+                        }
 
-                        // Update comment count in the button AND in modal
                         var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
                         $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
                         $('.comment-count-' + postId).text(currentCount + 1);
@@ -1113,8 +1153,64 @@
                     }
                 });
             });
-        });
-        
-        
+        }
+
+        // Handle mobile comment form submission
+        function handleMobileCommentFormSubmission() {
+            $('.comment-form-mobile').on('submit', function(e) {
+                e.preventDefault();
+
+                var form = $(this);
+                var postId = form.data('post-id');
+                var commentInput = form.find('input[name="comment"]');
+                var commentText = commentInput.val();
+
+                if (!commentText.trim()) {
+                    return;
+                }
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        commentInput.val('');
+                        $('#noCommentsMobile' + postId).hide();
+
+                        var newComment = `
+                        <div class="mb-3 comment-item">
+                            <div class="d-flex">
+                                <img src="${response.user.avatar}" 
+                                     alt="User" 
+                                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                <div class="ml-2 flex-grow-1">
+                                    <div class="bg-light p-2 rounded">
+                                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
+                                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
+                                    </div>
+                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                        $('#commentsListMobile' + postId).append(newComment);
+
+                        var commentsListMobile = document.getElementById('commentsListMobile' + postId);
+                        if (commentsListMobile) {
+                            commentsListMobile.scrollTop = commentsListMobile.scrollHeight;
+                        }
+
+                        var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
+                        $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
+                        $('.comment-count-' + postId).text(currentCount + 1);
+                        $('.comment-count-mobile-' + postId).text(currentCount + 1);
+                    },
+                    error: function(xhr) {
+                        alert('Failed to post comment. Please try again.');
+                    }
+                });
+            });
+        }
     </script>
 @endpush
