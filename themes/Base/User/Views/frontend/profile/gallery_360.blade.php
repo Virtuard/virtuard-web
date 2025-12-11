@@ -92,21 +92,75 @@
                                              style="overflow-y: auto; flex: 1 1 auto; height: 0;">
 
                                             @forelse($post->comments as $comment)
-                                                <div class="mb-3 comment-item">
+                                                <div class="mb-3 comment-item" data-comment-id="{{ $comment->id }}">
                                                     <div class="d-flex">
                                                         <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
-                                                             alt="User"
-                                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                            alt="User"
+                                                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
                                                         <div class="ml-2 flex-grow-1">
-                                                            <div class="bg-light p-2 rounded">
-                                                                <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
-                                                                    {{ $comment->user->display_name ?? $comment->user->name }}
+                                                            <!-- View Mode -->
+                                                            <div class="comment-view-mode">
+                                                                <div class="d-flex justify-content-between align-items-start">
+                                                                    <div class="bg-light p-2 rounded flex-grow-1">
+                                                                        <p class="mb-1 font-weight-bold" style="font-size: 1rem;">
+                                                                            {{ $comment->user->display_name ?? $comment->user->name }}
+                                                                        </p>
+                                                                        <p class="m-0 comment-text" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
+                                                                    </div>
+                                                                    @if(auth()->check() && auth()->id() === $comment->user_id)
+                                                                        <div class="comment-actions ml-2 d-flex flex-column">
+                                                                            <button class="btn btn-sm edit-comment-btn mb-2" 
+                                                                                    data-comment-id="{{ $comment->id }}"
+                                                                                    title="Edit"
+                                                                                    style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-pencil"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-sm delete-comment-btn" 
+                                                                                    data-comment-id="{{ $comment->id }}"
+                                                                                    data-post-id="{{ $post->id }}"
+                                                                                    title="Delete"
+                                                                                    style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                                    {{ $comment->created_at->diffForHumans() }}
+                                                                    @if($comment->created_at != $comment->updated_at)
+                                                                        <span class="text-muted">(edited)</span>
+                                                                    @endif
                                                                 </p>
-                                                                <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
                                                             </div>
-                                                            <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
-                                                                {{ $comment->created_at->diffForHumans() }}
-                                                            </p>
+                                        
+                                                            <!-- Edit Mode (Hidden by default) -->
+                                                            <div class="comment-edit-mode" style="display: none;">
+                                                                <form class="update-comment-form" data-comment-id="{{ $comment->id }}" data-post-id="{{ $post->id }}">
+                                                                    @csrf
+                                                                    <div class="d-flex align-items-center">
+                                                                        <input type="text" 
+                                                                            name="comment" 
+                                                                            class="form-control form-control-sm comment-edit-input" 
+                                                                            value="{{ $comment->comment }}"
+                                                                            style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
+                                                                            required>
+                                                                        <div class="comment-actions ml-2 d-flex flex-column">
+                                                                            <button type="submit" 
+                                                                                    class="btn btn-sm mb-2" 
+                                                                                    title="Save"
+                                                                                    style="background-color: #4caf50; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-check"></i>
+                                                                            </button>
+                                                                            <button type="button" 
+                                                                                    class="btn btn-sm cancel-edit-btn" 
+                                                                                    title="Cancel"
+                                                                                    style="background-color: #9e9e9e; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-times"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -119,10 +173,12 @@
 
                                          Like & Comment Count (FIXED) 
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
-                                                <span>
-                                                    <i class="fa fa-comment"></i> 
-                                                    <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
-                                                </span>
+                                            <div class="d-flex justify-content-between">
+                                            <span>
+                                                <i class="fa fa-comment"></i> 
+                                                <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
+                                            </span>
+                                            </div>
                                         </div>
 
                                          Comment Form (FIXED) 
@@ -325,83 +381,6 @@
 
 @push('css')
     <style>
-        /* Hide mobile modal on desktop */
-        @media (min-width: 768px) {
-            .comment-modal-mobile {
-                display: none !important;
-            }
-        }
-
-        /* Hide desktop modal on mobile */
-        @media (max-width: 767px) {
-            .comment-modal-desktop {
-                display: none !important;
-            }
-        }
-
-        /* Mobile modal specific styles */
-        .comment-modal-mobile .modal-dialog {
-            max-width: 100%;
-            margin: 0;
-            height: 100vh;
-        }
-
-        .comment-modal-mobile .modal-content {
-            height: 100vh;
-            border-radius: 0;
-            border: none;
-        }
-
-        .comment-modal-mobile .modal-body {
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        /* Comments list - scrollable area */
-        [id^="commentsListMobile"] {
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-            overflow-y: auto !important;
-            flex: 1 1 auto;
-            min-height: 0;
-        }
-
-        /* Comment count section - fixed */
-        .comment-modal-mobile .comment-count-section {
-            flex: 0 0 auto;
-            flex-shrink: 0;
-        }
-
-        /* Comment form section - fixed at bottom with more spacing */
-        .comment-modal-mobile .comment-form-section {
-            flex: 0 0 auto;
-            flex-shrink: 0;
-            padding: 20px 15px 20px 15px !important;
-            background: white;
-            border-top: 2px solid #e0e0e0;
-        }
-
-        /* Safe area for devices with notch */
-        @supports (padding-bottom: env(safe-area-inset-bottom)) {
-            .comment-modal-mobile .comment-form-section {
-                padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
-            }
-        }
-
-        /* Comment input styling for mobile */
-        .virtual-tour-comment-form-mobile .form-control {
-            font-size: 16px !important; /* Prevents iOS zoom */
-            min-height: 44px;
-            padding: 12px 15px !important;
-        }
-
-        .virtual-tour-comment-form-mobile .btn {
-            min-height: 44px;
-            min-width: 54px;
-            padding: 10px 16px !important;
-        }
 
         .delete-btn-wrapper {
             position: absolute;
@@ -523,24 +502,20 @@
         }
 
         /* Scrollbar styling for comments */
-        [id^="commentsList"]::-webkit-scrollbar,
-        [id^="commentsListMobile"]::-webkit-scrollbar {
+        [id^="commentsList"]::-webkit-scrollbar {
             width: 6px;
         }
 
-        [id^="commentsList"]::-webkit-scrollbar-track,
-        [id^="commentsListMobile"]::-webkit-scrollbar-track {
+        [id^="commentsList"]::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
 
-        [id^="commentsList"]::-webkit-scrollbar-thumb,
-        [id^="commentsListMobile"]::-webkit-scrollbar-thumb {
+        [id^="commentsList"]::-webkit-scrollbar-thumb{
             background: #888;
             border-radius: 3px;
         }
 
-        [id^="commentsList"]::-webkit-scrollbar-thumb:hover,
-        [id^="commentsListMobile"]::-webkit-scrollbar-thumb:hover {
+        [id^="commentsList"]::-webkit-scrollbar-thumb:hover{
             background: #555;
         }
 
@@ -585,14 +560,46 @@
             }
         }
 
-        .modal-dialog.modal-dialog-centered.modal-xl {
-            max-height: 90vh;
-            margin: 1.75rem auto;
+        .col-4 {
+            padding-left: 5px;
+            padding-right: 5px;
         }
 
+        .col-4.mb-2 {
+            margin-bottom: 5px;
+        }
+
+        .custom-fullscreen-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+        .custom-fullscreen-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+        .modal-dialog.modal-dialog-centered.modal-xl {
+            max-height: 100vh; 
+            margin: auto !important;
+        }
         @media (max-width: 767px) {
+            .modal .modal-content {
+                height: 100vh;
+            }
             .modal .panorama-side {
                 display: none; 
+                height: 0px;
             }
             .modal .comments-side {
                 height: calc(90vh - 65px) !important;
@@ -602,13 +609,70 @@
             }
         }
 
-        .col-4 {
-            padding-left: 5px;
-            padding-right: 5px;
+        /* Comment Actions Styling */
+
+        .comment-edit-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        /* Hover effects untuk tombol edit dan delete */
+        .edit-comment-btn:hover {
+            background-color: #bbdefb !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .col-4.mb-2 {
-            margin-bottom: 5px;
+        .delete-comment-btn:hover {
+            background-color: #ffcdd2 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Hover effects untuk tombol save dan cancel di edit mode */
+        .update-comment-form button[type="submit"]:hover {
+            background-color: #45a049 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+        }
+
+        .cancel-edit-btn:hover {
+            background-color: #757575 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Active state */
+        .edit-comment-btn:active,
+        .delete-comment-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Focus state untuk input edit */
+        .comment-edit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        /* Smooth transition */
+        .comment-actions button,
+        .update-comment-form button {
+            transition: all 0.2s ease;
+}
+        /* Mobile specific */
+        @media (max-width: 767px) {
+            .comment-actions .btn {
+                font-size: 16px;
+                min-width: 32px;
+                min-height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .comment-edit-input {
+                font-size: 16px !important;
+                min-height: 40px;
+            }
         }
     </style>
 @endpush
@@ -619,9 +683,12 @@
             previewPanorama();
             initPanoramaModals();
             handleCommentForms();
-            handleMobileCommentForms();
             handleLikeButtons();
             handleCommentButtons();
+            handleEditComment();
+            handleCancelEdit();
+            handleUpdateComment(); 
+            handleDeleteComment();
         });
 
         function previewPanorama() {
@@ -664,50 +731,233 @@
             });
         }
 
-        // Handle comment button click - FIXED VERSION
-        function handleCommentButtons() {
-            $('.comment-btn').on('click', function(e) {
-                e.preventDefault();
+        function handleEditComment() {
+        $(document).on('click', '.edit-comment-btn', function() {
+            var commentItem = $(this).closest('.comment-item');
+            commentItem.find('.comment-view-mode').hide();
+            commentItem.find('.comment-edit-mode').show();
+            commentItem.find('.comment-edit-input').focus();
+        });
+    }
 
-                var isMobile = window.innerWidth < 768;
-                var targetDesktop = $(this).data('target');
-                var targetMobile = $(this).data('target-mobile');
+    function handleCancelEdit() {
+        $(document).on('click', '.cancel-edit-btn', function() {
+            var commentItem = $(this).closest('.comment-item');
+            commentItem.find('.comment-edit-mode').hide();
+            commentItem.find('.comment-view-mode').show();
+            
+            var originalText = commentItem.find('.comment-text').text();
+            commentItem.find('.comment-edit-input').val(originalText);
+        });
+    }
 
-                // Force close ALL modals first and clean up
-                $('.modal').modal('hide');
-                $('.modal-backdrop').remove();
-                $('body').removeClass('modal-open').css('padding-right', '');
-
-                // Wait for cleanup, then open the correct modal
-                setTimeout(function() {
-                    if (isMobile && targetMobile) {
-                        $(targetMobile).modal('show');
-                    } else {
-                        $(targetDesktop).modal('show');
+    function handleUpdateComment() {
+        $(document).on('submit', '.update-comment-form', function(e) {
+            e.preventDefault();
+            
+            var form = $(this);
+            var commentItem = form.closest('.comment-item');
+            var commentId = commentItem.attr('data-comment-id');
+            var postId = form.data('post-id');
+            var newComment = form.find('input[name="comment"]').val();
+            
+            if (!commentId || commentId === 'undefined') {
+                console.error('Comment ID is undefined!');
+                alert('Error: Comment ID not found. Please refresh the page.');
+                return;
+            }
+            
+            if (!newComment.trim()) {
+                return;
+            }
+            
+            $.ajax({
+                url: '/post/' + commentId + '/comment',
+                method: 'PUT',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    comment: newComment
+                },
+                success: function(response) {
+                    commentItem.find('.comment-text').text(response.comment);
+                    
+                    var timeText = commentItem.find('.comment-view-mode p.text-muted').first();
+                    if (!timeText.find('span:contains("edited")').length) {
+                        timeText.append(' <span class="text-muted">(edited)</span>');
                     }
-                }, 350);
+                    
+                    commentItem.find('.comment-edit-input').val(response.comment);
+                    
+                    commentItem.find('.comment-edit-mode').hide();
+                    commentItem.find('.comment-view-mode').show();
+                },
+                error: function(xhr) {
+                    console.error('Update error:', xhr);
+                    alert('Failed to update comment. Please try again.');
+                }
             });
+        });
+    }
 
-            // Clean up when modal closes
-            $('.modal').on('hidden.bs.modal', function() {
-                $('.modal-backdrop').remove();
-                $('body').removeClass('modal-open').css('padding-right', '');
+    function handleDeleteComment() {
+        $(document).on('click', '.delete-comment-btn', function() {
+            if (!confirm('Are you sure you want to delete this comment?')) {
+                return;
+            }
+            
+            var btn = $(this);
+            var commentItem = btn.closest('.comment-item');
+            var commentId = commentItem.attr('data-comment-id');
+            var postId = btn.data('post-id');
+            
+            if (!commentId || commentId === 'undefined') {
+                console.error('Comment ID is undefined!');
+                alert('Error: Comment ID not found. Please refresh the page.');
+                return;
+            }
+            
+            $.ajax({
+                url: '/post/' + commentId + '/comment',
+                method: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log('Delete success:', response);
+                    
+                    commentItem.fadeOut(300, function() {
+                        $(this).remove();
+                        
+                        var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
+                        var newCount = Math.max(0, currentCount - 1);
+                        
+                        $('[data-target="#commentModal' + postId + '"] .action-count').text(newCount);
+                        $('.comment-count-' + postId).text(newCount);
+                        
+                        if (newCount === 0) {
+                            $('#noComments' + postId).show();
+                        }
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Delete error:', xhr);
+                    alert('Failed to delete comment. Please try again.');
+                }
             });
+        });
+    }
 
-            // Handle orientation/resize changes
-            var resizeTimeout;
-            $(window).on('resize orientationchange', function() {
-                clearTimeout(resizeTimeout);
-                resizeTimeout = setTimeout(function() {
-                    if ($('.modal.show').length > 0) {
-                        $('.modal').modal('hide');
-                        $('.modal-backdrop').remove();
-                        $('body').removeClass('modal-open').css('padding-right', '');
+    function handleCommentFormSubmission() {
+        $('.comment-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var postId = form.data('post-id');
+            var commentInput = form.find('input[name="comment"]');
+            var commentText = commentInput.val();
+
+            if (!commentText.trim()) {
+                return;
+            }
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    console.log('Comment created:', response);
+                    
+                    if (!response.comment_id) {
+                        console.error('Response missing comment_id:', response);
+                        alert('Error: Invalid server response.');
+                        return;
                     }
-                }, 100);
-            });
-        }
+                    
+                    commentInput.val('');
+                    $('#noComments' + postId).hide();
+                    
+                    var escapedComment = $('<div>').text(response.comment).html();
+                    var escapedName = $('<div>').text(response.user.name).html();
+                    
+                    var newComment = `
+                    <div class="mb-3 comment-item" data-comment-id="${response.comment_id}">
+                        <div class="d-flex">
+                            <img src="${response.user.avatar}" 
+                                alt="User" 
+                                style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                            <div class="ml-2 flex-grow-1">
+                                <div class="comment-view-mode">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="bg-light p-2 rounded flex-grow-1">
+                                            <p class="mb-1 font-weight-bold" style="font-size: 1rem;">${escapedName}</p>
+                                            <p class="m-0 comment-text" style="font-size: 0.9rem;">${escapedComment}</p>
+                                        </div>
+                                        <div class="comment-actions ml-2 d-flex flex-column">
+                                            <button class="btn btn-sm edit-comment-btn mb-2"
+                                                    title="Edit"
+                                                    style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm delete-comment-btn"
+                                                    title="Delete" 
+                                                    data-post-id="${postId}"
+                                                    style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                                </div>
+                                <div class="comment-edit-mode" style="display: none;">
+                                    <form class="update-comment-form" data-post-id="${postId}">
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" 
+                                                name="comment" 
+                                                class="form-control form-control-sm comment-edit-input" 
+                                                value="${escapedComment}"
+                                                style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
+                                                required>
+                                            <div class="comment-actions ml-2 d-flex flex-column">
+                                                <button type="submit" 
+                                                        class="btn btn-sm mb-2" 
+                                                        title="Save"
+                                                        style="background-color: #4caf50; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" 
+                                                        class="btn btn-sm cancel-edit-btn" 
+                                                        title="Cancel"
+                                                        style="background-color: #9e9e9e; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    
+                    var $newComment = $(newComment);
+                    $('#commentsList' + postId).append($newComment);
+                    
+                    var commentsList = document.getElementById('commentsList' + postId);
+                    if (commentsList) {
+                        commentsList.scrollTop = commentsList.scrollHeight;
+                    }
 
+                    var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text()) || 0;
+                    $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
+                    $('.comment-count-' + postId).text(currentCount + 1);
+                },
+                error: function(xhr) {
+                    console.error('Submit error:', xhr);
+                    alert('Failed to post comment. Please try again.');
+                }
+            });
+        });
+    }
         function handleLikeButtons() {
             $('.virtual-like-btn').on('click', function(e) {
                 e.preventDefault();
@@ -759,72 +1009,6 @@
                 });
             });
         }
-
-        // Handle desktop comment form submission via AJAX
-        function handleCommentForms() {
-            $('.virtual-tour-comment-form').on('submit', function(e) {
-                e.preventDefault();
-
-                var form = $(this);
-                var postId = form.data('post-id');
-                var commentInput = form.find('input[name="comment"]');
-                var commentText = commentInput.val();
-
-                if (!commentText.trim()) {
-                    return;
-                }
-
-                $.ajax({
-                    url: form.attr('action'),
-                    method: 'POST',
-                    data: form.serialize(),
-                    success: function(response) {
-                        // Clear input
-                        commentInput.val('');
-
-                        // Hide "no comments" message if exists
-                        $('#noComments' + postId).hide();
-
-                        // Add new comment to the list
-                        var newComment = `
-                        <div class="mb-3 comment-item">
-                            <div class="d-flex">
-                                <img src="${response.user.avatar}" 
-                                     alt="User" 
-                                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                                <div class="ml-2 flex-grow-1">
-                                    <div class="bg-light p-2 rounded">
-                                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
-                                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
-                                    </div>
-                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-                        $('#commentsList' + postId).append(newComment);
-
-                        // Scroll to bottom
-                        var commentsList = document.getElementById('commentsList' + postId);
-                        if (commentsList) {
-                            commentsList.scrollTop = commentsList.scrollHeight;
-                        }
-
-                        // Update comment count
-                        var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
-                        $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
-                        $('.comment-count-' + postId).text(currentCount + 1);
-                    },
-                    error: function(xhr) {
-                        alert('Failed to post comment. Please try again.');
-                    }
-                });
-            });
-        }
-
-        // Handle mobile comment form submission via AJAX
-        function handleMobileCommentForms() {
             $('.virtual-tour-comment-form-mobile').on('submit', function(e) {
                 e.preventDefault();
 
