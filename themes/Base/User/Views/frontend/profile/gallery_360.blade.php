@@ -90,11 +90,11 @@
                                         {{-- Comments List (SCROLLABLE AREA) --}}
                                         <div id="commentsList{{ $post->id }}"  class="p-3 bg-white" style="overflow-y: auto; flex: 1 1 auto; height: 0;">
                                             @forelse($post->comments as $comment)
-                                                <div class="mb-3 comment-item" data-comment-id="{{ $comment->id }}"></div>
+                                                <div class="mb-3 comment-item" data-comment-id="{{ $comment->id }}">
                                                     <div class="d-flex">
                                                         <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
-                                                             alt="User"
-                                                             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                                                            alt="User"
+                                                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
                                                         <div class="ml-2 flex-grow-1">
                                                             <!-- View Mode -->
                                                             <div class="comment-view-mode">
@@ -137,11 +137,11 @@
                                                                     @csrf
                                                                     <div class="d-flex align-items-center">
                                                                         <input type="text" 
-                                                                               name="comment" 
-                                                                               class="form-control form-control-sm comment-edit-input" 
-                                                                               value="{{ $comment->comment }}"
-                                                                               style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
-                                                                               required>
+                                                                            name="comment" 
+                                                                            class="form-control form-control-sm comment-edit-input" 
+                                                                            value="{{ $comment->comment }}"
+                                                                            style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
+                                                                            required>
                                                                         <div class="comment-actions ml-2 d-flex flex-column">
                                                                             <button type="submit" 
                                                                                     class="btn btn-sm mb-2" 
@@ -171,10 +171,12 @@
 
                                         {{-- Like & Comment Count (FIXED) --}}
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
-                                                <span>
-                                                    <i class="fa fa-comment"></i> 
-                                                    <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
-                                                </span>
+                                            <div class="d-flex justify-content-between">
+                                            <span>
+                                                <i class="fa fa-comment"></i> 
+                                                <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
+                                            </span>
+                                            </div>
                                         </div>
 
                                         {{-- Comment Form (FIXED) --}}
@@ -206,6 +208,7 @@
                                             @endauth
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -295,83 +298,6 @@
 
 @push('css')
     <style>
-        /* Hide mobile modal on desktop */
-        @media (min-width: 768px) {
-            .comment-modal-mobile {
-                display: none !important;
-            }
-        }
-
-        /* Hide desktop modal on mobile */
-        @media (max-width: 767px) {
-            .comment-modal-desktop {
-                display: none !important;
-            }
-        }
-
-        /* Mobile modal specific styles */
-        .comment-modal-mobile .modal-dialog {
-            max-width: 100%;
-            margin: 0;
-            height: 100vh;
-        }
-
-        .comment-modal-mobile .modal-content {
-            height: 100vh;
-            border-radius: 0;
-            border: none;
-        }
-
-        .comment-modal-mobile .modal-body {
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        /* Comments list - scrollable area */
-        [id^="commentsListMobile"] {
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-            overflow-y: auto !important;
-            flex: 1 1 auto;
-            min-height: 0;
-        }
-
-        /* Comment count section - fixed */
-        .comment-modal-mobile .comment-count-section {
-            flex: 0 0 auto;
-            flex-shrink: 0;
-        }
-
-        /* Comment form section - fixed at bottom with more spacing */
-        .comment-modal-mobile .comment-form-section {
-            flex: 0 0 auto;
-            flex-shrink: 0;
-            padding: 20px 15px 20px 15px !important;
-            background: white;
-            border-top: 2px solid #e0e0e0;
-        }
-
-        /* Safe area for devices with notch */
-        @supports (padding-bottom: env(safe-area-inset-bottom)) {
-            .comment-modal-mobile .comment-form-section {
-                padding-bottom: calc(20px + env(safe-area-inset-bottom)) !important;
-            }
-        }
-
-        /* Comment input styling for mobile */
-        .virtual-tour-comment-form-mobile .form-control {
-            font-size: 16px !important; /* Prevents iOS zoom */
-            min-height: 44px;
-            padding: 12px 15px !important;
-        }
-
-        .virtual-tour-comment-form-mobile .btn {
-            min-height: 44px;
-            min-width: 54px;
-            padding: 10px 16px !important;
-        }
 
         .delete-btn-wrapper {
             position: absolute;
@@ -493,24 +419,20 @@
         }
 
         /* Scrollbar styling for comments */
-        [id^="commentsList"]::-webkit-scrollbar,
-        [id^="commentsListMobile"]::-webkit-scrollbar {
+        [id^="commentsList"]::-webkit-scrollbar {
             width: 6px;
         }
 
-        [id^="commentsList"]::-webkit-scrollbar-track,
-        [id^="commentsListMobile"]::-webkit-scrollbar-track {
+        [id^="commentsList"]::-webkit-scrollbar-track {
             background: #f1f1f1;
         }
 
-        [id^="commentsList"]::-webkit-scrollbar-thumb,
-        [id^="commentsListMobile"]::-webkit-scrollbar-thumb {
+        [id^="commentsList"]::-webkit-scrollbar-thumb{
             background: #888;
             border-radius: 3px;
         }
 
-        [id^="commentsList"]::-webkit-scrollbar-thumb:hover,
-        [id^="commentsListMobile"]::-webkit-scrollbar-thumb:hover {
+        [id^="commentsList"]::-webkit-scrollbar-thumb:hover{
             background: #555;
         }
 
@@ -564,6 +486,23 @@
             margin-bottom: 5px;
         }
 
+        .custom-fullscreen-btn {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
         .custom-fullscreen-btn:hover {
             background: rgba(0, 0, 0, 0.8);
         }

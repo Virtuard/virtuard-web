@@ -373,6 +373,7 @@
                                             @endauth
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -581,6 +582,24 @@
 
         .comment-item {
             animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes likeHeart {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.3);
+            }
+            50% {
+                transform: scale(0.9);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes fadeIn {
