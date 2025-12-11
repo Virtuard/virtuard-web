@@ -227,7 +227,7 @@
                                 </button>
                             </div>
                             <div class="modal-body p-0 d-flex flex-column" style="height: calc(100vh - 60px);">
-                                 Comments List - scrollable area 
+{{--                                 Comments List - scrollable area --}}
                                 <div id="commentsListMobile{{ $post->id }}" class="p-3 bg-white" style="overflow-y: auto; flex: 1 1 auto; min-height: 0;">
                                     @forelse($post->comments as $comment)
                                         <div class="mb-3 comment-item">
@@ -255,7 +255,7 @@
                                     @endforelse
                                 </div>
 
-                                 Comment Count - fixed 
+{{--                                 Comment Count - fixed --}}
                                 <div class="px-3 py-2 border-top border-bottom bg-white comment-count-section" style="flex: 0 0 auto;">
                                     <div class="d-flex justify-content-between">
                                             <span>
@@ -265,7 +265,7 @@
                                     </div>
                                 </div>
 
-                                 Comment Form - fixed at bottom 
+{{--                                 Comment Form - fixed at bottom --}}
                                 <div class="comment-form-section bg-white" style="flex: 0 0 auto; padding: 20px 15px;">
                                     @auth
                                         <form action="{{ route('post.comment.store', $post->id) }}"
@@ -687,7 +687,7 @@
             handleEditComment();
             handleCancelEdit();
             handleUpdateComment(); 
-            handleDeleteComment();
+            handleVirtualDeleteComment();
         });
 
         function previewPanorama() {
@@ -798,7 +798,7 @@
         });
     }
 
-    function handleDeleteComment() {
+    function handleVirtualDeleteComment() {
         $(document).on('click', '.delete-comment-btn', function() {
             if (!confirm('Are you sure you want to delete this comment?')) {
                 return;

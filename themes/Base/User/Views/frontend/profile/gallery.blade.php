@@ -278,7 +278,7 @@
                                                                                     style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
                                                                                 <i class="fa fa-pencil"></i>
                                                                             </button>
-                                                                            <button class="btn btn-sm delete-comment-btn" 
+                                                                            <button class="btn btn-sm post-delete-comment-btn" 
                                                                                     data-comment-id="{{ $comment->id }}"
                                                                                     data-post-id="{{ $post->id }}"
                                                                                     title="Delete"
@@ -883,7 +883,7 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .delete-comment-btn:hover {
+        .post-delete-comment-btn:hover {
             background-color: #ffcdd2 !important;
             transform: translateY(-1px);
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -904,7 +904,7 @@
 
         /* Active state */
         .edit-comment-btn:active,
-        .delete-comment-btn:active {
+        .post-delete-comment-btn:active {
             transform: translateY(0);
         }
 
@@ -1027,7 +1027,7 @@
     }
 
     function handleDeleteComment() {
-        $(document).on('click', '.delete-comment-btn', function() {
+        $(document).on('click', '.post-delete-comment-btn', function() {
             if (!confirm('Are you sure you want to delete this comment?')) {
                 return;
             }
@@ -1125,7 +1125,7 @@
                                                     style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
                                                 <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button class="btn btn-sm delete-comment-btn"
+                                            <button class="btn btn-sm post-delete-comment-btn"
                                                     title="Delete" 
                                                     data-post-id="${postId}"
                                                     style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
