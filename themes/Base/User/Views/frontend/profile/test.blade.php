@@ -1,7 +1,7 @@
 {{-- Comment Modal --}}
 <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content" style="height: 90vh; max-width: 1200px;">
+        <div class="modal-content" style="height: 80vh; max-width: 1200px;">
             <div class="modal-header">
                 <h5 class="modal-title">{{ __('Post') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
