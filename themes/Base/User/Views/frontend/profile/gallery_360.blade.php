@@ -20,7 +20,7 @@
 
                 <div class="col-md-4 col-6 mb-2">
                     <div class="gallery-item">
-                        {{-- Tombol Delete --}}
+{{--                         Tombol Delete --}}
                         @if (auth()->check() && auth()->user()->id == $post->ipanorama->user_id)
                             <form action="{{ route('post.destroy', $post->id) }}" method="POST"
                                   class="delete-btn-wrapper">
@@ -32,15 +32,15 @@
                             </form>
                         @endif
 
-                        {{-- Tombol Like & Comment --}}
+{{--                         Tombol Like & Comment --}}
                         <div class="action-btn-wrapper">
                             @auth
                                 <a href="javascript:void(0)"
-                                   class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                   class="action-btn virtual-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                    data-post-id="{{ $post->id }}"
                                    data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                     <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                    <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    <span class="action-count virtual-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
                                 </a>
                             @else
                                 <a href="javascript:void(0)"
@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                {{-- Comment Modal for Desktop --}}
+{{--                 Comment Modal for Desktop --}}
                 <div class="modal fade comment-modal-desktop" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                         <div class="modal-content" style="height: 90vh; max-width: 1200px;">
@@ -80,14 +80,14 @@
                             </div>
                             <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
                                 <div class="row no-gutters" style="height: 100%;">
-                                    {{-- Left Side - 360 Panorama (DESKTOP ONLY) --}}
+                                     Left Side - 360 Panorama (DESKTOP ONLY) 
                                     <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
                                         <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
                                     </div>
 
-                                    {{-- Right Side - Comments Section --}}
+                                     Right Side - Comments Section 
                                     <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
-                                        {{-- Comments List (SCROLLABLE AREA) --}}
+                                         Comments List (SCROLLABLE AREA) 
                                         <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
                                              style="overflow-y: auto; flex: 1 1 auto; height: 0;">
 
@@ -117,7 +117,7 @@
                                             @endforelse
                                         </div>
 
-                                        {{-- Like & Comment Count (FIXED) --}}
+                                         Like & Comment Count (FIXED) 
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                                 <span>
                                                     <i class="fa fa-comment"></i> 
@@ -125,7 +125,7 @@
                                                 </span>
                                         </div>
 
-                                        {{-- Comment Form (FIXED) --}}
+                                         Comment Form (FIXED) 
                                         <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
                                             @auth
                                                 <form action="{{ route('post.comment.store', $post->id) }}"
@@ -160,7 +160,7 @@
                     </div>
                 </div>
 
-                {{-- Comment Modal for Mobile (COMMENTS ONLY) --}}
+{{--                 Comment Modal for Mobile (COMMENTS ONLY) --}}
                 <div class="modal fade comment-modal-mobile" id="commentModalMobile{{ $post->id }}" tabindex="-1" role="dialog">
                     <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 100%; margin: 0; height: 100vh;">
                         <div class="modal-content" style="height: 100vh; border-radius: 0;">
@@ -171,7 +171,7 @@
                                 </button>
                             </div>
                             <div class="modal-body p-0 d-flex flex-column" style="height: calc(100vh - 60px);">
-                                {{-- Comments List - scrollable area --}}
+                                 Comments List - scrollable area 
                                 <div id="commentsListMobile{{ $post->id }}" class="p-3 bg-white" style="overflow-y: auto; flex: 1 1 auto; min-height: 0;">
                                     @forelse($post->comments as $comment)
                                         <div class="mb-3 comment-item">
@@ -199,7 +199,7 @@
                                     @endforelse
                                 </div>
 
-                                {{-- Comment Count - fixed --}}
+                                 Comment Count - fixed 
                                 <div class="px-3 py-2 border-top border-bottom bg-white comment-count-section" style="flex: 0 0 auto;">
                                     <div class="d-flex justify-content-between">
                                             <span>
@@ -209,7 +209,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Comment Form - fixed at bottom --}}
+                                 Comment Form - fixed at bottom 
                                 <div class="comment-form-section bg-white" style="flex: 0 0 auto; padding: 20px 15px;">
                                     @auth
                                         <form action="{{ route('post.comment.store', $post->id) }}"
@@ -709,14 +709,14 @@
         }
 
         function handleLikeButtons() {
-            $('.like-btn').on('click', function(e) {
+            $('.virtual-like-btn').on('click', function(e) {
                 e.preventDefault();
 
                 var btn = $(this);
                 var postId = btn.data('post-id');
                 var likeUrl = btn.data('like-url');
                 var icon = btn.find('i');
-                var likeCount = $('.like-count-' + postId);
+                var likeCount = $('.virtual-like-count-' + postId);
                 var likeCountModal = $('.like-count-modal-' + postId);
 
                 if (btn.data('processing')) {
@@ -743,8 +743,8 @@
                                 icon.removeClass('fa-heart').addClass('fa-heart-o');
                             }
 
-                            likeCount.text(response.total_likes);
-                            likeCountModal.text(response.total_likes);
+                            likeCount.text(response.like_count);
+                            likeCountModal.text(response.like_count);
                         }
                         btn.data('processing', false);
                     },

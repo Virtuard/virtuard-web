@@ -41,20 +41,20 @@
                         {{-- Tombol Like & Comment --}}
                         <div class="action-btn-wrapper">
                             @auth
-                                <a href="javascript:void(0)"
-                                   class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                <div
+                                   class="action-btn post-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                    data-post-id="{{ $post->id }}"
                                    data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                     <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                    <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                </a>
+                                    <span class="action-count post-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                </div>
                             @else
-                                <a href="javascript:void(0)"
+                                <div
                                    onclick="alert('You need to login to like this post');"
                                    class="action-btn cursor-pointer">
                                     <i class="fa fa-heart-o"></i>
                                     <span class="action-count">{{ $post->likes->count() }}</span>
-                                </a>
+                                </div>
                             @endauth
 
                             <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
@@ -89,20 +89,20 @@
                             {{-- Tombol Like & Comment --}}
                             <div class="action-btn-wrapper">
                                 @auth
-                                    <a href="javascript:void(0)"
-                                       class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                    <div
+                                       class="action-btn post-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                        data-post-id="{{ $post->id }}"
                                        data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                         <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                        <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                    </a>
+                                        <span class="action-count post-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    </div>
                                 @else
-                                    <a href="javascript:void(0)"
+                                    <div
                                        onclick="alert('You need to login to like this post');"
                                        class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
                                         <span class="action-count">{{ $post->likes->count() }}</span>
-                                    </a>
+                                    </div>
                                 @endauth
 
                                 <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
@@ -148,20 +148,20 @@
                             {{-- Tombol Like & Comment --}}
                             <div class="action-btn-wrapper">
                                 @auth
-                                    <a href="javascript:void(0)"
-                                       class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                    <div 
+                                       class="action-btn post-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                        data-post-id="{{ $post->id }}"
                                        data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                         <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                        <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                    </a>
+                                        <span class="action-count post-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    </div>
                                 @else
-                                    <a href="javascript:void(0)"
+                                    <div
                                        onclick="alert('You need to login to like this post');"
                                        class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
                                         <span class="action-count">{{ $post->likes->count() }}</span>
-                                    </a>
+                                    </div>
                                 @endauth
 
                                 <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
@@ -929,7 +929,7 @@
 
     <script>
     $(document).ready(function() {
-        handleLikeButtons();
+        handleLikePostButtons();
         handleInitial360MediaModal();
         handleCommentButtons();
         handleCommentFormSubmission();
@@ -1169,18 +1169,17 @@ function handleCommentFormSubmission() {
         });
     });
 }
-    function handleLikeButtons() {
-        
-        $('.like-btn').on('click', function(e) {
+    function handleLikePostButtons() {
+        $(document).on('click', '.post-like-btn', function(e) {
             e.preventDefault();
 
             var btn = $(this);
             var postId = btn.data('post-id');
             var likeUrl = btn.data('like-url');
             var icon = btn.find('i');
-            var likeCount = $('.like-count-' + postId);
-            var likeCountModal = $('.like-count-modal-' + postId);
-
+            var likeCount = $('.post-like-count-' + postId);
+            
+            // Prevent multiple clicks
             if (btn.data('processing')) {
                 return;
             }
@@ -1204,17 +1203,24 @@ function handleCommentFormSubmission() {
                             btn.removeClass('liked');
                             icon.removeClass('fa-heart').addClass('fa-heart-o');
                         }
-
-                        likeCount.text(response.total_likes);
-                        likeCountModal.text(response.total_likes);
+                        
+                        likeCount.text(response.like_count);
+                        
+                    } else {
+                        console.log('Response success is false or undefined');
                     }
+
                     btn.data('processing', false);
                 },
                 error: function(xhr) {
+                    console.log('AJAX error - Status:', xhr.status);
+                    console.log('AJAX error - Response text:', xhr.responseText);
+
                     btn.data('processing', false);
                     if (xhr.status === 401) {
                         alert('You need to login to like this post');
                     } else {
+                        console.error('Error:', xhr.responseText);
                         alert('Failed to like/unlike post. Please try again.');
                     }
                 }
