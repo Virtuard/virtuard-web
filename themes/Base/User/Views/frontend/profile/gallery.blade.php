@@ -928,18 +928,18 @@
     <script src="https://unpkg.com/videojs-vr/dist/videojs-vr.min.js"></script>
 
     <script>
-    $(document).ready(function() {
-        handleLikeButtons();
-        handleInitial360MediaModal();
-        handleCommentButtons();
-        handleCommentFormSubmission();
-        handleEditComment();
-        handleCancelEdit();
-        handleUpdateComment(); 
-        handleDeleteComment();
-    });
+$(document).ready(function() {
+    handleLikeButtons();
+    handleInitial360MediaModal();
+    handleCommentButtons();
+    handleCommentFormSubmission();
+    handleEditComment();
+    handleCancelEdit();
+    handleUpdateComment(); 
+    handleDeleteComment();
+});
 
-    function handleEditComment() {
+function handleEditComment() {
     $(document).on('click', '.edit-comment-btn', function() {
         var commentItem = $(this).closest('.comment-item');
         commentItem.find('.comment-view-mode').hide();
@@ -1075,7 +1075,6 @@ function handleCommentFormSubmission() {
             success: function(response) {
                 console.log('Comment created:', response);
                 
-                // Validasi response
                 if (!response.comment_id) {
                     console.error('Response missing comment_id:', response);
                     alert('Error: Invalid server response.');
@@ -1085,11 +1084,9 @@ function handleCommentFormSubmission() {
                 commentInput.val('');
                 $('#noComments' + postId).hide();
                 
-                // Escape HTML untuk mencegah XSS
                 var escapedComment = $('<div>').text(response.comment).html();
                 var escapedName = $('<div>').text(response.user.name).html();
                 
-                // Template dengan data-comment-id yang benar
                 var newComment = `
                 <div class="mb-3 comment-item" data-comment-id="${response.comment_id}">
                     <div class="d-flex">
@@ -1169,145 +1166,142 @@ function handleCommentFormSubmission() {
         });
     });
 }
-    function handleLikeButtons() {
-        
-        $('.like-btn').on('click', function(e) {
-            e.preventDefault();
 
-            var btn = $(this);
-            var postId = btn.data('post-id');
-            var likeUrl = btn.data('like-url');
-            var icon = btn.find('i');
-            var likeCount = $('.like-count-' + postId);
-            var likeCountModal = $('.like-count-modal-' + postId);
+function handleLikeButtons() {
+    $('.like-btn').on('click', function(e) {
+        e.preventDefault();
 
-            if (btn.data('processing')) {
-                return;
-            }
+        var btn = $(this);
+        var postId = btn.data('post-id');
+        var likeUrl = btn.data('like-url');
+        var icon = btn.find('i');
+        var likeCount = $('.like-count-' + postId);
+        var likeCountModal = $('.like-count-modal-' + postId);
 
-            btn.data('processing', true);
+        if (btn.data('processing')) {
+            return;
+        }
 
-            $.ajax({
-                url: likeUrl,
-                method: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    if (response.success) {
-                        if (response.liked) {
-                            btn.addClass('liked');
-                            icon.removeClass('fa-heart-o').addClass('fa-heart');
-                            icon.addClass('like-animation');
-                            setTimeout(function() {
-                                icon.removeClass('like-animation');
-                            }, 600);
-                        } else {
-                            btn.removeClass('liked');
-                            icon.removeClass('fa-heart').addClass('fa-heart-o');
-                        }
+        btn.data('processing', true);
 
-                        likeCount.text(response.total_likes);
-                        likeCountModal.text(response.total_likes);
-                    }
-                    btn.data('processing', false);
-                },
-                error: function(xhr) {
-                    btn.data('processing', false);
-                    if (xhr.status === 401) {
-                        alert('You need to login to like this post');
+        $.ajax({
+            url: likeUrl,
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    if (response.liked) {
+                        btn.addClass('liked');
+                        icon.removeClass('fa-heart-o').addClass('fa-heart');
+                        icon.addClass('like-animation');
+                        setTimeout(function() {
+                            icon.removeClass('like-animation');
+                        }, 600);
                     } else {
-                        alert('Failed to like/unlike post. Please try again.');
+                        btn.removeClass('liked');
+                        icon.removeClass('fa-heart').addClass('fa-heart-o');
                     }
+
+                    likeCount.text(response.total_likes);
+                    likeCountModal.text(response.total_likes);
                 }
-            });
-        });
-    }
-
-    function auto_grow(element) {
-        element.style.height = "5px";
-        element.style.height = (element.scrollHeight) + "px";
-    }
-
-    function handleInitial360MediaModal() {
-        var panoramaViewers = {};
-
-        
-        $('[id^="commentModal"]').on('shown.bs.modal', function() {
-            var modalId = $(this).attr('id');
-            
-            var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
-            var containerId = 'panorama-modal-' + postId;
-            var container = $('#' + containerId);
-
-            if (container.length && container.data('url') && !panoramaViewers[postId]) {
-                setTimeout(function() {
-                    try {
-                        
-                        if (typeof pannellum !== 'undefined') {
-                            panoramaViewers[postId] = pannellum.viewer(containerId, {
-                                "type": "equirectangular",
-                                "panorama": container.data('url'),
-                                "autoLoad": true,
-                                "showZoomCtrl": true
-                            });
-                        }
-                    } catch(e) {
-                        console.error('Panorama error:', e);
-                    }
-                }, 150);
+                btn.data('processing', false);
+            },
+            error: function(xhr) {
+                btn.data('processing', false);
+                if (xhr.status === 401) {
+                    alert('You need to login to like this post');
+                } else {
+                    alert('Failed to like/unlike post. Please try again.');
+                }
             }
         });
+    });
+}
 
-        $('[id^="commentModal"]').on('hidden.bs.modal', function() {
-            var modalId = $(this).attr('id');
-            var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
-            if (panoramaViewers[postId]) {
+function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+}
+
+function handleInitial360MediaModal() {
+    var panoramaViewers = {};
+
+    $('[id^="commentModal"]').on('shown.bs.modal', function() {
+        var modalId = $(this).attr('id');
+        var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
+        var containerId = 'panorama-modal-' + postId;
+        var container = $('#' + containerId);
+
+        if (container.length && container.data('url') && !panoramaViewers[postId]) {
+            setTimeout(function() {
                 try {
-                    panoramaViewers[postId].destroy();
-                } catch(e) {}
-                delete panoramaViewers[postId];
-            }
-        });
-    }
-
-    function handleCommentButtons() {
-        
-        
-        $('.comment-btn').on('click', function(e) {
-            e.preventDefault();
-
-            // var isMobile = window.innerWidth < 768;
-            var targetDesktop = $(this).data('target');
-            // var targetMobile = $(this).data('target-mobile');
-
-            $('.modal').modal('hide');
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open').css('padding-right', '');
-
-            // setTimeout(function() {
-            //     if (isMobile && targetMobile) {
-            //         $(targetMobile).modal('show');
-            //     } else {
-                    $(targetDesktop).modal('show');
-                // }
-            // }, 350);
-        });
-
-        $('.modal').on('hidden.bs.modal', function() {
-            $('.modal-backdrop').remove();
-            $('body').removeClass('modal-open').css('padding-right', '');
-        });
-
-        var resizeTimeout;
-        $(window).on('resize orientationchange', function() {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(function() {
-                if ($('.modal.show').length > 0) {
-                    $('.modal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    $('body').removeClass('modal-open').css('padding-right', '');
+                    if (typeof pannellum !== 'undefined') {
+                        panoramaViewers[postId] = pannellum.viewer(containerId, {
+                            "type": "equirectangular",
+                            "panorama": container.data('url'),
+                            "autoLoad": true,
+                            "showZoomCtrl": true
+                        });
+                    }
+                } catch(e) {
+                    console.error('Panorama error:', e);
                 }
-            }, 100);
-        });
-    }
+            }, 150);
+        }
+    });
+
+    $('[id^="commentModal"]').on('hidden.bs.modal', function() {
+        var modalId = $(this).attr('id');
+        var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
+        if (panoramaViewers[postId]) {
+            try {
+                panoramaViewers[postId].destroy();
+            } catch(e) {}
+            delete panoramaViewers[postId];
+        }
+    });
+}
+
+function handleCommentButtons() {
+    $('.comment-btn').on('click', function(e) {
+        e.preventDefault();
+
+        var targetDesktop = $(this).data('target');
+
+        $('.modal').modal('hide');
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open').css('padding-right', '');
+
+        setTimeout(function() {
+            $(targetDesktop).modal('show');
+        }, 350);
+    });
+
+    $('.modal').on('hidden.bs.modal', function() {
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open').css('padding-right', '');
+    });
+
+    var lastWidth = window.innerWidth;
+    var resizeTimeout;
+    
+    $(window).on('resize orientationchange', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+            var currentWidth = window.innerWidth;
+            var wasDesktop = lastWidth >= 768;
+            var isDesktop = currentWidth >= 768;
+            
+            if (wasDesktop !== isDesktop && $('.modal.show').length > 0) {
+                $('.modal').modal('hide');
+                $('.modal-backdrop').remove();
+                $('body').removeClass('modal-open').css('padding-right', '');
+            }
+            
+            lastWidth = currentWidth;
+        }, 250); 
+    });
+}
     </script>
 @endpush
