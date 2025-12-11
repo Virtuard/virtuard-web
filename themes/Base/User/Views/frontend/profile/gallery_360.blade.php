@@ -80,14 +80,14 @@
                             </div>
                             <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
                                 <div class="row no-gutters" style="height: 100%;">
-                                     Left Side - 360 Panorama (DESKTOP ONLY) 
+{{--                                     Left Side - 360 Panorama (DESKTOP ONLY) --}}
                                     <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
                                         <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
                                     </div>
 
-                                     Right Side - Comments Section 
+{{--                                     Right Side - Comments Section --}}
                                     <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
-                                         Comments List (SCROLLABLE AREA) 
+{{--                                         Comments List (SCROLLABLE AREA) --}}
                                         <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
                                              style="overflow-y: auto; flex: 1 1 auto; height: 0;">
 
@@ -171,7 +171,7 @@
                                             @endforelse
                                         </div>
 
-                                         Like & Comment Count (FIXED) 
+{{--                                         Like & Comment Count (FIXED) --}}
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                             <div class="d-flex justify-content-between">
                                             <span>
@@ -181,7 +181,7 @@
                                             </div>
                                         </div>
 
-                                         Comment Form (FIXED) 
+{{--                                         Comment Form (FIXED) --}}
                                         <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
                                             @auth
                                                 <form action="{{ route('post.comment.store', $post->id) }}"
@@ -682,9 +682,8 @@
         $(document).ready(function() {
             previewPanorama();
             initPanoramaModals();
-            handleCommentForms();
-            handleLikeButtons();
-            handleCommentButtons();
+            handleCommentFormSubmission();
+            handleLikeButtons();    
             handleEditComment();
             handleCancelEdit();
             handleUpdateComment(); 
