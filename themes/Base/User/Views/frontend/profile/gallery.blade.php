@@ -1183,7 +1183,6 @@
                     alert('Failed to post comment. Please try again.');
                 }
             });
-        });
     });
 }
     function handleLikePostButtons() {

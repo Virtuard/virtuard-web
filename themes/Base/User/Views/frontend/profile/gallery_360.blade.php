@@ -1067,8 +1067,7 @@
                     error: function(xhr) {
                         alert('Failed to post comment. Please try again.');
                     }
-                });
             });
-        }
+        });
     </script>
 @endpush
