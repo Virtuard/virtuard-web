@@ -78,6 +78,7 @@ Route::post('/', 'PostController@store')->name('store');
 Route::get('{id}/like', 'PostController@likePost')->name('like');
 Route::post('{id}/comment', 'PostController@storeComment')->name('comment.store');
 Route::delete('{id}', 'PostController@destroy')->name('destroy');
+Route::put('{id}/comment', 'PostController@updateComment')->name('comment.update');
 Route::delete('{id}/comment', 'PostController@destroyComment')->name('comment.destroy');
 });
 

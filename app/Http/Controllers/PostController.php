@@ -64,7 +64,7 @@ class PostController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $panorama_posts = $this->userPost    
+        $panorama_posts = $this->userPost
             ->with(['ipanorama', 'medias', 'likes', 'comments'])
             ->when(isset($request->filter), function ($q) use ($request) {
                 if (auth()->check()) {
@@ -132,7 +132,7 @@ class PostController extends Controller
             'media_user.*.max' => 'Maximum upload file 100MB'
         ]);
 
-        if(isset($request->media_user) || $request->ipanorama_id){
+        if (isset($request->media_user) || $request->ipanorama_id) {
             $this->validate($request, [
                 'message' => 'nullable',
             ]);
@@ -161,7 +161,7 @@ class PostController extends Controller
                     $extension = strtolower($file->getClientOriginalExtension());
                     $type = getMimeTypeFromExtension($extension);
                     $path = $file->storeAs('/media', $filename);
-                    
+
                     $dataMedia = [
                         'post_id' => $post->id,
                         'media' => $path,
@@ -244,48 +244,6 @@ class PostController extends Controller
         $toUser->notify(new PrivateChannelServices($data));
     }
 
-
-    public function storeComment(Request $request, $id)
-    {
-        $idUser = Auth::id();
-
-        $request->validate([
-            'comment' => 'required',
-        ]);
-
-        $post = UserPost::find($id);
-        if (!$post) {
-            return redirect()->back()->with('error', 'Post not found');
-        }
-
-        $comment = new PostComment();
-        $comment->post_id = $id;
-        $comment->user_id = $idUser;
-        $comment->comment = $request->input('comment');
-        $comment->save();
-
-        $messageData = [
-            'id' => $post->user_id,
-            'message' => 'Commented on your post',
-        ];
-
-        $this->notifyUserComeent($post->user_id, $messageData, $id);
-
-        if ($request->ajax() || $request->wantsJson()) {
-            return response()->json([
-                'success' => true,
-                'comment' => $comment->comment,
-                'user' => [
-                    'name' => auth()->user()->display_name ?? auth()->user()->name,
-                    'avatar' => auth()->user()->getAvatarUrl() ?? asset('images/avatar.png')
-                ],
-                'created_at' => $comment->created_at->diffForHumans()
-            ]);
-        }
-
-        return redirect()->to(url()->previous() . '#Post-' . $id);
-    }
-
     protected function notifyUserComeent($toUserId, $message, $postId)
     {
         $currentUser = auth()->user();
@@ -321,10 +279,116 @@ class PostController extends Controller
         return back()->with('success', 'Deleted status');
     }
 
+    // public function destroyComment($id)
+    // {
+    //     PostComment::destroy($id);
+
+    //     return back()->with('success', 'Deleted status');
+    // }
+
+    public function storeComment(Request $request, $id)
+    {
+        $idUser = Auth::id();
+
+        $request->validate([
+            'comment' => 'required',
+        ]);
+
+        $post = UserPost::find($id);
+        if (!$post) {
+            return redirect()->back()->with('error', 'Post not found');
+        }
+
+        $comment = new PostComment();
+        $comment->post_id = $id;
+        $comment->user_id = $idUser;
+        $comment->comment = $request->input('comment');
+        $comment->save();
+
+        $messageData = [
+            'id' => $post->user_id,
+            'message' => 'Commented on your post',
+        ];
+
+        $this->notifyUserComeent($post->user_id, $messageData, $id);
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'comment_id' => $comment->id,
+                'comment' => $comment->comment,
+                'user' => [
+                    'name' => auth()->user()->display_name ?? auth()->user()->name,
+                    'avatar' => auth()->user()->getAvatarUrl() ?? asset('images/avatar.png')
+                ],
+                'created_at' => $comment->created_at->diffForHumans()
+            ]);
+        }
+
+        return redirect()->to(url()->previous() . '#Post-' . $id);
+    }
+
+    public function updateComment(Request $request, $id)
+    {
+        $request->validate([
+            'comment' => 'required',
+        ]);
+
+        $comment = PostComment::findOrFail($id);
+
+
+        if ($comment->user_id !== auth()->id()) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 403);
+            }
+            return back()->with('error', 'Unauthorized');
+        }
+
+        $comment->comment = $request->input('comment');
+        $comment->save();
+
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'comment_id' => $comment->id,
+                'comment' => $comment->comment,
+                'updated_at' => $comment->updated_at->diffForHumans()
+            ]);
+        }
+
+        return back()->with('success', 'Comment updated');
+    }
+
     public function destroyComment($id)
     {
-        PostComment::destroy($id);
+        $comment = PostComment::findOrFail($id);
 
-        return back()->with('success', 'Deleted status');
+
+        if ($comment->user_id !== auth()->id()) {
+            if (request()->ajax() || request()->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Unauthorized'
+                ], 403);
+            }
+            return back()->with('error', 'Unauthorized');
+        }
+
+        $postId = $comment->post_id;
+        $commentId = $comment->id;
+        $comment->delete();
+
+        if (request()->ajax() || request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'comment_id' => $commentId,
+                'post_id' => $postId
+            ]);
+        }
+
+        return back()->with('success', 'Deleted comment');
     }
 }

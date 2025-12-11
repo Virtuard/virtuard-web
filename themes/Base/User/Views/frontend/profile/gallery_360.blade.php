@@ -592,10 +592,10 @@
 
         @media (max-width: 767px) {
             .modal .panorama-side {
-                height: 40vh !important;
+                display: none; 
             }
             .modal .comments-side {
-                height: calc(50vh - 60px) !important;
+                height: calc(90vh - 65px) !important;
             }
             .modal-dialog.modal-dialog-centered.modal-xl {
                 margin: 0 auto !important;
