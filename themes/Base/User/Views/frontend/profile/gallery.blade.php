@@ -928,380 +928,380 @@
     <script src="https://unpkg.com/videojs-vr/dist/videojs-vr.min.js"></script>
 
     <script>
-$(document).ready(function() {
-    handleLikeButtons();
-    handleInitial360MediaModal();
-    handleCommentButtons();
-    handleCommentFormSubmission();
-    handleEditComment();
-    handleCancelEdit();
-    handleUpdateComment(); 
-    handleDeleteComment();
-});
-
-function handleEditComment() {
-    $(document).on('click', '.edit-comment-btn', function() {
-        var commentItem = $(this).closest('.comment-item');
-        commentItem.find('.comment-view-mode').hide();
-        commentItem.find('.comment-edit-mode').show();
-        commentItem.find('.comment-edit-input').focus();
+    $(document).ready(function() {
+        handleLikeButtons();
+        handleInitial360MediaModal();
+        handleCommentButtons();
+        handleCommentFormSubmission();
+        handleEditComment();
+        handleCancelEdit();
+        handleUpdateComment(); 
+        handleDeleteComment();
     });
-}
 
-function handleCancelEdit() {
-    $(document).on('click', '.cancel-edit-btn', function() {
-        var commentItem = $(this).closest('.comment-item');
-        commentItem.find('.comment-edit-mode').hide();
-        commentItem.find('.comment-view-mode').show();
-        
-        var originalText = commentItem.find('.comment-text').text();
-        commentItem.find('.comment-edit-input').val(originalText);
-    });
-}
-
-function handleUpdateComment() {
-    $(document).on('submit', '.update-comment-form', function(e) {
-        e.preventDefault();
-        
-        var form = $(this);
-        var commentItem = form.closest('.comment-item');
-        var commentId = commentItem.attr('data-comment-id');
-        var postId = form.data('post-id');
-        var newComment = form.find('input[name="comment"]').val();
-        
-        if (!commentId || commentId === 'undefined') {
-            console.error('Comment ID is undefined!');
-            alert('Error: Comment ID not found. Please refresh the page.');
-            return;
-        }
-        
-        if (!newComment.trim()) {
-            return;
-        }
-        
-        $.ajax({
-            url: '/post/' + commentId + '/comment',
-            method: 'PUT',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                comment: newComment
-            },
-            success: function(response) {
-                commentItem.find('.comment-text').text(response.comment);
-                
-                var timeText = commentItem.find('.comment-view-mode p.text-muted').first();
-                if (!timeText.find('span:contains("edited")').length) {
-                    timeText.append(' <span class="text-muted">(edited)</span>');
-                }
-                
-                commentItem.find('.comment-edit-input').val(response.comment);
-                
-                commentItem.find('.comment-edit-mode').hide();
-                commentItem.find('.comment-view-mode').show();
-            },
-            error: function(xhr) {
-                console.error('Update error:', xhr);
-                alert('Failed to update comment. Please try again.');
-            }
+    function handleEditComment() {
+        $(document).on('click', '.edit-comment-btn', function() {
+            var commentItem = $(this).closest('.comment-item');
+            commentItem.find('.comment-view-mode').hide();
+            commentItem.find('.comment-edit-mode').show();
+            commentItem.find('.comment-edit-input').focus();
         });
-    });
-}
+    }
 
-function handleDeleteComment() {
-    $(document).on('click', '.delete-comment-btn', function() {
-        if (!confirm('Are you sure you want to delete this comment?')) {
-            return;
-        }
-        
-        var btn = $(this);
-        var commentItem = btn.closest('.comment-item');
-        var commentId = commentItem.attr('data-comment-id');
-        var postId = btn.data('post-id');
-        
-        if (!commentId || commentId === 'undefined') {
-            console.error('Comment ID is undefined!');
-            alert('Error: Comment ID not found. Please refresh the page.');
-            return;
-        }
-        
-        $.ajax({
-            url: '/post/' + commentId + '/comment',
-            method: 'DELETE',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                console.log('Delete success:', response);
-                
-                commentItem.fadeOut(300, function() {
-                    $(this).remove();
+    function handleCancelEdit() {
+        $(document).on('click', '.cancel-edit-btn', function() {
+            var commentItem = $(this).closest('.comment-item');
+            commentItem.find('.comment-edit-mode').hide();
+            commentItem.find('.comment-view-mode').show();
+            
+            var originalText = commentItem.find('.comment-text').text();
+            commentItem.find('.comment-edit-input').val(originalText);
+        });
+    }
+
+    function handleUpdateComment() {
+        $(document).on('submit', '.update-comment-form', function(e) {
+            e.preventDefault();
+            
+            var form = $(this);
+            var commentItem = form.closest('.comment-item');
+            var commentId = commentItem.attr('data-comment-id');
+            var postId = form.data('post-id');
+            var newComment = form.find('input[name="comment"]').val();
+            
+            if (!commentId || commentId === 'undefined') {
+                console.error('Comment ID is undefined!');
+                alert('Error: Comment ID not found. Please refresh the page.');
+                return;
+            }
+            
+            if (!newComment.trim()) {
+                return;
+            }
+            
+            $.ajax({
+                url: '/post/' + commentId + '/comment',
+                method: 'PUT',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    comment: newComment
+                },
+                success: function(response) {
+                    commentItem.find('.comment-text').text(response.comment);
                     
-                    var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
-                    var newCount = Math.max(0, currentCount - 1);
-                    
-                    $('[data-target="#commentModal' + postId + '"] .action-count').text(newCount);
-                    $('.comment-count-' + postId).text(newCount);
-                    
-                    if (newCount === 0) {
-                        $('#noComments' + postId).show();
+                    var timeText = commentItem.find('.comment-view-mode p.text-muted').first();
+                    if (!timeText.find('span:contains("edited")').length) {
+                        timeText.append(' <span class="text-muted">(edited)</span>');
                     }
-                });
-            },
-            error: function(xhr) {
-                console.error('Delete error:', xhr);
-                alert('Failed to delete comment. Please try again.');
-            }
-        });
-    });
-}
-
-function handleCommentFormSubmission() {
-    $('.comment-form').on('submit', function(e) {
-        e.preventDefault();
-
-        var form = $(this);
-        var postId = form.data('post-id');
-        var commentInput = form.find('input[name="comment"]');
-        var commentText = commentInput.val();
-
-        if (!commentText.trim()) {
-            return;
-        }
-
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: form.serialize(),
-            success: function(response) {
-                console.log('Comment created:', response);
-                
-                if (!response.comment_id) {
-                    console.error('Response missing comment_id:', response);
-                    alert('Error: Invalid server response.');
-                    return;
+                    
+                    commentItem.find('.comment-edit-input').val(response.comment);
+                    
+                    commentItem.find('.comment-edit-mode').hide();
+                    commentItem.find('.comment-view-mode').show();
+                },
+                error: function(xhr) {
+                    console.error('Update error:', xhr);
+                    alert('Failed to update comment. Please try again.');
                 }
-                
-                commentInput.val('');
-                $('#noComments' + postId).hide();
-                
-                var escapedComment = $('<div>').text(response.comment).html();
-                var escapedName = $('<div>').text(response.user.name).html();
-                
-                var newComment = `
-                <div class="mb-3 comment-item" data-comment-id="${response.comment_id}">
-                    <div class="d-flex">
-                        <img src="${response.user.avatar}" 
-                            alt="User" 
-                            style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                        <div class="ml-2 flex-grow-1">
-                            <div class="comment-view-mode">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div class="bg-light p-2 rounded flex-grow-1">
-                                        <p class="mb-1 font-weight-bold" style="font-size: 1rem;">${escapedName}</p>
-                                        <p class="m-0 comment-text" style="font-size: 0.9rem;">${escapedComment}</p>
-                                    </div>
-                                    <div class="comment-actions ml-2 d-flex flex-column">
-                                        <button class="btn btn-sm edit-comment-btn mb-2"
-                                                title="Edit"
-                                                style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
-                                            <i class="fa fa-pencil"></i>
-                                        </button>
-                                        <button class="btn btn-sm delete-comment-btn"
-                                                title="Delete" 
-                                                data-post-id="${postId}"
-                                                style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
-                            </div>
-                            <div class="comment-edit-mode" style="display: none;">
-                                <form class="update-comment-form" data-post-id="${postId}">
-                                    <div class="d-flex align-items-center">
-                                        <input type="text" 
-                                               name="comment" 
-                                               class="form-control form-control-sm comment-edit-input" 
-                                               value="${escapedComment}"
-                                               style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
-                                               required>
+            });
+        });
+    }
+
+    function handleDeleteComment() {
+        $(document).on('click', '.delete-comment-btn', function() {
+            if (!confirm('Are you sure you want to delete this comment?')) {
+                return;
+            }
+            
+            var btn = $(this);
+            var commentItem = btn.closest('.comment-item');
+            var commentId = commentItem.attr('data-comment-id');
+            var postId = btn.data('post-id');
+            
+            if (!commentId || commentId === 'undefined') {
+                console.error('Comment ID is undefined!');
+                alert('Error: Comment ID not found. Please refresh the page.');
+                return;
+            }
+            
+            $.ajax({
+                url: '/post/' + commentId + '/comment',
+                method: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log('Delete success:', response);
+                    
+                    commentItem.fadeOut(300, function() {
+                        $(this).remove();
+                        
+                        var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
+                        var newCount = Math.max(0, currentCount - 1);
+                        
+                        $('[data-target="#commentModal' + postId + '"] .action-count').text(newCount);
+                        $('.comment-count-' + postId).text(newCount);
+                        
+                        if (newCount === 0) {
+                            $('#noComments' + postId).show();
+                        }
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Delete error:', xhr);
+                    alert('Failed to delete comment. Please try again.');
+                }
+            });
+        });
+    }
+
+    function handleCommentFormSubmission() {
+        $('.comment-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var postId = form.data('post-id');
+            var commentInput = form.find('input[name="comment"]');
+            var commentText = commentInput.val();
+
+            if (!commentText.trim()) {
+                return;
+            }
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    console.log('Comment created:', response);
+                    
+                    if (!response.comment_id) {
+                        console.error('Response missing comment_id:', response);
+                        alert('Error: Invalid server response.');
+                        return;
+                    }
+                    
+                    commentInput.val('');
+                    $('#noComments' + postId).hide();
+                    
+                    var escapedComment = $('<div>').text(response.comment).html();
+                    var escapedName = $('<div>').text(response.user.name).html();
+                    
+                    var newComment = `
+                    <div class="mb-3 comment-item" data-comment-id="${response.comment_id}">
+                        <div class="d-flex">
+                            <img src="${response.user.avatar}" 
+                                alt="User" 
+                                style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                            <div class="ml-2 flex-grow-1">
+                                <div class="comment-view-mode">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="bg-light p-2 rounded flex-grow-1">
+                                            <p class="mb-1 font-weight-bold" style="font-size: 1rem;">${escapedName}</p>
+                                            <p class="m-0 comment-text" style="font-size: 0.9rem;">${escapedComment}</p>
+                                        </div>
                                         <div class="comment-actions ml-2 d-flex flex-column">
-                                            <button type="submit" 
-                                                    class="btn btn-sm mb-2" 
-                                                    title="Save"
-                                                    style="background-color: #4caf50; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
-                                                <i class="fa fa-check"></i>
+                                            <button class="btn btn-sm edit-comment-btn mb-2"
+                                                    title="Edit"
+                                                    style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                <i class="fa fa-pencil"></i>
                                             </button>
-                                            <button type="button" 
-                                                    class="btn btn-sm cancel-edit-btn" 
-                                                    title="Cancel"
-                                                    style="background-color: #9e9e9e; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
-                                                <i class="fa fa-times"></i>
+                                            <button class="btn btn-sm delete-comment-btn"
+                                                    title="Delete" 
+                                                    data-post-id="${postId}"
+                                                    style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                <i class="fa fa-trash"></i>
                                             </button>
                                         </div>
                                     </div>
-                                </form>
+                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                                </div>
+                                <div class="comment-edit-mode" style="display: none;">
+                                    <form class="update-comment-form" data-post-id="${postId}">
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" 
+                                                name="comment" 
+                                                class="form-control form-control-sm comment-edit-input" 
+                                                value="${escapedComment}"
+                                                style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
+                                                required>
+                                            <div class="comment-actions ml-2 d-flex flex-column">
+                                                <button type="submit" 
+                                                        class="btn btn-sm mb-2" 
+                                                        title="Save"
+                                                        style="background-color: #4caf50; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" 
+                                                        class="btn btn-sm cancel-edit-btn" 
+                                                        title="Cancel"
+                                                        style="background-color: #9e9e9e; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                `;
-                
-                var $newComment = $(newComment);
-                $('#commentsList' + postId).append($newComment);
-                
-                var commentsList = document.getElementById('commentsList' + postId);
-                if (commentsList) {
-                    commentsList.scrollTop = commentsList.scrollHeight;
+                    `;
+                    
+                    var $newComment = $(newComment);
+                    $('#commentsList' + postId).append($newComment);
+                    
+                    var commentsList = document.getElementById('commentsList' + postId);
+                    if (commentsList) {
+                        commentsList.scrollTop = commentsList.scrollHeight;
+                    }
+
+                    var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text()) || 0;
+                    $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
+                    $('.comment-count-' + postId).text(currentCount + 1);
+                },
+                error: function(xhr) {
+                    console.error('Submit error:', xhr);
+                    alert('Failed to post comment. Please try again.');
                 }
-
-                var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text()) || 0;
-                $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
-                $('.comment-count-' + postId).text(currentCount + 1);
-            },
-            error: function(xhr) {
-                console.error('Submit error:', xhr);
-                alert('Failed to post comment. Please try again.');
-            }
+            });
         });
-    });
-}
+    }
 
-function handleLikeButtons() {
-    $('.like-btn').on('click', function(e) {
-        e.preventDefault();
+    function handleLikeButtons() {
+        $('.like-btn').on('click', function(e) {
+            e.preventDefault();
 
-        var btn = $(this);
-        var postId = btn.data('post-id');
-        var likeUrl = btn.data('like-url');
-        var icon = btn.find('i');
-        var likeCount = $('.like-count-' + postId);
-        var likeCountModal = $('.like-count-modal-' + postId);
+            var btn = $(this);
+            var postId = btn.data('post-id');
+            var likeUrl = btn.data('like-url');
+            var icon = btn.find('i');
+            var likeCount = $('.like-count-' + postId);
+            var likeCountModal = $('.like-count-modal-' + postId);
 
-        if (btn.data('processing')) {
-            return;
-        }
+            if (btn.data('processing')) {
+                return;
+            }
 
-        btn.data('processing', true);
+            btn.data('processing', true);
 
-        $.ajax({
-            url: likeUrl,
-            method: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                if (response.success) {
-                    if (response.liked) {
-                        btn.addClass('liked');
-                        icon.removeClass('fa-heart-o').addClass('fa-heart');
-                        icon.addClass('like-animation');
-                        setTimeout(function() {
-                            icon.removeClass('like-animation');
-                        }, 600);
+            $.ajax({
+                url: likeUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        if (response.liked) {
+                            btn.addClass('liked');
+                            icon.removeClass('fa-heart-o').addClass('fa-heart');
+                            icon.addClass('like-animation');
+                            setTimeout(function() {
+                                icon.removeClass('like-animation');
+                            }, 600);
+                        } else {
+                            btn.removeClass('liked');
+                            icon.removeClass('fa-heart').addClass('fa-heart-o');
+                        }
+
+                        likeCount.text(response.total_likes);
+                        likeCountModal.text(response.total_likes);
+                    }
+                    btn.data('processing', false);
+                },
+                error: function(xhr) {
+                    btn.data('processing', false);
+                    if (xhr.status === 401) {
+                        alert('You need to login to like this post');
                     } else {
-                        btn.removeClass('liked');
-                        icon.removeClass('fa-heart').addClass('fa-heart-o');
+                        alert('Failed to like/unlike post. Please try again.');
                     }
+                }
+            });
+        });
+    }
 
-                    likeCount.text(response.total_likes);
-                    likeCountModal.text(response.total_likes);
-                }
-                btn.data('processing', false);
-            },
-            error: function(xhr) {
-                btn.data('processing', false);
-                if (xhr.status === 401) {
-                    alert('You need to login to like this post');
-                } else {
-                    alert('Failed to like/unlike post. Please try again.');
-                }
+    function auto_grow(element) {
+        element.style.height = "5px";
+        element.style.height = (element.scrollHeight) + "px";
+    }
+
+    function handleInitial360MediaModal() {
+        var panoramaViewers = {};
+
+        $('[id^="commentModal"]').on('shown.bs.modal', function() {
+            var modalId = $(this).attr('id');
+            var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
+            var containerId = 'panorama-modal-' + postId;
+            var container = $('#' + containerId);
+
+            if (container.length && container.data('url') && !panoramaViewers[postId]) {
+                setTimeout(function() {
+                    try {
+                        if (typeof pannellum !== 'undefined') {
+                            panoramaViewers[postId] = pannellum.viewer(containerId, {
+                                "type": "equirectangular",
+                                "panorama": container.data('url'),
+                                "autoLoad": true,
+                                "showZoomCtrl": true
+                            });
+                        }
+                    } catch(e) {
+                        console.error('Panorama error:', e);
+                    }
+                }, 150);
             }
         });
-    });
-}
 
-function auto_grow(element) {
-    element.style.height = "5px";
-    element.style.height = (element.scrollHeight) + "px";
-}
-
-function handleInitial360MediaModal() {
-    var panoramaViewers = {};
-
-    $('[id^="commentModal"]').on('shown.bs.modal', function() {
-        var modalId = $(this).attr('id');
-        var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
-        var containerId = 'panorama-modal-' + postId;
-        var container = $('#' + containerId);
-
-        if (container.length && container.data('url') && !panoramaViewers[postId]) {
-            setTimeout(function() {
+        $('[id^="commentModal"]').on('hidden.bs.modal', function() {
+            var modalId = $(this).attr('id');
+            var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
+            if (panoramaViewers[postId]) {
                 try {
-                    if (typeof pannellum !== 'undefined') {
-                        panoramaViewers[postId] = pannellum.viewer(containerId, {
-                            "type": "equirectangular",
-                            "panorama": container.data('url'),
-                            "autoLoad": true,
-                            "showZoomCtrl": true
-                        });
-                    }
-                } catch(e) {
-                    console.error('Panorama error:', e);
-                }
-            }, 150);
-        }
-    });
-
-    $('[id^="commentModal"]').on('hidden.bs.modal', function() {
-        var modalId = $(this).attr('id');
-        var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
-        if (panoramaViewers[postId]) {
-            try {
-                panoramaViewers[postId].destroy();
-            } catch(e) {}
-            delete panoramaViewers[postId];
-        }
-    });
-}
-
-function handleCommentButtons() {
-    $('.comment-btn').on('click', function(e) {
-        e.preventDefault();
-
-        var targetDesktop = $(this).data('target');
-
-        $('.modal').modal('hide');
-        $('.modal-backdrop').remove();
-        $('body').removeClass('modal-open').css('padding-right', '');
-
-        setTimeout(function() {
-            $(targetDesktop).modal('show');
-        }, 350);
-    });
-
-    $('.modal').on('hidden.bs.modal', function() {
-        $('.modal-backdrop').remove();
-        $('body').removeClass('modal-open').css('padding-right', '');
-    });
-
-    var lastWidth = window.innerWidth;
-    var resizeTimeout;
-    
-    $(window).on('resize orientationchange', function() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-            var currentWidth = window.innerWidth;
-            var wasDesktop = lastWidth >= 768;
-            var isDesktop = currentWidth >= 768;
-            
-            if (wasDesktop !== isDesktop && $('.modal.show').length > 0) {
-                $('.modal').modal('hide');
-                $('.modal-backdrop').remove();
-                $('body').removeClass('modal-open').css('padding-right', '');
+                    panoramaViewers[postId].destroy();
+                } catch(e) {}
+                delete panoramaViewers[postId];
             }
-            
-            lastWidth = currentWidth;
-        }, 250); 
-    });
-}
+        });
+    }
+
+    function handleCommentButtons() {
+        $('.comment-btn').on('click', function(e) {
+            e.preventDefault();
+
+            var targetDesktop = $(this).data('target');
+
+            $('.modal').modal('hide');
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css('padding-right', '');
+
+            setTimeout(function() {
+                $(targetDesktop).modal('show');
+            }, 350);
+        });
+
+        $('.modal').on('hidden.bs.modal', function() {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css('padding-right', '');
+        });
+
+        var lastWidth = window.innerWidth;
+        var resizeTimeout;
+        
+        $(window).on('resize orientationchange', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                var currentWidth = window.innerWidth;
+                var wasDesktop = lastWidth >= 768;
+                var isDesktop = currentWidth >= 768;
+                
+                if (wasDesktop !== isDesktop && $('.modal.show').length > 0) {
+                    $('.modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css('padding-right', '');
+                }
+                
+                lastWidth = currentWidth;
+            }, 250); 
+        });
+    }
     </script>
 @endpush
