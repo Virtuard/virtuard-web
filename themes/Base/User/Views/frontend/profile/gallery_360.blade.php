@@ -602,7 +602,7 @@
                 height: 0px;
             }
             .modal .comments-side {
-                height: calc(90vh - 65px) !important;
+                height: calc(80vh - 65px) !important;
             }
             .modal-dialog.modal-dialog-centered.modal-xl {
                 margin: 0 auto !important;
