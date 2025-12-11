@@ -682,7 +682,7 @@
         $(document).ready(function() {
             previewPanorama();
             initPanoramaModals();
-            handleCommentFormSubmission();
+            handleCommentSubmission();
             handleLikeButtons();    
             handleEditComment();
             handleCancelEdit();
@@ -846,8 +846,8 @@
         });
     }
 
-    function handleCommentFormSubmission() {
-        $('.comment-form').on('submit', function(e) {
+    function handleCommentSubmission() {
+        $('.virtual-tour-comment-form').on('submit', function(e) {
             e.preventDefault();
 
             var form = $(this);

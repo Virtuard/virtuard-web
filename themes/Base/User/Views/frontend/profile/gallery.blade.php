@@ -349,7 +349,7 @@
                                             @auth
                                                 <form action="{{ route('post.comment.store', $post->id) }}"
                                                       method="POST"
-                                                      class="comment-form"
+                                                      class="post-comment-form"
                                                       data-post-id="{{ $post->id }}">
                                                     @csrf
                                                     <div class="input-group">
@@ -1075,7 +1075,7 @@
     }
 
     function handleCommentFormSubmission() {
-        $('.comment-form').on('submit', function(e) {
+        $('.post-comment-form').on('submit', function(e) {
             e.preventDefault();
 
             var form = $(this);
