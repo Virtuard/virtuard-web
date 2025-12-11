@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\FollowUser;
 use App\User;
+use Illuminate\Support\Facades\Log;
 use Modules\Hotel\Models\Hotel;
 use Modules\Location\Models\LocationCategory;
 use Modules\Page\Models\Page;
@@ -183,7 +184,6 @@ class PostController extends Controller
     public function likePost(Request $request, $id)
     {
         $idUser = Auth::id();
-
         $post = UserPost::find($id);
         if (!$post) {
             return redirect()->back()->with('error', 'Post not found');
@@ -192,7 +192,7 @@ class PostController extends Controller
         $postLike = PostLike::where('post_id', $id)
             ->where('user_id', $idUser)
             ->first();
-
+        Log::info($postLike);
         if (!$postLike) {
             $like = new PostLike();
             $like->post_id = $id;
@@ -212,6 +212,8 @@ class PostController extends Controller
         if ($request->ajax() || $request->wantsJson()) {
             return response()->json([
                 'success' => true,
+                'liked' => (bool)!$postLike,
+                'like_count' => $post->likes->count()
             ]);
         }
         return redirect()->to(url()->previous() . '#Post-' . $id);
