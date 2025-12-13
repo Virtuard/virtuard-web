@@ -988,22 +988,22 @@ class ManagePanoramaController extends ApiController
         $pattern = '#^' . preg_quote($panorama->user_id, '#') . '/#';
         $imageUrl = preg_replace($pattern, '', $imageUrl);
         
-        // Step 1: Try uploads/ipanoramaBuilder/imageUrl
-        $path1 = 'uploads/ipanoramaBuilder/' . $imageUrl;
+        // Step 1: Try uploads/ipanoramaBuilder/upload/imageUrl
+        $path1 = 'uploads/ipanoramaBuilder/upload/' . $imageUrl;
         $fullPath1 = public_path($path1);
         if (File::exists($fullPath1)) {
             return preg_replace('#/+#', '/', $path1);
         }
         
-        // Step 2: Try uploads/ipanoramaBuilder/user_id/imageUrl
-        $path2 = 'uploads/ipanoramaBuilder/' . $panorama->user_id . '/' . $imageUrl;
+        // Step 2: Try uploads/ipanoramaBuilder/upload/user_id/imageUrl
+        $path2 = 'uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $imageUrl;
         $fullPath2 = public_path($path2);
         if (File::exists($fullPath2)) {
             return preg_replace('#/+#', '/', $path2);
         }
         
-        // Step 3: Use uploads/ipanoramaBuilder/user_id/panorama_id/imageUrl
-        $path3 = 'uploads/ipanoramaBuilder/' . $panorama->user_id . '/' . $panorama->id . '/' . $imageUrl;
+        // Step 3: Use uploads/ipanoramaBuilder/upload/user_id/panorama_id/imageUrl
+        $path3 = 'uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $panorama->id . '/' . $imageUrl;
         return preg_replace('#/+#', '/', $path3);
     }
 
