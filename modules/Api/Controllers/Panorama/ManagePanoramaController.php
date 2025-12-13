@@ -880,9 +880,7 @@ class ManagePanoramaController extends ApiController
         
         foreach ($code->scenes as $sceneId => $scene) {
             if (isset($scene->image)) {
-                $imageUrl = $useRelativePath 
-                    ? $this->buildImagePath($scene->image, $panorama)
-                    : $this->buildImageUrl($scene->image, $panorama);
+                $imageUrl = $this->buildImagePath($scene->image, $panorama);
                 $scenes[] = [
                     'id' => $sceneId,
                     'image' => $imageUrl,
@@ -924,9 +922,7 @@ class ManagePanoramaController extends ApiController
             }
             
             if ($imageUrl) {
-                $imageUrl = $useRelativePath 
-                    ? $this->buildImagePath($imageUrl, $panorama)
-                    : $this->buildImageUrl($imageUrl, $panorama);
+                $imageUrl = $this->buildImagePath($imageUrl, $panorama);
                 $scenes[] = [
                     'id' => is_numeric($index) ? (string)$index : $index,
                     'image' => $imageUrl,
@@ -990,56 +986,23 @@ class ManagePanoramaController extends ApiController
         $pattern = '#^' . preg_quote($panorama->user_id, '#') . '/' . preg_quote($panorama->id, '#') . '/#';
         $imageUrl = preg_replace($pattern, '', $imageUrl);
         
-        // Build clean path
+        // First check if file exists at user_id/imageUrl path
+        $pathWithoutPanoramaId = 'uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $imageUrl;
+        $fullPathWithoutPanoramaId = public_path($pathWithoutPanoramaId);
+        
+        // If file exists without panorama_id, use path without "s" in upload
+        if (File::exists($fullPathWithoutPanoramaId)) {
+            $returnPath = 'upload/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $imageUrl;
+            return preg_replace('#/+#', '/', $returnPath);
+        }
+        
+        // Otherwise, use path with panorama_id
         $cleanPath = 'uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $panorama->id . '/' . $imageUrl;
         
         // Normalize double slashes in path
         return preg_replace('#/+#', '/', $cleanPath);
     }
 
-    /**
-     * Build full URL for image
-     *
-     * @param string $imageUrl
-     * @param object $panorama
-     * @return string
-     */
-    protected function buildImageUrl($imageUrl, $panorama)
-    {
-        // If already a full URL, normalize and return
-        if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
-            return preg_replace('#([^:])//+#', '$1/', $imageUrl);
-        }
-        
-        // Clean the imageUrl - remove leading/trailing slashes and normalize
-        $imageUrl = trim($imageUrl, '/');
-        
-        // If it's already a full path starting with /uploads/, normalize and return
-        if (strpos($imageUrl, 'uploads/') === 0 || strpos($imageUrl, '/uploads/') === 0) {
-            $imageUrl = ltrim($imageUrl, '/');
-            $cleanPath = '/' . $imageUrl;
-            $cleanPath = preg_replace('#/+#', '/', $cleanPath);
-            $fullUrl = url($cleanPath);
-            return preg_replace('#([^:])//+#', '$1/', $fullUrl);
-        }
-        
-        // Remove common prefixes that might be in the stored path
-        $imageUrl = preg_replace('#^(upload/|ipanoramaBuilder/upload/|uploads/ipanoramaBuilder/upload/)#', '', $imageUrl);
-        
-        // Remove user_id and panorama_id if already in the path
-        $pattern = '#^' . preg_quote($panorama->user_id, '#') . '/' . preg_quote($panorama->id, '#') . '/#';
-        $imageUrl = preg_replace($pattern, '', $imageUrl);
-        
-        // Build clean path
-        $cleanPath = '/uploads/ipanoramaBuilder/upload/' . $panorama->user_id . '/' . $panorama->id . '/' . $imageUrl;
-        
-        // Normalize double slashes in path
-        $cleanPath = preg_replace('#/+#', '/', $cleanPath);
-        
-        // Build URL and remove any double slashes (except after http: or https:)
-        $fullUrl = url($cleanPath);
-        return preg_replace('#([^:])//+#', '$1/', $fullUrl);
-    }
 
     protected function isValidAccess($user_id)
     {
