@@ -8,10 +8,104 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * @OA\Tag(
+ *     name="Profile",
+ *     description="API Endpoints for user profile management"
+ * )
+ */
 class ProfileController extends Controller
 {
+    /**
+     * @OA\Get(
+     *     path="/api/profile",
+     *     tags={"Profile"},
+     *     summary="Get current user profile",
+     *     description="Retrieve the authenticated user's profile information",
+     *     security={{"sanctum":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful response",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="user", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="first_name", type="string", example="John"),
+     *                 @OA\Property(property="last_name", type="string", example="Doe"),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+     *                 @OA\Property(property="phone", type="string", nullable=true, example="+1234567890"),
+     *                 @OA\Property(property="business_name", type="string", nullable=true, example="My Business"),
+     *                 @OA\Property(property="bio", type="string", nullable=true, example="User bio"),
+     *                 @OA\Property(property="address", type="string", nullable=true, example="123 Main St"),
+     *                 @OA\Property(property="city", type="string", nullable=true, example="New York"),
+     *                 @OA\Property(property="state", type="string", nullable=true, example="NY"),
+     *                 @OA\Property(property="country", type="string", nullable=true, example="USA"),
+     *                 @OA\Property(property="zip_code", type="string", nullable=true, example="10001"),
+     *                 @OA\Property(property="website_url", type="string", nullable=true, example="https://example.com"),
+     *                 @OA\Property(property="instagram_url", type="string", nullable=true, example="https://instagram.com/user"),
+     *                 @OA\Property(property="facebook_url", type="string", nullable=true, example="https://facebook.com/user"),
+     *                 @OA\Property(property="twitter_url", type="string", nullable=true, example="https://twitter.com/user"),
+     *                 @OA\Property(property="linkedin_url", type="string", nullable=true, example="https://linkedin.com/in/user"),
+     *                 @OA\Property(property="avatar_url", type="string", nullable=true, example="https://example.com/uploads/avatar.jpg"),
+     *                 @OA\Property(property="user_name", type="string", nullable=true, example="johndoe"),
+     *                 @OA\Property(property="birthday", type="string", format="date", nullable=true, example="1990-01-01")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Missing or invalid authentication token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function getProfile(Request $request)
+    {
+        try {
+            // Middleware auth:sanctum sudah memastikan user terautentikasi
+            $user = $request->user();
+
+            return response()->json([
+                'status' => true,
+                'user' => [
+                    'id' => $user->id,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'business_name' => $user->business_name,
+                    'bio' => $user->bio,
+                    'address' => $user->address,
+                    'address2' => $user->address2,
+                    'city' => $user->city,
+                    'state' => $user->state,
+                    'country' => $user->country,
+                    'zip_code' => $user->zip_code,
+                    'website_url' => $user->website_url,
+                    'instagram_url' => $user->instagram_url,
+                    'facebook_url' => $user->facebook_url,
+                    'twitter_url' => $user->twitter_url,
+                    'linkedin_url' => $user->linkedin_url,
+                    'avatar_url' => $user->getAvatarUrl(),
+                    'user_name' => $user->user_name,
+                    'birthday' => $user->birthday,
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please try again later.',
+            ], 500);
+        }
+    }
+
     public function profile(Request $request, $id_or_slug)
     {
         $user = User::where('user_name', '=', $id_or_slug)->first();
@@ -132,36 +226,93 @@ class ProfileController extends Controller
     return response()->json($data);
 }
 
+    /**
+     * @OA\Post(
+     *     path="/api/profile",
+     *     tags={"Profile"},
+     *     summary="Update user profile",
+     *     description="Update the authenticated user's profile information",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"first_name", "last_name"},
+     *                 @OA\Property(property="first_name", type="string", maxLength=60, example="John", description="User's first name"),
+     *                 @OA\Property(property="last_name", type="string", maxLength=60, example="Doe", description="User's last name"),
+     *                 @OA\Property(property="phone", type="string", maxLength=20, nullable=true, example="+1234567890", description="User's phone number"),
+     *                 @OA\Property(property="address", type="string", maxLength=255, nullable=true, example="123 Main St", description="User's address"),
+     *                 @OA\Property(property="address2", type="string", maxLength=255, nullable=true, example="Apt 4B", description="User's address line 2"),
+     *                 @OA\Property(property="bio", type="string", nullable=true, example="User bio description", description="User's biography"),
+     *                 @OA\Property(property="website_url", type="string", nullable=true, example="https://example.com", description="User's website URL"),
+     *                 @OA\Property(property="instagram_url", type="string", nullable=true, example="https://instagram.com/user", description="User's Instagram URL"),
+     *                 @OA\Property(property="facebook_url", type="string", nullable=true, example="https://facebook.com/user", description="User's Facebook URL"),
+     *                 @OA\Property(property="twitter_url", type="string", nullable=true, example="https://twitter.com/user", description="User's Twitter URL"),
+     *                 @OA\Property(property="linkedin_url", type="string", nullable=true, example="https://linkedin.com/in/user", description="User's LinkedIn URL"),
+     *                 @OA\Property(property="avatar", type="string", format="binary", nullable=true, description="User's avatar image (jpeg, png, jpg, max 2MB)")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Profile updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Profile updated successfully"),
+     *             @OA\Property(property="user", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="first_name", type="string", example="John"),
+     *                 @OA\Property(property="last_name", type="string", example="Doe"),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", format="email", example="john.doe@example.com"),
+     *                 @OA\Property(property="phone", type="string", nullable=true, example="+1234567890"),
+     *                 @OA\Property(property="business_name", type="string", nullable=true, example="My Business"),
+     *                 @OA\Property(property="bio", type="string", nullable=true, example="User bio"),
+     *                 @OA\Property(property="website_url", type="string", nullable=true, example="https://example.com"),
+     *                 @OA\Property(property="instagram_url", type="string", nullable=true, example="https://instagram.com/user"),
+     *                 @OA\Property(property="facebook_url", type="string", nullable=true, example="https://facebook.com/user"),
+     *                 @OA\Property(property="twitter_url", type="string", nullable=true, example="https://twitter.com/user"),
+     *                 @OA\Property(property="linkedin_url", type="string", nullable=true, example="https://linkedin.com/in/user"),
+     *                 @OA\Property(property="avatar_url", type="string", nullable=true, example="https://example.com/uploads/avatar.jpg")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Missing or invalid authentication token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\AdditionalProperties(type="array", @OA\Items(type="string"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Something went wrong. Please try again later.")
+     *         )
+     *     )
+     * )
+     */
 public function updateProfile(Request $request)
     {
         try {
-            if (!auth()->check()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Unauthorized',
-                ], 401);
-            }
+            // Middleware auth:sanctum sudah memastikan user terautentikasi
+            $user = $request->user();
 
-            $user = auth()->user();
-
-// first_name
-// last_name
-// business_name
-// email
-// address
-// address2
-// phone
-// birthday
-// city
-// state
-// country
-// zip_code
-// bio
-// website_url
-// instagram_url
-// facebook_url
-// twitter_url
-// linkedin_url
 
             $validator = Validator::make($request->all(), [
                 'first_name' => 'required|string|max:60',
@@ -205,7 +356,7 @@ public function updateProfile(Request $request)
                 if ($user->avatar_id) {
                     $oldMedia = $mediaFile->findById($user->avatar_id);
                     if ($oldMedia) {
-                        \Storage::delete($oldMedia->file_path);
+                        Storage::delete($oldMedia->file_path);
                          DB::table('media_files')->where('id', $oldMedia->id)->delete();
                     }
                 }
