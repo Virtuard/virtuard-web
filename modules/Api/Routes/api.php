@@ -177,6 +177,7 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
 });
 
 Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
+Route::get('map/explore', [MapController::class, 'explore']);
 
 Route::get('/all-members', [MemberController::class, 'allMembers']);
 
