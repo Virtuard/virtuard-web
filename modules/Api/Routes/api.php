@@ -24,6 +24,7 @@ use Modules\Api\Controllers\MapController;
 use Modules\Api\Controllers\AttributeController;
 use Modules\Api\Controllers\Panorama\ManagePanoramaController;
 use Modules\Api\Controllers\Auth\ResetPasswordController;
+use Modules\Api\Controllers\HomePageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,10 @@ use Modules\Api\Controllers\Auth\ResetPasswordController;
 */
 /* Config */
 Route::get('configs','BookingController@getConfigs')->name('api.get_configs');
+
+/* Home Page */
+Route::get('home-page/service-counts', [HomePageController::class, 'getServiceCounts']);
+
 /* Service */
 Route::get('services','SearchController@searchServices')->name('api.service-search');
 Route::get('{type}/search','SearchController@search')->name('api.search2');
