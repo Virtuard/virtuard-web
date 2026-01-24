@@ -23,6 +23,7 @@ use Modules\Api\Controllers\MemberController;
 use Modules\Api\Controllers\MapController;
 use Modules\Api\Controllers\AttributeController;
 use Modules\Api\Controllers\Panorama\ManagePanoramaController;
+use Modules\Api\Controllers\Auth\ResetPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -81,9 +82,15 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::get('me', 'AuthController@me');
     Route::post('me', 'AuthController@updateUser');
     Route::post('change-password', 'AuthController@changePassword');
-    Route::post('forgot-password', 'AuthController@sendResetLinkEmail');
     Route::get('check-email-availability', 'AuthController@checkEmailAvailability');
-}); 
+});
+
+// OTP Reset Password
+Route::group(['middleware' => 'api', 'prefix' => 'auth/otp'], function ($router) {
+    Route::post('forgot-password', [ResetPasswordController::class, 'forgotPassword']);
+    Route::post('forgot-password/verify', [ResetPasswordController::class, 'verifyOtp']);
+    Route::post('reset-password', [ResetPasswordController::class, 'resetPassword']);
+});
 
 
 /* User */
