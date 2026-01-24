@@ -264,7 +264,7 @@ class ResetPasswordController extends Controller
     {
         try {
             $subject = __('Reset Password OTP');
-            $message = __('Your OTP code for password reset is: :otp. This code will expire in 10 minutes.', ['otp' => $otpToken]);
+            $message = __('Your OTP code for password reset is: :otp. This code will expire in 2 minutes.', ['otp' => $otpToken]);
 
             Mail::raw($message, function ($mail) use ($user, $subject) {
                 $mail->to($user->email)
