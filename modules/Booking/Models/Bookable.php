@@ -420,6 +420,14 @@
                 'map_lat' => $this->map_lat,
                 'map_lng' => $this->map_lng,
             ];
+            
+            // Add wishlist status (same mechanism as view: isWishList() returns 'active' or '')
+            if (method_exists($this, 'isWishList')) {
+                $wishlistStatus = $this->isWishList();
+                $data['is_wishlisted'] = !empty($wishlistStatus) && $wishlistStatus === 'active';
+            } else {
+                $data['is_wishlisted'] = false;
+            }
             if ($forSingle) {
                 $data["address"] = $this->address;
                 $data["map_lat"] = $this->map_lat;

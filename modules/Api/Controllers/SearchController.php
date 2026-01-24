@@ -5,6 +5,7 @@ namespace Modules\Api\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Modules\Booking\Models\Service;
 use Modules\Flight\Controllers\FlightController;
 
@@ -167,6 +168,14 @@ class SearchController extends Controller
 
         if (empty($class) || !class_exists($class)) {
             return $this->sendError(__("Type does not exist"));
+        }
+
+        // Ensure Sanctum authentication is checked for wishlist
+        // Sanctum will authenticate user from token even if route is not protected
+        $user = request()->user('sanctum');
+        if ($user) {
+            // Set authenticated user for Auth facade to use in hasWishList relation
+            Auth::setUser($user);
         }
 
         $limit = request()->query('limit', setting_item($type . "_page_limit_item") ?: 9);
@@ -436,7 +445,15 @@ class SearchController extends Controller
             return $this->sendError(__("Type does not exists"))->setStatusCode(404);
         }
 
-        $row = $class::find($id);
+        // Ensure Sanctum authentication is checked for wishlist
+        $user = request()->user('sanctum');
+        if ($user) {
+            // Set authenticated user for Auth facade to use in hasWishList relation
+            Auth::setUser($user);
+        }
+
+        // Load with hasWishList relation (same as web detail controller)
+        $row = $class::with(['hasWishList'])->find($id);
         if (empty($row)) {
             return $this->sendError(__("Resource not found"))->setStatusCode(404);
         }
