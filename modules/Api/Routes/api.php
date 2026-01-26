@@ -187,6 +187,17 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
 Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
 Route::get('map/explore', [MapController::class, 'explore']);
 
+/* Member */
+Route::group(['middleware' => 'api', 'prefix' => 'members'], function ($router) {
+    Route::get('/', [MemberController::class, 'allMembers']);
+    Route::get('/{id_or_slug}', [MemberController::class, 'detailMember']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/{id}/follow', [MemberController::class, 'follow']);
+        Route::post('/{id}/unfollow', [MemberController::class, 'unfollow']);
+    });
+});
+
+// Legacy route (keep for backward compatibility)
 Route::get('/all-members', [MemberController::class, 'allMembers']);
 
 Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
