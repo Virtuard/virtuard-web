@@ -24,6 +24,7 @@ use Modules\Api\Controllers\MapController;
 use Modules\Api\Controllers\AttributeController;
 use Modules\Api\Controllers\Panorama\ManagePanoramaController;
 use Modules\Api\Controllers\Auth\ResetPasswordController;
+use Modules\Api\Controllers\Auth\GoogleLoginController;
 use Modules\Api\Controllers\HomePageController;
 
 /*
@@ -88,6 +89,8 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('me', 'AuthController@updateUser');
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('check-email-availability', 'AuthController@checkEmailAvailability');
+    // Google Login
+    Route::post('google/login', [GoogleLoginController::class, 'googleLogin']);
 });
 
 // OTP Reset Password
