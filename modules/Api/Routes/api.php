@@ -26,6 +26,7 @@ use Modules\Api\Controllers\Panorama\ManagePanoramaController;
 use Modules\Api\Controllers\Auth\ResetPasswordController;
 use Modules\Api\Controllers\Auth\GoogleLoginController;
 use Modules\Api\Controllers\HomePageController;
+use Modules\Api\Controllers\UserGameProgressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -199,6 +200,15 @@ Route::group(['middleware' => 'api', 'prefix' => 'members'], function ($router) 
 
 // Legacy route (keep for backward compatibility)
 Route::get('/all-members', [MemberController::class, 'allMembers']);
+
+/* Game Progress */
+Route::group(['middleware' => ['api', 'auth:sanctum'], 'prefix' => 'game-progress'], function ($router) {
+    Route::get('/', [UserGameProgressController::class, 'index']);
+    Route::post('/', [UserGameProgressController::class, 'store']); // Create or Update (Upsert)
+    Route::post('/add-score', [UserGameProgressController::class, 'addScore']);
+    Route::post('/use-life', [UserGameProgressController::class, 'useLife']);
+    Route::post('/add-play-time', [UserGameProgressController::class, 'addPlayTime']);
+});
 
 Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('/', [ProfileController::class, 'getProfile']);
