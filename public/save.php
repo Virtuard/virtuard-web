@@ -2,9 +2,6 @@
 /**
  * Save User Progress API
  * Compatible with Virtuard Laravel API structure
- * 
- * Endpoint: POST /api/progress/save
- * Auth: Bearer token (Laravel Sanctum)
  */
 
 header('Content-Type: application/json');
@@ -18,24 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Database configuration - MODIFY WITH YOUR VIRTUARD DB CREDENTIALS
-// Database configuration
-$host = '31.97.50.178';
-$dbname = 'virtuard_db'; // Assuming a standard naming convention or I should ask, but let's try to find if it was mentioned
+// CONFIGURAZIONE DATABASE
+$host = 'localhost';
+$dbname = 'virtuard'; 
 $username = 'virtuard';
 $password = 'v1rtu4rD@ubuDD25!!!';
-$port = '31525';
+$port = '3306';
 
 try {
     $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Get Bearer token (optional - for future authentication)
-    $headers = getallheaders();
-    $token = null;
-    if (isset($headers['Authorization'])) {
-        $token = str_replace('Bearer ', '', $headers['Authorization']);
-    }
 
     // Get JSON input
     $json = file_get_contents('php://input');
@@ -110,4 +99,5 @@ try {
         'message' => 'Database error: ' . $e->getMessage()
     ]);
 }
+?>
 ?>
