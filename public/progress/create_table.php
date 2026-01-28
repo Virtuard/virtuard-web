@@ -6,7 +6,7 @@ $password = 'v1rtu4rD@ubuDD25!!!';
 $port = '3306';
 
 try {
-    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password);
+    $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbname", $username, $password>);
     
     $sql = "CREATE TABLE IF NOT EXISTS `puzzle_progress` (
       [id](cci:1://file:///C:/Users/User/.gemini/antigravity/scratch/AndroidPuzzle/app/src/main/java/com/antoniorutilio/puzzle/HomeActivity.kt:351:4-475:5) bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
