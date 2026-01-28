@@ -1,8 +1,4 @@
 <?php
-/**
- * Load User Progress API
- */
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, OPTIONS');
@@ -13,9 +9,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// CONFIGURAZIONE DATABASE
+// Configurazione Database
 $host = 'localhost';
-$dbname = 'virtuard_db'; // <--- ASSICURATI CHE IL NOME DEL DATABASE SIA QUESTO
+$dbname = 'virtuard'; 
 $username = 'virtuard';
 $password = 'v1rtu4rD@ubuDD25!!!';
 $port = '3306';
@@ -25,9 +21,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     $email = isset($_GET['email']) ? $_GET['email'] : null;
-
     if (!$email) {
-        http_response_code(400);
         echo json_encode(['status' => 0, 'message' => 'Email required']);
         exit;
     }
@@ -43,12 +37,11 @@ try {
             'coins' => (int) $row['coins'],
             'timestamp' => (int) $row['timestamp']
         ];
-        echo json_encode(['status' => 1, 'message' => 'Loaded', 'progress' => $progress]);
+        echo json_encode(['status' => 1, 'progress' => $progress]);
     } else {
-        echo json_encode(['status' => 1, 'message' => 'No progress', 'progress' => ['completedLevels' => 0, 'completedLevelIds' => [], 'coins' => 0, 'timestamp' => time() * 1000]]);
+        echo json_encode(['status' => 1, 'message' => 'New user', 'progress' => ['completedLevels' => 0, 'completedLevelIds' => [], 'coins' => 0, 'timestamp' => time() * 1000]]);
     }
 } catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['status' => 0, 'message' => 'DB Error: ' . $e->getMessage()]);
+    echo json_encode(['status' => 0, 'message' => 'Error: ' . $e->getMessage()]);
 }
 ?>
