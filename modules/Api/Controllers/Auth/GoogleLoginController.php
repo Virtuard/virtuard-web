@@ -20,21 +20,21 @@ class GoogleLoginController extends Controller
      * @OA\Post(
      *     path="/api/auth/google/login",
      *     tags={"Auth"},
-     *     summary="Google Login",
-     *     description="Authenticate user using Google ID token. Verifies the token with Google and creates/authenticates user.",
+     *     summary="Google Login & Register",
+     *     description="Authenticate or register user using Google ID token. This endpoint automatically creates a new user account if the user doesn't exist, or logs in if the user already exists. Verifies the token with Google and returns an access token.",
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
      *             required={"id_token"},
-     *             @OA\Property(property="id_token", type="string", example="eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...", description="Google ID token from client")
+     *             @OA\Property(property="id_token", type="string", example="eyJhbGciOiJSUzI1NiIsImtpZCI6Ij...", description="Google ID token from client (obtained from Google Sign-In)")
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Login successful",
+     *         description="Login/Register successful",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="integer", example=1),
-     *             @OA\Property(property="token", type="string", example="1|xxxxxxxxxxxxx"),
+     *             @OA\Property(property="token", type="string", example="1|xxxxxxxxxxxxx", description="Sanctum access token"),
      *             @OA\Property(property="user", type="object",
      *                 @OA\Property(property="id", type="integer", example=1),
      *                 @OA\Property(property="name", type="string", example="John Doe"),
@@ -46,7 +46,8 @@ class GoogleLoginController extends Controller
      *                 @OA\Property(property="user_name", type="string", example="johndoe"),
      *                 @OA\Property(property="photo_profile", type="string", example="https://...")
      *             ),
-     *             @OA\Property(property="message", type="string", example="Login success")
+     *             @OA\Property(property="message", type="string", example="Login success or Registration successful"),
+     *             @OA\Property(property="is_new_user", type="boolean", example=false, description="true if user was just created, false if existing user logged in")
      *         )
      *     ),
      *     @OA\Response(
@@ -138,6 +139,7 @@ class GoogleLoginController extends Controller
 
             // 6. Find or create user
             $provider = 'google';
+            $isNewUser = false;
             $user = User::getUserBySocialId($provider, $googleId);
 
             if (!$user) {
@@ -158,6 +160,7 @@ class GoogleLoginController extends Controller
                     $user->save();
                 } else {
                     // Create new user
+                    $isNewUser = true;
                     $splitName = explode(' ', $name, 2);
                     $firstName = $splitName[0] ?? $givenName ?? $name;
                     $lastName = $splitName[1] ?? $familyName ?? null;
@@ -185,7 +188,14 @@ class GoogleLoginController extends Controller
                     }
 
                     // Assign default role
-                    $user->assignRole(setting_item('user_role'));
+                    $defaultRole = setting_item('user_role');
+                    if ($defaultRole) {
+                        $user->assignRole($defaultRole);
+                    } else {
+                        // Fallback to role_id 2 if setting is not configured
+                        $user->role_id = 2;
+                        $user->save();
+                    }
 
                     // Send registration email
                     try {
@@ -216,7 +226,8 @@ class GoogleLoginController extends Controller
                 'token' => $accessToken,
                 'user' => new UserResource($user),
                 'status' => 1,
-                'message' => __('Login success')
+                'message' => $isNewUser ? __('Registration successful') : __('Login success'),
+                'is_new_user' => $isNewUser
             ];
 
         } catch (\Exception $e) {
