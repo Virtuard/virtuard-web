@@ -204,10 +204,15 @@ Route::get('/all-members', [MemberController::class, 'allMembers']);
 /* Game Progress */
 Route::group(['middleware' => ['api', 'auth:sanctum'], 'prefix' => 'game-progress'], function ($router) {
     Route::get('/', [UserGameProgressController::class, 'index']);
-    Route::post('/', [UserGameProgressController::class, 'store']); // Create or Update (Upsert)
+    Route::post('/', [UserGameProgressController::class, 'store']);
     Route::post('/add-score', [UserGameProgressController::class, 'addScore']);
     Route::post('/use-life', [UserGameProgressController::class, 'useLife']);
     Route::post('/add-play-time', [UserGameProgressController::class, 'addPlayTime']);
+    
+    Route::post('/images/upload', [UserGameProgressController::class, 'uploadImage']);
+    Route::get('/images', [UserGameProgressController::class, 'getImages']);
+    Route::get('/images/{id}', [UserGameProgressController::class, 'getImage']);
+    Route::delete('/images/{id}', [UserGameProgressController::class, 'deleteImage']);
 });
 
 Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {

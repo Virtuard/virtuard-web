@@ -4,11 +4,14 @@ namespace Modules\Api\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\UserGameProgress;
+use App\Models\GameImage;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Exception;
 
 class UserGameProgressController extends Controller
@@ -45,7 +48,6 @@ class UserGameProgressController extends Controller
             $progress = UserGameProgress::where('user_id', $userId)->first();
 
             if (!$progress) {
-                // Create default progress if not exists
                 $progress = UserGameProgress::create([
                     'user_id' => $userId,
                     'current_level' => 1,
@@ -233,7 +235,6 @@ class UserGameProgressController extends Controller
             $progress = UserGameProgress::where('user_id', $userId)->first();
 
             if (!$progress) {
-                // Create default progress if not exists
                 $progress = UserGameProgress::create([
                     'user_id' => $userId,
                     'current_level' => 1,
@@ -348,7 +349,6 @@ class UserGameProgressController extends Controller
             $progress = UserGameProgress::where('user_id', $userId)->first();
 
             if (!$progress) {
-                // Create default progress if not exists
                 $progress = UserGameProgress::create([
                     'user_id' => $userId,
                     'current_level' => 1,
@@ -370,6 +370,278 @@ class UserGameProgressController extends Controller
         } catch (Exception $exception) {
             Log::error("Error adding play time: " . $exception->getMessage());
             return $this->sendError('Failed to add play time', [], 500);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/game-progress/images/upload",
+     *     tags={"Game Progress"},
+     *     summary="Upload image for game",
+     *     description="Upload an image file from device to be used in the random image game",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="image",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="The image file to upload (JPEG, PNG, WebP, max 10MB)"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Image uploaded successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Image uploaded successfully"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     )
+     * )
+     */
+    public function uploadImage(Request $request)
+    {
+        try {
+            if (!Auth::check()) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
+            ]);
+
+            if ($validator->fails()) {
+                return $this->sendError('Validation failed', ['errors' => $validator->errors()], 422);
+            }
+
+            $userId = Auth::id();
+            $file = $request->file('image');
+
+            if (!$file || !$file->isValid()) {
+                return $this->sendError('Invalid image file provided', [], 400);
+            }
+
+            $folder = 'game-images/' . sprintf('%04d', (int)$userId / 1000) . '/' . $userId . '/' . date('Y/m/d');
+            $extension = $file->getClientOriginalExtension();
+            $newFileName = time() . '-' . Str::random(10) . '.' . $extension;
+
+            $fullPath = public_path('uploads/' . $folder);
+            if (!file_exists($fullPath)) {
+                mkdir($fullPath, 0755, true);
+            }
+
+            $filePath = $file->storeAs($folder, $newFileName, 'uploads');
+            $imageUrl = asset('uploads/' . $filePath);
+
+            $gameImage = GameImage::create([
+                'user_id' => $userId,
+                'url' => $imageUrl,
+            ]);
+
+            return $this->sendSuccess($gameImage, 'Image uploaded successfully');
+
+        } catch (Exception $exception) {
+            Log::error("Error uploading game image: " . $exception->getMessage());
+            return $this->sendError('Failed to upload image: ' . $exception->getMessage(), [], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/game-progress/images",
+     *     tags={"Game Progress"},
+     *     summary="Get user's game images",
+     *     description="Retrieve all images uploaded by the authenticated user for the game",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=20)
+     *     ),
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Images retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Images retrieved successfully"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
+     */
+    public function getImages(Request $request)
+    {
+        try {
+            if (!Auth::check()) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $userId = Auth::id();
+            $perPage = $request->input('per_page', 20);
+
+            $images = GameImage::where('user_id', $userId)
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage);
+
+            return $this->sendSuccess([
+                'data' => $images->items(),
+                'current_page' => $images->currentPage(),
+                'last_page' => $images->lastPage(),
+                'per_page' => $images->perPage(),
+                'total' => $images->total(),
+            ], 'Images retrieved successfully');
+
+        } catch (Exception $exception) {
+            Log::error("Error getting game images: " . $exception->getMessage());
+            return $this->sendError('Failed to retrieve images', [], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/game-progress/images/{id}",
+     *     tags={"Game Progress"},
+     *     summary="Get single game image",
+     *     description="Get a specific image by ID. User can only access their own images.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Image ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Image retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Image retrieved successfully"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Image not found or access denied"
+     *     )
+     * )
+     */
+    public function getImage(Request $request, $id)
+    {
+        try {
+            if (!Auth::check()) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $userId = Auth::id();
+            $image = GameImage::where('user_id', $userId)->where('id', $id)->first();
+
+            if (!$image) {
+                return $this->sendError('Image not found or you do not have permission to access this image', [], 404);
+            }
+
+            return $this->sendSuccess($image, 'Image retrieved successfully');
+
+        } catch (Exception $exception) {
+            Log::error("Error getting game image: " . $exception->getMessage());
+            return $this->sendError('Failed to retrieve image', [], 500);
+        }
+    }
+
+    /**
+     * @OA\Delete(
+     *     path="/api/game-progress/images/{id}",
+     *     tags={"Game Progress"},
+     *     summary="Delete game image",
+     *     description="Delete a specific image. User can only delete their own images.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="Image ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Image deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Image deleted successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Image not found or access denied"
+     *     )
+     * )
+     */
+    public function deleteImage(Request $request, $id)
+    {
+        try {
+            if (!Auth::check()) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $userId = Auth::id();
+            $image = GameImage::where('user_id', $userId)->where('id', $id)->first();
+
+            if (!$image) {
+                return $this->sendError('Image not found or you do not have permission to access this image', [], 404);
+            }
+
+            if ($image->url) {
+                $urlPath = parse_url($image->url, PHP_URL_PATH);
+                $filePath = str_replace('/uploads/', '', $urlPath);
+                $filePath = ltrim($filePath, '/');
+                
+                if ($filePath && Storage::disk('uploads')->exists($filePath)) {
+                    Storage::disk('uploads')->delete($filePath);
+                }
+            }
+
+            $image->delete();
+
+            return $this->sendSuccess([], 'Image deleted successfully');
+
+        } catch (Exception $exception) {
+            Log::error("Error deleting game image: " . $exception->getMessage());
+            return $this->sendError('Failed to delete image', [], 500);
         }
     }
 }
