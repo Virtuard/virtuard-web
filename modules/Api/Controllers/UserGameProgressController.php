@@ -644,4 +644,216 @@ class UserGameProgressController extends Controller
             return $this->sendError('Failed to delete image', [], 500);
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/game-progress/players",
+     *     tags={"Game Progress"},
+     *     summary="Get list of members who have played the game",
+     *     description="Retrieve a paginated list of all members who have game progress (have played the game)",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(type="integer", default=20)
+     *     ),
+     *     @OA\Parameter(
+     *         name="search",
+     *         in="query",
+     *         description="Search by member name",
+     *         required=false,
+     *         @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_by",
+     *         in="query",
+     *         description="Sort by: total_score, experience, current_level, total_play_time, created_at",
+     *         required=false,
+     *         @OA\Schema(type="string", default="total_score")
+     *     ),
+     *     @OA\Parameter(
+     *         name="sort_order",
+     *         in="query",
+     *         description="Sort order: asc or desc",
+     *         required=false,
+     *         @OA\Schema(type="string", default="desc")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Players retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="message", type="string", example="Members who have played the game retrieved successfully"),
+     *             @OA\Property(
+     *                 property="players",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="name", type="string", example="John Doe"),
+     *                     @OA\Property(property="first_name", type="string", example="John"),
+     *                     @OA\Property(property="last_name", type="string", example="Doe"),
+     *                     @OA\Property(property="user_name", type="string", example="johndoe"),
+     *                     @OA\Property(property="email", type="string", example="john@example.com"),
+     *                     @OA\Property(property="bio", type="string", nullable=true, example="Game enthusiast"),
+     *                     @OA\Property(property="avatar_url", type="string", example="https://example.com/avatars/1.jpg"),
+     *                     @OA\Property(property="business_name", type="string", nullable=true, example=null),
+     *                     @OA\Property(
+     *                         property="game_progress",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="current_level", type="integer", example=5),
+     *                         @OA\Property(property="current_stage", type="integer", nullable=true, example=3),
+     *                         @OA\Property(property="current_checkpoint", type="integer", nullable=true, example=2),
+     *                         @OA\Property(property="total_score", type="integer", example=15000),
+     *                         @OA\Property(property="experience", type="integer", example=5000),
+     *                         @OA\Property(property="coins", type="integer", example=250),
+     *                         @OA\Property(property="lives", type="integer", example=5),
+     *                         @OA\Property(property="total_play_time", type="integer", example=3600),
+     *                         @OA\Property(property="completed_levels_count", type="integer", example=4),
+     *                         @OA\Property(property="trophies_count", type="integer", example=2),
+     *                         @OA\Property(property="last_played_at", type="string", format="date-time", example="2026-01-28T10:30:00.000000Z"),
+     *                         @OA\Property(property="first_played_at", type="string", format="date-time", example="2026-01-25T08:15:00.000000Z")
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="pagination",
+     *                 type="object",
+     *                 @OA\Property(property="current_page", type="integer", example=1),
+     *                 @OA\Property(property="per_page", type="integer", example=20),
+     *                 @OA\Property(property="total", type="integer", example=50),
+     *                 @OA\Property(property="last_page", type="integer", example=3),
+     *                 @OA\Property(property="from", type="integer", example=1),
+     *                 @OA\Property(property="to", type="integer", example=20),
+     *                 @OA\Property(property="has_more_pages", type="boolean", example=true)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     )
+     * )
+     */
+    public function players(Request $request)
+    {
+        try {
+            if (!Auth::check()) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $perPage = $request->input('per_page', 20);
+            $perPage = min($perPage, 100); // Max 100 per page
+
+            $sortBy = $request->input('sort_by', 'total_score');
+            $sortOrder = $request->input('sort_order', 'desc');
+            
+            // Allowed sort fields
+            $allowedSortFields = ['total_score', 'experience', 'current_level', 'total_play_time', 'created_at'];
+            if (!in_array($sortBy, $allowedSortFields)) {
+                $sortBy = 'total_score';
+            }
+            
+            if (!in_array(strtolower($sortOrder), ['asc', 'desc'])) {
+                $sortOrder = 'desc';
+            }
+
+            // Query users who have game progress
+            $query = UserGameProgress::with(['user' => function($q) {
+                $q->where('status', 'publish')
+                  ->where('role_id', '!=', 1);
+            }])
+            ->whereHas('user', function($q) {
+                $q->where('status', 'publish')
+                  ->where('role_id', '!=', 1);
+            });
+
+            // Search by member name
+            if ($request->has('search') && $request->search) {
+                $search = $request->search;
+                $query->whereHas('user', function($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('user_name', 'like', '%' . $search . '%');
+                });
+            }
+
+            // Sort - default by total_score descending (highest first)
+            $query->orderBy($sortBy, $sortOrder);
+            
+            // Secondary sort for consistency when values are equal
+            if ($sortBy !== 'created_at') {
+                $query->orderBy('created_at', 'desc');
+            } else {
+                $query->orderBy('total_score', 'desc');
+            }
+
+            $progressList = $query->paginate($perPage);
+
+            // Transform collection to include user and game progress data
+            $players = collect($progressList->items())->map(function ($progress) {
+                $user = $progress->user;
+                if (!$user) {
+                    return null;
+                }
+
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'user_name' => $user->user_name,
+                    'email' => $user->email,
+                    'bio' => $user->bio,
+                    'avatar_url' => $user->getAvatarUrl(),
+                    'business_name' => $user->business_name,
+                    'game_progress' => [
+                        'id' => $progress->id,
+                        'current_level' => $progress->current_level,
+                        'current_stage' => $progress->current_stage,
+                        'current_checkpoint' => $progress->current_checkpoint,
+                        'total_score' => $progress->total_score,
+                        'experience' => $progress->experience,
+                        'coins' => $progress->coins,
+                        'lives' => $progress->lives,
+                        'total_play_time' => $progress->total_play_time,
+                        'completed_levels_count' => ($progress->completed_levels_data && is_array($progress->completed_levels_data)) 
+                            ? count($progress->completed_levels_data) 
+                            : 0,
+                        'trophies_count' => ($progress->trophies && is_array($progress->trophies)) 
+                            ? count($progress->trophies) 
+                            : 0,
+                        'last_played_at' => $progress->updated_at,
+                        'first_played_at' => $progress->created_at,
+                    ]
+                ];
+            })->filter()->values(); // Remove null entries and reindex
+
+            return $this->sendSuccess([
+                'players' => $players,
+                'pagination' => [
+                    'current_page' => $progressList->currentPage(),
+                    'per_page' => $progressList->perPage(),
+                    'total' => $progressList->total(),
+                    'last_page' => $progressList->lastPage(),
+                    'from' => $progressList->firstItem(),
+                    'to' => $progressList->lastItem(),
+                    'has_more_pages' => $progressList->hasMorePages()
+                ]
+            ], 'Members who have played the game retrieved successfully');
+
+        } catch (Exception $exception) {
+            Log::error("Error getting members who played: " . $exception->getMessage());
+            return $this->sendError('Failed to retrieve members who played', [], 500);
+        }
+    }
 }
