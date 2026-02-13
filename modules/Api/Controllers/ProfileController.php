@@ -470,6 +470,7 @@ class ProfileController extends Controller
                 ],
             ]);
         } catch (\Exception $e) {
+            logger($e);
             return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong. Please try again later.',
