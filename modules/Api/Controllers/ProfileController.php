@@ -171,60 +171,60 @@ class ProfileController extends Controller
     }
 
     public function allServices(Request $request, $id_or_slug)
-{
-    $all = get_bookable_services();
-    $type = $request->query('type');
+    {
+        $all = get_bookable_services();
+        $type = $request->query('type');
 
-    $user = User::where('user_name', '=', $id_or_slug)->first();
-    if (empty($user)) {
-        $user = User::find($id_or_slug);
-    }
-    if (empty($user)) {
-        return response()->json(['message' => 'User not found'], 404);
-    }
-
-    $data = [
-        'user' => $user,
-        'page_title' => __(':name - Services', ['name' => $user->getDisplayName()]),
-        'breadcrumbs' => [
-            ['name' => $user->getDisplayName(), 'url' => route('user.profile', ['id' => $user->user_name ?? $user->id])],
-            ['name' => __('All Services'), 'url' => ''],
-        ],
-    ];
-
-    // If type is provided, get the specific type of services
-    if ($type && array_key_exists($type, $all)) {
-        $moduleClass = $all[$type];
-        $servicesQuery = $moduleClass::getVendorServicesQuery($user->id)->orderBy('id', 'desc');
-    } else {
-        // Get services from all available types
-        $servicesQuery = collect();
-        foreach ($all as $serviceType => $moduleClass) {
-            $servicesQuery = $servicesQuery->merge(
-                $moduleClass::getVendorServicesQuery($user->id)->orderBy('id', 'desc')->get()
-            );
+        $user = User::where('user_name', '=', $id_or_slug)->first();
+        if (empty($user)) {
+            $user = User::find($id_or_slug);
         }
+        if (empty($user)) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $data = [
+            'user' => $user,
+            'page_title' => __(':name - Services', ['name' => $user->getDisplayName()]),
+            'breadcrumbs' => [
+                ['name' => $user->getDisplayName(), 'url' => route('user.profile', ['id' => $user->user_name ?? $user->id])],
+                ['name' => __('All Services'), 'url' => ''],
+            ],
+        ];
+
+        // If type is provided, get the specific type of services
+        if ($type && array_key_exists($type, $all)) {
+            $moduleClass = $all[$type];
+            $servicesQuery = $moduleClass::getVendorServicesQuery($user->id)->orderBy('id', 'desc');
+        } else {
+            // Get services from all available types
+            $servicesQuery = collect();
+            foreach ($all as $serviceType => $moduleClass) {
+                $servicesQuery = $servicesQuery->merge(
+                    $moduleClass::getVendorServicesQuery($user->id)->orderBy('id', 'desc')->get()
+                );
+            }
+        }
+
+        // Paginate the merged services collection
+        $perPage = 6;
+        $currentPage = Paginator::resolveCurrentPage();
+        $currentPageResults = $servicesQuery->slice(($currentPage - 1) * $perPage, $perPage)->all();
+
+        // Create a LengthAwarePaginator instance
+        $servicesPaginated = new LengthAwarePaginator(
+            $currentPageResults,
+            $servicesQuery->count(),
+            $perPage,
+            $currentPage,
+            ['path' => Paginator::resolveCurrentPath()]
+        );
+
+        // Add the paginated services to the data array
+        $data['services'] = $servicesPaginated;
+
+        return response()->json($data);
     }
-
-    // Paginate the merged services collection
-    $perPage = 6;
-    $currentPage = Paginator::resolveCurrentPage();
-    $currentPageResults = $servicesQuery->slice(($currentPage - 1) * $perPage, $perPage)->all();
-
-    // Create a LengthAwarePaginator instance
-    $servicesPaginated = new LengthAwarePaginator(
-        $currentPageResults, 
-        $servicesQuery->count(), 
-        $perPage, 
-        $currentPage, 
-        ['path' => Paginator::resolveCurrentPath()]
-    );
-
-    // Add the paginated services to the data array
-    $data['services'] = $servicesPaginated;
-
-    return response()->json($data);
-}
 
     /**
      * @OA\Post(
@@ -307,7 +307,7 @@ class ProfileController extends Controller
      *     )
      * )
      */
-public function updateProfile(Request $request)
+    public function updateProfile(Request $request)
     {
         try {
             // Middleware auth:sanctum sudah memastikan user terautentikasi
@@ -336,7 +336,7 @@ public function updateProfile(Request $request)
                     'errors' => $validator->errors(),
                 ], 422);
             }
-                    
+
             // Update fields
             $user->first_name = $request->first_name;
             $user->last_name = $request->last_name;
@@ -349,29 +349,9 @@ public function updateProfile(Request $request)
             $user->facebook_url = $request->facebook_url ?? $user->facebook_url;
             $user->twitter_url = $request->twitter_url ?? $user->twitter_url;
             $user->linkedin_url = $request->linkedin_url ?? $user->linkedin_url;
-            
+
             if ($request->hasFile('avatar')) {
-                // Delete old avatar if exists
-                $mediaFile = new \Modules\Media\Models\MediaFile();
-                if ($user->avatar_id) {
-                    $oldMedia = $mediaFile->findById($user->avatar_id);
-                    if ($oldMedia) {
-                        Storage::delete($oldMedia->file_path);
-                         DB::table('media_files')->where('id', $oldMedia->id)->delete();
-                    }
-                }
-
-                // Store new avatar
-                $path = $request->file('avatar')->store('profile');
-               
-                $mediaFile->file_name = $request->file('avatar')->getClientOriginalName();
-                $mediaFile->file_path = $path;
-                $mediaFile->file_size = $request->file('avatar')->getSize();
-                $mediaFile->file_type = $request->file('avatar')->getMimeType();
-                $mediaFile->save();
-
-                $user->avatar_id = $mediaFile->id;
-               
+                $this->storeAvatar($request->file('avatar'), $user);
             }
 
             $user->save();
@@ -379,22 +359,22 @@ public function updateProfile(Request $request)
             return response()->json([
                 'status' => true,
                 'message' => 'Profile updated successfully',
-                 'user' => [
-                     'id' => $user->id,
-                     'first_name' => $user->first_name,
-                     'last_name' => $user->last_name,
-                     'business_name' => $user->business_name,
-                     'name' => $user->name,
-                     'email' => $user->email,
-                     'phone' => $user->phone,
-                     'bio' => $user->bio,
-                     'website_url' => $user->website_url,
-                     'instagram_url' => $user->instagram_url,
-                     'facebook_url' => $user->facebook_url,
-                     'twitter_url' => $user->twitter_url,
-                     'linkedin_url' => $user->linkedin_url,
-                     'avatar_url' => $user->getAvatarUrl(),
-                 ],
+                'user' => [
+                    'id' => $user->id,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'business_name' => $user->business_name,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'phone' => $user->phone,
+                    'bio' => $user->bio,
+                    'website_url' => $user->website_url,
+                    'instagram_url' => $user->instagram_url,
+                    'facebook_url' => $user->facebook_url,
+                    'twitter_url' => $user->twitter_url,
+                    'linkedin_url' => $user->linkedin_url,
+                    'avatar_url' => $user->getAvatarUrl(),
+                ],
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -479,27 +459,7 @@ public function updateProfile(Request $request)
             }
 
             if ($request->hasFile('avatar')) {
-                // Delete old avatar if exists
-                $mediaFile = new \Modules\Media\Models\MediaFile();
-                if ($user->avatar_id) {
-                    $oldMedia = $mediaFile->findById($user->avatar_id);
-                    if ($oldMedia) {
-                        Storage::delete($oldMedia->file_path);
-                        DB::table('media_files')->where('id', $oldMedia->id)->delete();
-                    }
-                }
-
-                // Store new avatar
-                $path = $request->file('avatar')->store('profile');
-               
-                $mediaFile->file_name = $request->file('avatar')->getClientOriginalName();
-                $mediaFile->file_path = $path;
-                $mediaFile->file_size = $request->file('avatar')->getSize();
-                $mediaFile->file_type = $request->file('avatar')->getMimeType();
-                $mediaFile->save();
-
-                $user->avatar_id = $mediaFile->id;
-                $user->save();
+                $this->storeAvatar($request->file('avatar'), $user);
             }
 
             return response()->json([
@@ -515,5 +475,31 @@ public function updateProfile(Request $request)
                 'message' => 'Something went wrong. Please try again later.',
             ], 500);
         }
+    }
+
+    private function storeAvatar($avatar, $user)
+    {
+        // Delete old avatar if exists
+        $mediaFile = new \Modules\Media\Models\MediaFile();
+        if ($user->avatar_id) {
+            $oldMedia = $mediaFile->findById($user->avatar_id);
+            if ($oldMedia) {
+                Storage::delete($oldMedia->file_path);
+                DB::table('media_files')->where('id', $oldMedia->id)->delete();
+            }
+        }
+
+        $dir = 'profile/' . $user->id;
+        // Store new avatar
+        $path = $avatar->store($dir);
+
+        $mediaFile->file_name = $avatar->getClientOriginalName();
+        $mediaFile->file_path = $path;
+        $mediaFile->file_size = $avatar->getSize();
+        $mediaFile->file_type = $avatar->getMimeType();
+        $mediaFile->save();
+
+        $user->avatar_id = $mediaFile->id;
+        $user->save();
     }
 }
