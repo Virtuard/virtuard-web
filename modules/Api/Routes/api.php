@@ -219,6 +219,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum'], 'prefix' => 'game-progres
 Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
     Route::get('/', [ProfileController::class, 'getProfile']);
     Route::post('/', [ProfileController::class, 'updateProfile']);
+    Route::post('/picture', [ProfileController::class, 'updatePicture']);
 });
 
 Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {

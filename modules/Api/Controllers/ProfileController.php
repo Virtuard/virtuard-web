@@ -403,4 +403,117 @@ public function updateProfile(Request $request)
             ], 500);
         }
     }
+
+    /**
+     * @OA\Post(
+     *     path="/api/profile/picture",
+     *     tags={"Profile"},
+     *     summary="Update user profile picture",
+     *     description="Update only the authenticated user's profile picture/avatar",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 required={"avatar"},
+     *                 @OA\Property(property="avatar", type="string", format="binary", description="User's avatar image (jpeg, png, jpg, max 2MB)")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Profile picture updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Profile picture updated successfully"),
+     *             @OA\Property(property="user", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="avatar_url", type="string", nullable=true, example="https://example.com/uploads/avatar.jpg")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Missing or invalid authentication token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthorized")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="errors", type="object",
+     *                 @OA\AdditionalProperties(type="array", @OA\Items(type="string"))
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Something went wrong. Please try again later.")
+     *         )
+     *     )
+     * )
+     */
+    public function updatePicture(Request $request)
+    {
+        try {
+            $user = $request->user();
+
+            $validator = Validator::make($request->all(), [
+                'avatar' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            if ($request->hasFile('avatar')) {
+                // Delete old avatar if exists
+                $mediaFile = new \Modules\Media\Models\MediaFile();
+                if ($user->avatar_id) {
+                    $oldMedia = $mediaFile->findById($user->avatar_id);
+                    if ($oldMedia) {
+                        Storage::delete($oldMedia->file_path);
+                        DB::table('media_files')->where('id', $oldMedia->id)->delete();
+                    }
+                }
+
+                // Store new avatar
+                $path = $request->file('avatar')->store('profile');
+               
+                $mediaFile->file_name = $request->file('avatar')->getClientOriginalName();
+                $mediaFile->file_path = $path;
+                $mediaFile->file_size = $request->file('avatar')->getSize();
+                $mediaFile->file_type = $request->file('avatar')->getMimeType();
+                $mediaFile->save();
+
+                $user->avatar_id = $mediaFile->id;
+                $user->save();
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Profile picture updated successfully',
+                'user' => [
+                    'avatar_url' => $user->getAvatarUrl(),
+                ],
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong. Please try again later.',
+            ], 500);
+        }
+    }
 }
