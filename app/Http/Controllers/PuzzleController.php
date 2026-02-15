@@ -9,6 +9,8 @@ class PuzzleController extends Controller
 {
     public function index(Request $request)
     {
+        $title = $request->title ?? 'Puzzle AR';
+        $img = $request->img ?? 'https://virtuard.com/uploads/0000/1/2026/02/14/logodefinitivo1.png';
         // Get active configuration from database
         $config = PuzzleConfig::getActive();
         
@@ -52,10 +54,10 @@ class PuzzleController extends Controller
         
         // Prepare data array
         $data = [
+            'title' => $title,
+            'imgUrl' => $img,
             'config' => $isActive ? $config : null,
             'isSharingMode' => $isSharingMode,
-            'imgUrl' => 'https://virtuard.com/uploads/0000/1/2026/02/14/logodefinitivo1.png',
-            'title' => 'Puzzle AR',
             'androidStoreLink' => $androidStoreLink,
             'iosStoreLink' => $iosStoreLink,
             'deepLink' => $deepLink,
