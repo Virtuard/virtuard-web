@@ -11,13 +11,6 @@ $menus = [
         'title' => __("Puzzle AR"),
         'icon'  => 'icon ion-ios-grid',
         "position"=>0,
-        'children' => [
-            'puzzle_config'=>[
-                'url'   => route('admin.puzzle.config.index'),
-                'title' => __('Configuration'),
-                'icon'  => 'icon ion-ios-settings',
-            ],
-        ]
     ],
     'virtuard360'=>[
         'url'   => route('admin.virtuard360.index'),
