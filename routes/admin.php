@@ -61,4 +61,18 @@ Route::group([
     ], function() {
         Route::get('/', 'Admin\CompressImageController@index')->name('index');
     });
+
+    // Puzzle AR Admin
+    Route::group([
+        'prefix' => 'puzzle',
+        'as' => 'puzzle.'
+    ], function() {
+        Route::group([
+            'prefix' => 'config',
+            'as' => 'config.'
+        ], function() {
+            Route::get('/', [\App\Http\Controllers\Admin\PuzzleAdminController::class, 'index'])->name('index');
+            Route::post('/', [\App\Http\Controllers\Admin\PuzzleAdminController::class, 'store'])->name('store');
+        });
+    });
 });

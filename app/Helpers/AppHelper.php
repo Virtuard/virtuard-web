@@ -1391,6 +1391,7 @@ if (!function_exists('menu_admin')) {
             'theme',
             'virtuard360',
             'referral',
+            'puzzle',
         ];
 
         return $data;
