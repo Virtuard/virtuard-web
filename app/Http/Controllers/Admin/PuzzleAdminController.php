@@ -12,20 +12,6 @@ class PuzzleAdminController extends Controller
     public function index()
     {
         $config = PuzzleConfig::first();
-        
-        if (!$config) {
-            // Create default config if not exists
-            $config = PuzzleConfig::create([
-                'android_package' => 'com.antoniorutilio.puzzle',
-                'android_store_link' => 'https://play.google.com/store/apps/details?id=com.antoniorutilio.puzzle',
-                'android_deep_link_scheme' => 'https',
-                'ios_app_id' => '',
-                'ios_store_link' => '',
-                'ios_deep_link_scheme' => 'virtuardpuzzle',
-                'web_game_url' => '',
-                'is_active' => true,
-            ]);
-        }
 
         $data = [
             'row' => $config,
