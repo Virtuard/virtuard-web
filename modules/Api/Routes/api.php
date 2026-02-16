@@ -175,14 +175,17 @@ Route::middleware('auth:sanctum')->group(function () {
 
 /* Post */
 Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function () {
-    Route::get('/', 'PostController@index');
-    Route::post('/','PostController@store');
-    Route::post('/{id}/comment','PostController@storeComment');
-    Route::get('/{id}/comments','PostController@getComments');
-    Route::put('/{id}/like','PostController@likeOrUnlikePost');
-    Route::delete('/{id}','PostController@deletePost');
-    Route::delete('/comment/{id}', 'PostController@deleteComment');
+    Route::get('/', [ControllersPostController::class, 'index']);
+    Route::post('/', [ControllersPostController::class, 'store']);
     
+    Route::post('/{id}/comment', [ControllersPostController::class, 'storeComment']);
+    Route::get('/{id}/comments', [ControllersPostController::class, 'getComments']);
+    Route::put('/{id}/like', [ControllersPostController::class, 'likeOrUnlikePost']);
+    Route::delete('/comment/{id}', [ControllersPostController::class, 'deleteComment']);
+    
+    Route::post('/{id}/update', [ControllersPostController::class, 'update']);
+    Route::get('/{id}', [ControllersPostController::class, 'show']);
+    Route::delete('/{id}', [ControllersPostController::class, 'deletePost']);
 });
 
 Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
