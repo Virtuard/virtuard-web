@@ -1286,7 +1286,7 @@ if (!function_exists('menu_listing_as')) {
                 $str = 'property';
                 break;
             case 'business':
-                $str = 'commercial activities';
+                $str = 'business';
                 break;
             case 'boat':
                 $str = 'vehicle';
@@ -1314,7 +1314,7 @@ if (!function_exists('get_attribute_listing')) {
                 $data['new_key'] = 'property';
                 break;
             case 'business':
-                $data['new_key'] = 'commercial activities';
+                $data['new_key'] = 'business';
                 break;
         }
 

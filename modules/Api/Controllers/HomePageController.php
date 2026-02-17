@@ -85,7 +85,7 @@ class HomePageController extends Controller
                 'link' => route('space.search'),
             ],
             [
-                'name' => __('Commercial Activities'),
+                'name' => __('Business'),
                 'image' => 'uploads/images/business.webp',
                 'link' => route('business.search'),
             ],
@@ -106,7 +106,7 @@ class HomePageController extends Controller
         if (strpos($nameLower, 'property') !== false || strpos($nameLower, 'space') !== false || strpos($nameLower, 'real estate') !== false) {
             return 'space';
         }
-        if (strpos($nameLower, 'commercial') !== false || strpos($nameLower, 'business') !== false) {
+        if (strpos($nameLower, 'business') !== false) {
             return 'business';
         }
         
