@@ -206,6 +206,22 @@
                             {!! session()->get('message') !!}
                         </div>
                     @endif
+                    @if (session()->get('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {!! session()->get('success') !!}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
+                    @if (session()->get('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {!! session()->get('error') !!}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    @endif
                 </div>
             </div>
             <div class="row">
@@ -540,8 +556,35 @@
                                     </script>
                                 @endif
 
-                                <p class="mt-3" style="font-size: 0.9rem; font-weight: 500; color: #9b9b9b;">
-                                    {{ $post->message }}
+                                <p class="mt-3" style="font-size: 0.9rem; font-weight: 500; color: #9b9b9b; overflow-wrap: anywhere;">
+                                    @php
+                                        // Function to convert URLs to clickable links (using function_exists to avoid redeclare)
+                                        if (!function_exists('makeLinksClickable')) {
+                                            function makeLinksClickable($text) {
+                                                if (empty($text)) return '';
+                                                
+                                                // Escape HTML first
+                                                $text = e($text);
+                                                
+                                                // Pattern to match URLs (http://, https://, www., or domain.com)
+                                                $pattern = '/(?i)\b((?:https?:\/\/|www\.)[^\s<>"{}|\\^`\[\]]+)/';
+                                                
+                                                return preg_replace_callback($pattern, function($matches) {
+                                                    $url = trim($matches[0]);
+                                                    $displayUrl = $url;
+                                                    
+                                                    // Add http:// if starts with www.
+                                                    if (preg_match('/^www\./i', $url)) {
+                                                        $url = 'http://' . $url;
+                                                    }
+                                                    
+                                                    return '<a href="' . e($url) . '" target="_blank" rel="noopener noreferrer" style="color: #007bff; text-decoration: underline;">' . e($displayUrl) . '</a>';
+                                                }, nl2br($text));
+                                            }
+                                        }
+                                        
+                                        echo makeLinksClickable($post->message ?? '');
+                                    @endphp
                                 </p>
                                 <hr>
                                 @php
@@ -659,7 +702,12 @@
                                         </div>
                                     </div>
 
-                                    @if(auth()->check() && auth()->user()->id == $post->user_id)
+                                    @php
+                                        $isOwner = auth()->check() && auth()->user()->id == $post->user_id;
+                                        $isAdmin = auth()->check() && auth()->user()->hasRole('administrator');
+                                    @endphp
+
+                                    @if($isOwner || $isAdmin)
                                         <form action="{{ route('post.destroy', $post->id) }}" class="mb-0" method="POST">
                                             @csrf
                                             @method('delete')

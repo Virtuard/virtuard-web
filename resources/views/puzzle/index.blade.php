@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title }}</title>
 
-    <link rel="icon" href="{{$imgUrl}}" type="image/x-icon">
+    <link rel="icon" href="https://virtuard.com/uploads/0000/1/2026/02/17/logo-ar.png" type="image/x-icon">
     @if($isSharingMode && $imgUrl)
     <!-- Open Graph for Social Previews (only for sharing mode) -->
     <meta property="og:title" content="{{ $title }}" />
