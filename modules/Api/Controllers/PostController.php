@@ -40,10 +40,15 @@ class PostController extends Controller
      *     description="",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="filter",
+     *         name="scope",
      *         in="query",
-     *         description="filter post by me, friend or default all",
-     *         @OA\Schema(type="string")
+     *         description="Scope of posts to retrieve: 'me' for current user's posts, 'friend' for posts from friends/following. Leave empty or do not send this parameter to get all posts.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"me", "friend"},
+     *             example="me"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -66,8 +71,19 @@ class PostController extends Controller
                         $query->where('user_id',$idUser);
                     },
                     'author.mediaFile'])
-                ->when(isset($request->user_id), function ($q) use ($request) {
-                    $q->where('user_id', $request->user_id);
+                ->when(isset($request->scope), function ($q) use ($request, $idUser) {
+                    if ($request->scope == 'me') {
+                        $q->where('user_id', $idUser);
+                    } elseif ($request->scope == 'friend') {
+                        $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                        $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                        $ids = array_merge($following_ids, $follower_ids);
+                        if (!empty($ids)) {
+                            $q->whereIn('user_id', $ids);
+                        } else {
+                            $q->where('user_id', 0);
+                        }
+                    }
                 })
                 ->orderBy('id', 'desc')
                 ->paginate(20)
