@@ -20,7 +20,7 @@ use Modules\User\Controllers\PlanController;
     |
     */
 
-// Route::get('/intro', 'LandingpageController@index');
+
 Route::get('/', 'HomeController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/landing', 'HomeController@landing')->name('landing');
@@ -33,24 +33,24 @@ Route::group([
     'prefix' => '/user/virtuard-360',
     'as' => 'user.virtuard-360.',
     'middleware' => ['auth'],
-], function (){
-Route::get('/', 'VirtuardController@vendorVirtuardIndex')->name('index');
-Route::get('show/{id}', 'VirtuardController@show')->name('show');
-Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
-Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api-edit');
-Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');
-Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
-Route::get('bulkEdit/{id}', 'VirtuardController@bulkEdit')->name('bulk_edit');
+], function () {
+    Route::get('/', 'VirtuardController@vendorVirtuardIndex')->name('index');
+    Route::get('show/{id}', 'VirtuardController@show')->name('show');
+    Route::post('/add/newImage', 'VirtuardController@addNewImageVirtuard360')->name('add-new-image-service');
+    Route::get('/add/api/edit', 'VirtuardController@vendorVirtuardAjaxGetApi')->name('add-virtuard-api-edit');
+    Route::post('/add/api', 'VirtuardController@vendorVirtuardAddApi')->name('add-virtuard-api');
+    Route::post('/add/apiSecond', 'VirtuardController@vendorVirtuardAddApiSecond')->name('add-virtuard-api-second');
+    Route::get('bulkEdit/{id}', 'VirtuardController@bulkEdit')->name('bulk_edit');
 
-Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
-Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
-Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');   
-Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
-Route::group([
-    'middleware' => ['user_ipanorama_plan']
-], function (){
-Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
-});
+    Route::get('/edit', 'VirtuardController@vendorVirtuardEdit')->name('edit');
+    Route::post('/edit/updateTour', 'VirtuardController@updateIsTourField')->name('update-tour');
+    Route::get('/{id}/delete', 'VirtuardController@vendorVirtuardDelete')->name('destroy');
+    Route::post('/add/new', 'VirtuardController@addNewVirtuard360')->name('add-new-service');
+    Route::group([
+        'middleware' => ['user_ipanorama_plan']
+    ], function () {
+        Route::get('/add', 'VirtuardController@vendorVirtuardAdd')->name('add');
+    });
 });
 Route::get('/plan/expired', 'VirtuardController@expiredPlan')->name('plan.expired');
 
@@ -73,46 +73,33 @@ Route::post('/admin/delete/category/product', 'CategoryController@delete')->name
 Route::group([
     'prefix' => 'post',
     'as' => 'post.',
-], function(){
-Route::get('/', 'PostController@index')->name('index');
-Route::post('/', 'PostController@store')->name('store');
-Route::get('{id}/like', 'PostController@likePost')->name('like');
-Route::post('{id}/comment', 'PostController@storeComment')->name('comment.store');
-Route::delete('{id}', 'PostController@destroy')->name('destroy');
-Route::put('{id}/comment', 'PostController@updateComment')->name('comment.update');
-Route::delete('{id}/comment', 'PostController@destroyComment')->name('comment.destroy');
+], function () {
+    Route::get('/', 'PostController@index')->name('index');
+    Route::post('/', 'PostController@store')->name('store');
+    Route::get('{id}/like', 'PostController@likePost')->name('like');
+    Route::post('{id}/comment', 'PostController@storeComment')->name('comment.store');
+    Route::delete('{id}', 'PostController@destroy')->name('destroy');
+    Route::put('{id}/comment', 'PostController@updateComment')->name('comment.update');
+    Route::delete('{id}/comment', 'PostController@destroyComment')->name('comment.destroy');
 });
 
 // member
 Route::group([
     'prefix' => 'member',
     'as' => 'member.',
-], function(){
-Route::get('/', 'MemberController@index')->name('index');
-Route::post('/', 'MemberController@store')->name('store');
-Route::post('followers', 'MemberController@follower')->name('follower');
-Route::post('following', 'MemberController@following')->name('following');
+], function () {
+    Route::get('/', 'MemberController@index')->name('index');
+    Route::post('/', 'MemberController@store')->name('store');
+    Route::post('followers', 'MemberController@follower')->name('follower');
+    Route::post('following', 'MemberController@following')->name('following');
 });
 
-// Social Login
-Route::get('social-login/{provider}/{affiliate_id?}', 'Auth\LoginController@socialLogin');
-Route::get('social-callback/{provider}', 'Auth\LoginController@socialCallBack');
+// Social Login (replaced by v2 auth)
+// Route::get('social-login/{provider}/{affiliate_id?}', 'Auth\LoginController@socialLogin');
+// Route::get('social-callback/{provider}', 'Auth\LoginController@socialCallBack');
 
 // create
 Route::get('/create', 'CreateController@index')->name('create');
-
-// explore
-Route::group([
-    'prefix' => 'explore',
-    'as' => 'explore.',
-], function(){
-    Route::get('/', 'ExploreController@index')->name('index');
-    Route::post('list', 'ExploreController@list')->name('list');
-    Route::get('service/search', 'ExploreController@searchService')->name('service.search');
-    // Route::post('service/search', 'ExploreController@searchService')->name('service.search');
-    Route::post('map/search', 'ExploreController@searchMap')->name('map.search');
-    Route::post('filter', 'ExploreController@filter')->name('filter');
-});
 
 // Logs
 Route::get(config('admin.admin_route_prefix') . '/logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->middleware(['auth', 'dashboard', 'system_log_view'])->name('admin.logs');
@@ -134,8 +121,13 @@ Route::get('thankyou/booking', [BookingController::class, 'thanyouController'])-
 Route::post('midtrans/callback', [BookingController::class, 'midtransCallback'])->name('midtrans.callback');
 
 // Google OAuth route  (especially for mobile authentication)
-Route::post('/api/auth/google/account', [LoginController::class, 'handleGoogleAccount'] );
+Route::post('/api/auth/google/account', [LoginController::class, 'handleGoogleAccount']);
 
 // Puzzle AR Smart Links
 Route::get('/puzzleAR', [PuzzleController::class, 'index'])->name('puzzle.ar');
 Route::post('/puzzleAR/track', [PuzzleController::class, 'trackClick'])->name('puzzle.track');
+
+
+// ---------------------------------------------------------------------------------------------------------------------------
+require __DIR__ . '/v2/web.php';
+// ---------------------------------------------------------------------------------------------------------------------------
