@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\User\Models\Plan;
+use Modules\User\Models\PlanPayment;
 
 class CheckoutController extends Controller
 {
@@ -96,8 +97,21 @@ class CheckoutController extends Controller
      */
     public function process(Request $request, $planId)
     {
-        // Redirect to existing buy process
         return app(\Modules\User\Controllers\PlanController::class)->buyProcess($request, $planId);
+    }
+
+    /**
+     * Confirm plan payment page (Midtrans Snap popup).
+     */
+    public function confirmPlan($code)
+    {
+        $payment = PlanPayment::where('code', $code)->firstOrFail();
+
+        return view('v2.checkout.confirm-plan', [
+            'page_title' => __('Confirm Payment'),
+            'payment' => $payment,
+            'snapToken' => $payment->getMeta('snap_token'),
+        ]);
     }
 
     private function hasAffiliatePlan($user): bool
