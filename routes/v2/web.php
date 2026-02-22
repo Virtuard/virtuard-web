@@ -92,6 +92,39 @@ Route::group([
     // referral
     Route::get('/referral', [\App\Http\Controllers\v2\Vendor\VendorReferralController::class, 'index'])->name('referral.index');
 
+    // business
+    Route::group(['prefix' => 'business', 'as' => 'business.'], function () {
+        Route::get('/', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'index'])->name('index');
+        Route::get('/add', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'create'])->name('add');
+        Route::get('/edit/{id}', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'edit'])->name('edit');
+        Route::get('/show/{id}', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'show'])->name('show');
+        Route::get('/delete/{id}', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'delete'])->name('delete');
+        Route::get('/update-status/{id}', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'updateStatus'])->name('updateStatus');
+        Route::post('/store/{id?}', [\App\Http\Controllers\v2\Vendor\VendorBusinessController::class, 'store'])->name('store');
+    });
+
+    // property
+    Route::group(['prefix' => 'space', 'as' => 'property.'], function () {
+        Route::get('/', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'index'])->name('index');
+        Route::get('/add', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'create'])->name('add');
+        Route::get('/edit/{id}', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'edit'])->name('edit');
+        Route::get('/show/{id}', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'show'])->name('show');
+        Route::get('/delete/{id}', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'delete'])->name('delete');
+        Route::get('/update-status/{id}', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'updateStatus'])->name('updateStatus');
+        Route::post('/store/{id?}', [\App\Http\Controllers\v2\Vendor\VendorPropertyController::class, 'store'])->name('store');
+    });
+
+    // accommodation
+    Route::group(['prefix' => 'hotel', 'as' => 'accommodation.'], function () {
+        Route::get('/', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'index'])->name('index');
+        Route::get('/add', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'create'])->name('add');
+        Route::get('/edit/{id}', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'edit'])->name('edit');
+        Route::get('/show/{id}', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'show'])->name('show');
+        Route::get('/delete/{id}', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'delete'])->name('delete');
+        Route::get('/update-status/{id}', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'updateStatus'])->name('updateStatus');
+        Route::post('/store/{id?}', [\App\Http\Controllers\v2\Vendor\VendorAccommodationController::class, 'store'])->name('store');
+    });
+
     // virtuard 360
     Route::group(['prefix' => 'virtuard360', 'as' => 'virtuard360.'], function () {
         Route::get('/', [\App\Http\Controllers\v2\Vendor\VendorVirtuardController::class, 'index'])->name('index');
