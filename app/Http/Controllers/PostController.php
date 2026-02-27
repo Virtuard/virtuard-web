@@ -62,7 +62,7 @@ class PostController extends Controller
                 }
             })
             ->orderBy('id', 'desc')
-            ->paginate(20)
+            ->paginate(10)
             ->withQueryString();
 
         $panorama_posts = $this->userPost
