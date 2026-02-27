@@ -68,6 +68,7 @@ class PostController extends Controller
 
         $panorama_posts = $this->userPost
             ->with(['ipanorama', 'medias', 'likes', 'comments'])
+            ->whereHas('user')
             ->when(isset($request->filter), function ($q) use ($request) {
                 if (auth()->check()) {
                     if ($request->filter == 'me') {
@@ -82,7 +83,7 @@ class PostController extends Controller
             })
             ->where('ipanorama_id', '!=', null)
             ->orderBy('id', 'desc')
-            ->paginate(20)
+            ->paginate(10)
             ->withQueryString();
 
         $memberCount = User::count();
@@ -105,7 +106,7 @@ class PostController extends Controller
                 }
             })
             ->orderByDesc('id')
-            ->paginate(50)
+            ->paginate(20)
             ->withQueryString();
 
         $data = [
