@@ -49,6 +49,7 @@ class PostController extends Controller
     {
         $posts = $this->userPost
             ->with(['ipanorama', 'medias', 'likes', 'comments'])
+            ->whereHas('user')
             ->when(isset($request->filter), function ($q) use ($request) {
                 if (auth()->check()) {
                     if ($request->filter == 'me') {
