@@ -71,6 +71,7 @@ class PostController extends Controller
                         $query->where('user_id',$idUser);
                     },
                     'author.mediaFile'])
+                ->whereHas('user')
                 ->when(isset($request->scope), function ($q) use ($request, $idUser) {
                     if ($request->scope == 'me') {
                         $q->where('user_id', $idUser);
@@ -86,7 +87,7 @@ class PostController extends Controller
                     }
                 })
                 ->orderBy('id', 'desc')
-                ->paginate(20)
+                ->paginate(10)
                 ->withQueryString();
 
             $posts->getCollection()->transform(function ($post) use ($request, $idUser){
@@ -167,6 +168,7 @@ class PostController extends Controller
                     },
                     'author.mediaFile'
                 ])
+                ->whereHas('user')
                 ->find($id);
             
             if (!$post) {
