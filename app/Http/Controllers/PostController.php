@@ -194,7 +194,6 @@ class PostController extends Controller
         $postLike = PostLike::where('post_id', $id)
             ->where('user_id', $idUser)
             ->first();
-        Log::info($postLike);
         if (!$postLike) {
             $like = new PostLike();
             $like->post_id = $id;

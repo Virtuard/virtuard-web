@@ -365,12 +365,10 @@ class VendorController extends FrontendController
     protected function processCatalogFiles($model, $request)
     {
         if (!$request->has('catalogs')) {
-            Log::info('Hotel Vendor processCatalogFiles: No catalogs in request');
             return;
         }
 
         $catalogs = $request->input('catalogs');
-        Log::info('Hotel Vendor processCatalogFiles: Raw catalogs input', ['catalogs' => $catalogs, 'count' => is_array($catalogs) ? count($catalogs) : 0]);
         
         $processedCatalogs = [];
 
@@ -387,7 +385,6 @@ class VendorController extends FrontendController
             if (($catalog['type'] ?? 'file') === 'file' && $request->hasFile("catalogs.{$key}.file")) {
                 $file = $request->file("catalogs.{$key}.file");
                 
-                Log::info("Hotel Vendor processCatalogFiles: Processing file upload for key {$key}", ['filename' => $file->getClientOriginalName()]);
 
                 // Generate unique filename
                 $filename = time() . '_' . $file->getClientOriginalName();
@@ -395,41 +392,23 @@ class VendorController extends FrontendController
                 
                 // Store file path directly to url field
                 $processedCatalog['url'] = $path;
-                Log::info("Hotel Vendor processCatalogFiles: File uploaded successfully", ['path' => $path]);
             } elseif (($catalog['type'] ?? 'file') === 'link') {
                 // For link type, use the provided URL
                 $processedCatalog['url'] = $catalog['url'] ?? '';
-                Log::info("Hotel Vendor processCatalogFiles: Processing link for key {$key}", ['url' => $processedCatalog['url']]);
             } elseif (($catalog['type'] ?? 'file') === 'file') {
                 // For file type without new upload, use existing URL from request (sent via hidden input)
                 $processedCatalog['url'] = $catalog['url'] ?? '';
-                Log::info("Hotel Vendor processCatalogFiles: Keeping existing file URL for key {$key}", ['url' => $processedCatalog['url']]);
             }
 
             $processedCatalogs[] = $processedCatalog;
         }
 
-        Log::info('Hotel Vendor processCatalogFiles: Processed catalogs before save', [
-            'count' => count($processedCatalogs),
-            'catalogs' => $processedCatalogs,
-            'model_id' => $model->id
-        ]);
-
         // Save to main model directly as array (model has cast for catalogs)
         $model->catalogs = $processedCatalogs;
         $saved = $model->save();
         
-        Log::info('Hotel Vendor processCatalogFiles: Save result', [
-            'saved' => $saved,
-            'model_id' => $model->id,
-            'catalogs_after_save' => $model->catalogs
-        ]);
-        
         // Refresh to verify
         $model->refresh();
-        Log::info('Hotel Vendor processCatalogFiles: After refresh', [
-            'catalogs' => $model->catalogs
-        ]);
     }
 
     public function edit(Request $request, $id)

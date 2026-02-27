@@ -259,12 +259,7 @@ class BusinessController extends AdminController
         }
 
         $row->fillByAttr($dataKeys,$request->input());
-        
-        // Debug catalogs data
-        if($request->has('catalogs')){
-            \Log::info('Catalogs data received:', $request->input('catalogs'));
-        }
-        
+
         if($request->input('slug')){
             $row->slug = $request->input('slug');
         }
