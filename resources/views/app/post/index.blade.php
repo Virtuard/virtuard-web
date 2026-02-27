@@ -420,6 +420,9 @@
                     </form>
                     <div id="content_status_post" style="display: block;">
                         @foreach ($posts as $post)
+                            @if(!$post->user)
+                                @continue
+                            @endif
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img loading='lazy' class="mr-4"
@@ -750,6 +753,10 @@
                     </div>
                     <div id="content_virtual_tour_post" style="display: none;">
                         @foreach ($panorama_posts as $post)
+                            @if (!$post->user)
+                                @continue
+                            @endif
+                            
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img loading='lazy' class="mr-4"
