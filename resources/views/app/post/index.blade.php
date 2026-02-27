@@ -423,7 +423,7 @@
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img loading='lazy' class="mr-4"
-                                        src="{{ $post->user->getAvatarUrl() ?? '' }}"
+                                        src="{{ $post->user?->getAvatarUrl() }}"
                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                         alt="">
                                     <div>
@@ -597,7 +597,7 @@
                                         @foreach ($comments as $comment)
                                             <div style="display: flex; align-items: center;">
                                                 <img loading='lazy' class="mr-4"
-                                                    src="{{ $comment->user->getAvatarUrl() ?? '' }}"
+                                                    src="{{ $comment->user?->getAvatarUrl() }}"
                                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                                     alt="">
                                                 <div>
@@ -753,7 +753,7 @@
                             <div class="w-100 mt-3" style="background: #FFF; border-radius: 8px; padding: 23px 35px;" id="Post-{{ $post->id }}">
                                 <div style="display: flex; align-items: center;">
                                     <img loading='lazy' class="mr-4"
-                                        src="{{ $post->user?->getAvatarUrl() ?? '' }}"
+                                        src="{{ $post->user?->getAvatarUrl() }}"
                                         style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                         alt="">
                                     <div>
@@ -830,7 +830,7 @@
                                         @foreach ($comments as $comment)
                                             <div style="display: flex; align-items: center;">
                                                 <img loading='lazy' class="mr-4"
-                                                    src="{{ $comment->user->getAvatarUrl() ?? '' }}"
+                                                    src="{{ $comment->user?->getAvatarUrl() }}"
                                                     style="width: 60px; height: 60px; object-fit: cover; border-radius: 100px;"
                                                     alt="">
                                                 <div>
