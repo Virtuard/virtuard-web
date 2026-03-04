@@ -88,27 +88,39 @@ class MemberController extends Controller
                 });
             }
 
+            // Try multiple ways to get current user ID for Sanctum authentication
+            $currentUserId = $request->user() ? $request->user()->id : (Auth::guard('sanctum')->id() ?? Auth::id());
+            
             // Exclude current user if authenticated
-            if (Auth::check()) {
-                $query->where('id', '!=', Auth::id());
+            if ($currentUserId) {
+                $query->where('id', '!=', $currentUserId);
             }
 
             $members = $query->orderBy('last_login_at', 'DESC')
                 ->orderBy('id', 'DESC')
                 ->paginate($perPage);
 
-            // Transform collection to add is_followed field
-            $currentUserId = Auth::id();
+            // Transform collection to add is_followed and is_follower fields
             $members->getCollection()->transform(function ($user) use ($currentUserId) {
                 $user->avatar_url = $user->getAvatarUrl();
                 
                 // Check if current user is following this user
                 $user->is_followed = false;
+                // Check if this user is following current user (is a follower)
+                $user->is_follower = false;
+                
                 if ($currentUserId) {
+                    // Check if current user is following this user
                     $isFollowing = FollowUser::where('user_id', $currentUserId)
                         ->where('follower_id', $user->id)
                         ->exists();
                     $user->is_followed = $isFollowing;
+                    
+                    // Check if this user is following current user (is a follower of current user)
+                    $isFollower = FollowUser::where('user_id', $user->id)
+                        ->where('follower_id', $currentUserId)
+                        ->exists();
+                    $user->is_follower = $isFollower;
                 }
                 
                 return $user;
@@ -173,13 +185,23 @@ class MemberController extends Controller
                 return $this->sendError('Member not found', [], 404);
             }
 
-            $currentUserId = Auth::id();
+            // Try multiple ways to get current user ID for Sanctum authentication
+            $currentUserId = $request->user() ? $request->user()->id : (Auth::guard('sanctum')->id() ?? Auth::id());
             
             // Check if current user is following this member
             $isFollowed = false;
+            // Check if this member is following current user (is a follower)
+            $isFollower = false;
+            
             if ($currentUserId) {
+                // Check if current user is following this member
                 $isFollowed = FollowUser::where('user_id', $currentUserId)
                     ->where('follower_id', $user->id)
+                    ->exists();
+                
+                // Check if this member is following current user (is a follower of current user)
+                $isFollower = FollowUser::where('user_id', $user->id)
+                    ->where('follower_id', $currentUserId)
                     ->exists();
             }
 
@@ -280,6 +302,7 @@ class MemberController extends Controller
                     'created_at' => $user->created_at,
                 ],
                 'is_followed' => $isFollowed,
+                'is_follower' => $isFollower,
                 'stats' => [
                     'posts_count' => $postsCount,
                     'followers_count' => $followersCount,
@@ -427,7 +450,7 @@ class MemberController extends Controller
             $currentUserId = Auth::id();
             $targetUser = User::find($id);
 
-            if (!$targetUser) {
+            if (!$targetUser || $targetUser->role_id == 1 || $targetUser->status != 'publish') {
                 return $this->sendError('Member not found', [], 404);
             }
 
