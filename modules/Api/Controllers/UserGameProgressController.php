@@ -856,4 +856,114 @@ class UserGameProgressController extends Controller
             return $this->sendError('Failed to retrieve members who played', [], 500);
         }
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/game-progress/user/{user_id}",
+     *     tags={"Game Progress"},
+     *     summary="Get game progress by user ID",
+     *     description="Retrieve game progress details for a specific user by their user ID",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="user_id",
+     *         in="path",
+     *         description="User ID",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Game progress retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Game progress retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="user_id", type="integer", example=123),
+     *                 @OA\Property(property="current_level", type="integer", example=5),
+     *                 @OA\Property(property="current_stage", type="integer", nullable=true, example=3),
+     *                 @OA\Property(property="current_checkpoint", type="integer", nullable=true, example=2),
+     *                 @OA\Property(property="total_score", type="integer", example=15000),
+     *                 @OA\Property(property="experience", type="integer", example=5000),
+     *                 @OA\Property(property="coins", type="integer", example=250),
+     *                 @OA\Property(property="lives", type="integer", example=5),
+     *                 @OA\Property(property="completed_levels_data", type="array", @OA\Items(type="object")),
+     *                 @OA\Property(property="trophies", type="array", @OA\Items(type="object")),
+     *                 @OA\Property(property="total_play_time", type="integer", example=3600),
+     *                 @OA\Property(property="created_at", type="string", format="date-time"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time"),
+     *                 @OA\Property(
+     *                     property="user",
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=123),
+     *                     @OA\Property(property="name", type="string", example="John Doe"),
+     *                     @OA\Property(property="user_name", type="string", example="johndoe"),
+     *                     @OA\Property(property="email", type="string", example="john@example.com"),
+     *                     @OA\Property(property="avatar_url", type="string", example="https://example.com/avatars/123.jpg")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Game progress not found"
+     *     )
+     * )
+     */
+    public function getByUser(Request $request, $userId)
+    {
+        try {
+            if (!Auth::check()) {
+                return $this->sendError('Unauthorized', [], 401);
+            }
+
+            $userId = (int) $userId;
+            
+            // Get game progress with user relationship
+            $progress = UserGameProgress::with(['user' => function($q) {
+                $q->where('status', 'publish')
+                  ->where('role_id', '!=', 1)
+                  ->select('id', 'name', 'user_name', 'email', 'avatar_id', 'bio', 'first_name', 'last_name');
+            }])
+            ->whereHas('user', function($q) {
+                $q->where('status', 'publish')
+                  ->where('role_id', '!=', 1);
+            })
+            ->where('user_id', $userId)
+            ->first();
+
+            if (!$progress) {
+                return $this->sendError('Game progress not found for this user', [], 404);
+            }
+
+            // Transform data to include user info
+            $user = $progress->user;
+            $progressData = $progress->toArray();
+            
+            if ($user) {
+                $progressData['user'] = [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'user_name' => $user->user_name,
+                    'email' => $user->email,
+                    'bio' => $user->bio,
+                    'avatar_url' => $user->getAvatarUrl(),
+                ];
+            }
+
+            return $this->sendSuccess($progressData, 'Game progress retrieved successfully');
+
+        } catch (Exception $exception) {
+            Log::error("Error getting game progress by user: " . $exception->getMessage());
+            return $this->sendError('Failed to retrieve game progress', [], 500);
+        }
+    }
 }

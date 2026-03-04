@@ -212,6 +212,7 @@ Route::group(['middleware' => ['api', 'auth:sanctum'], 'prefix' => 'game-progres
     Route::post('/use-life', [UserGameProgressController::class, 'useLife']);
     Route::post('/add-play-time', [UserGameProgressController::class, 'addPlayTime']);
     Route::get('/players', [UserGameProgressController::class, 'players']);
+    Route::get('/user/{user_id}', [UserGameProgressController::class, 'getByUser']);
     
     Route::post('/images/upload', [UserGameProgressController::class, 'uploadImage']);
     Route::get('/images', [UserGameProgressController::class, 'getImages']);
