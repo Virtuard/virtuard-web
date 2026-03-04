@@ -304,7 +304,7 @@
 
                             <div class="w-100 d-flex justify-content-between md-flex-column">
                                 <div class="d-flex align-items-center">
-                                    <select class="h-100" id="filter-post" name="type_post"
+                                    <select class="h-100" id="type-post-select" name="type_post"
                                         style="
                                         padding: 0 13px;
                                         background: #f5f5f5;
@@ -313,9 +313,9 @@
                                         font-weight: 600;
                                         outline: none;
                                     ">
-                                        <option value="">{{ __('Public') }}</option>
-                                        <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
-                                        <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
+                                        <option value="public">{{ __('Public') }}</option>
+                                        <option value="friend">{{ __('Friend') }}</option>
+                                        <option value="private">{{ __('Private') }}</option>
                                     </select>
                                     <a class="cursor-pointer d-none">
                                         <i class="fa fa-lg fa-smile-o ml-3"></i>
@@ -1055,6 +1055,30 @@
                             </p>
                         </div>
                     </div>
+                    <hr class="mx-4">
+                    <div class="w-100 mb-2" style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
+                        <div>
+                            <label class="m-0 mb-2" style="font-weight: 600; color: #333;">
+                                <i class="fa fa-filter mr-2"></i>
+                                {{ __('Filter') }}
+                            </label>
+                            <select class="form-control mt-2" id="type-post-filter" name="type_post_filter"
+                                style="
+                                    padding: 8px 13px;
+                                    background: #f5f5f5;
+                                    border: 1px solid #ddd;
+                                    border-radius: 8px;
+                                    font-weight: 500;
+                                    outline: none;
+                                    cursor: pointer;
+                                ">
+                                <option value="">{{ __('All Posts') }}</option>
+                                <option value="public" {{ request('type_post_filter') == 'public' ? 'selected' : '' }}>{{ __('Public') }}</option>
+                                <option value="friend" {{ request('type_post_filter') == 'friend' ? 'selected' : '' }}>{{ __('Friend') }}</option>
+                                <option value="private" {{ request('type_post_filter') == 'private' ? 'selected' : '' }}>{{ __('Private') }}</option>
+                            </select>
+                        </div>
+                    </div>
                     @endauth
                 </div>
             </div>
@@ -1341,24 +1365,43 @@
             document.getElementById('commentInput_' + postId).style.display = 'none';
         }
 
-        $('#filter-post').on('change', function(){
-            const val = $(this).val();
+        // Note: filter-post is for filtering displayed posts, type-post-select is for setting post privacy
+        // If filter-post exists, handle it separately
+        if ($('#filter-post').length) {
+            $('#filter-post').on('change', function(){
+                const val = $(this).val();
 
-            switch (val) {
-                case 'public' :
-                    window.location.href = "{!! route('post.index') !!}";
-                case 'me' :
-                    window.location.href = "{!! route('post.index', ['filter' => 'me']) !!}";
-                    break;
-                case 'friend' :
-                    window.location.href = "{!! route('post.index', ['filter' => 'friend']) !!}";
-                    break;
-                case 'login' :
-                    $('#login').modal('show');
-                    break;
-                default:
-                    window.location.href = "{!! route('post.index') !!}";
+                switch (val) {
+                    case 'me' :
+                        window.location.href = "{!! route('post.index', ['filter' => 'me']) !!}";
+                        break;
+                    case 'friend' :
+                        window.location.href = "{!! route('post.index', ['filter' => 'friend']) !!}";
+                        break;
+                    case 'login' :
+                        $('#login').modal('show');
+                        break;
+                    default:
+                        window.location.href = "{!! route('post.index') !!}";
+                }
+            });
+        }
+
+        // Filter by type_post
+        $('#type-post-filter').on('change', function(){
+            const val = $(this).val();
+            const currentUrl = new URL(window.location.href);
+            const currentFilter = currentUrl.searchParams.get('filter');
+            
+            let params = {};
+            if (currentFilter) {
+                params.filter = currentFilter;
             }
-        })
+            if (val) {
+                params.type_post_filter = val;
+            }
+            
+            window.location.href = "{!! route('post.index') !!}" + (Object.keys(params).length > 0 ? '?' + $.param(params) : '');
+        });
     </script>
 @endpush

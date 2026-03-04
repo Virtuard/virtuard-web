@@ -47,6 +47,8 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
+        $idUser = auth()->check() ? auth()->user()->id : null;
+        
         $posts = $this->userPost
             ->with(['ipanorama', 'medias', 'likes', 'comments'])
             ->whereHas('user')
@@ -60,6 +62,88 @@ class PostController extends Controller
                         $ids = array_merge($following_ids, $follwer_ids);
                         $q->whereIn('user_id', $ids);
                     }
+                }
+            })
+            ->where(function ($q) use ($idUser, $request) {
+                // Jika ada filter type_post_filter, hanya tampilkan post dengan type_post tersebut
+                if ($request->has('type_post_filter') && $request->type_post_filter) {
+                    $typeFilter = $request->type_post_filter;
+                    if ($typeFilter == 'public') {
+                        // Public posts: semua bisa lihat (termasuk yang kosong/null)
+                        $q->where(function ($q2) {
+                            $q2->where('type_post', 'public')
+                               ->orWhereNull('type_post')
+                               ->orWhere('type_post', '');
+                        });
+                        // User juga bisa melihat post mereka sendiri yang public
+                        if ($idUser) {
+                            $q->orWhere('user_id', $idUser);
+                        }
+                    } elseif ($typeFilter == 'friend') {
+                        // Friend posts: hanya teman yang bisa lihat atau post sendiri
+                        $q->where(function ($query) use ($idUser) {
+                            if ($idUser) {
+                                // Post sendiri dengan type_post friend
+                                $query->where('user_id', $idUser)
+                                      ->where('type_post', 'friend');
+                                
+                                // Post dari teman dengan type_post friend
+                                $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                $friend_ids = array_merge($following_ids, $follower_ids);
+                                if (!empty($friend_ids)) {
+                                    $query->orWhere(function ($q2) use ($friend_ids) {
+                                        $q2->where('type_post', 'friend')
+                                           ->whereIn('user_id', $friend_ids);
+                                    });
+                                }
+                            } else {
+                                $query->where('user_id', 0); // Not logged in, can't see friend posts
+                            }
+                        });
+                    } elseif ($typeFilter == 'private') {
+                        // Private posts: hanya pemilik yang bisa lihat
+                        if ($idUser) {
+                            $q->where('type_post', 'private')
+                              ->where('user_id', $idUser);
+                        } else {
+                            $q->where('user_id', 0); // Not logged in, can't see private posts
+                        }
+                    }
+                } else {
+                    // Default: User selalu bisa melihat post mereka sendiri, apapun type_post-nya
+                    if ($idUser) {
+                        $q->where('user_id', $idUser);
+                    }
+                    
+                    // Filter berdasarkan type_post untuk post dari user lain
+                    $q->orWhere(function ($query) use ($idUser) {
+                        // Public posts: semua bisa lihat (termasuk yang kosong/null)
+                        $query->where(function ($q2) {
+                            $q2->where('type_post', 'public')
+                               ->orWhereNull('type_post')
+                               ->orWhere('type_post', '');
+                        });
+                    })
+                    ->orWhere(function ($query) use ($idUser) {
+                        // Friend posts: hanya teman yang bisa lihat
+                        $query->where('type_post', 'friend')
+                              ->where(function ($q2) use ($idUser) {
+                                  if ($idUser) {
+                                      $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                      $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                      $friend_ids = array_merge($following_ids, $follower_ids);
+                                      if (!empty($friend_ids)) {
+                                          $q2->whereIn('user_id', $friend_ids);
+                                      } else {
+                                          $q2->where('user_id', 0); // No friends, so no posts
+                                      }
+                                  } else {
+                                      $q2->where('user_id', 0); // Not logged in, can't see friend posts
+                                  }
+                              });
+                    });
+                    // Private posts dari user lain tidak bisa dilihat (sudah di-handle di atas dengan where user_id)
                 }
             })
             ->orderBy('id', 'desc')
@@ -79,6 +163,88 @@ class PostController extends Controller
                         $ids = array_merge($following_ids, $follwer_ids);
                         $q->whereIn('user_id', $ids);
                     }
+                }
+            })
+            ->where(function ($q) use ($idUser, $request) {
+                // Jika ada filter type_post_filter, hanya tampilkan post dengan type_post tersebut
+                if ($request->has('type_post_filter') && $request->type_post_filter) {
+                    $typeFilter = $request->type_post_filter;
+                    if ($typeFilter == 'public') {
+                        // Public posts: semua bisa lihat (termasuk yang kosong/null)
+                        $q->where(function ($q2) {
+                            $q2->where('type_post', 'public')
+                               ->orWhereNull('type_post')
+                               ->orWhere('type_post', '');
+                        });
+                        // User juga bisa melihat post mereka sendiri yang public
+                        if ($idUser) {
+                            $q->orWhere('user_id', $idUser);
+                        }
+                    } elseif ($typeFilter == 'friend') {
+                        // Friend posts: hanya teman yang bisa lihat atau post sendiri
+                        $q->where(function ($query) use ($idUser) {
+                            if ($idUser) {
+                                // Post sendiri dengan type_post friend
+                                $query->where('user_id', $idUser)
+                                      ->where('type_post', 'friend');
+                                
+                                // Post dari teman dengan type_post friend
+                                $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                $friend_ids = array_merge($following_ids, $follower_ids);
+                                if (!empty($friend_ids)) {
+                                    $query->orWhere(function ($q2) use ($friend_ids) {
+                                        $q2->where('type_post', 'friend')
+                                           ->whereIn('user_id', $friend_ids);
+                                    });
+                                }
+                            } else {
+                                $query->where('user_id', 0); // Not logged in, can't see friend posts
+                            }
+                        });
+                    } elseif ($typeFilter == 'private') {
+                        // Private posts: hanya pemilik yang bisa lihat
+                        if ($idUser) {
+                            $q->where('type_post', 'private')
+                              ->where('user_id', $idUser);
+                        } else {
+                            $q->where('user_id', 0); // Not logged in, can't see private posts
+                        }
+                    }
+                } else {
+                    // Default: User selalu bisa melihat post mereka sendiri, apapun type_post-nya
+                    if ($idUser) {
+                        $q->where('user_id', $idUser);
+                    }
+                    
+                    // Filter berdasarkan type_post untuk post dari user lain
+                    $q->orWhere(function ($query) use ($idUser) {
+                        // Public posts: semua bisa lihat (termasuk yang kosong/null)
+                        $query->where(function ($q2) {
+                            $q2->where('type_post', 'public')
+                               ->orWhereNull('type_post')
+                               ->orWhere('type_post', '');
+                        });
+                    })
+                    ->orWhere(function ($query) use ($idUser) {
+                        // Friend posts: hanya teman yang bisa lihat
+                        $query->where('type_post', 'friend')
+                              ->where(function ($q2) use ($idUser) {
+                                  if ($idUser) {
+                                      $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                      $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                      $friend_ids = array_merge($following_ids, $follower_ids);
+                                      if (!empty($friend_ids)) {
+                                          $q2->whereIn('user_id', $friend_ids);
+                                      } else {
+                                          $q2->where('user_id', 0); // No friends, so no posts
+                                      }
+                                  } else {
+                                      $q2->where('user_id', 0); // Not logged in, can't see friend posts
+                                  }
+                              });
+                    });
+                    // Private posts dari user lain tidak bisa dilihat (sudah di-handle di atas dengan where user_id)
                 }
             })
             ->where('ipanorama_id', '!=', null)
@@ -152,7 +318,7 @@ class PostController extends Controller
                 'ipanorama_id' =>  $request->input('ipanorama_id'),
                 'message' =>  $request->input('message'),
                 'type_status' =>  'Status',
-                'type_post' =>  $request->input('type_post'),
+                'type_post' =>  $request->input('type_post') ?: 'public', // Default to 'public' if empty
                 'tag' =>  '-',
             ];
             $post = UserPost::create($dataPost);

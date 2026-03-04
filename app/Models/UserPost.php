@@ -8,17 +8,28 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class UserPost extends Model
 {
     use SoftDeletes;
-    
+
     protected $table = 'user_post_status';
 
-    protected $fillable = ['user_id', 'ipanorama_id', 'message', 'type_status', 'media', 'type_post', 'tag'];
+    protected $fillable = [
+        'user_id',
+        'ipanorama_id',
+        'message',
+        'type_status',
+        'media',
+        'type_post',
+        'tag'
+    ];
+    
     public $timestamps = true;
 
-    public function ipanorama(){
+    public function ipanorama()
+    {
         return $this->belongsTo(Ipanorama::class, 'ipanorama_id');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
@@ -38,7 +49,18 @@ class UserPost extends Model
     }
 
     public function author()
-{
-    return $this->belongsTo(User::class, 'user_id');
-}
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * Get the type_post attribute, default to 'public' if empty
+     *
+     * @param  mixed  $value
+     * @return string
+     */
+    public function getTypePostAttribute($value)
+    {
+        return empty($value) ? 'public' : $value;
+    }
 }

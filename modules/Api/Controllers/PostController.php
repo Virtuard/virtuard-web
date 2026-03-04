@@ -86,6 +86,41 @@ class PostController extends Controller
                         }
                     }
                 })
+                ->where(function ($q) use ($idUser) {
+                    // User selalu bisa melihat post mereka sendiri, apapun type_post-nya
+                    if ($idUser) {
+                        $q->where('user_id', $idUser);
+                    }
+                    
+                    // Filter berdasarkan type_post untuk post dari user lain
+                    $q->orWhere(function ($query) use ($idUser) {
+                        // Public posts: semua bisa lihat (termasuk yang kosong/null)
+                        $query->where(function ($q2) {
+                            $q2->where('type_post', 'public')
+                               ->orWhereNull('type_post')
+                               ->orWhere('type_post', '');
+                        });
+                    })
+                    ->orWhere(function ($query) use ($idUser) {
+                        // Friend posts: hanya teman yang bisa lihat
+                        $query->where('type_post', 'friend')
+                              ->where(function ($q2) use ($idUser) {
+                                  if ($idUser) {
+                                      $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                      $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                      $friend_ids = array_merge($following_ids, $follower_ids);
+                                      if (!empty($friend_ids)) {
+                                          $q2->whereIn('user_id', $friend_ids);
+                                      } else {
+                                          $q2->where('user_id', 0); // No friends, so no posts
+                                      }
+                                  } else {
+                                      $q2->where('user_id', 0); // Not logged in, can't see friend posts
+                                  }
+                              });
+                    });
+                    // Private posts dari user lain tidak bisa dilihat (sudah di-handle di atas dengan where user_id)
+                })
                 ->orderBy('id', 'desc')
                 ->paginate(10)
                 ->withQueryString();
@@ -176,6 +211,30 @@ class PostController extends Controller
                     'status' => false,
                     'message' => 'Post not found'
                 ], 404);
+            }
+
+            // Check if user can access this post based on type_post
+            $typePost = $post->type_post ?? 'public';
+            $canAccess = false;
+
+            if ($typePost == 'public' || empty($typePost)) {
+                $canAccess = true;
+            } elseif ($typePost == 'friend') {
+                if ($idUser) {
+                    $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                    $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                    $friend_ids = array_merge($following_ids, $follower_ids);
+                    $canAccess = in_array($post->user_id, $friend_ids) || $post->user_id == $idUser;
+                }
+            } elseif ($typePost == 'private') {
+                $canAccess = $post->user_id == $idUser;
+            }
+
+            if (!$canAccess) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You do not have permission to view this post'
+                ], 403);
             }
             
             // Transform post data
@@ -324,7 +383,7 @@ class PostController extends Controller
                 'ipanorama_id' =>  $request->input('ipanorama_id'),
                 'message' =>  $request->input('message'),
                 'type_status' =>  'Status',
-                'type_post' =>  $request->input('type_post'),
+                'type_post' =>  $request->input('type_post') ?: 'public', // Default to 'public' if empty
                 'tag' =>  '-',
             ];
             $post = $this->userPost->create($dataPost);
@@ -513,7 +572,7 @@ class PostController extends Controller
                 
                 // Get type_post if provided
                 if (array_key_exists('type_post', $allInput)) {
-                    $data['type_post'] = $request->input('type_post');
+                    $data['type_post'] = $request->input('type_post') ?: 'public'; // Default to 'public' if empty
                 }
 
                 // Update post with collected data
