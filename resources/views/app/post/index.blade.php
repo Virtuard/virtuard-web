@@ -325,20 +325,6 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <div class="d-none">
-                                    <span>Posts in :</span>
-                                    <select class="h-100 ml-3" name="type_post"
-                                        style="
-                                        padding: 0 13px;
-                                        background: #f5f5f5;
-                                        border: 0;
-                                        border-radius: 100px;
-                                        font-weight: 600;
-                                        outline: none;
-                                    ">
-                                        <option value="My Profile">My Profile</option>
-                                    </select>
-                                    </div>
                                     <button type="submit" class="btn btn-primary text-uppercase btn-submit ml-3"
                                         style="border-radius: 100px; outline: none;"
                                     @guest
@@ -1062,7 +1048,7 @@
                                 <i class="fa fa-filter mr-2"></i>
                                 {{ __('Filter') }}
                             </label>
-                            <select class="form-control mt-2" id="type-post-filter" name="type_post_filter"
+                            <select class="form-control mt-2" id="type-post-filter" name="type_post"
                                 style="
                                     padding: 8px 13px;
                                     background: #f5f5f5;
@@ -1073,9 +1059,9 @@
                                     cursor: pointer;
                                 ">
                                 <option value="">{{ __('All Posts') }}</option>
-                                <option value="public" {{ request('type_post_filter') == 'public' ? 'selected' : '' }}>{{ __('Public') }}</option>
-                                <option value="friend" {{ request('type_post_filter') == 'friend' ? 'selected' : '' }}>{{ __('Friend') }}</option>
-                                <option value="private" {{ request('type_post_filter') == 'private' ? 'selected' : '' }}>{{ __('Private') }}</option>
+                                <option value="public" {{ request('type') == 'public' ? 'selected' : '' }}>{{ __('Public') }}</option>
+                                <option value="friend" {{ request('type') == 'friend' ? 'selected' : '' }}>{{ __('Friend') }}</option>
+                                <option value="private" {{ request('type') == 'private' ? 'selected' : '' }}>{{ __('Private') }}</option>
                             </select>
                         </div>
                     </div>
@@ -1398,7 +1384,7 @@
                 params.filter = currentFilter;
             }
             if (val) {
-                params.type_post_filter = val;
+                params.type = val;
             }
             
             window.location.href = "{!! route('post.index') !!}" + (Object.keys(params).length > 0 ? '?' + $.param(params) : '');

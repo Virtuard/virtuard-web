@@ -50,6 +50,17 @@ class PostController extends Controller
      *             example="me"
      *         )
      *     ),
+     *     @OA\Parameter(
+     *         name="type",
+     *         in="query",
+     *         description="Filter posts by privacy type: 'public', 'friend', or 'private'. Leave empty to get all accessible posts.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"public", "friend", "private"},
+     *             example="public"
+     *         )
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="Successful search post"
@@ -86,40 +97,71 @@ class PostController extends Controller
                         }
                     }
                 })
-                ->where(function ($q) use ($idUser) {
-                    // User selalu bisa melihat post mereka sendiri, apapun type_post-nya
-                    if ($idUser) {
-                        $q->where('user_id', $idUser);
-                    }
-                    
-                    // Filter berdasarkan type_post untuk post dari user lain
-                    $q->orWhere(function ($query) use ($idUser) {
-                        // Public posts: semua bisa lihat (termasuk yang kosong/null)
-                        $query->where(function ($q2) {
-                            $q2->where('type_post', 'public')
-                               ->orWhereNull('type_post')
-                               ->orWhere('type_post', '');
+                ->where(function ($q) use ($idUser, $request) {
+                    if ($request->has('type') && $request->type) {
+                        $typeFilter = $request->type;
+                        if ($typeFilter == 'public') {
+                            $q->where(function ($q2) {
+                                $q2->where('type_post', 'public')
+                                   ->orWhereNull('type_post')
+                                   ->orWhere('type_post', '');
+                            });
+                            if ($idUser) {
+                                $q->orWhere('user_id', $idUser);
+                            }
+                        } elseif ($typeFilter == 'friend') {
+                            $q->where(function ($query) use ($idUser) {
+                                if ($idUser) {
+                                    $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                    $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                    $friend_ids = array_merge($following_ids, $follower_ids);
+                                    if (!empty($friend_ids)) {
+                                        $query->where('type_post', 'friend')
+                                              ->whereIn('user_id', $friend_ids);
+                                    } else {
+                                        $query->where('user_id', 0);
+                                    }
+                                } else {
+                                    $query->where('user_id', 0);
+                                }
+                            });
+                        } elseif ($typeFilter == 'private') {
+                            if ($idUser) {
+                                $q->where('type_post', 'private')
+                                  ->where('user_id', $idUser);
+                            } else {
+                                $q->where('user_id', 0);
+                            }
+                        }
+                    } else {
+                        $q->where(function ($query) use ($idUser) {
+                            if ($idUser) {
+                                $query->where('user_id', $idUser);
+                            }
+                            
+                            $query->orWhere(function ($q2) {
+                                $q2->where('type_post', 'public')
+                                   ->orWhereNull('type_post')
+                                   ->orWhere('type_post', '');
+                            });
+                            
+                            if ($idUser) {
+                                $query->orWhere(function ($q3) use ($idUser) {
+                                    $q3->where('type_post', 'friend')
+                                       ->where(function ($q4) use ($idUser) {
+                                           $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                                           $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                                           $friend_ids = array_merge($following_ids, $follower_ids);
+                                           if (!empty($friend_ids)) {
+                                               $q4->whereIn('user_id', $friend_ids);
+                                           } else {
+                                               $q4->where('user_id', 0);
+                                           }
+                                       });
+                                });
+                            }
                         });
-                    })
-                    ->orWhere(function ($query) use ($idUser) {
-                        // Friend posts: hanya teman yang bisa lihat
-                        $query->where('type_post', 'friend')
-                              ->where(function ($q2) use ($idUser) {
-                                  if ($idUser) {
-                                      $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
-                                      $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
-                                      $friend_ids = array_merge($following_ids, $follower_ids);
-                                      if (!empty($friend_ids)) {
-                                          $q2->whereIn('user_id', $friend_ids);
-                                      } else {
-                                          $q2->where('user_id', 0); // No friends, so no posts
-                                      }
-                                  } else {
-                                      $q2->where('user_id', 0); // Not logged in, can't see friend posts
-                                  }
-                              });
-                    });
-                    // Private posts dari user lain tidak bisa dilihat (sudah di-handle di atas dengan where user_id)
+                    }
                 })
                 ->orderBy('id', 'desc')
                 ->paginate(10)
@@ -213,7 +255,6 @@ class PostController extends Controller
                 ], 404);
             }
 
-            // Check if user can access this post based on type_post
             $typePost = $post->type_post ?? 'public';
             $canAccess = false;
 
@@ -237,7 +278,6 @@ class PostController extends Controller
                 ], 403);
             }
             
-            // Transform post data
             unset($post->ipanorama_id);
             $post->deletable = $post->user_id == $idUser;
             
@@ -313,10 +353,11 @@ class PostController extends Controller
      *                     example=1
      *                 ),
      *                 @OA\Property(
-     *                     property="type_post",
+     *                     property="type",
      *                     type="string",
-     *                     description="Type of post (optional)",
-     *                     example="normal"
+     *                     description="Post privacy type",
+     *                     enum={"public", "friend", "private"},
+     *                     example="public"
      *                 ),
      *                 @OA\Property(
      *                     property="media_user",
@@ -383,7 +424,7 @@ class PostController extends Controller
                 'ipanorama_id' =>  $request->input('ipanorama_id'),
                 'message' =>  $request->input('message'),
                 'type_status' =>  'Status',
-                'type_post' =>  $request->input('type_post') ?: 'public', // Default to 'public' if empty
+                'type_post' =>  $request->input('type') ?: 'public',
                 'tag' =>  '-',
             ];
             $post = $this->userPost->create($dataPost);
@@ -451,30 +492,31 @@ class PostController extends Controller
      *                     description="Post message content (required)",
      *                     example="Updated post message"
      *                 ),
-     *                 @OA\Property(
-     *                     property="ipanorama_id",
-     *                     type="integer",
-     *                     description="ID of the associated panorama (optional)",
-     *                     example=1
-     *                 ),
-     *                 @OA\Property(
-     *                     property="type_post",
-     *                     type="string",
-     *                     description="Type of post (optional)",
-     *                     example="normal"
-     *                 ),
-     *                 @OA\Property(
-     *                     property="media_user",
-     *                     type="array",
-     *                     description="Array of media files to upload (optional). New files will be added to existing media.",
-     *                     @OA\Items(type="file", format="binary")
-     *                 ),
-     *                 @OA\Property(
-     *                     property="is_360_media",
-     *                     type="boolean",
-     *                     description="Whether the media is 360-degree media (optional, only used when media_user is provided)",
-     *                     example=false
-     *                 )
+                 *                 @OA\Property(
+                 *                     property="ipanorama_id",
+                 *                     type="integer",
+                 *                     description="ID of the associated panorama (optional)",
+                 *                     example=1
+                 *                 ),
+                 *                 @OA\Property(
+                 *                     property="type",
+                 *                     type="string",
+                 *                     description="Post privacy type",
+                 *                     enum={"public", "friend", "private"},
+                 *                     example="public"
+                 *                 ),
+                 *                 @OA\Property(
+                 *                     property="media_user",
+                 *                     type="array",
+                 *                     description="Array of media files to upload (optional). New files will be added to existing media.",
+                 *                     @OA\Items(type="file", format="binary")
+                 *                 ),
+                 *                 @OA\Property(
+                 *                     property="is_360_media",
+                 *                     type="boolean",
+                 *                     description="Whether the media is 360-degree media (optional, only used when media_user is provided)",
+                 *                     example=false
+                 *                 )
      *             )
      *         )
      *     ),
@@ -531,7 +573,6 @@ class PostController extends Controller
             $userId = Auth::id();
             $id = (int) $id;
 
-            // Find the post
             $post = $this->userPost->find($id);
 
             if (!$post) {
@@ -541,7 +582,6 @@ class PostController extends Controller
                 ], 404);
             }
 
-            // Check authorization
             if ($post->user_id != $userId) {
                 return response()->json([
                     'status' => false,
@@ -549,39 +589,32 @@ class PostController extends Controller
                 ], 403);
             }
 
-            // Validation - Only validate message as required
             $this->validate($request, [
                 'message' => 'nullable',
             ]);
 
             DB::beginTransaction();
             try {
-                // Collect all fields from request
                 $data = [];
                 
-                // Get message if it exists in request (check using array_key_exists for multipart/form-data)
                 $allInput = $request->all();
                 if (array_key_exists('message', $allInput)) {
                     $data['message'] = $request->input('message');
                 }
                 
-                // Get ipanorama_id if provided
                 if (array_key_exists('ipanorama_id', $allInput)) {
                     $data['ipanorama_id'] = $request->input('ipanorama_id');
                 }
                 
-                // Get type_post if provided
-                if (array_key_exists('type_post', $allInput)) {
-                    $data['type_post'] = $request->input('type_post') ?: 'public'; // Default to 'public' if empty
+                if (array_key_exists('type', $allInput)) {
+                    $data['type_post'] = $request->input('type') ?: 'public';
                 }
 
-                // Update post with collected data
                 if (!empty($data)) {
                     $post->update($data);
                     $post->refresh();
                 }
 
-                // Handle new media uploads
                 if ($request->hasFile('media_user')) {
                     $files = $request->file('media_user');
                     foreach ($files as $file) {
@@ -869,7 +902,6 @@ class PostController extends Controller
             ]);
 
         } catch (ValidationException $e) {
-            // Get first error message
             $firstError = collect($e->errors())->flatten()->first();
 
             return response()->json([
@@ -932,7 +964,6 @@ class PostController extends Controller
             $userId = Auth::id();
             $id = (int) $id;
 
-            // Get comment with post relationship
             $comment = PostComment::with('user')->find($id);
 
             if (!$comment) {
@@ -942,7 +973,6 @@ class PostController extends Controller
                 ], 404);
             }
 
-            // Get post to check ownership
             $post = UserPost::find($comment->post_id);
 
             if (!$post) {
@@ -952,7 +982,6 @@ class PostController extends Controller
                 ], 404);
             }
 
-            // Check authorization: either comment owner OR post owner
             if ($comment->user_id != $userId && $post->user_id != $userId) {
                 return response()->json([
                     'status' => false,
@@ -960,7 +989,6 @@ class PostController extends Controller
                 ], 403);
             }
 
-            // Delete the comment
             $comment->delete();
 
             return response()->json([
