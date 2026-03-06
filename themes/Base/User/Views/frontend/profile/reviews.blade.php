@@ -19,10 +19,12 @@ $reviews = \Modules\Review\Models\Review::query()->where([
         <div class="review-list">
             @if($reviews)
                 @foreach($reviews as $item)
-                    @php $userInfo = $item->author;
-                         if(!$userInfo){
+                    @php 
+                        $userInfo = $item->author;
+                        if(!$userInfo || empty($userInfo->id)){
                             continue;
-                         }
+                        }
+                        $profileId = !empty($userInfo->user_name) ? $userInfo->user_name : $userInfo->id;
                     @endphp
                     <div class="review-item">
                         <div class="review-item-head">
@@ -36,7 +38,12 @@ $reviews = \Modules\Review\Models\Review::query()->where([
                                 </div>
                                 <div class="media-body">
                                     <h4 class="media-heading">
-                                        <a href="{{ route('user.profile', $userInfo->user_name ?? $userInfo->id) }}">{{$userInfo->getDisplayName()}}</a></h4>
+                                        @if(!empty($profileId))
+                                            <a href="{{ route('user.profile', $profileId) }}">{{$userInfo->getDisplayName()}}</a>
+                                        @else
+                                            {{$userInfo->getDisplayName()}}
+                                        @endif
+                                    </h4>
                                     <div class="date">{{display_datetime($item->created_at)}}</div>
                                 </div>
                             </div>
@@ -62,6 +69,15 @@ $reviews = \Modules\Review\Models\Review::query()->where([
                 @endforeach
             @endif
         </div>
-        <div class="text-center mt30"><a class="btn btn-sm btn-primary" href="{{route('user.profile.reviews',['id'=> $user->user_name ?? $user->id])}}">{{__('View all reviews (:total)',['total'=>$reviews->total()])}}</a></div>
+        <div class="text-center mt30">
+            @php
+                $profileReviewsId = !empty($user->user_name) ? $user->user_name : ($user->id ?? '');
+            @endphp
+            @if(!empty($profileReviewsId))
+                <a class="btn btn-sm btn-primary" href="{{route('user.profile.reviews',['id'=> $profileReviewsId])}}">{{__('View all reviews (:total)',['total'=>$reviews->total()])}}</a>
+            @else
+                <span class="btn btn-sm btn-primary disabled">{{__('View all reviews (:total)',['total'=>$reviews->total()])}}</span>
+            @endif
+        </div>
     </div>
 @endif
