@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "user_id": 1,
+        "current_level": 5,
+        "current_stage": 0,
+        "current_checkpoint": 0,
+        "total_score": 5000,
+        "experience": 0,
+        "coins": 100,
+        "lives": 5,
+        "completed_levels_data": null,
+        "puzzle_details": null,
+        "trophies": "[\"trophy1\",\"trophy2\"]",
+        "total_play_time": 0,
+        "create_user": null,
+        "update_user": null,
+        "deleted_at": null,
+        "created_at": "2026-03-05 03:40:31",
+        "updated_at": "2026-03-05 03:40:31"
+    }
+]

@@ -1,0 +1,51 @@
+--- ALL TABLES LIST ---
+- bravo_attrs
+- bravo_attrs_translations
+- bravo_booking_meta
+- bravo_bookings
+- bravo_business_dates
+- bravo_business_term
+- bravo_business_translations
+- bravo_businesses
+- bravo_contact
+- bravo_location_translations
+- bravo_locations
+- bravo_review
+- bravo_review_meta
+- bravo_seo
+- bravo_terms
+- bravo_terms_translations
+- bravo_tour_category
+- bravo_tour_category_translations
+- bravo_tour_meta
+- bravo_tour_term
+- bravo_tour_translations
+- bravo_tours
+- core_languages
+- core_menu_translations
+- core_menus
+- core_news
+- core_news_category
+- core_news_category_translations
+- core_news_translations
+- core_page_translations
+- core_pages
+- core_settings
+- core_subscribers
+- core_tag_translations
+- core_template_translations
+- core_templates
+- core_translations
+- core_vendor_plans
+- media_files
+- migrations
+- otps
+- password_resets
+- sqlite_sequence
+- user_game_progress
+- user_meta
+- users
+- vendors_plan_payments
+
+--- RECENT USERS ---
+ID: 1, Name:  , Username: NULL

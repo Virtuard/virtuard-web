@@ -1,0 +1,23 @@
+.badge-private {
+    background-color: #d66c00;
+    color: #fff;
+}
+#nav-seo .nav-tabs {
+    background: transparent;
+    padding: unset;
+}
+#nav-seo .nav-tabs a {
+    margin: 0;
+}
+#nav-seo .nav-tabs a.active {
+    background: transparent;
+    color: #000;
+}
+.bravo_wrap .bravo_user_profile .dungdt-upload-multiple .attach-demo .image-item .inner {
+    height: 100%;
+}
+.dungdt-upload-multiple .attach-demo .image-item .inner img {
+    object-fit: contain;
+    height: 100%;
+    width: 100%;
+}

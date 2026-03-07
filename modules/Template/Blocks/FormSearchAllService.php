@@ -1,0 +1,158 @@
+<?php
+namespace Modules\Template\Blocks;
+
+use App\Models\Ipanorama;
+use Modules\Flight\Models\SeatType;
+use Modules\Hotel\Models\Hotel;
+use Modules\Template\Blocks\BaseBlock;
+use Modules\Location\Models\Location;
+use Modules\Media\Helpers\FileHelper;
+
+class FormSearchAllService extends BaseBlock
+{
+    public function getName()
+    {
+        return __('Form Search All Service');
+    }
+
+    public function getOptions()
+    {
+        $list_service = [];
+        foreach (get_bookable_services() as $key => $service) {
+            $res = [
+                'value'   => $key,
+                'name' => ucwords($key)
+            ];
+            
+            $resArg = [
+                'id'        => 'title_for_'.$key,
+                'type'      => 'input',
+                'inputType' => 'text',
+                'label'     => __('Title for :service',['service'=>ucwords($key)])
+            ];
+
+            if (in_array($key, menu_listing())) {
+                $list_service[] = $res;
+                $arg[] = $resArg;
+            }
+        }
+        $arg[] = [
+            'id'            => 'service_types',
+            'type'          => 'checklist',
+            'listBox'          => 'true',
+            'label'         => "<strong>".__('Service Type')."</strong>",
+            'values'        => $list_service,
+        ];
+
+        $arg[] = [
+            'id'        => 'title',
+            'type'      => 'input',
+            'inputType' => 'text',
+            'label'     => __('Title')
+        ];
+        $arg[] = [
+            'id'        => 'sub_title',
+            'type'      => 'input',
+            'inputType' => 'text',
+            'label'     => __('Sub Title')
+        ];
+
+        $arg[] =  [
+            'id'            => 'style',
+            'type'          => 'radios',
+            'label'         => __('Style Background'),
+            'values'        => [
+                [
+                    'value'   => '',
+                    'name' => __("Normal")
+                ],
+                [
+                    'value'   => 'carousel',
+                    'name' => __("Slider Carousel")
+                ],
+                [
+                    'value'   => 'carousel_v2',
+                    'name' => __("Slider Carousel Ver 2")
+                ]
+            ]
+        ];
+
+        $arg[] = [
+            'id'    => 'bg_image',
+            'type'  => 'uploader',
+            'label' => __('- Layout Normal: Background Image Uploader')
+        ];
+
+        $arg[] = [
+            'id'          => 'list_slider',
+            'type'        => 'listItem',
+            'label'       => __('- Layout Slider: List Item(s)'),
+            'title_field' => 'title',
+            'settings'    => [
+                [
+                    'id'        => 'title',
+                    'type'      => 'input',
+                    'inputType' => 'text',
+                    'label'     => __('Title (using for slider ver 2)')
+                ],
+                [
+                    'id'        => 'desc',
+                    'type'      => 'input',
+                    'inputType' => 'text',
+                    'label'     => __('Desc (using for slider ver 2)')
+                ],
+                [
+                    'id'    => 'bg_image',
+                    'type'  => 'uploader',
+                    'label' => __('Background Image Uploader')
+                ]
+            ]
+        ];
+
+        $arg[] = [
+            'type'=> "checkbox",
+            'label'=>__("Hide form search service?"),
+            'id'=> "hide_form_search",
+            'default'=>false
+        ];
+
+        return [
+            'settings' => $arg,
+            'category'=>__("Other Block")
+        ];
+    }
+
+    public function content($model = [])
+    {
+        $model['bg_image_url'] = FileHelper::url($model['bg_image'] ?? "", 'full') ?? "";
+        $model['list_location'] = $model['tour_location'] =  Location::where("status","publish")->limit(1000)->orderBy('name', 'asc')->with(['translation'])->get()->toTree();
+        $model['style'] = $model['style'] ?? "";
+        $model['list_slider'] = $model['list_slider'] ?? "";
+        $model['modelBlock'] = $model;
+        $model['seatType'] =  SeatType::get();
+
+        $mainPanoramaId = setting_item('main_panorama_id', 174);
+        $get_panorama = Ipanorama::find($mainPanoramaId);
+        
+        if(isset($get_panorama)){
+            $model['get_panorama'] = $get_panorama;
+        } else {
+            // $model['get_panorama'] = Hotel::where('ipanorama_id', '!=', null)->orderByDesc('review_score')->first();
+            $model['get_panorama'] = Ipanorama::where('status', 'publish')->first();
+        }
+        
+        $model['all_panorama_hotels'] = Hotel::where('ipanorama_id', '!=', null)
+                                            ->where('ipanorama_id', '!=', 0)
+                                            ->orderByDesc('review_score')
+                                            ->get();
+
+        return $this->view('Template::frontend.blocks.form-search-all-service.index', $model);
+    }
+
+    public function contentAPI($model = []){
+        if (!empty($model['bg_image'])) {
+            $model['bg_image_url'] = FileHelper::url($model['bg_image'], 'full');
+        }
+        return $model;
+    }
+}

@@ -1,0 +1,1 @@
+ERROR: SQLSTATE[HY000]: General error: 1 no such table: user_game_progress (SQL: alter table "user_game_progress" add column "puzzle_details" text)

@@ -1,0 +1,201 @@
+<?php
+namespace Modules\Business\Blocks;
+
+use Modules\Template\Blocks\BaseBlock;
+use Modules\Business\Models\Business;
+use Modules\Location\Models\Location;
+
+class ListBusiness extends BaseBlock
+{
+    protected $businessClass;
+    public function __construct(Business $businessClass)
+    {
+        $this->businessClass = $businessClass;
+    }
+
+    public function getName()
+    {
+        return __('Business: List Items');
+    }
+
+    public function getOptions()
+    {
+        return [
+            'settings' => [
+                [
+                    'id'        => 'title',
+                    'type'      => 'input',
+                    'inputType' => 'text',
+                    'label'     => __('Title')
+                ],
+                [
+                    'id'        => 'desc',
+                    'type'      => 'input',
+                    'inputType' => 'text',
+                    'label'     => __('Desc')
+                ],
+                [
+                    'id'        => 'number',
+                    'type'      => 'input',
+                    'inputType' => 'number',
+                    'label'     => __('Number Item')
+                ],
+                [
+                    'id'     => 'style',
+                    'type'   => 'radios',
+                    'label'  => __('Style'),
+                    'values' => [
+                        [
+                            'value' => 'normal',
+                            'name'  => __("Normal")
+                        ],
+                        [
+                            'value' => 'carousel',
+                            'name'  => __("Slider Carousel")
+                        ]
+                    ]
+                ],
+                [
+                    'id'           => 'location_id',
+                    'type'         => 'select2',
+                    'label'        => __('Filter by Location'),
+                    'select2'      => [
+                        'ajax'        => [
+                            'url'      => route('location.admin.getForSelect2'),
+                            'dataType' => 'json'
+                        ],
+                        'width'       => '100%',
+                        'allowClear'  => 'true',
+                        'placeholder' => __('-- Select --')
+                    ],
+                    'pre_selected' => route('location.admin.getForSelect2',['pre_selected'=>1])
+                ],
+                [
+                    'id'     => 'order',
+                    'type'   => 'radios',
+                    'label'  => __('Order'),
+                    'values' => [
+                        [
+                            'value' => 'id',
+                            'name'  => __("Date Create")
+                        ],
+                        [
+                            'value' => 'title',
+                            'name'  => __("Title")
+                        ],
+                        [
+                            'value'   => 'review_score',
+                            'name' => __("Review Score")
+                        ],
+                    ]
+                ],
+                [
+                    'id'     => 'order_by',
+                    'type'   => 'radios',
+                    'label'  => __('Order By'),
+                    'values' => [
+                        [
+                            'value' => 'asc',
+                            'name'  => __("ASC")
+                        ],
+                        [
+                            'value' => 'desc',
+                            'name'  => __("DESC")
+                        ],
+                    ]
+                ],
+                [
+                    'type'    => "checkbox",
+                    'label'   => __("Only featured items?"),
+                    'id'      => "is_featured",
+                    'default' => true
+                ],
+                [
+                    'id'           => 'custom_ids',
+                    'type'         => 'select2',
+                    'label'        => __('List by IDs'),
+                    'select2'      => [
+                        'ajax'        => [
+                            'url'      => route('business.admin.getForSelect2'),
+                            'dataType' => 'json'
+                        ],
+                        'width'       => '100%',
+                        'multiple'    => "true",
+                        'placeholder' => __('-- Select --')
+                    ],
+                    'pre_selected' => route('business.admin.getForSelect2', [
+                        'pre_selected' => 1
+                    ])
+                ],
+            ],
+            'category' => __("Service Business")
+        ];
+    }
+
+    public function content($model = [])
+    {
+        $list = $this->query($model);
+        $data = [
+            'rows'       => $list,
+            'style_list' => $model['style'],
+            'title'      => $model['title'],
+            'desc'       => $model['desc'],
+        ];
+        return view('Business::frontend.blocks.list-business.index', $data);
+    }
+
+    public function contentAPI($model = [], $authorId = null)
+    {
+        $rows = $this->query($model, $authorId);
+        $model['data'] = $rows->map(function ($row) {
+            return $row->dataForApi();
+        });
+        return $model;
+    }
+
+    public function query($model, $authorId = null)
+    {
+        $businessClass = $this->businessClass->search($model);
+        $limit = $model['number'] ?? 5;
+        if(isset($authorId)) $businessClass->where('author_id', $authorId);
+        return $businessClass->paginate($limit);
+
+        $model_business = Business::select("bravo_businesses.*")->with([
+            'location',
+            'translation',
+            'hasWishList'
+        ]);
+        if (empty($model['order']))
+            $model['order'] = "id";
+        if (empty($model['order_by']))
+            $model['order_by'] = "desc";
+        if (empty($model['number']))
+            $model['number'] = 5;
+        if (!empty($model['location_id'])) {
+            $location = Location::where('id', $model['location_id'])->where("status", "publish")->first();
+            if (!empty($location)) {
+                $model_business->join('bravo_locations', function ($join) use ($location) {
+                    $join->on('bravo_locations.id', '=', 'bravo_businesses.location_id')->where('bravo_locations._lft', '>=', $location->_lft)->where('bravo_locations._rgt', '<=', $location->_rgt);
+                });
+            }
+        }
+        if (!empty($model['is_featured'])) {
+            $model_business->where('bravo_businesses.is_featured', 1);
+        }
+        if (!empty($model['custom_ids'])) {
+            $model_business->whereIn("bravo_businesses.id", $model['custom_ids']);
+        }
+        if(isset($authorId)) {
+            $model_business->where('author_id', $authorId);
+        }
+
+        $model_business->orderByDesc("ipanorama_id");
+        $model_business->orderByDesc("review_score");
+        $model_business->orderBy("bravo_businesses." . $model['order'], $model['order_by']);
+        $model_business->where("bravo_businesses.status", "publish");
+        $model_business->with('location');
+        $model_business->groupBy("bravo_businesses.id");
+
+        return $model_business->limit($model['number'])->get();
+    }
+}

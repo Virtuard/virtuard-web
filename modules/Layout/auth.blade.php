@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ $html_class ?? '' }}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    @include('partials.preconnect')
+    @php event(new \Modules\Layout\Events\LayoutBeginHead()); @endphp
+    @php
+        $favicon = setting_item('site_favicon');
+        if (isset($seo_meta) && isset($seo_meta['seo_image'])) {
+            $favicon = $seo_meta['seo_image'];
+        }
+    @endphp
+    @if ($favicon && (request()->is('profile/*') || request()->is('user/profile')))
+        @php
+            $avatarUrl = $user->getAvatarUrl() ?? url('images/favicon.png');
+        @endphp
+        <link rel="icon" type="image/png" href="{{ $avatarUrl }}" />
+    @else
+        @php
+            $file = (new \Modules\Media\Models\MediaFile())->findById($favicon);
+        @endphp
+        @if (!empty($file))
+            <link rel="icon" type="{{ $file['file_type'] }}" href="{{ asset('uploads/' . $file['file_path']) }}" />
+        @else
+            <link rel="icon" type="image/png" href="{{ url('images/favicon.png') }}" />
+        @endif
+    @endif
+
+
+    @include('Layout::parts.seo-meta')
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/virtual-tour-plugin/index.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/gallery-plugin/index.css" />
+    <script src="https://cdn.jsdelivr.net/npm/photo-sphere-viewer@4/dist/photo-sphere-viewer.js"></script>
+    
+    <link href="{{ asset('libs/bootstrap/css/bootstrap.css') }}" rel="stylesheet">
+    <link href="{{ asset('libs/font-awesome/css/font-awesome.css') }}" rel="stylesheet">
+    <link href="{{ asset('libs/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('libs/icofont/icofont.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('libs/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('dist/frontend/css/notification.css') }}" rel="newest stylesheet">
+    <link href="{{ asset('dist/frontend/css/app.css?_ver=' . config('app.asset_version')) }}" rel="stylesheet">
+    <link href="{{ asset('libs/lightbox2/dist/css/lightbox.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('libs/daterange/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/shepherd.css') }}" />
+    <!-- Fonts -->
+    <link rel='stylesheet' id='google-font-css-css'
+        href='https://fonts.googleapis.com/css?family=Poppins%3A300%2C400%2C500%2C600&display=swap' type='text/css'
+        media='all' />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ asset('assets/css/custom-app.css?_ver=' . get_asset_version()) }}">
+    {!! \App\Helpers\Assets::css() !!}
+    {!! \App\Helpers\Assets::js() !!}
+    @include('Layout::parts.global-script')
+    <!-- Styles -->
+    @stack('css')
+    {{-- Custom Style --}}
+    <link href="{{ route('core.style.customCss') }}" rel="stylesheet">
+    <link href="{{ asset('libs/carousel-2/owl.carousel.css') }}" rel="stylesheet">
+    @if (!is_demo_mode())
+        {!! setting_item('head_scripts') !!}
+        {!! setting_item_with_lang_raw('head_scripts') !!}
+    @endif
+</head>
+
+<body
+    class="frontend-page {{ !empty($row->header_style) ? 'header-' . $row->header_style : 'header-normal' }} {{ $body_class ?? '' }} @if (is_api()) is_api @endif">
+    @if (!is_demo_mode())
+        {!! setting_item('body_scripts') !!}
+        {!! setting_item_with_lang_raw('body_scripts') !!}
+    @endif
+    <div class="bravo_wrap">
+        @if (!is_api())
+            {{-- @include('Layout::parts.topbar') --}}
+            {{-- @include('Layout::parts.header') --}}
+        @endif
+
+        @yield('content')
+
+        @include('Layout::parts.footer')
+    </div>
+    @if (!is_demo_mode())
+        {!! setting_item('footer_scripts') !!}
+        {!! setting_item_with_lang_raw('footer_scripts') !!}
+    @endif
+    <script src="{{ asset('assets/js/custom-app.js?_ver=' . get_asset_version()) }}"></script>
+</body>
+
+</html>

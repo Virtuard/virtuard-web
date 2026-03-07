@@ -1,0 +1,42 @@
+# Robots.txt for virtuard.com
+# This file tells search engines which parts of the site they can crawl
+
+# Allow all bots to access the entire site
+User-agent: *
+Allow: /
+
+# Block access to sensitive directories (if any)
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /cache/
+Disallow: /.git/
+Disallow: /config/
+Disallow: /logs/
+
+# Block access to files that shouldn't be indexed
+Disallow: *.pdf$
+Disallow: *.doc$
+Disallow: *.docx$
+Disallow: /search?
+Disallow: /search/
+Disallow: /ajax/
+Disallow: /api/
+
+# Special rules for specific bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Crawl delay (optional - adjust based on server capacity)
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://www.virtuard.com/sitemap.xml
+Sitemap: https://www.virtuard.com/sitemap-images.xml
+Sitemap: https://www.virtuard.com/sitemap-news.xml
+
+# Host directive (helps with canonicalization)
+Host: https://www.virtuard.com

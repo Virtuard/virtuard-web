@@ -1,0 +1,3 @@
+DB Connection: sqlite
+SQLite Path: C:\Users\User\.gemini\antigravity\scratch\newVirtuard\database\database.sqlite
+Core Settings Count: 0

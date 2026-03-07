@@ -1,0 +1,120 @@
+@php
+    $translation = $row->translate();
+@endphp
+<div class="item-loop {{$wrap_class ?? ''}}">
+    @if($row->is_featured == "1")
+        <div class="featured">
+            {{__("Featured")}}
+        </div>
+    @endif
+    <div class="thumb-image ">
+        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl($include_param ?? true)}}" aria-label="{{$row->title}}">
+            @if($row->image_url)
+                @if(!empty($disable_lazyload))
+                    <img loading='lazy' src="{{$row->image_url}}" class="img-responsive" alt="{{$row->title}}">
+                @else
+                    {!! get_image_tag($row->image_id,'medium',['class'=>'img-responsive','alt'=>$row->title]) !!}
+                @endif
+            @endif
+        </a>
+        @if ($row->display_price > 0)
+        <div class="price-wrapper">
+            <div class="price">
+                <span class="onsale">{{ $row->display_sale_price }}</span>
+                <span class="text-price">
+                    {{ $row->display_price }}
+                    @if($row->getBookingType()=="by_day")
+                        <span class="unit">{{__("/day")}}</span>
+                    @else
+                        <span class="unit">{{__("/night")}}</span>
+                    @endif
+                </span>
+            </div>
+        </div>
+        @endif
+        <div class="service-wishlist {{$row->isWishList()}}" data-id="{{$row->id}}" data-type="{{$row->type}}">
+            <i class="fa fa-heart"></i>
+        </div>
+    </div>
+    <div class="item-title">
+        <a @if(!empty($blank)) target="_blank" @endif href="{{$row->getDetailUrl($include_param ?? true)}}" aria-label="{{$row->title}}">
+            @if($row->is_instant)
+                <i class="fa fa-bolt d-none"></i>
+            @endif
+                {{$translation->title}}
+        </a>
+        @if($row->discount_percent)
+            <div class="sale_info">{{$row->discount_percent}}</div>
+        @endif
+    </div>
+    <div class="location">
+        @if(!empty($row->location->name))
+            @php $location =  $row->location->translate() @endphp
+            {{$location->name ?? ''}}
+        @endif
+    </div>
+    @if(setting_item('business_enable_review'))
+    <?php
+    $reviewData = $row->getScoreReview();
+    $score_total = $reviewData['score_total'];
+    ?>
+    <div class="service-review">
+        <span class="rate">
+            @if($reviewData['total_review'] > 0) {{$score_total}}/5 @endif <span class="rate-text">{{$reviewData['review_text']}}</span>
+        </span>
+        <span class="review">
+             @if($reviewData['total_review'] > 1)
+                {{ __(":number Reviews",["number"=>$reviewData['total_review'] ]) }}
+            @else
+                {{ __(":number Review",["number"=>$reviewData['total_review'] ]) }}
+            @endif
+        </span>
+        @if($row->view_count > 0)
+            <span class="view-counts ml-2">
+                <span class="view-number">{{ number_format($row->view_count) }}</span>
+                <i class="fa fa-eye"></i>
+            </span>
+        @endif
+    </div>
+    @endif
+    <div class="amenities">
+        @if($row->max_guests)
+            <span class="amenity total" data-toggle="tooltip"  title="{{ __("No. People") }}">
+                <i class="input-icon field-icon icofont-people  "></i> {{$row->max_guests}}
+            </span>
+        @endif
+        @if($row->bed)
+            <span class="amenity bed" data-toggle="tooltip" title="{{__("No. Bed")}}">
+                <i class="input-icon field-icon icofont-hotel"></i> {{$row->bed}}
+            </span>
+        @endif
+        @if($row->bathroom)
+            <span class="amenity bath" data-toggle="tooltip" title="{{__("No. Bathroom")}}" >
+                <i class="input-icon field-icon icofont-bathtub"></i> {{$row->bathroom}}
+            </span>
+        @endif
+        @if($row->square)
+            <span class="amenity size" data-toggle="tooltip" title="{{__("Square")}}" >
+                <i class="input-icon field-icon icofont-ruler-compass-alt"></i> {!! size_unit_format($row->square) !!}
+            </span>
+        @endif
+    </div>
+    @if(auth()->check() && auth()->id() === $row->author_id)
+    <div class="service-actions" style="display: flex; gap: 10px; align-items: center; padding: 10px 10px;">
+        <span class="badge" style="background-color: #007bff; color: white; padding: 5px 10px; border-radius: 5px;">
+            <a href="{{ route("business.vendor.edit",[$row->id]) }}" class="edit-icon" style="color: white; text-decoration: none;">
+                <i class="fa fa-edit"></i> Edit
+            </a>
+        </span>
+        <span class="badge" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px;">
+            <form action="" method="POST" style="display:inline;">
+                @csrf
+                @method('DELETE')
+                <a href="{{ route("business.vendor.delete",[$row->id]) }}" class="edit-icon" style="color: white; text-decoration: none;">
+                    <i class="fa fa-trash"></i> Delete
+                </a>
+            </form>
+        </span>
+    </div>
+@endif
+</div>

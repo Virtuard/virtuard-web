@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('bravo_businesses', function (Blueprint $table) {
+            $table->text('catalogs')->nullable()->after('items');
+        });
+        Schema::table('bravo_business_translations', function (Blueprint $table) {
+            $table->text('catalogs')->nullable()->after('items');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('bravo_businesses', function (Blueprint $table) {
+            $table->dropColumn('catalogs');
+        });
+        Schema::table('bravo_business_translations', function (Blueprint $table) {
+            $table->dropColumn('catalogs');
+        });
+    }
+};

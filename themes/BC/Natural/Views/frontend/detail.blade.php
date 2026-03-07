@@ -1,0 +1,90 @@
+@extends('layouts.app')
+@push('css')
+    <link href="{{ asset('dist/frontend/module/tour/css/tour.css?_ver='.config('app.asset_version')) }}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset("libs/ion_rangeslider/css/ion.rangeSlider.min.css") }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset("libs/fotorama/fotorama.css") }}"/>
+    
+   <!-- iPanorama -->
+   @include('partials.ipanorama.ipanorama-css')
+@endpush
+@section('content')
+    <div class="bravo_detail_tour">
+        @include('Layout::parts.bc')
+        @include('Natural::frontend.layouts.details.natural-banner')
+        <div class="bravo_content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-9">
+                        @include('user.partials.listing.ipanorama')
+                    </div>
+                    <div class="col-md-12 col-lg-9">
+                        @php $review_score = $row->review_data @endphp
+                        @include('Natural::frontend.layouts.details.natural-detail')
+                        @include('Natural::frontend.layouts.details.natural-review')
+                    </div>
+                    <div class="col-md-12 col-lg-3">
+                        @include('Natural::frontend.layouts.details.vendor')
+                        @if(enable_referral_sell($row))
+                            @include('partials.listing.sell-button')
+                        @endif
+                        @include('Natural::frontend.layouts.details.natural-form-book')
+                        @include('Natural::frontend.layouts.details.open-hours')
+                    </div>
+                </div>
+                <div class="row end_tour_sticky">
+                    <div class="col-md-12">
+                        @include('Natural::frontend.layouts.details.natural-related')
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if($row->author->checkUserPlan())
+        @include('Natural::frontend.layouts.details.form-book-mobile')
+        @endif
+    </div>
+@endsection
+
+@push('js')
+    {!! App\Helpers\MapEngine::scripts() !!}
+    <script>
+        jQuery(function ($) {
+            @if($row->map_lat && $row->map_lng)
+            new BravoMapEngine('map_content', {
+                disableScripts: true,
+                fitBounds: true,
+                center: [{{$row->map_lat}}, {{$row->map_lng}}],
+                zoom:22,
+                ready: function (engineMap) {
+                    engineMap.addMarker([{{$row->map_lat}}, {{$row->map_lng}}], {
+                        icon_options: {
+                            iconUrl:"{{get_file_url(setting_item("natural_icon_marker_map"),'full') ?? url('images/icons/png/pin.png') }}"
+                        }
+                    });
+                }
+            });
+            @endif
+        })
+    </script>
+    <script>
+        var bravo_booking_data = {!! json_encode($booking_data) !!}
+        var bravo_booking_i18n = {
+                no_date_select:'{{__('Please select Start date')}}',
+                no_guest_select:'{{__('Please select at least one guest')}}',
+                load_dates_url:'{{route('natural.vendor.availability.loadDates')}}',
+                name_required:'{{ __("Name is Required") }}',
+                email_required:'{{ __("Email is Required") }}',
+            };
+    </script>
+    <script type="text/javascript" src="{{ asset("libs/ion_rangeslider/js/ion.rangeSlider.min.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("libs/fotorama/fotorama.js") }}"></script>
+    <script type="text/javascript" src="{{ asset("libs/sticky/jquery.sticky.js") }}"></script>
+    <script type="text/javascript" src="{{ asset('module/natural/js/single-tour.js?_ver='.config('app.asset_version')) }}"></script>
+
+    @include('partials.ipanorama.ipanorama-js-no-jquery')
+    @if (is_display_panorama_listing($row))
+    @include('partials.ipanorama.ipanorama-preview-js')
+    @endif
+    @if(enable_referral_sell($row))
+        @include('partials.listing.copy-referral-script')
+    @endif
+@endpush
