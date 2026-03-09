@@ -44,6 +44,7 @@ Route::get('configs', 'BookingController@getConfigs')->name('api.get_configs');
 
 /* Shared Puzzle Routes (Public) */
 Route::get('puzzle/stats', 'PostController@getPuzzleStats');
+Route::get('post/puzzle-stats', 'PostController@getPuzzleStats'); // Alias: Flutter calls this endpoint
 Route::get('puzzle/get-one', 'PostController@getPuzzleDetails');
 
 /* Home Page */
