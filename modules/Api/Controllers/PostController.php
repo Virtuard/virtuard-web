@@ -1322,12 +1322,22 @@ class PostController extends Controller
 
         $postIdInt = (int) $puzzleId;
         if ($postIdInt <= 0) {
-            $row = DB::table('posts')
-                ->where('image_url', 'LIKE', "%$puzzleId%")
-                ->orWhere('puzzle_id', $puzzleId)
-                ->first(['id']);
-            if ($row) {
-                $postIdInt = (int) $row->id;
+            // First check if it's a modern post in post_media
+            $linkedPostId = DB::table('post_media')
+                ->where('media', 'LIKE', "%$puzzleId%")
+                ->value('post_id');
+                
+            if ($linkedPostId) {
+                $postIdInt = (int) $linkedPostId;
+            } else {
+                // Fallback to check legacy posts table
+                $row = DB::table('posts')
+                    ->where('image_url', 'LIKE', "%$puzzleId%")
+                    ->orWhere('puzzle_id', $puzzleId)
+                    ->first(['id']);
+                if ($row) {
+                    $postIdInt = (int) $row->id;
+                }
             }
         }
 
@@ -1506,109 +1516,173 @@ class PostController extends Controller
     {
         try {
             $type = $request->input('type', 'play'); // 'play' or 'win'
-            $post = UserPost::find($id);
             $userId = Auth::id();
 
-            // Record transaction for Leaderboard/Stats
+            // Handle cases where $id might be a legacy posts.id or a filename/puzzle_id string
+            $post = UserPost::find((int) $id);
+            $legacyPost = null;
+
+            if (!$post) {
+                // Not a direct UserPost ID. 
+                // First, if it's a string filename, try to find the modern UserPost via post_media
+                if (!is_numeric($id)) {
+                    $linkedPostId = DB::table('post_media')
+                        ->where('media', 'LIKE', "%$id%")
+                        ->value('post_id');
+                        
+                    if ($linkedPostId) {
+                        $post = UserPost::find($linkedPostId);
+                    }
+                }
+
+                if (!$post) {
+                    // If still no UserPost found, try finding a legacy post
+                    $legacyPost = DB::table('posts')->where('id', (int) $id)->first();
+                    
+                    // If not found by ID, it might be a filename/puzzle_id string passed from tablet/mobile
+                    if (!$legacyPost && !is_numeric($id)) {
+                        $legacyPost = DB::table('posts')
+                            ->where('image_url', 'LIKE', "%$id%")
+                            ->orWhere('puzzle_id', $id)
+                            ->first();
+                    }
+
+                    // If we found a legacy post, try to find the linked UserPost by matching the image name
+                    if ($legacyPost) {
+                        $mediaName = basename($legacyPost->image_url);
+                        if (!empty($mediaName)) {
+                            // Look for a UserPost that has this media
+                            $linkedPostId = DB::table('post_media')
+                                ->where('media', 'LIKE', "%$mediaName%")
+                                ->value('post_id');
+                                
+                            if ($linkedPostId) {
+                                $post = UserPost::find($linkedPostId);
+                            }
+                        }
+                        
+                        // Update internal ID reference if we found the legacy post
+                        $id = $legacyPost->id;
+                    }
+                }
+            }
+
+            // We now have either $post (UserPost), $legacyPost, or both.
+            // Record the play/completion transaction first
+            $transactionRecorded = false;
+            
+            // For transactions, we prefer the UserPost ID if available, otherwise fallback to legacy ID
+            $transactionId = $post ? $post->id : $id; 
+
             try {
                 if ($type === 'win') {
                     DB::table('post_completions')->insert([
-                        'post_id' => $id,
+                        'post_id' => $transactionId,
                         'user_id' => $userId,
                         'time_spent' => $request->input('time_spent', 0),
                         'moves' => $request->input('moves', 0),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+                    $transactionRecorded = true;
 
-                    // Check for Record Breaking
+                    // Check for Record Breaking (Using transactionId)
                     $bestTime = DB::table('post_completions')
-                        ->where('post_id', $id)
+                        ->where('post_id', $transactionId)
                         ->where('user_id', '!=', $userId)
                         ->min('time_spent');
 
                     $currentTime = (int) $request->input('time_spent', 0);
                     if ($currentTime > 0 && ($bestTime === null || $currentTime < $bestTime)) {
                         // New Record!
-                        $author = User::find($post->user_id);
-                        if ($author && $author->id != $userId) {
-                            $author->notify(new RecordNotification([
-                                'id' => uniqid(),
-                                'name' => Auth::user()->display_name,
-                                'avatar' => Auth::user()->avatar_url,
-                                'link' => url('/post/' . $id),
-                                'message' => Auth::user()->display_name . ' broke the record on your puzzle!',
-                                'puzzle_id' => $id,
-                                'time_spent' => $currentTime,
-                                'moves' => $request->input('moves', 0),
-                            ]));
+                        $authorId = $post ? $post->user_id : ($legacyPost ? $legacyPost->user_id : null);
+                        if ($authorId) {
+                            $author = User::find($authorId);
+                            if ($author && $author->id != $userId) {
+                                $author->notify(new RecordNotification([
+                                    'id' => uniqid(),
+                                    'name' => Auth::user()->display_name ?? 'A user',
+                                    'avatar' => Auth::user()->avatar_url ?? '',
+                                    'link' => url('/post/' . $transactionId),
+                                    'message' => (Auth::user()->display_name ?? 'Someone') . ' broke the record on your puzzle!',
+                                    'puzzle_id' => $transactionId,
+                                    'time_spent' => $currentTime,
+                                    'moves' => $request->input('moves', 0),
+                                ]));
+                            }
                         }
                     }
                 } else {
                     DB::table('post_plays')->insert([
-                        'post_id' => $id,
+                        'post_id' => $transactionId,
                         'user_id' => $userId,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+                    $transactionRecorded = true;
                 }
             } catch (\Exception $e) {
                 Log::error("[PostController] Failed to record transaction: " . $e->getMessage());
-                // Non-critical, continue to increment counters
             }
 
+            // Now increment the aggregate counters
+            $currentPlays = 0;
+            $currentWins = 0;
+
             if ($post) {
+                // Increment on modern user_post_status table
                 if ($type === 'win') {
                     $post->increment('completions_count');
-                    $post->increment('completions'); // Backwards compatibility
+                    $post->increment('completions'); // Backwards compatibility for the model
                 } else {
                     $post->increment('plays_count');
-                    $post->increment('plays'); // Backwards compatibility
+                    $post->increment('plays'); // Backwards compatibility for the model
                 }
-            } else {
-                // Try legacy system counters
-                try {
-                    $legacyPost = DB::table('posts')->where('id', $id)->first();
-                    if ($legacyPost) {
+                
+                $currentPlays = (int) ($post->plays_count ?? $post->plays);
+                $currentWins = (int) ($post->completions_count ?? $post->completions);
+                
+                // Also update the legacy table if it exists to keep them in sync
+                if ($legacyPost) {
+                    try {
                         if ($type === 'win') {
-                            DB::table('posts')->where('id', $id)->increment('completions');
+                            DB::table('posts')->where('id', $legacyPost->id)->increment('completions');
                         } else {
-                            DB::table('posts')->where('id', $id)->increment('plays');
+                            DB::table('posts')->where('id', $legacyPost->id)->increment('plays');
                         }
-
-                        $updated = DB::table('posts')->where('id', $id)->first();
-                        return response()->json([
-                            'status' => true,
-                            'message' => 'Statistics updated successfully (legacy)',
-                            'data' => [
-                                'id' => $id,
-                                'type' => $type,
-                                'current_plays' => (int) ($updated->plays ?? 0),
-                                'current_wins' => (int) ($updated->completions ?? 0),
-                                'legacy' => true
-                            ]
-                        ]);
+                    } catch (\Exception $syncErr) {}
+                }
+            } elseif ($legacyPost) {
+                // Increment purely on legacy posts table
+                try {
+                    if ($type === 'win') {
+                        DB::table('posts')->where('id', $legacyPost->id)->increment('completions');
+                    } else {
+                        DB::table('posts')->where('id', $legacyPost->id)->increment('plays');
                     }
+
+                    $updated = DB::table('posts')->where('id', $legacyPost->id)->first();
+                    $currentPlays = (int) ($updated->plays ?? 0);
+                    $currentWins = (int) ($updated->completions ?? 0);
                 } catch (\Exception $e) {
                     Log::error("[PostController] Legacy increment failed: " . $e->getMessage());
                 }
-
-                if (!$post) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Post not found',
-                    ], 404);
-                }
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post not found',
+                ], 404);
             }
 
             return response()->json([
                 'status' => true,
                 'message' => 'Statistics updated successfully',
                 'data' => [
-                    'id' => $id,
+                    'id' => $transactionId,
                     'type' => $type,
-                    'current_plays' => (int) ($post->plays_count ?? $post->plays),
-                    'current_wins' => (int) ($post->completions_count ?? $post->completions)
+                    'current_plays' => $currentPlays,
+                    'current_wins' => $currentWins,
+                    'legacy' => !$post && $legacyPost
                 ]
             ]);
 
