@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\PuzzleConfig;
 use App\Models\PuzzleTracking;
+use App\Models\UserPost;
 use Illuminate\Http\Request;
 
 class PuzzleController extends Controller
@@ -24,13 +25,28 @@ class PuzzleController extends Controller
         $isActive = $config && $config->is_active;
         
         // Track page view
-        PuzzleTracking::track('view', [
-            'platform' => $platform,
-            'user_agent' => $userAgent,
-            'ip_address' => $request->ip(),
-            'referrer' => $request->header('referer'),
-            'query_params' => $request->all(),
-        ]);
+        $postId = $request->input('post_id');
+        
+        if ($postId) {
+            // Track view with post_id
+            PuzzleTracking::trackView($postId, [
+                'query_params' => $request->all(),
+                'img_url' => $img,
+                'title' => $title,
+                'referrer' => $request->header('referer'),
+            ]);
+        } else {
+            // Track general view without post_id
+            PuzzleTracking::track('view', [
+                'platform' => $platform,
+                'user_agent' => $userAgent,
+                'ip_address' => $request->ip(),
+                'referrer' => $request->header('referer'),
+                'query_params' => $request->all(),
+                'img_url' => $img,
+                'title' => $title,
+            ]);
+        }
         
         // Prepare data with conditional values
         $androidPackage = $isActive ? $config->android_package : '';
@@ -56,6 +72,7 @@ class PuzzleController extends Controller
         $data = [
             'title' => $title,
             'imgUrl' => $img,
+            'postId' => $postId ?? null,
             'config' => $isActive ? $config : null,
             'isSharingMode' => $isSharingMode,
             'androidStoreLink' => $androidStoreLink,
@@ -81,16 +98,31 @@ class PuzzleController extends Controller
         $userAgent = $request->header('User-Agent');
         $platform = $this->detectPlatform($userAgent);
         
-        PuzzleTracking::track('click', [
-            'platform' => $platform,
-            'user_agent' => $userAgent,
-            'ip_address' => $request->ip(),
-            'referrer' => $request->header('referer'),
-            'img_url' => $request->input('img_url'),
-            'title' => $request->input('title'),
-            'deep_link_used' => $request->input('deep_link'),
-            'redirect_url' => $request->input('redirect_url'),
-        ]);
+        $postId = $request->input('post_id');
+        
+        if ($postId) {
+            // Track play with post_id
+            PuzzleTracking::trackPlay($postId, [
+                'query_params' => $request->all(),
+                'img_url' => $request->input('img_url'),
+                'title' => $request->input('title'),
+                'deep_link_used' => $request->input('deep_link'),
+                'redirect_url' => $request->input('redirect_url'),
+                'referrer' => $request->header('referer'),
+            ]);
+        } else {
+            // Track general click without post_id
+            PuzzleTracking::track('click', [
+                'platform' => $platform,
+                'user_agent' => $userAgent,
+                'ip_address' => $request->ip(),
+                'referrer' => $request->header('referer'),
+                'img_url' => $request->input('img_url'),
+                'title' => $request->input('title'),
+                'deep_link_used' => $request->input('deep_link'),
+                'redirect_url' => $request->input('redirect_url'),
+            ]);
+        }
 
         return response()->json(['success' => true]);
     }

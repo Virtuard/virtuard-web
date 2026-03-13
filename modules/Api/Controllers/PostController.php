@@ -13,6 +13,8 @@ use App\Models\UserPost;
 use App\Models\PostMedia;
 use App\Models\PostLike;
 use App\Models\PostComment;
+use App\Helpers\PuzzleArPostHelper;
+use App\Models\PuzzleTracking;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -429,6 +431,13 @@ class PostController extends Controller
             ];
             $post = $this->userPost->create($dataPost);
 
+            // Share flow: post baru dulu — sisipkan post_id ke link PuzzleAR supaya klik & main tercatat ke post ini
+            $messageAfterCreate = PuzzleArPostHelper::appendPostIdToMessage($post->message, $post->id);
+            if ($messageAfterCreate !== $post->message) {
+                $post->message = $messageAfterCreate;
+                $post->save();
+            }
+
             if ($request->hasFile('media_user')) {
                 $files = $request->file('media_user');
                 foreach ($files as $file) {
@@ -451,10 +460,18 @@ class PostController extends Controller
 
             DB::commit();
 
+            $puzzleArUrl = null;
+            if ($post->message && (stripos($post->message, 'puzzleAR') !== false)) {
+                if (preg_match('#https?://[^\s"\'<>]*puzzleAR[^\s"\'<>]*#i', $post->message, $mm)) {
+                    $puzzleArUrl = $mm[0];
+                }
+            }
+
             return response()->json([
                 'status' => true,
                 'message' => 'Post created successfully',
-                'data' => $post
+                'data' => $post,
+                'puzzle_ar_url' => $puzzleArUrl,
             ]);
         } catch (Exception $e) {
             DB::rollBack();
@@ -1217,5 +1234,405 @@ class PostController extends Controller
         ];
 
         $toUser->notify(new PrivateChannelServices($data));
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/post/{id}/track/view",
+     *     tags={"PostTracking"},
+     *     summary="Track post view",
+     *     description="Mencatat bahwa post telah dilihat. Data disimpan ke tabel puzzle_tracking dengan post_id untuk menghubungkan ke post spesifik.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID post (user_post_status.id)",
+     *         @OA\Schema(type="integer", example=123)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="View tracked successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="View tracked successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="view_count", type="integer", example=42)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Post not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function trackView(Request $request, $id)
+    {
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        PuzzleTracking::trackView($id, [
+            'metadata' => [
+                'referrer' => $request->header('referer'),
+                'query_params' => $request->all(),
+            ]
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'View tracked successfully',
+            'data' => [
+                'view_count' => $post->view_count
+            ]
+        ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/post/{id}/track/play",
+     *     tags={"PostTracking"},
+     *     summary="Track post play",
+     *     description="Mencatat bahwa user membuka/memainkan game dari post. Data disimpan ke puzzle_tracking dengan event_type='play' dan post_id.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID post (user_post_status.id)",
+     *         @OA\Schema(type="integer", example=123)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Play tracked successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Play tracked successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="play_count", type="integer", example=15),
+     *                 @OA\Property(property="unique_player_count", type="integer", example=8)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Post not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function trackPlay(Request $request, $id)
+    {
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        PuzzleTracking::trackPlay($id, [
+            'metadata' => [
+                'referrer' => $request->header('referer'),
+                'query_params' => $request->all(),
+            ]
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Play tracked successfully',
+            'data' => [
+                'play_count' => $post->play_count,
+                'unique_player_count' => $post->unique_player_count
+            ]
+        ]);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/post/{id}/track/screenshot",
+     *     tags={"PostTracking"},
+     *     summary="Upload screenshot from game",
+     *     description="Upload screenshot hasil game. File disimpan dan tracking disimpan ke puzzle_tracking dengan event_type='screenshot' dan post_id.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID post (user_post_status.id)",
+     *         @OA\Schema(type="integer", example=123)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 @OA\Property(
+     *                     property="screenshot",
+     *                     type="string",
+     *                     format="binary",
+     *                     description="Screenshot image file (jpeg, png, jpg, max 5MB)"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Screenshot uploaded successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Screenshot uploaded successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="screenshot_url", type="string", example="https://virtuard.com/uploads/media/screenshots/screenshot_123.jpg"),
+     *                 @OA\Property(property="screenshot_count", type="integer", example=3)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Post not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation failed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The screenshot field is required."),
+     *             @OA\Property(property="errors", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function uploadScreenshot(Request $request, $id)
+    {
+        $request->validate([
+            'screenshot' => 'required|image|mimes:jpeg,png,jpg|max:5120', // max 5MB
+        ]);
+
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        try {
+            $file = $request->file('screenshot');
+            $filename = 'screenshot_' . time() . '_' . $id . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('/media/screenshots', $filename);
+
+            PuzzleTracking::trackScreenshot($id, $path, [
+                'metadata' => [
+                    'original_filename' => $file->getClientOriginalName(),
+                    'file_size' => $file->getSize(),
+                ]
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Screenshot uploaded successfully',
+                'data' => [
+                    'screenshot_url' => get_file_url($path) ?? asset('storage/' . $path),
+                    'screenshot_count' => $post->screenshot_count
+                ]
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to upload screenshot: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/post/{id}/statistics",
+     *     tags={"PostTracking"},
+     *     summary="Get post tracking statistics",
+     *     description="Mengambil statistik lengkap untuk post: view count, play count, unique players, screenshots. Data diambil dari puzzle_tracking dengan filter post_id.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID post (user_post_status.id)",
+     *         @OA\Schema(type="integer", example=123)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Statistics retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Statistics retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="post_id", type="integer", example=123),
+     *                 @OA\Property(property="view_count", type="integer", example=100),
+     *                 @OA\Property(property="play_count", type="integer", example=45),
+     *                 @OA\Property(property="unique_player_count", type="integer", example=30),
+     *                 @OA\Property(property="screenshot_count", type="integer", example=12),
+     *                 @OA\Property(
+     *                     property="players",
+     *                     type="array",
+     *                     description="List of unique players who played",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="user_id", type="integer", example=1),
+     *                         @OA\Property(
+     *                             property="user",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="John Doe"),
+     *                             @OA\Property(property="avatar", type="string", example="https://...")
+     *                         ),
+     *                         @OA\Property(property="play_count", type="integer", example=5),
+     *                         @OA\Property(property="last_played", type="string", format="date-time", example="2026-03-11T12:00:00.000000Z")
+     *                     )
+     *                 ),
+     *                 @OA\Property(
+     *                     property="screenshots",
+     *                     type="array",
+     *                     description="List of screenshots uploaded",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=10),
+     *                         @OA\Property(property="screenshot_url", type="string", example="https://..."),
+     *                         @OA\Property(
+     *                             property="user",
+     *                             type="object",
+     *                             nullable=true,
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="John Doe"),
+     *                             @OA\Property(property="avatar", type="string", example="https://...")
+     *                         ),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2026-03-11T12:00:00.000000Z")
+     *                     )
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Post not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post not found")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function getStatistics($id)
+    {
+        $post = UserPost::with(['views.user', 'plays.user', 'screenshots.user'])->find($id);
+        if (!$post) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        $uniquePlayers = PuzzleTracking::where('post_id', $id)
+            ->where('event_type', 'play')
+            ->whereNotNull('user_id')
+            ->with('user')
+            ->select('user_id')
+            ->distinct()
+            ->get()
+            ->map(function ($tracking) use ($id) {
+                return [
+                    'user_id' => $tracking->user_id,
+                    'user' => $tracking->user ? [
+                        'id' => $tracking->user->id,
+                        'name' => $tracking->user->display_name ?? $tracking->user->name,
+                        'avatar' => $tracking->user->getAvatarUrl(),
+                    ] : null,
+                    'play_count' => PuzzleTracking::where('post_id', $id)
+                        ->where('event_type', 'play')
+                        ->where('user_id', $tracking->user_id)
+                        ->count(),
+                    'last_played' => PuzzleTracking::where('post_id', $id)
+                        ->where('event_type', 'play')
+                        ->where('user_id', $tracking->user_id)
+                        ->latest()
+                        ->first()
+                        ->created_at ?? null,
+                ];
+            });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Statistics retrieved successfully',
+            'data' => [
+                'post_id' => $post->id,
+                'view_count' => $post->view_count,
+                'play_count' => $post->play_count,
+                'unique_player_count' => $post->unique_player_count,
+                'screenshot_count' => $post->screenshot_count,
+                'players' => $uniquePlayers,
+                'screenshots' => $post->screenshots->map(function ($tracking) {
+                    return [
+                        'id' => $tracking->id,
+                        'screenshot_url' => get_file_url($tracking->screenshot_url) ?? asset('storage/' . $tracking->screenshot_url),
+                        'user' => $tracking->user ? [
+                            'id' => $tracking->user->id,
+                            'name' => $tracking->user->display_name ?? $tracking->user->name,
+                            'avatar' => $tracking->user->getAvatarUrl(),
+                        ] : null,
+                        'created_at' => $tracking->created_at,
+                    ];
+                }),
+            ]
+        ]);
     }
 }

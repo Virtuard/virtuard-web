@@ -18,6 +18,8 @@ use App\Models\UserPost;
 use App\Models\PostMedia;
 use App\Models\PostLike;
 use App\Models\PostComment;
+use App\Helpers\PuzzleArPostHelper;
+use App\Models\PuzzleTracking;
 use App\Models\Story;
 use App\Models\Ipanorama;
 use App\Notifications\PrivateChannelServices;
@@ -291,6 +293,12 @@ class PostController extends Controller
             ];
             $post = UserPost::create($dataPost);
 
+            $msg = PuzzleArPostHelper::appendPostIdToMessage($post->message, $post->id);
+            if ($msg !== $post->message) {
+                $post->message = $msg;
+                $post->save();
+            }
+
             if ($request->hasFile('media_user')) {
                 $files = $request->file('media_user');
                 foreach ($files as $file) {
@@ -527,5 +535,170 @@ class PostController extends Controller
         }
 
         return back()->with('success', 'Deleted comment');
+    }
+
+    /**
+     * Track post view
+     */
+    public function trackView(Request $request, $id)
+    {
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        PuzzleTracking::trackView($id, [
+            'referrer' => $request->header('referer'),
+            'query_params' => $request->all(),
+            'metadata' => [
+                'referrer' => $request->header('referer'),
+                'query_params' => $request->all(),
+            ],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'view_count' => $post->view_count
+        ]);
+    }
+
+    /**
+     * Track post play (when game is opened/played)
+     */
+    public function trackPlay(Request $request, $id)
+    {
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        PuzzleTracking::trackPlay($id, [
+            'referrer' => $request->header('referer'),
+            'query_params' => $request->all(),
+            'metadata' => [
+                'referrer' => $request->header('referer'),
+                'query_params' => $request->all(),
+            ],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'play_count' => $post->play_count,
+            'unique_player_count' => $post->unique_player_count
+        ]);
+    }
+
+    /**
+     * Upload screenshot from game
+     */
+    public function uploadScreenshot(Request $request, $id)
+    {
+        $request->validate([
+            'screenshot' => 'required|image|mimes:jpeg,png,jpg|max:5120', // max 5MB
+        ]);
+
+        $post = UserPost::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        try {
+            $file = $request->file('screenshot');
+            $filename = 'screenshot_' . time() . '_' . $id . '.' . $file->getClientOriginalExtension();
+            $path = $file->storeAs('/media/screenshots', $filename);
+
+            PuzzleTracking::trackScreenshot($id, $path, [
+                'metadata' => [
+                    'original_filename' => $file->getClientOriginalName(),
+                    'file_size' => $file->getSize(),
+                ]
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'screenshot_url' => get_file_url($path) ?? asset('storage/' . $path),
+                'screenshot_count' => $post->screenshot_count
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to upload screenshot: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Get post statistics
+     */
+    public function getStatistics($id)
+    {
+        $post = UserPost::with(['views.user', 'plays.user', 'screenshots.user'])->find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 404);
+        }
+
+        $uniquePlayers = PuzzleTracking::where('post_id', $id)
+            ->where('event_type', 'play')
+            ->whereNotNull('user_id')
+            ->with('user')
+            ->select('user_id')
+            ->distinct()
+            ->get()
+            ->map(function ($tracking) {
+                return [
+                    'user_id' => $tracking->user_id,
+                    'user' => $tracking->user ? [
+                        'id' => $tracking->user->id,
+                        'name' => $tracking->user->display_name ?? $tracking->user->name,
+                        'avatar' => $tracking->user->getAvatarUrl(),
+                    ] : null,
+                    'play_count' => PuzzleTracking::where('post_id', $tracking->post_id)
+                        ->where('event_type', 'play')
+                        ->where('user_id', $tracking->user_id)
+                        ->count(),
+                    'last_played' => PuzzleTracking::where('post_id', $tracking->post_id)
+                        ->where('event_type', 'play')
+                        ->where('user_id', $tracking->user_id)
+                        ->latest()
+                        ->first()
+                        ->created_at ?? null,
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'data' => [
+                'post_id' => $post->id,
+                'view_count' => $post->view_count,
+                'play_count' => $post->play_count,
+                'unique_player_count' => $post->unique_player_count,
+                'screenshot_count' => $post->screenshot_count,
+                'players' => $uniquePlayers,
+                'screenshots' => $post->screenshots->map(function ($tracking) {
+                    return [
+                        'id' => $tracking->id,
+                        'screenshot_url' => get_file_url($tracking->screenshot_url) ?? asset('storage/' . $tracking->screenshot_url),
+                        'user' => $tracking->user ? [
+                            'id' => $tracking->user->id,
+                            'name' => $tracking->user->display_name ?? $tracking->user->name,
+                            'avatar' => $tracking->user->getAvatarUrl(),
+                        ] : null,
+                        'created_at' => $tracking->created_at,
+                    ];
+                }),
+            ]
+        ]);
     }
 }

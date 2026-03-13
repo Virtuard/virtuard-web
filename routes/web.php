@@ -81,6 +81,11 @@ Route::post('{id}/comment', 'PostController@storeComment')->name('comment.store'
 Route::delete('{id}', 'PostController@destroy')->name('destroy');
 Route::put('{id}/comment', 'PostController@updateComment')->name('comment.update');
 Route::delete('{id}/comment', 'PostController@destroyComment')->name('comment.destroy');
+// Post tracking routes
+Route::post('{id}/track/view', 'PostController@trackView')->name('track.view');
+Route::post('{id}/track/play', 'PostController@trackPlay')->name('track.play');
+Route::post('{id}/track/screenshot', 'PostController@uploadScreenshot')->name('track.screenshot');
+Route::get('{id}/statistics', 'PostController@getStatistics')->name('statistics');
 });
 
 // member

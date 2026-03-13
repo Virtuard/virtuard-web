@@ -186,6 +186,12 @@ Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function (
     Route::post('/{id}/update', [ControllersPostController::class, 'update']);
     Route::get('/{id}', [ControllersPostController::class, 'show']);
     Route::delete('/{id}', [ControllersPostController::class, 'deletePost']);
+    
+    // Post tracking routes
+    Route::post('/{id}/track/view', [ControllersPostController::class, 'trackView']);
+    Route::post('/{id}/track/play', [ControllersPostController::class, 'trackPlay']);
+    Route::post('/{id}/track/screenshot', [ControllersPostController::class, 'uploadScreenshot']);
+    Route::get('/{id}/statistics', [ControllersPostController::class, 'getStatistics']);
 });
 
 Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
