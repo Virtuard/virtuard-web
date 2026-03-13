@@ -15,6 +15,7 @@ use App\Models\PostLike;
 use App\Models\PostComment;
 use App\Helpers\PuzzleArPostHelper;
 use App\Models\PuzzleTracking;
+use App\Models\UserGameProgress;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
@@ -1530,7 +1531,8 @@ class PostController extends Controller
      *                             @OA\Property(property="avatar", type="string", example="https://...")
      *                         ),
      *                         @OA\Property(property="play_count", type="integer", example=5),
-     *                         @OA\Property(property="last_played", type="string", format="date-time", example="2026-03-11T12:00:00.000000Z")
+     *                         @OA\Property(property="last_played", type="string", format="date-time", example="2026-03-11T12:00:00.000000Z"),
+     *                         @OA\Property(property="total_score", type="integer", example=12500, description="Total score dari user_game_progress")
      *                     )
      *                 ),
      *                 @OA\Property(
@@ -1590,6 +1592,8 @@ class PostController extends Controller
             ->distinct()
             ->get()
             ->map(function ($tracking) use ($id) {
+                $gameProgress = UserGameProgress::where('user_id', $tracking->user_id)->first();
+                
                 return [
                     'user_id' => $tracking->user_id,
                     'user' => $tracking->user ? [
@@ -1607,6 +1611,7 @@ class PostController extends Controller
                         ->latest()
                         ->first()
                         ->created_at ?? null,
+                    'total_score' => $gameProgress ? $gameProgress->total_score : 0,
                 ];
             });
 
