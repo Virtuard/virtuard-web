@@ -52,39 +52,39 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-        if(Auth::user()->hasPermission('dashboard_access')){
+        if (Auth::user()->hasPermission('dashboard_access')) {
             return '/admin';
-        }else{
+        } else {
             return $this->redirectTo;
         }
     }
 
     public function showLoginForm()
     {
-        return view('auth.login',['page_title'=> __("Login")]);
+        return view('auth.login', ['page_title' => __("Login")]);
     }
 
     public function socialLogin($provider)
     {
         $this->initConfigs($provider);
-        $redirectTo = request()->server('HTTP_REFERER',url('/'));
-        session()->put('url.intended',$redirectTo);
+        $redirectTo = request()->server('HTTP_REFERER', url('/'));
+        session()->put('url.intended', $redirectTo);
 
         return Socialite::driver($provider)->redirect();
     }
 
     protected function initConfigs($provider)
     {
-        switch($provider){
+        switch ($provider) {
             case "facebook":
             case "google":
             case "twitter":
                 config()->set([
-                    'services.'.$provider.'.client_id'=>setting_item($provider.'_client_id'),
-                    'services.'.$provider.'.client_secret'=>setting_item($provider.'_client_secret'),
-                    'services.'.$provider.'.redirect'=>'/social-callback/'.$provider,
+                    'services.' . $provider . '.client_id' => setting_item($provider . '_client_id'),
+                    'services.' . $provider . '.client_secret' => setting_item($provider . '_client_secret'),
+                    'services.' . $provider . '.redirect' => '/social-callback/' . $provider,
                 ]);
-            break;
+                break;
         }
     }
 
@@ -114,7 +114,7 @@ class LoginController extends Controller
 
                 // if we can not get email, then fake email will be generated
                 $email = $user->getEmail();
-                $email = $email?:$user->getId().'@'.$provider;
+                $email = $email ?: $user->getId() . '@' . $provider;
 
                 $userResponse = User::query()->where('email', $email)->first();
                 if (!empty($userResponse)) {
@@ -126,6 +126,7 @@ class LoginController extends Controller
                     $userResponse->addMeta('social_meta_avatar', $user->getAvatar());
 
                     $userResponse->need_update_pw = 0;
+                    $userResponse->last_login_at = now();
                     $userResponse->save();
 
                     // Login with user
@@ -165,7 +166,6 @@ class LoginController extends Controller
                 Auth::login($realUser);
 
                 return redirect($redirectTo);
-
             } else {
 
                 if ($existUser->deleted == 1) {
@@ -183,25 +183,24 @@ class LoginController extends Controller
 
                 return redirect($redirectTo);
             }
-        }catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
             $message = $exception->getMessage();
-            if(empty($message) and request()->get('error_message')) $message = request()->get('error_message');
-            if(empty($message)) $message = $exception->getCode();
+            if (empty($message) and request()->get('error_message')) $message = request()->get('error_message');
+            if (empty($message)) $message = $exception->getCode();
 
-            return redirect()->route('login')->with('error',$message);
+            return redirect()->route('login')->with('error', $message);
         }
     }
 
-    public function getRedirectTo(){
+    public function getRedirectTo()
+    {
         $url = session()->get('url.intended', url('/'));
         session()->forget('url.intended');
-        if($url == url('/') or $url ==route('login') or $url == route('auth.register')){
+        if ($url == url('/') or $url == route('login') or $url == route('auth.register')) {
             $url = url('/');
         }
         return $url;
     }
-
 
     public function handleGoogleAccount(Request $request)
     {
@@ -212,11 +211,11 @@ class LoginController extends Controller
             $spittedName = explode(" ", $name);
             $firstName = $spittedName[0];
             $lastName = null;
-            if(count($spittedName) > 1){
+            if (count($spittedName) > 1) {
                 $lastName = $spittedName[1];
             }
             $user_name = generate_user_name($name);
-            
+
             $photoUrl = $request->input('photo_url');
 
             // Optional: validate the email
@@ -234,8 +233,9 @@ class LoginController extends Controller
                 $userResponse->addMeta('social_meta_avatar',  $photoUrl);
 
                 $userResponse->need_update_pw = 0;
+                $userResponse->last_login_at = now();
                 $userResponse->save();
-                
+
                 $token = $userResponse->createToken('access_token')->plainTextToken;
                 $responseJson = [
                     'token' => $token,
@@ -256,11 +256,8 @@ class LoginController extends Controller
                 // Login with user
                 Auth::login($userResponse);;
                 return response()->json($responseJson, 200);
-
-               
             }
-            
-            
+
             $userDto = [
                 'google_user_id' => $id,
                 'name' => $name,
@@ -270,7 +267,7 @@ class LoginController extends Controller
                 'user_name' => $user_name,
                 'photo_profile' => $photoUrl,
             ];
-            
+
             $userResponse = $this->createGoogleUser($userDto);
             return response()->json([
                 'token' => $userResponse->createToken('access_token')->plainTextToken,
@@ -287,20 +284,17 @@ class LoginController extends Controller
                 ],
                 'status'    => 1,
             ], 200);
-            
-            
-
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             return response()->json(['message' => $e->getMessage()], 500);
         }
-    }   
-    
-    
-    public function createGoogleUser($user) {
+    }
+
+    public function createGoogleUser($user)
+    {
         // Create New User
         $provider = 'google';
-        try{
+        try {
             $realUser = new User();
             $realUser->email = $user['email'];
             $realUser->password = Hash::make(uniqid() . time());
@@ -318,20 +312,12 @@ class LoginController extends Controller
             $realUser->addMeta('social_' . $provider . '_avatar', $user["photo_profile"]);
             $realUser->addMeta('social_meta_avatar',  $user["photo_profile"]);
 
-
             $realUser->save();
-            
+
             return $realUser;
-      
-        }catch(exception $e){
+        } catch (exception $e) {
             Log::error($e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
-      
     }
-        
-
-
-
 }
-

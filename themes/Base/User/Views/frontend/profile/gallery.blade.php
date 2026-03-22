@@ -41,20 +41,20 @@
                         {{-- Tombol Like & Comment --}}
                         <div class="action-btn-wrapper">
                             @auth
-                                <a href="javascript:void(0)"
-                                   class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                <div
+                                   class="action-btn post-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                    data-post-id="{{ $post->id }}"
                                    data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                     <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                    <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                </a>
+                                    <span class="action-count post-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                </div>
                             @else
-                                <a href="javascript:void(0)"
+                                <div
                                    onclick="alert('You need to login to like this post');"
                                    class="action-btn cursor-pointer">
                                     <i class="fa fa-heart-o"></i>
                                     <span class="action-count">{{ $post->likes->count() }}</span>
-                                </a>
+                                </div>
                             @endauth
 
                             <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
@@ -89,20 +89,20 @@
                             {{-- Tombol Like & Comment --}}
                             <div class="action-btn-wrapper">
                                 @auth
-                                    <a href="javascript:void(0)"
-                                       class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                    <div
+                                       class="action-btn post-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                        data-post-id="{{ $post->id }}"
                                        data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                         <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                        <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                    </a>
+                                        <span class="action-count post-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    </div>
                                 @else
-                                    <a href="javascript:void(0)"
+                                    <div
                                        onclick="alert('You need to login to like this post');"
                                        class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
                                         <span class="action-count">{{ $post->likes->count() }}</span>
-                                    </a>
+                                    </div>
                                 @endauth
 
                                 <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
@@ -148,20 +148,20 @@
                             {{-- Tombol Like & Comment --}}
                             <div class="action-btn-wrapper">
                                 @auth
-                                    <a href="javascript:void(0)"
-                                       class="action-btn like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
+                                    <div 
+                                       class="action-btn post-like-btn {{ $liked->count() > 0 ? 'liked' : '' }}"
                                        data-post-id="{{ $post->id }}"
                                        data-like-url="{{ route('post.like', ['id' => $post->id]) }}">
                                         <i class="fa {{ $liked->count() > 0 ? 'fa-heart' : 'fa-heart-o' }}"></i>
-                                        <span class="action-count like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
-                                    </a>
+                                        <span class="action-count post-like-count-{{ $post->id }}">{{ $post->likes->count() }}</span>
+                                    </div>
                                 @else
-                                    <a href="javascript:void(0)"
+                                    <div
                                        onclick="alert('You need to login to like this post');"
                                        class="action-btn cursor-pointer">
                                         <i class="fa fa-heart-o"></i>
                                         <span class="action-count">{{ $post->likes->count() }}</span>
-                                    </a>
+                                    </div>
                                 @endauth
 
                                 <a href="#" class="action-btn comment-btn" data-toggle="modal" data-target="#commentModal{{ $post->id }}">
@@ -187,8 +187,8 @@
 
                 {{-- Comment Modal --}}
                 <div class="modal fade" id="commentModal{{ $post->id }}" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document" style="max-height: 90vh; margin: 1.75rem auto;">
-                        <div class="modal-content" style="height: 90vh; max-width: 1200px;">
+                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                        <div class="modal-content" style="height: 80vh; max-width: 1200px;">
                             <div class="modal-header">
                                 <h5 class="modal-title">{{ __('Post') }}</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -198,32 +198,24 @@
                             <div class="modal-body p-0" style="height: calc(100% - 60px); overflow: hidden;">
                                 <div class="row no-gutters" style="height: 100%;">
                                     {{-- Left Side - Post Media (FIXED, NO SCROLL) --}}
-                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center"
-                                         style="height: 100%;">
+                                    <div class="col-12 col-md-6 bg-dark d-flex align-items-center justify-content-center panorama-side">
                                         @php
                                             $firstMedia = $post->medias->first();
                                         @endphp
-
+                
                                         @if($firstMedia)
                                             @if($firstMedia->type == 'image')
                                                 @if($firstMedia->is_360_media)
                                                     {{-- 360 Image --}}
-                                                    <div id="panorama-modal-{{ $post->id }}" style="width: 100%; height: 100%;"></div>
-                                                    <script>
-                                                        document.addEventListener("DOMContentLoaded", function () {
-                                                            pannellum.viewer('panorama-modal-{{ $post->id }}', {
-                                                                "type": "equirectangular",
-                                                                "panorama": "/uploads/{{ $firstMedia->media }}",
-                                                                "autoLoad": true,
-                                                                "showZoomCtrl": true
-                                                            });
-                                                        });
-                                                    </script>
+                                                    <div id="panorama-modal-{{ $post->id }}"
+                                                         data-url="/uploads/{{ $firstMedia->media }}"
+                                                         style="width: 100%; height: 100%;">
+                                                    </div>
                                                 @else
                                                     {{-- Regular Image --}}
                                                     <img src="{{ asset('uploads/' . $firstMedia->media) }}"
                                                          alt="Post"
-                                                         style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                                                         style="width: 100%; height: 100%; object-fit: cover;">
                                                 @endif
                                             @elseif($firstMedia->type == 'video')
                                                 {{-- Video --}}
@@ -244,7 +236,7 @@
                                                                 fullscreenToggle: true,
                                                             }
                                                         });
-
+                
                                                         @if($firstMedia->is_360_media)
                                                         playerModal{{ $post->id }}.vr({
                                                             projection: "360",
@@ -257,30 +249,81 @@
                                             <p class="text-white">{{ __('No media available') }}</p>
                                         @endif
                                     </div>
-
+                
                                     {{-- Right Side - Comments Section --}}
-                                    <div class="col-12 col-md-6 d-flex flex-column bg-white" style="height: 100%;">
-
-                                        {{-- Comments List (SCROLLABLE AREA) --}}
-                                        <div id="commentsList{{ $post->id }}" class="p-3 bg-white"
-                                             style="overflow-y: auto; flex: 1 1 auto; height: 0;">
-
+                                    <div class="col-12 col-md-6 d-flex flex-column bg-white comments-side">
+                
+                                        <div id="commentsList{{ $post->id }}" class="p-3 bg-white" style="overflow-y: auto; flex: 1 1 auto; height: 0;">
                                             @forelse($post->comments as $comment)
-                                                <div class="mb-3 comment-item">
+                                                <div class="mb-3 comment-item" data-comment-id="{{ $comment->id }}">
                                                     <div class="d-flex">
                                                         <img src="{{ $comment->user->getAvatarUrl() ?? asset('images/avatar.png') }}"
                                                              alt="User"
                                                              style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
                                                         <div class="ml-2 flex-grow-1">
-                                                            <div class="bg-light p-2 rounded">
-                                                                <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">
-                                                                    {{ $comment->user->display_name ?? $comment->user->name }}
+                                                            <!-- View Mode -->
+                                                            <div class="comment-view-mode">
+                                                                <div class="d-flex justify-content-between align-items-start">
+                                                                    <div class="bg-light p-2 rounded flex-grow-1">
+                                                                        <p class="mb-1 font-weight-bold" style="font-size: 1rem;">
+                                                                            {{ $comment->user->display_name ?? $comment->user->name }}
+                                                                        </p>
+                                                                        <p class="m-0 comment-text" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
+                                                                    </div>
+                                                                    @if(auth()->check() && auth()->id() === $comment->user_id)
+                                                                        <div class="comment-actions ml-2 d-flex flex-column">
+                                                                            <button class="btn btn-sm edit-comment-btn mb-2" 
+                                                                                    data-comment-id="{{ $comment->id }}"
+                                                                                    title="Edit"
+                                                                                    style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-pencil"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-sm post-delete-comment-btn" 
+                                                                                    data-comment-id="{{ $comment->id }}"
+                                                                                    data-post-id="{{ $post->id }}"
+                                                                                    title="Delete"
+                                                                                    style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-trash"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    @endif
+                                                                </div>
+                                                                <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
+                                                                    {{ $comment->created_at->diffForHumans() }}
+                                                                    @if($comment->created_at != $comment->updated_at)
+                                                                        <span class="text-muted">(edited)</span>
+                                                                    @endif
                                                                 </p>
-                                                                <p class="m-0" style="font-size: 0.9rem;">{{ $comment->comment }}</p>
                                                             </div>
-                                                            <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">
-                                                                {{ $comment->created_at->diffForHumans() }}
-                                                            </p>
+                                        
+                                                            <!-- Edit Mode (Hidden by default) -->
+                                                            <div class="comment-edit-mode" style="display: none;">
+                                                                <form class="update-comment-form" data-comment-id="{{ $comment->id }}" data-post-id="{{ $post->id }}">
+                                                                    @csrf
+                                                                    <div class="d-flex align-items-center">
+                                                                        <input type="text" 
+                                                                               name="comment" 
+                                                                               class="form-control form-control-sm comment-edit-input" 
+                                                                               value="{{ $comment->comment }}"
+                                                                               style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
+                                                                               required>
+                                                                        <div class="comment-actions ml-2 d-flex flex-column">
+                                                                            <button type="submit" 
+                                                                                    class="btn btn-sm mb-2" 
+                                                                                    title="Save"
+                                                                                    style="background-color: #4caf50; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-check"></i>
+                                                                            </button>
+                                                                            <button type="button" 
+                                                                                    class="btn btn-sm cancel-edit-btn" 
+                                                                                    title="Cancel"
+                                                                                    style="background-color: #9e9e9e; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                                                <i class="fa fa-times"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -290,23 +333,23 @@
                                                 </p>
                                             @endforelse
                                         </div>
-
+                
                                         {{-- Like & Comment Count (FIXED) --}}
                                         <div class="px-3 py-2 border-top border-bottom bg-white" style="flex: 0 0 auto;">
                                             <div class="d-flex justify-content-between">
-                                <span>
-                                    <i class="fa fa-comment"></i> 
-                                    <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
-                                </span>
+                                            <span>
+                                                <i class="fa fa-comment"></i> 
+                                                <strong class="comment-count-{{ $post->id }}">{{ $post->comments->count() }}</strong> {{ __('comments') }}
+                                            </span>
                                             </div>
                                         </div>
-
+                
                                         {{-- Comment Form (FIXED) --}}
                                         <div class="p-3 border-top bg-white" style="flex: 0 0 auto;">
                                             @auth
                                                 <form action="{{ route('post.comment.store', $post->id) }}"
                                                       method="POST"
-                                                      class="comment-form"
+                                                      class="post-comment-form"
                                                       data-post-id="{{ $post->id }}">
                                                     @csrf
                                                     <div class="input-group">
@@ -314,7 +357,7 @@
                                                                name="comment"
                                                                class="form-control border-0"
                                                                placeholder="{{ __('Write a comment...') }}"
-                                                               style="background: #f0f2f5;"
+                                                               style="background: #f0f2f5; margin: 0px !important;"
                                                                required>
                                                         <div class="input-group-append">
                                                             <button class="btn btn-primary" type="submit">
@@ -330,12 +373,13 @@
                                             @endauth
                                         </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
+                
                 <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     @foreach ($videos as $vid)
@@ -378,6 +422,78 @@
         @endforeach
     </div>
     
+    <div id="modalGallery" class="modal fade">
+        <div class="modal-dialog modal-dialog-centered">
+            <form action="{{ route('post.store') }}" method="POST"
+            enctype="multipart/form-data" class="modal-content">
+            @csrf
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ __('Add Post') }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label for="" class="form-label">{{ __('Caption') }}</label>
+                        <textarea style="width: 100%; padding: 10px;" name="message" placeholder="{{ __('What\'s new?') }}"
+                                        oninput="auto_grow(this)"></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="" class="form-label">{{ __('Select Media') }}</label>
+                        <input type="file" id="fileInput" class="m-0" name="media_user[]"
+                            accept="image/*, video/*"
+                            multiple>
+                    </div>
+                    <div class="">
+                        <label for="is_360_media" class="form-label d-block">{{ __('Is it 360 media?') }}</label>
+                        <label class="switch">
+                            <input name="is_360_media" id="is_360_media" type="checkbox">
+                            <div class="slider">
+                                <div class="circle">
+                                    <svg class="cross" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 365.696 365.696" y="0" x="0" height="6" width="6" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path data-original="#000000" fill="currentColor" d="M243.188 182.86 356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25L24.48 356.32c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0"></path>
+                                        </g>
+                                    </svg>
+                                    <svg class="checkmark" xml:space="preserve" style="enable-background:new 0 0 512 512" viewBox="0 0 24 24" y="0" x="0" height="10" width="10" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                        <g>
+                                            <path class="" data-original="#000000" fill="currentColor" d="M9.707 19.121a.997.997 0 0 1-1.414 0l-5.646-5.647a1.5 1.5 0 0 1 0-2.121l.707-.707a1.5 1.5 0 0 1 2.121 0L9 14.171l9.525-9.525a1.5 1.5 0 0 1 2.121 0l.707.707a1.5 1.5 0 0 1 0 2.121z"></path>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="">
+                        <label for="" class="form-label d-block">{{ __('Status') }}</label>
+                        <select class="h-100" id="filter-post" name="type_post"
+                            style="
+                            padding: 5px 16px;
+                            background: #f5f5f5;
+                            border: 0;
+                            border-radius: 100px;
+                            font-weight: 600;
+                            outline: none;
+                        ">
+                            <option value="">{{ __('Public') }}</option>
+                            <option value="{{ auth()->check() ? 'me' : 'login' }}" {{ request('filter') == 'me' ? 'selected' : '' }}>{{ __('Only Me') }}</option>
+                            <option value="{{ auth()->check() ? 'friend' : 'login' }}" {{ request('filter') == 'friend' ? 'selected' : '' }}>{{ __('My Friends') }}</option>
+                        </select>
+                        <a class="cursor-pointer d-none">
+                            <i class="fa fa-lg fa-smile-o ml-3"></i>
+                        </a>
+                        <div class="cursor-pointer d-none" id="toogle-tag" onclick="showSelect()">
+                            <i class="fa fa-lg fa-tags ml-3"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">{{ __('Post') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 @push('css')
@@ -466,6 +582,24 @@
 
         .comment-item {
             animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes likeHeart {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.3);
+            }
+            50% {
+                transform: scale(0.9);
+            }
+            75% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
         }
 
         @keyframes fadeIn {
@@ -716,6 +850,91 @@
         .custom-fullscreen-btn:hover {
             background: rgba(0, 0, 0, 0.8);
         }
+        .modal-dialog.modal-dialog-centered.modal-xl {
+            max-height: 100vh; 
+            margin: auto !important;
+        }
+        @media (max-width: 767px) {
+            .modal .modal-content {
+                height: 100vh;
+            }
+            .modal .panorama-side {
+                display: none; 
+                height: 0px;
+            }
+            .modal .comments-side {
+                height: calc(75vh - 65px) !important;
+            }
+            .modal-dialog.modal-dialog-centered.modal-xl {
+                margin: 0 auto !important;
+            }
+        }
+
+        /* Comment Actions Styling */
+
+        .comment-edit-input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        /* Hover effects untuk tombol edit dan delete */
+        .edit-comment-btn:hover {
+            background-color: #bbdefb !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .post-delete-comment-btn:hover {
+            background-color: #ffcdd2 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Hover effects untuk tombol save dan cancel di edit mode */
+        .update-comment-form button[type="submit"]:hover {
+            background-color: #45a049 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+        }
+
+        .cancel-edit-btn:hover {
+            background-color: #757575 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Active state */
+        .edit-comment-btn:active,
+        .post-delete-comment-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Focus state untuk input edit */
+        .comment-edit-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        }
+
+        /* Smooth transition */
+        .comment-actions button,
+        .update-comment-form button {
+            transition: all 0.2s ease;
+}
+        /* Mobile specific */
+        @media (max-width: 767px) {
+            .comment-actions .btn {
+                font-size: 16px;
+                min-width: 32px;
+                min-height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .comment-edit-input {
+                font-size: 16px !important;
+                min-height: 40px;
+            }
+        }
     </style>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
@@ -723,141 +942,391 @@
 
     <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
 @endpush
-
 @push('js')
     <script src="https://unpkg.com/video.js/dist/video.js"></script>
     <script src="https://unpkg.com/videojs-vr/dist/videojs-vr.min.js"></script>
 
     <script>
-        $(document).ready(function() {
-            handleLikeButtons();
+    $(document).ready(function() {
+        handleLikePostButtons();
+        handleInitial360MediaModal();
+        handleCommentButtons();
+        handleCommentFormSubmission();
+        handleEditComment();
+        handleCancelEdit();
+        handleUpdateComment(); 
+        handleDeleteComment();
+    });
+
+    function handleEditComment() {
+        $(document).on('click', '.edit-comment-btn', function() {
+            var commentItem = $(this).closest('.comment-item');
+            commentItem.find('.comment-view-mode').hide();
+            commentItem.find('.comment-edit-mode').show();
+            commentItem.find('.comment-edit-input').focus();
         });
+    }
 
-        function handleLikeButtons() {
-            $('.action-btn').on('click', function(e) {
-                e.preventDefault();
+    function handleCancelEdit() {
+        $(document).on('click', '.cancel-edit-btn', function() {
+            var commentItem = $(this).closest('.comment-item');
+            commentItem.find('.comment-edit-mode').hide();
+            commentItem.find('.comment-view-mode').show();
+            
+            var originalText = commentItem.find('.comment-text').text();
+            commentItem.find('.comment-edit-input').val(originalText);
+        });
+    }
 
-                var btn = $(this);
-                var postId = btn.data('post-id');
-                var likeUrl = btn.data('like-url');
-                console.log("Like URL: " + likeUrl);
-                var icon = btn.find('i');
-                var likeCount = $('.like-count-' + postId);
-                var likeCountModal = $('.like-count-modal-' + postId);
-
-                // Prevent multiple clicks
-                if (btn.data('processing')) {
-                    return;
-                }
-
-                btn.data('processing', true);
-
-                $.ajax({
-                    url: likeUrl,
-                    method: 'GET',
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.success) {
-                            if (response.liked) {
-                                btn.addClass('liked');
-                                icon.removeClass('fa-heart-o').addClass('fa-heart');
-
-                              
-                                icon.addClass('like-animation');
-                                setTimeout(function() {
-                                    icon.removeClass('like-animation');
-                                }, 600);
-                            } else {
-                                btn.removeClass('liked');
-                                icon.removeClass('fa-heart').addClass('fa-heart-o');
-                            }
-                            
-                            likeCount.text(response.total_likes);
-                            likeCountModal.text(response.total_likes);
-                        }
-
-                        btn.data('processing', false);
-                    },
-                    error: function(xhr) {
-                        btn.data('processing', false);
-
-                        if (xhr.status === 401) {
-                            alert('You need to login to like this post');
-                        } else {
-                            alert('Failed to like/unlike post. Please try again.');
-                        }
+    function handleUpdateComment() {
+        $(document).on('submit', '.update-comment-form', function(e) {
+            e.preventDefault();
+            
+            var form = $(this);
+            var commentItem = form.closest('.comment-item');
+            var commentId = commentItem.attr('data-comment-id');
+            var postId = form.data('post-id');
+            var newComment = form.find('input[name="comment"]').val();
+            
+            if (!commentId || commentId === 'undefined') {
+                console.error('Comment ID is undefined!');
+                alert('Error: Comment ID not found. Please refresh the page.');
+                return;
+            }
+            
+            if (!newComment.trim()) {
+                return;
+            }
+            
+            $.ajax({
+                url: '/post/' + commentId + '/comment',
+                method: 'PUT',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    comment: newComment
+                },
+                success: function(response) {
+                    commentItem.find('.comment-text').text(response.comment);
+                    
+                    var timeText = commentItem.find('.comment-view-mode p.text-muted').first();
+                    if (!timeText.find('span:contains("edited")').length) {
+                        timeText.append(' <span class="text-muted">(edited)</span>');
                     }
-                });
-            });
-        }
-        
-        function auto_grow(element) {
-            element.style.height = "5px";
-            element.style.height = (element.scrollHeight) + "px";
-        }
-
-        // Handle comment form submission via AJAX
-        $(document).ready(function() {
-            $('.comment-form').on('submit', function(e) {
-                e.preventDefault();
-
-                var form = $(this);
-                var postId = form.data('post-id');
-                var commentInput = form.find('input[name="comment"]');
-                var commentText = commentInput.val();
-
-                if (!commentText.trim()) {
-                    return;
+                    
+                    commentItem.find('.comment-edit-input').val(response.comment);
+                    
+                    commentItem.find('.comment-edit-mode').hide();
+                    commentItem.find('.comment-view-mode').show();
+                },
+                error: function(xhr) {
+                    console.error('Update error:', xhr);
+                    alert('Failed to update comment. Please try again.');
                 }
+            });
+        });
+    }
 
-                $.ajax({
-                    url: form.attr('action'),
-                    method: 'POST',
-                    data: form.serialize(),
-                    // Update bagian success di script AJAX yang sudah ada
-                    success: function(response) {
-                        // Clear input
-                        commentInput.val('');
-
-                        // Hide "no comments" message if exists
-                        $('#noComments' + postId).hide();
-
-                        // Add new comment to the list
-                        var newComment = `
-        <div class="mb-3 comment-item">
-            <div class="d-flex">
-                <img src="${response.user.avatar}" 
-                     alt="User" 
-                     style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
-                <div class="ml-2 flex-grow-1">
-                    <div class="bg-light p-2 rounded">
-                        <p class="m-0 font-weight-bold" style="font-size: 0.9rem;">${response.user.name}</p>
-                        <p class="m-0" style="font-size: 0.9rem;">${response.comment}</p>
-                    </div>
-                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
-                </div>
-            </div>
-        </div>
-    `;
-
-                        $('#commentsList' + postId).append(newComment);
-
-                        // Scroll to bottom
-                        var commentsList = document.getElementById('commentsList' + postId);
-                        commentsList.scrollTop = commentsList.scrollHeight;
-
-                        // Update comment count in the button AND in modal
+    function handleDeleteComment() {
+        $(document).on('click', '.post-delete-comment-btn', function() {
+            if (!confirm('Are you sure you want to delete this comment?')) {
+                return;
+            }
+            
+            var btn = $(this);
+            var commentItem = btn.closest('.comment-item');
+            var commentId = commentItem.attr('data-comment-id');
+            var postId = btn.data('post-id');
+            
+            if (!commentId || commentId === 'undefined') {
+                console.error('Comment ID is undefined!');
+                alert('Error: Comment ID not found. Please refresh the page.');
+                return;
+            }
+            
+            $.ajax({
+                url: '/post/' + commentId + '/comment',
+                method: 'DELETE',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    console.log('Delete success:', response);
+                    
+                    commentItem.fadeOut(300, function() {
+                        $(this).remove();
+                        
                         var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text());
-                        $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
-                        $('.comment-count-' + postId).text(currentCount + 1);
-                    },
-                    error: function(xhr) {
-                        alert('Failed to post comment. Please try again.');
-                    }
-                });
+                        var newCount = Math.max(0, currentCount - 1);
+                        
+                        $('[data-target="#commentModal' + postId + '"] .action-count').text(newCount);
+                        $('.comment-count-' + postId).text(newCount);
+                        
+                        if (newCount === 0) {
+                            $('#noComments' + postId).show();
+                        }
+                    });
+                },
+                error: function(xhr) {
+                    console.error('Delete error:', xhr);
+                    alert('Failed to delete comment. Please try again.');
+                }
             });
         });
+    }
+
+    function handleCommentFormSubmission() {
+        $('.post-comment-form').on('submit', function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var postId = form.data('post-id');
+            var commentInput = form.find('input[name="comment"]');
+            var commentText = commentInput.val();
+
+            if (!commentText.trim()) {
+                return;
+            }
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    console.log('Comment created:', response);
+                    
+                    if (!response.comment_id) {
+                        console.error('Response missing comment_id:', response);
+                        alert('Error: Invalid server response.');
+                        return;
+                    }
+                    
+                    commentInput.val('');
+                    $('#noComments' + postId).hide();
+                    
+                    var escapedComment = $('<div>').text(response.comment).html();
+                    var escapedName = $('<div>').text(response.user.name).html();
+                    
+                    var newComment = `
+                    <div class="mb-3 comment-item" data-comment-id="${response.comment_id}">
+                        <div class="d-flex">
+                            <img src="${response.user.avatar}" 
+                                alt="User" 
+                                style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                            <div class="ml-2 flex-grow-1">
+                                <div class="comment-view-mode">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="bg-light p-2 rounded flex-grow-1">
+                                            <p class="mb-1 font-weight-bold" style="font-size: 1rem;">${escapedName}</p>
+                                            <p class="m-0 comment-text" style="font-size: 0.9rem;">${escapedComment}</p>
+                                        </div>
+                                        <div class="comment-actions ml-2 d-flex flex-column">
+                                            <button class="btn btn-sm edit-comment-btn mb-2"
+                                                    title="Edit"
+                                                    style="background-color: #e3f2fd; color: #1976d2; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                <i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button class="btn btn-sm post-delete-comment-btn"
+                                                    title="Delete" 
+                                                    data-post-id="${postId}"
+                                                    style="background-color: #ffebee; color: #c62828; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <p class="m-0 mt-1 text-muted" style="font-size: 0.75rem;">Just now</p>
+                                </div>
+                                <div class="comment-edit-mode" style="display: none;">
+                                    <form class="update-comment-form" data-post-id="${postId}">
+                                        <div class="d-flex align-items-center">
+                                            <input type="text" 
+                                                name="comment" 
+                                                class="form-control form-control-sm comment-edit-input" 
+                                                value="${escapedComment}"
+                                                style="border: 2px solid #1976d2; border-radius: 6px; padding: 8px 12px;"
+                                                required>
+                                            <div class="comment-actions ml-2 d-flex flex-column">
+                                                <button type="submit" 
+                                                        class="btn btn-sm mb-2" 
+                                                        title="Save"
+                                                        style="background-color: #4caf50; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                                <button type="button" 
+                                                        class="btn btn-sm cancel-edit-btn" 
+                                                        title="Cancel"
+                                                        style="background-color: #9e9e9e; color: white; border: none; padding: 4px 8px; width:100% !important; height: 100% !important; border-radius: 4px; font-size: 0.85rem; transition: all 0.2s;">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                    
+                    var $newComment = $(newComment);
+                    $('#commentsList' + postId).append($newComment);
+                    
+                    var commentsList = document.getElementById('commentsList' + postId);
+                    if (commentsList) {
+                        commentsList.scrollTop = commentsList.scrollHeight;
+                    }
+
+                    var currentCount = parseInt($('[data-target="#commentModal' + postId + '"] .action-count').text()) || 0;
+                    $('[data-target="#commentModal' + postId + '"] .action-count').text(currentCount + 1);
+                    $('.comment-count-' + postId).text(currentCount + 1);
+                },
+                error: function(xhr) {
+                    console.error('Submit error:', xhr);
+                    alert('Failed to post comment. Please try again.');
+                }
+            });
+    });
+}
+    function handleLikePostButtons() {
+        $(document).on('click', '.post-like-btn', function(e) {
+            e.preventDefault();
+
+            var btn = $(this);
+            var postId = btn.data('post-id');
+            var likeUrl = btn.data('like-url');
+            var icon = btn.find('i');
+            var likeCount = $('.post-like-count-' + postId);
+            
+            // Prevent multiple clicks
+            if (btn.data('processing')) {
+                return;
+            }
+
+            btn.data('processing', true);
+
+            $.ajax({
+                url: likeUrl,
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.success) {
+                        if (response.liked) {
+                            btn.addClass('liked');
+                            icon.removeClass('fa-heart-o').addClass('fa-heart');
+                            icon.addClass('like-animation');
+                            setTimeout(function() {
+                                icon.removeClass('like-animation');
+                            }, 600);
+                        } else {
+                            btn.removeClass('liked');
+                            icon.removeClass('fa-heart').addClass('fa-heart-o');
+                        }
+                        
+                        likeCount.text(response.like_count);
+                        
+                    } else {
+                        console.log('Response success is false or undefined');
+                    }
+
+                    btn.data('processing', false);
+                },
+                error: function(xhr) {
+                    console.log('AJAX error - Status:', xhr.status);
+                    console.log('AJAX error - Response text:', xhr.responseText);
+
+                    btn.data('processing', false);
+                    if (xhr.status === 401) {
+                        alert('You need to login to like this post');
+                    } else {
+                        console.error('Error:', xhr.responseText);
+                        alert('Failed to like/unlike post. Please try again.');
+                    }
+                }
+            });
+        });
+    }
+
+    function auto_grow(element) {
+        element.style.height = "5px";
+        element.style.height = (element.scrollHeight) + "px";
+    }
+
+    function handleInitial360MediaModal() {
+        var panoramaViewers = {};
+
+        $('[id^="commentModal"]').on('shown.bs.modal', function() {
+            var modalId = $(this).attr('id');
+            var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
+            var containerId = 'panorama-modal-' + postId;
+            var container = $('#' + containerId);
+
+            if (container.length && container.data('url') && !panoramaViewers[postId]) {
+                setTimeout(function() {
+                    try {
+                        if (typeof pannellum !== 'undefined') {
+                            panoramaViewers[postId] = pannellum.viewer(containerId, {
+                                "type": "equirectangular",
+                                "panorama": container.data('url'),
+                                "autoLoad": true,
+                                "showZoomCtrl": true
+                            });
+                        }
+                    } catch(e) {
+                        console.error('Panorama error:', e);
+                    }
+                }, 150);
+            }
+        });
+
+        $('[id^="commentModal"]').on('hidden.bs.modal', function() {
+            var modalId = $(this).attr('id');
+            var postId = modalId.replace('commentModal', '').replace('Mobile', ''); 
+            if (panoramaViewers[postId]) {
+                try {
+                    panoramaViewers[postId].destroy();
+                } catch(e) {}
+                delete panoramaViewers[postId];
+            }
+        });
+    }
+
+    function handleCommentButtons() {
+        $('.comment-btn').on('click', function(e) {
+            e.preventDefault();
+
+            var targetDesktop = $(this).data('target');
+
+            $('.modal').modal('hide');
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css('padding-right', '');
+
+            setTimeout(function() {
+                $(targetDesktop).modal('show');
+            }, 350);
+        });
+
+        $('.modal').on('hidden.bs.modal', function() {
+            $('.modal-backdrop').remove();
+            $('body').removeClass('modal-open').css('padding-right', '');
+        });
+
+        var lastWidth = window.innerWidth;
+        var resizeTimeout;
         
-        
+        $(window).on('resize orientationchange', function() {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function() {
+                var currentWidth = window.innerWidth;
+                var wasDesktop = lastWidth >= 768;
+                var isDesktop = currentWidth >= 768;
+                
+                if (wasDesktop !== isDesktop && $('.modal.show').length > 0) {
+                    $('.modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    $('body').removeClass('modal-open').css('padding-right', '');
+                }
+                
+                lastWidth = currentWidth;
+            }, 250); 
+        });
+    }
     </script>
 @endpush

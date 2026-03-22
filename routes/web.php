@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\PuzzleController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cookie;
@@ -78,6 +79,7 @@ Route::post('/', 'PostController@store')->name('store');
 Route::get('{id}/like', 'PostController@likePost')->name('like');
 Route::post('{id}/comment', 'PostController@storeComment')->name('comment.store');
 Route::delete('{id}', 'PostController@destroy')->name('destroy');
+Route::put('{id}/comment', 'PostController@updateComment')->name('comment.update');
 Route::delete('{id}/comment', 'PostController@destroyComment')->name('comment.destroy');
 });
 
@@ -133,3 +135,7 @@ Route::post('midtrans/callback', [BookingController::class, 'midtransCallback'])
 
 // Google OAuth route  (especially for mobile authentication)
 Route::post('/api/auth/google/account', [LoginController::class, 'handleGoogleAccount'] );
+
+// Puzzle AR Smart Links
+Route::get('/puzzleAR', [PuzzleController::class, 'index'])->name('puzzle.ar');
+Route::post('/puzzleAR/track', [PuzzleController::class, 'trackClick'])->name('puzzle.track');

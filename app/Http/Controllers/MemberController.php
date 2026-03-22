@@ -92,6 +92,7 @@ class MemberController extends Controller
             ['role_id', '!=', 1],
             ['status', '=', 'publish'],
         ])
+        ->orderBy('last_login_at', 'DESC')
         ->orderBy('id', 'DESC')
         ->paginate(15);
     

@@ -11,9 +11,10 @@
                 grid-template-columns: repeat(1, 1fr);
             }
         }
-
+        
         @media(max-width: 768px) {
             .nav.nav-tabs {
+                grid-template-columns: repeat(1, 1fr);
                 gap: 0;
             }
         }

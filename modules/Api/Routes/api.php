@@ -23,6 +23,10 @@ use Modules\Api\Controllers\MemberController;
 use Modules\Api\Controllers\MapController;
 use Modules\Api\Controllers\AttributeController;
 use Modules\Api\Controllers\Panorama\ManagePanoramaController;
+use Modules\Api\Controllers\Auth\ResetPasswordController;
+use Modules\Api\Controllers\Auth\GoogleLoginController;
+use Modules\Api\Controllers\HomePageController;
+use Modules\Api\Controllers\UserGameProgressController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +40,10 @@ use Modules\Api\Controllers\Panorama\ManagePanoramaController;
 */
 /* Config */
 Route::get('configs','BookingController@getConfigs')->name('api.get_configs');
+
+/* Home Page */
+Route::get('home-page/service-counts', [HomePageController::class, 'getServiceCounts']);
+
 /* Service */
 Route::get('services','SearchController@searchServices')->name('api.service-search');
 Route::get('{type}/search','SearchController@search')->name('api.search2');
@@ -81,9 +89,17 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::get('me', 'AuthController@me');
     Route::post('me', 'AuthController@updateUser');
     Route::post('change-password', 'AuthController@changePassword');
-    Route::post('forgot-password', 'AuthController@sendResetLinkEmail');
     Route::get('check-email-availability', 'AuthController@checkEmailAvailability');
-}); 
+    // Google Login
+    Route::post('google/login', [GoogleLoginController::class, 'googleLogin']);
+});
+
+// OTP Reset Password
+Route::group(['middleware' => 'api', 'prefix' => 'auth/otp'], function ($router) {
+    Route::post('forgot-password', [ResetPasswordController::class, 'forgotPassword']);
+    Route::post('forgot-password/verify', [ResetPasswordController::class, 'verifyOtp']);
+    Route::post('reset-password', [ResetPasswordController::class, 'resetPassword']);
+});
 
 
 /* User */
@@ -159,22 +175,54 @@ Route::middleware('auth:sanctum')->group(function () {
 
 /* Post */
 Route::group(['prefix' => 'post', 'middleware' => ['auth:sanctum'],], function () {
-    Route::get('/', 'PostController@index');
-    Route::post('/','PostController@store');
-    Route::post('/{id}/comment','PostController@storeComment');
-    Route::get('/{id}/comments','PostController@getComments');
-    Route::put('/{id}/like','PostController@likeOrUnlikePost');
-    Route::delete('/{id}','PostController@deletePost');
-    Route::delete('/comment/{id}', 'PostController@deleteComment');
+    Route::get('/', [ControllersPostController::class, 'index']);
+    Route::post('/', [ControllersPostController::class, 'store']);
     
+    Route::post('/{id}/comment', [ControllersPostController::class, 'storeComment']);
+    Route::get('/{id}/comments', [ControllersPostController::class, 'getComments']);
+    Route::put('/{id}/like', [ControllersPostController::class, 'likeOrUnlikePost']);
+    Route::delete('/comment/{id}', [ControllersPostController::class, 'deleteComment']);
+    
+    Route::post('/{id}/update', [ControllersPostController::class, 'update']);
+    Route::get('/{id}', [ControllersPostController::class, 'show']);
+    Route::delete('/{id}', [ControllersPostController::class, 'deletePost']);
 });
 
 Route::post('map/mobile-search', [MapController::class, 'searchMapExplorerMobile']);
+Route::get('map/explore', [MapController::class, 'explore']);
 
+/* Member */
+Route::group(['middleware' => 'api', 'prefix' => 'members'], function ($router) {
+    Route::get('/', [MemberController::class, 'allMembers']);
+    Route::get('/{id_or_slug}', [MemberController::class, 'detailMember']);
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/{id}/follow', [MemberController::class, 'follow']);
+        Route::post('/{id}/unfollow', [MemberController::class, 'unfollow']);
+    });
+});
+
+// Legacy route (keep for backward compatibility)
 Route::get('/all-members', [MemberController::class, 'allMembers']);
 
+/* Game Progress */
+Route::group(['middleware' => ['api', 'auth:sanctum'], 'prefix' => 'game-progress'], function ($router) {
+    Route::get('/', [UserGameProgressController::class, 'index']);
+    Route::post('/', [UserGameProgressController::class, 'store']);
+    Route::post('/add-score', [UserGameProgressController::class, 'addScore']);
+    Route::post('/use-life', [UserGameProgressController::class, 'useLife']);
+    Route::post('/add-play-time', [UserGameProgressController::class, 'addPlayTime']);
+    Route::get('/players', [UserGameProgressController::class, 'players']);
+    
+    Route::post('/images/upload', [UserGameProgressController::class, 'uploadImage']);
+    Route::get('/images', [UserGameProgressController::class, 'getImages']);
+    Route::get('/images/{id}', [UserGameProgressController::class, 'getImage']);
+    Route::delete('/images/{id}', [UserGameProgressController::class, 'deleteImage']);
+});
+
 Route::group(['prefix' => 'profile', 'middleware' => ['auth:sanctum'],], function () {
-    Route::post('/update', [ProfileController::class, 'updateProfile']);
+    Route::get('/', [ProfileController::class, 'getProfile']);
+    Route::post('/', [ProfileController::class, 'updateProfile']);
+    Route::post('/picture', [ProfileController::class, 'updatePicture']);
 });
 
 Route::group(['prefix' => 'referral', 'middleware' => ['auth:sanctum'],], function () {

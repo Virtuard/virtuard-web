@@ -40,10 +40,15 @@ class PostController extends Controller
      *     description="",
      *     security={{"sanctum":{}}},
      *     @OA\Parameter(
-     *         name="filter",
+     *         name="scope",
      *         in="query",
-     *         description="filter post by me, friend or default all",
-     *         @OA\Schema(type="string")
+     *         description="Scope of posts to retrieve: 'me' for current user's posts, 'friend' for posts from friends/following. Leave empty or do not send this parameter to get all posts.",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="string",
+     *             enum={"me", "friend"},
+     *             example="me"
+     *         )
      *     ),
      *     @OA\Response(
      *         response=200,
@@ -66,8 +71,19 @@ class PostController extends Controller
                         $query->where('user_id',$idUser);
                     },
                     'author.mediaFile'])
-                ->when(isset($request->user_id), function ($q) use ($request) {
-                    $q->where('user_id', $request->user_id);
+                ->when(isset($request->scope), function ($q) use ($request, $idUser) {
+                    if ($request->scope == 'me') {
+                        $q->where('user_id', $idUser);
+                    } elseif ($request->scope == 'friend') {
+                        $following_ids = FollowUser::where('user_id', $idUser)->pluck('follower_id')->toArray();
+                        $follower_ids = FollowUser::where('follower_id', $idUser)->pluck('user_id')->toArray();
+                        $ids = array_merge($following_ids, $follower_ids);
+                        if (!empty($ids)) {
+                            $q->whereIn('user_id', $ids);
+                        } else {
+                            $q->where('user_id', 0);
+                        }
+                    }
                 })
                 ->orderBy('id', 'desc')
                 ->paginate(20)
@@ -102,6 +118,91 @@ class PostController extends Controller
         }
     }
     
+    /**
+     * @OA\Get(
+     *     path="/api/post/{id}",
+     *     tags={"Post"},
+     *     summary="Get post by ID",
+     *     description="Get a single post by its ID. The user must be authenticated.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The ID of the post",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Post retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Post retrieved successfully"),
+     *             @OA\Property(property="data", type="object")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Post not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post not found")
+     *         )
+     *     )
+     * )
+     */
+    public function show($id)
+    {
+        try {
+            $idUser = Auth::id();
+            $id = (int) $id;
+            
+            $post = $this->userPost
+                ->withCount('likes')
+                ->withCount('comments')
+                ->with([
+                    'medias',
+                    'likes' => function ($query) use ($idUser) {
+                        $query->where('user_id', $idUser);
+                    },
+                    'author.mediaFile'
+                ])
+                ->find($id);
+            
+            if (!$post) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post not found'
+                ], 404);
+            }
+            
+            // Transform post data
+            unset($post->ipanorama_id);
+            $post->deletable = $post->user_id == $idUser;
+            
+            $author = $this->selectAuthorFields($post);
+            unset($post->author);
+            $post->author = $author;
+            
+            $post->is_liked = $this->isLikedByUser($post);
+            unset($post->likes);
+            
+            return response()->json([
+                'status' => true,
+                'message' => 'Post retrieved successfully',
+                'data' => $post
+            ]);
+        } catch (Exception $e) {
+            Log::error("Error while fetching post: ");
+            Log::error($e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to retrieve post',
+                'data' => null
+            ], 400);
+        }
+    }
+    
     private function isLikedByUser($post) {
         if($post->likes->count() > 0) return true;
         return false;
@@ -130,16 +231,44 @@ class PostController extends Controller
      *     path="/api/post",
      *     tags={"Post"},
      *     summary="Create a post",
-     *     description="The user must be authenticated to create a post.",
+     *     description="Creates a new post. The user must be authenticated. Message is required if no media is provided, otherwise optional.",
      *     security={{"sanctum":{}}},
      *     @OA\RequestBody(
+     *         required=true,
      *         @OA\MediaType(
      *            mediaType="multipart/form-data",
      *             @OA\Schema(
      *                 type="object",
-     *                 @OA\Property(property="message", type="string", example="My new post message"),
-     *                 @OA\Property(property="ipanorama_id", type="integer"),
-     *                 @OA\Property(property="media_user", type="array", items=@OA\Items(type="file", format="binary"))
+     *                 @OA\Property(
+     *                     property="message",
+     *                     type="string",
+     *                     description="Post message content. Required if media_user is not provided, optional if media_user is provided.",
+     *                     example="My new post message"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ipanorama_id",
+     *                     type="integer",
+     *                     description="ID of the associated panorama (optional)",
+     *                     example=1
+     *                 ),
+     *                 @OA\Property(
+     *                     property="type_post",
+     *                     type="string",
+     *                     description="Type of post (optional)",
+     *                     example="normal"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="media_user",
+     *                     type="array",
+     *                     description="Array of media files to upload (optional)",
+     *                     @OA\Items(type="file", format="binary")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="is_360_media",
+     *                     type="boolean",
+     *                     description="Whether the media is 360-degree media (optional, only used when media_user is provided)",
+     *                     example=false
+     *                 )
      *             )
      *         )
      *     ),
@@ -149,14 +278,20 @@ class PostController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="Post created successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 description="Created post object with medias relationship"
+     *             )
      *         )
      *     ),
      *     @OA\Response(
      *         response=400,
-     *         description="Bad request - validation errors",
+     *         description="Bad request - validation errors or creation failed",
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=false),
-     *             @OA\Property(property="message", type="string", example="Post creation failed")
+     *             @OA\Property(property="message", type="string", example="Post created failed"),
+     *             @OA\Property(property="error_message", type="string", example="Error details")
      *         )
      *     ),
      *     @OA\Response(
@@ -204,7 +339,7 @@ class PostController extends Controller
                         'post_id' => $post->id,
                         'media' => $path,
                         'type' => $type,
-                        'is_360_media' => $request->is_360_media,
+                        'is_360_media' => $request->is_360_media ?? false,
                     ];
                     $mediaItem = PostMedia::create($dataMedia);
                 }
@@ -226,6 +361,213 @@ class PostController extends Controller
                 'message' => 'Post created failed',
                 'error_message' => $e->getMessage()
             ], 400);
+        }
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/post/{id}/update",
+     *     tags={"Post"},
+     *     summary="Update a post",
+     *     description="Updates an existing post. The user must be authenticated and must own the post to update it. Message is nullable.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="The ID of the post to update",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *            mediaType="multipart/form-data",
+     *             @OA\Schema(
+     *                 type="object",
+                 *                 @OA\Property(
+     *                     property="message",
+     *                     type="string",
+     *                     description="Post message content (required)",
+     *                     example="Updated post message"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="ipanorama_id",
+     *                     type="integer",
+     *                     description="ID of the associated panorama (optional)",
+     *                     example=1
+     *                 ),
+     *                 @OA\Property(
+     *                     property="type_post",
+     *                     type="string",
+     *                     description="Type of post (optional)",
+     *                     example="normal"
+     *                 ),
+     *                 @OA\Property(
+     *                     property="media_user",
+     *                     type="array",
+     *                     description="Array of media files to upload (optional). New files will be added to existing media.",
+     *                     @OA\Items(type="file", format="binary")
+     *                 ),
+     *                 @OA\Property(
+     *                     property="is_360_media",
+     *                     type="boolean",
+     *                     description="Whether the media is 360-degree media (optional, only used when media_user is provided)",
+     *                     example=false
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Post updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Post updated successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 description="Updated post object with medias relationship"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request - validation errors or update failed",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post update failed"),
+     *             @OA\Property(property="error_message", type="string", example="Error details")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Forbidden - User does not own the post",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="You are not authorized to update this post.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Post not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Post not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Missing or invalid authentication token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     )
+     * )
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $userId = Auth::id();
+            $id = (int) $id;
+
+            // Find the post
+            $post = $this->userPost->find($id);
+
+            if (!$post) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post not found.',
+                ], 404);
+            }
+
+            // Check authorization
+            if ($post->user_id != $userId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You are not authorized to update this post.',
+                ], 403);
+            }
+
+            // Validation - Only validate message as required
+            $this->validate($request, [
+                'message' => 'nullable',
+            ]);
+
+            DB::beginTransaction();
+            try {
+                // Collect all fields from request
+                $data = [];
+                
+                // Get message if it exists in request (check using array_key_exists for multipart/form-data)
+                $allInput = $request->all();
+                if (array_key_exists('message', $allInput)) {
+                    $data['message'] = $request->input('message');
+                }
+                
+                // Get ipanorama_id if provided
+                if (array_key_exists('ipanorama_id', $allInput)) {
+                    $data['ipanorama_id'] = $request->input('ipanorama_id');
+                }
+                
+                // Get type_post if provided
+                if (array_key_exists('type_post', $allInput)) {
+                    $data['type_post'] = $request->input('type_post');
+                }
+
+                // Update post with collected data
+                if (!empty($data)) {
+                    $post->update($data);
+                    $post->refresh();
+                }
+
+                // Handle new media uploads
+                if ($request->hasFile('media_user')) {
+                    $files = $request->file('media_user');
+                    foreach ($files as $file) {
+                        $filename = $file->getClientOriginalName();
+                        $extension = $file->getClientOriginalExtension();
+                        $type = getMimeTypeFromExtension($extension);
+                        $path = $file->storeAs('/media', $filename);
+
+                        $dataMedia = [
+                            'post_id' => $post->id,
+                            'media' => $path,
+                            'type' => $type,
+                            'is_360_media' => $request->input('is_360_media') ?? false,
+                        ];
+                        PostMedia::create($dataMedia);
+                    }
+                }
+
+                $post->load('medias');
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Post updated successfully',
+                    'data' => $post
+                ]);
+            } catch (Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post update failed',
+                    'error_message' => $e->getMessage()
+                ], 400);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $e->errors()
+            ], 422);
+        } catch (Exception $e) {
+            Log::error("Error while updating post: " . $e->getMessage());
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong.',
+            ], 500);
         }
     }
 
@@ -483,16 +825,54 @@ class PostController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/post/comment/{id}",
+     *     tags={"Post"},
+     *     summary="Delete a comment by ID",
+     *     description="Deletes a comment. The user must be authenticated and must own the comment or the post to delete it.",
+     *     security={{"sanctum":{}}},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="The ID of the comment to delete",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Comment deleted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Comment deleted successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Comment not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Comment not found.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="You are not authorized to delete this comment.")
+     *         )
+     *     )
+     * )
+     */
     public function deleteComment($id)
     {
         try {
             $userId = Auth::id();
+            $id = (int) $id;
 
-            // Get comment with post user_id in single query
-            $comment = PostComment::select('user_post_comment.*', 'user_post_status.user_id as post_user_id')
-                ->join('user_post_status', 'user_post_comment.post_id', '=', 'user_post_status.id')
-                ->where('user_post_comment.id', $id)
-                ->first();
+            // Get comment with post relationship
+            $comment = PostComment::with('user')->find($id);
 
             if (!$comment) {
                 return response()->json([
@@ -501,16 +881,26 @@ class PostController extends Controller
                 ], 404);
             }
 
+            // Get post to check ownership
+            $post = UserPost::find($comment->post_id);
+
+            if (!$post) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Post not found.',
+                ], 404);
+            }
+
             // Check authorization: either comment owner OR post owner
-            if ($comment->user_id != $userId && $comment->post_user_id != $userId) {
+            if ($comment->user_id != $userId && $post->user_id != $userId) {
                 return response()->json([
                     'status' => false,
                     'message' => 'You are not authorized to delete this comment.',
                 ], 403);
             }
 
-            // Delete using the comment model (not the joined result)
-            PostComment::destroy($id);
+            // Delete the comment
+            $comment->delete();
 
             return response()->json([
                 'status' => true,

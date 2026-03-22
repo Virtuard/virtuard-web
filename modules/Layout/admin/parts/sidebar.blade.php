@@ -6,6 +6,12 @@ $menus = [
         'icon'  => 'icon ion-ios-desktop',
         "position"=>0
     ],
+    'puzzle'=>[
+        'url'   => route('admin.puzzle.config.index'),
+        'title' => __("Puzzle AR"),
+        'icon'  => 'icon ion-ios-grid',
+        "position"=>0,
+    ],
     'virtuard360'=>[
         'url'   => route('admin.virtuard360.index'),
         'title' => __("Virtuard 360"),

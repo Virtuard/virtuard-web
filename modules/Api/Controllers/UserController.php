@@ -91,16 +91,116 @@ class UserController extends Controller
     //     ]);
     // }
 
+    /**
+     * @OA\Post(
+     *     path="/api/user/wishlist",
+     *     tags={"Wishlist"},
+     *     summary="Add or remove service from wishlist",
+     *     description="Toggle wishlist status for a service. If service is already in wishlist, it will be removed. Otherwise, it will be added.",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"object_id", "object_model"},
+     *             @OA\Property(property="object_id", type="integer", example=1, description="Service ID"),
+     *             @OA\Property(property="object_model", type="string", example="hotel", description="Service type (hotel, space, business, etc.)")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Wishlist status toggled successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="class", type="string", example="active", description="'active' if added, empty string if removed")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Service ID is required")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
     public function handleWishList(Request $request){
         $class = new \Modules\User\Controllers\UserWishListController();
         return $class->handleWishList($request);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/user/wishlist",
+     *     tags={"Wishlist"},
+     *     summary="Get user's wishlist",
+     *     description="Retrieve paginated list of services in user's wishlist",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         required=false,
+     *         description="Page number",
+     *         @OA\Schema(type="integer", example=1)
+     *     ),
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         required=false,
+     *         description="Items per page",
+     *         @OA\Schema(type="integer", example=5)
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Wishlist retrieved successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="object_id", type="integer", example=1),
+     *                     @OA\Property(property="object_model", type="string", example="hotel"),
+     *                     @OA\Property(property="user_id", type="integer", example=1),
+     *                     @OA\Property(property="service", type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="title", type="string", example="Grand Hotel"),
+     *                         @OA\Property(property="price", type="number", format="float", example=100.00),
+     *                         @OA\Property(property="sale_price", type="number", format="float", example=80.00),
+     *                         @OA\Property(property="image", type="string", example="http://example.com/image.jpg"),
+     *                         @OA\Property(property="review_score", type="number", format="float", example=4.5)
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(property="total", type="integer", example=10),
+     *             @OA\Property(property="total_pages", type="integer", example=2)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated")
+     *         )
+     *     )
+     * )
+     */
     public function indexWishlist(Request $request){
+        $perPage = $request->query('per_page', 5);
         $query = UserWishList::query()
             ->where("user_wishlist.user_id",Auth::id())
             ->orderBy('user_wishlist.id', 'desc')
-            ->paginate(5);
+            ->paginate($perPage);
         $rows = [];
         foreach ($query as $item){
             $service = $item->service;

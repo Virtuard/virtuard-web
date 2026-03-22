@@ -293,6 +293,67 @@ class AuthController extends Controller
         return response()->json(['message' => 'Successfully logged out']);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/auth/change-password",
+     *     tags={"Auth"},
+     *     summary="Change user password",
+     *     description="Change the authenticated user's password. After successful password change, all tokens will be invalidated and the user needs to re-login.",
+     *     security={{"sanctum":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"current_password", "new_password"},
+     *             @OA\Property(property="current_password", type="string", format="password", example="currentPassword123", description="User's current password"),
+     *             @OA\Property(property="new_password", type="string", format="password", minLength=6, example="newPassword123", description="User's new password (minimum 6 characters)")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Password changed successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=1),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="message", type="string", example="Password updated. Please re-login"),
+     *                 @OA\Property(property="code", type="string", example="need_relogin")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Invalid current password or validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="message", type="string", example="Current password is not correct"),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="code", type="string", example="invalid_current_password"),
+     *                 @OA\Property(property="errors", type="object",
+     *                     @OA\AdditionalProperties(type="array", @OA\Items(type="string"))
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Missing or invalid authentication token",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Unauthenticated.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="integer", example=0),
+     *             @OA\Property(property="data", type="object",
+     *                 @OA\Property(property="errors", type="object",
+     *                     @OA\AdditionalProperties(type="array", @OA\Items(type="string"))
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function changePassword(Request $request){
 
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
