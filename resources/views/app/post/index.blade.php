@@ -552,6 +552,9 @@
                                     <div class="w-100 mt-3"
                                         style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                                         @foreach ($comments as $comment)
+                                            @if(!$comment->user)
+                                                @continue
+                                            @endif
                                             <div style="display: flex; align-items: center;">
                                                 <img loading='lazy' class="mr-4"
                                                     src="{{ $comment->user->getAvatarUrl() }}"
@@ -780,6 +783,9 @@
                                     <div class="w-100 mt-3"
                                         style="background: #FFF; border-radius: 8px; padding: 23px 35px;">
                                         @foreach ($comments as $comment)
+                                            @if(!$comment->user)
+                                                @continue
+                                            @endif
                                             <div style="display: flex; align-items: center;">
                                                 <img loading='lazy' class="mr-4"
                                                     src="{{ $comment->user->getAvatarUrl() }}"
