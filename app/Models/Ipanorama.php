@@ -66,5 +66,16 @@ class Ipanorama extends Model
         return $this->hasMany(Business::class, 'ipanorama_id');
     }
     
+    public function getForSitemap(){
+        $all = $this->query()->where('status', 'publish')->get();
+        $res = [];
+        foreach ($all as $item){
+            $res[] = [
+                'loc' => route('panorama.preview', ['id' => $item->uuid]),
+                'lastmod' => date('c',strtotime($item->updated_at ? $item->updated_at : $item->created_at)),
+            ];
+        }
+        return $res;
+    }
     
 }

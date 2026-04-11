@@ -51,6 +51,13 @@ class AppServiceProvider extends ServiceProvider
         if(auth()->id() and !auth()->check()){
             auth()->logout();
         }
+
+        $this->app->booted(function () {
+            if ($this->app->bound(\Modules\Core\Helpers\SitemapHelper::class)) {
+                $sitemapHelper = $this->app->make(\Modules\Core\Helpers\SitemapHelper::class);
+                $sitemapHelper->add("panorama", [app()->make(\App\Models\Ipanorama::class), 'getForSitemap']);
+            }
+        });
     }
 
     protected function initConfigFromDB(){
