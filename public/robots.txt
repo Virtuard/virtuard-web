@@ -34,9 +34,7 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://www.virtuard.com/sitemap.xml
-Sitemap: https://www.virtuard.com/sitemap-images.xml
-Sitemap: https://www.virtuard.com/sitemap-news.xml
+Sitemap: https://virtuard.com/sitemap.xml
 
 # Host directive (helps with canonicalization)
-Host: https://www.virtuard.com
+Host: https://virtuard.com
